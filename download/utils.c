@@ -14,11 +14,16 @@
  * limitations under the License.
  */
 
-#ifndef UI_UIHANDLER_H
-#define UI_UIHANDLER_H
+#include "utils.h"
+#include "../config.h"
 
-#include "../structs.h"
+char *download_targetPath(system_t *system, char *filename) {
+    int arrayLength = strlen(ROM_BASE_DIR) + strlen(system->path) + 1 + strlen(filename) + 1;
+    char *filepath = calloc(sizeof(char), arrayLength);
+    strcat(filepath, ROM_BASE_DIR);
+    strcat(filepath, system->path);
+    strcat(filepath, "/");
+    strcat(filepath, filename);
 
-void ui_render(app_t *app);
-
-#endif
+    return filepath;
+}

@@ -23,4 +23,8 @@ char *fetchURL(char *url);
 
 int downloadURL(app_t *app, char *url, char *filename);
 
+int downloadURLPost(app_t *app, char *url, char *data, char *filename);
+
+char *fetchURLPost(char *url, char *postData);
+
 #endif

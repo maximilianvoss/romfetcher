@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-#ifndef UI_UIHANDLER_H
-#define UI_UIHANDLER_H
+#ifndef ENGINE_ROMSDOWNLOAD_ROMSDOWNLOAD_H
+#define ENGINE_ROMSDOWNLOAD_ROMSDOWNLOAD_H
 
-#include "../structs.h"
+#include "../../structs.h"
 
-void ui_render(app_t *app);
+searchresult_t *romsdownload_search(app_t *app, system_t *system, char *searchString);
+
+void romsdownload_download(app_t *app, searchresult_t *item, void (*callback)(app_t *app));
 
 #endif

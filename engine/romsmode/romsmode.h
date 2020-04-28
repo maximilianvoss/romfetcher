@@ -14,17 +14,13 @@
  * limitations under the License.
  */
 
-#ifndef SYSTEMS_H
-#define SYSTEMS_H
+#ifndef ENGINE_ROMSMODE_ROMSMODE_H
+#define ENGINE_ROMSMODE_ROMSMODE_H
 
-#include "structs.h"
+#include "../../structs.h"
 
-void freeSystems();
+searchresult_t *romsmode_search(app_t *app, system_t *system, char *searchString);
 
-void initSystems();
-
-system_t *getSystemList();
-
-char *getRomDownloadPath(system_t *system, char *filename);
+void romsmode_download(app_t *app, searchresult_t *item, void (*callback)(app_t *app));
 
 #endif

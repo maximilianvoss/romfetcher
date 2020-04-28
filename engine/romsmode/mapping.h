@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-#ifndef UI_UIHANDLER_H
-#define UI_UIHANDLER_H
+#ifndef ENGINE_ROMSMANIA_MAPPING_H
+#define ENGINE_ROMSMANIA_MAPPING_H
 
-#include "../structs.h"
+#include "../../structs.h"
 
-void ui_render(app_t *app);
+char *romsmode_deviceMapping(system_t *system);
 
 #endif

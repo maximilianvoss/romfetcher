@@ -16,6 +16,10 @@
 
 #include "enginehandler.h"
 #include "romsmania/romsmania.h"
+#include "romsmode/romsmode.h"
+#include "wowroms/wowroms.h"
+#include "romsdownload/romsdownload.h"
+#include "romsemulator/romsemulator.h"
 
 static void determineSearchEngine(app_t *app);
 
@@ -44,5 +48,20 @@ static void determineSearchEngine(app_t *app) {
             searchFunction = &romsmania_search;
             downloadFunction = &romsmania_download;
             break;
+        case romsmode:
+            searchFunction = &romsmode_search;
+            downloadFunction = &romsmode_download;
+            break;
+        case wowroms:
+            searchFunction = &wowroms_search;
+            downloadFunction = &wowroms_download;
+            break;
+        case romsdownload:
+            searchFunction = &romsdownload_search;
+            downloadFunction = &romsdownload_download;
+            break;
+        case romsemulator:
+            searchFunction = &romsemulator_search;
+            downloadFunction = &romsemulator_download;
     }
 }

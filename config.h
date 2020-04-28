@@ -13,12 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 #ifndef CONFIG_H
 #define CONFIG_H
 
 #define BACKGROUND_IMAGE "/usr/share/romfetcher/wallpaper.jpg"
 #define SELECTOR_ICON "/usr/share/romfetcher/selector.png"
 #define ROM_BASE_DIR "/home/pi/RetroPie/roms"
+#define DATABASE_FILE "/home/pi/.romfetcher/romfetcher.db"
 #define FONTS "/usr/share/romfetcher/FreeSans.ttf"
 #define CONTROLLER_MAPPING "00000000526574726f53746f6e653200,RetroStone2,a:b0,b:b1,x:b2,y:b3,dpdown:b11,dpleft:b12,dpright:b13,dpup:b10,leftshoulder:b4,lefttrigger:b6,rightshoulder:b5,righttrigger:b7,start:b9,back:b8,leftx:a0,lefty:a1,platform:Linux"
 
@@ -30,13 +32,4 @@
 #define TEXT_HIGHLIGHT_COLOR {0, 0, 255, 255}
 #define COPYRIGHT "C Copyright 2020 by Maximilian Voss (maximilian@voss.rocks)"
 
-#define ENABLE_NINTENDO
-#define ENABLE_SEGA
-#define ENABLE_OTHER_HANDHELDS
-#define ENABLE_PLAYSTATION
-#define ENABLE_ATARI
-#define ENABLE_PCLIKE
-#define ENABLE_ARCADE
-#define ENABLE_OTHER_CONSOLES
-#define ENABLE_FRAMEWORKS
 #endif

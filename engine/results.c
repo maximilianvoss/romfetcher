@@ -17,7 +17,7 @@
 #include "results.h"
 
 searchresult_t *newResultItem(system_t *system) {
-    searchresult_t *resultList = (searchresult_t *) malloc(sizeof(searchresult_t));
+    searchresult_t *resultList = (searchresult_t *) calloc(sizeof(searchresult_t), 1);
     resultList->title = NULL;
     resultList->url = NULL;
     resultList->system = system;
@@ -41,20 +41,22 @@ searchresult_t *addResultItemIntoList(searchresult_t *resultList, searchresult_t
 }
 
 void setTitle(searchresult_t *resultList, char *title) {
+    SDL_Log("Title: %s\n", title);
     if (resultList == NULL || title == NULL) {
         return;
     }
     int length = strlen(title) + 1;
-    resultList->title = (char *) malloc(sizeof(char) * length);
+    resultList->title = (char *) calloc(sizeof(char), length);
     memcpy(resultList->title, title, length);
 }
 
 void setUrl(searchresult_t *resultList, char *url) {
+    SDL_Log("URL: %s\n", url);
     if (resultList == NULL || url == NULL) {
         return;
     }
     int length = strlen(url) + 1;
-    resultList->url = (char *) malloc(sizeof(char) * length);
+    resultList->url = (char *) calloc(sizeof(char), length);
     memcpy(resultList->url, url, length);
 }
 

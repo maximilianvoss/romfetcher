@@ -23,7 +23,7 @@ void initGameController();
 
 void freeGameController();
 
-uint8_t processInputs(app_t *app);
+uint8_t ui_processInputs(app_t *app);
 
 
 #endif

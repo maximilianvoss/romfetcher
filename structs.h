@@ -20,6 +20,7 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <curl/curl.h>
+#include <sqlite3.h>
 
 typedef enum {
     search,
@@ -29,7 +30,11 @@ typedef enum {
 } window_t;
 
 typedef enum {
-    romsmania
+    romsmania,
+    romsmode,
+    wowroms,
+    romsdownload,
+    romsemulator
 } engine_t;
 
 typedef enum {
@@ -49,6 +54,7 @@ typedef struct system_s {
     char *name;
     char *fullname;
     char *path;
+    int active;
     struct system_s *prev;
     struct system_s *next;
 } system_t;
@@ -64,6 +70,9 @@ typedef struct searchresult_s {
 typedef struct {
     SDL_Renderer *renderer;
     SDL_Window *window;
+    struct {
+        sqlite3 *db;
+    } database;
     struct {
         SDL_Texture *backgroundImage;
         SDL_Texture *searchChevron;

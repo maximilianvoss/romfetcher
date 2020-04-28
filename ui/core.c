@@ -20,7 +20,7 @@
 #include "textures.h"
 #include "fonts.h"
 
-void initSDL(app_t *app) {
+void ui_init(app_t *app) {
 
     int screenWidth;
     int screenHeight;
@@ -72,7 +72,7 @@ void initSDL(app_t *app) {
     initGameController();
 }
 
-void cleanUp(app_t *app) {
+void ui_destroy(app_t *app) {
     freeGameController();
     destroyTextures(app);
     destroyFonts(app);

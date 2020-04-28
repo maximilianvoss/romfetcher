@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-#ifndef UI_UIHANDLER_H
-#define UI_UIHANDLER_H
 
-#include "../structs.h"
+#ifndef HELPER_MD5_H
+#define HELPER_MD5_H
 
-void ui_render(app_t *app);
+char *md5_file2md5(char *filename);
+
+char *md5_str2md5(char *string);
 
 #endif

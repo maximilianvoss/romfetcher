@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-#ifndef UI_UIHANDLER_H
-#define UI_UIHANDLER_H
+#ifndef ENGINE_URLHANDLING_H
+#define ENGINE_URLHANDLING_H
 
+#include <stdlib.h>
 #include "../structs.h"
 
-void ui_render(app_t *app);
+char *urlhandling_substitudeVariables(char *templateString, system_t *system, char *(*mapping)(system_t *system),
+                                      char *query, uint32_t page);
 
 #endif

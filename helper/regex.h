@@ -14,11 +14,23 @@
  * limitations under the License.
  */
 
-#ifndef UI_UIHANDLER_H
-#define UI_UIHANDLER_H
+#ifndef HELPER_REGEX_H
+#define HELPER_REGEX_H
 
-#include "../structs.h"
+#include <stdlib.h>
 
-void ui_render(app_t *app);
+typedef struct regexMatches_s {
+    size_t maxGroups;
+    char **groups;
+    struct regexMatches_s *prev;
+    struct regexMatches_s *next;
+} regexMatches_t;
+
+
+regexMatches_t *regex_getMatches(char *text, char *regexString, size_t maxGroups);
+
+char *regex_cpyGroupText(regexMatches_t *match, int group);
+
+void regex_destroyMatches(regexMatches_t *matches);
 
 #endif

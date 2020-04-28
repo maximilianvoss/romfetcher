@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-#ifndef UI_UIHANDLER_H
-#define UI_UIHANDLER_H
-
 #include "../structs.h"
 
-void ui_render(app_t *app);
+#ifndef DOWNLOAD_UTILS_H
+#define DOWNLOAD_UTILS_H
+
+char *download_targetPath(system_t *system, char *filename);
 
 #endif

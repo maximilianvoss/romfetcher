@@ -25,6 +25,8 @@ char *str_urlDecode(const char *string);
 
 char *str_htmlDecode(const char *string);
 
-char *path_toResource(char *path);
+char *str_concat(char *str1, char *str2);
+
+char *str_quoteDecode(char *strIn);
 
 #endif

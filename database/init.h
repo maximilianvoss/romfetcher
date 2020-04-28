@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-#ifndef UI_UIHANDLER_H
-#define UI_UIHANDLER_H
-
 #include "../structs.h"
 
-void ui_render(app_t *app);
+#ifndef DATABASE_INIT_H
+#define DATABASE_INIT_H
+
+void database_init(app_t *app);
+
+void database_destroy(app_t *app);
 
 #endif

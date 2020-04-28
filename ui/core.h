@@ -19,8 +19,8 @@
 
 #include "../structs.h"
 
-void initSDL(app_t *app);
+void ui_init(app_t *app);
 
-void cleanUp(app_t *app);
+void ui_destroy(app_t *app);
 
 #endif

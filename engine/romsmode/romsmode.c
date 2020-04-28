@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-#include "romsmania.h"
+#include "romsmode.h"
 #include "mapping.h"
 #include "../curlling.h"
 #include "../results.h"
 #include "../../helper/utils.h"
 #include "../../download/utils.h"
-#include "../urlhandling.h"
 #include "../../helper/regex.h"
+#include "../urlhandling.h"
 
-#define URL_TEMPLATE "https://romsmania.cc/roms/%system%/search?name=%query%&genre=&region=&orderBy=name&orderAsc=1&page=%page%"
+#define URL_TEMPLATE "https://romsmode.com/roms/%system%/%page%?name=%query%"
 
 static searchresult_t *fetchingResultItems(system_t *system, searchresult_t *resultList, char *response);
 
@@ -31,14 +31,16 @@ static char *fetchDownloadPageLink(char *response);
 
 static char *fetchDownloadLink(char *response);
 
-searchresult_t *romsmania_search(app_t *app, system_t *system, char *searchString) {
+static void removeFastTag(char *link);
+
+searchresult_t *romsmode_search(app_t *app, system_t *system, char *searchString) {
     uint32_t resultCount = 0;
     uint32_t page = 1;
     char *urlTemplate = URL_TEMPLATE;
 
     searchresult_t *resultList = NULL;
     do {
-        char *url = urlhandling_substitudeVariables(urlTemplate, system, &romsmania_deviceMapping, searchString, page);
+        char *url = urlhandling_substitudeVariables(urlTemplate, system, &romsmode_deviceMapping, searchString, page);
         if (url == NULL) {
             break;
         }
@@ -56,31 +58,42 @@ searchresult_t *romsmania_search(app_t *app, system_t *system, char *searchStrin
     return resultList;
 }
 
-void romsmania_download(app_t *app, searchresult_t *item, void (*callback)(app_t *app)) {
+void romsmode_download(app_t *app, searchresult_t *item, void (*callback)(app_t *app)) {
     if (item == NULL) {
         return;
     }
     char *detailPageResponse = fetchURL(item->url);
     char *linkDownloadPage = fetchDownloadPageLink(detailPageResponse);
 
+    removeFastTag(linkDownloadPage);
     char *downloadPageResponse = fetchURL(linkDownloadPage);
-    char *linkDownload = fetchDownloadLink(downloadPageResponse);
+    char *linkDownloadArtifact = fetchDownloadLink(downloadPageResponse);
 
-    char *filename = file_name(linkDownload);
+    char *filename = file_name(linkDownloadArtifact);
     char *decodedFilename = str_urlDecode(filename);
+
     char *downloadPath = download_targetPath(item->system, decodedFilename);
 
-    downloadURL(app, linkDownload, downloadPath);
+    downloadURL(app, linkDownloadArtifact, downloadPath);
 
     free(downloadPageResponse);
     free(linkDownloadPage);
-    free(detailPageResponse);
-    free(linkDownload);
-    free(downloadPath);
     free(decodedFilename);
+    free(detailPageResponse);
+    free(linkDownloadArtifact);
+    free(downloadPath);
 
     callback(app);
 }
+
+static void removeFastTag(char *link) {
+    char *ptr = link;
+    while (strcmp(ptr, "?fast")) {
+        ptr++;
+    }
+    *ptr = '\0';
+}
+
 
 static char *fetchDownloadLink(char *response) {
     char *regexString = "<a class=\"wait__link\" href=\"([^\"]+)\">";
@@ -95,7 +108,7 @@ static char *fetchDownloadLink(char *response) {
 }
 
 static char *fetchDownloadPageLink(char *response) {
-    char *regexString = "<a href=\"([^\"]+)\" rel=\"nofollow\" id=\"download_link\" class=\"btn is-with-ico\">";
+    char *regexString = "<a href=\"([^\"]+)\" class=\"btn is-with-ico\" rel=\"nofollow\">";
 
     regexMatches_t *matches = regex_getMatches(response, regexString, 1);
     if (matches == NULL) {
@@ -106,8 +119,9 @@ static char *fetchDownloadPageLink(char *response) {
     return link;
 }
 
+
 static searchresult_t *fetchingResultItems(system_t *system, searchresult_t *resultList, char *response) {
-    char *regexString = "<a href=\"([^\"]+)\">([^<]+)</a>";
+    char *regexString = "<a class=\"link\" href=\"([^\"]+)\">([^<]+)</a>";
 
     regexMatches_t *matches = regex_getMatches(response, regexString, 2);
     regexMatches_t *ptr = matches;

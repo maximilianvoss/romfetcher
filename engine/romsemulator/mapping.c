@@ -16,7 +16,7 @@
 
 #include "mapping.h"
 
-char *romsmania_deviceMapping(system_t *system) {
+char *romsemulator_deviceMapping(system_t *system) {
     char *deviceString = NULL;
 
     if (!strcmp(system->name, "3do")) {

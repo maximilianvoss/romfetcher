@@ -15,9 +15,6 @@
  */
 
 #include "curlling.h"
-#include <curl/curl.h>
-#include <stdlib.h>
-#include <memory.h>
 
 struct url_data {
     size_t size;
@@ -38,10 +35,11 @@ char *fetchURL(char *url) {
     CURL *curl;
     CURLcode res;
 
+    SDL_Log("Fetching: %s", url);
+
     struct url_data data;
     data.size = 0;
-    data.data = malloc(16386);
-    data.data[0] = '\0';
+    data.data = calloc(sizeof(char), 16386);
 
     curl = curl_easy_init();
     if (curl) {
@@ -58,22 +56,51 @@ char *fetchURL(char *url) {
     return data.data;
 }
 
+char *fetchURLPost(char *url, char *postData) {
+    CURL *curl;
+    CURLcode res;
+
+    SDL_Log("Fetching: %s", url);
+
+    struct url_data data;
+    data.size = 0;
+    data.data = calloc(sizeof(char), 16386);
+
+    curl = curl_easy_init();
+    if (curl) {
+        curl_easy_setopt(curl, CURLOPT_URL, url);
+        curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, postData);
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeDataToString);
+        curl_easy_setopt(curl, CURLOPT_HEADER, 1L);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &data);
+
+        res = curl_easy_perform(curl);
+        if (res != CURLE_OK)
+            fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
+        curl_easy_cleanup(curl);
+    }
+    return data.data;
+}
+
 int downloadURL(app_t *app, char *url, char *filename) {
-    CURL *curl_handle;
+    CURL *curl;
     FILE *pagefile;
     CURLcode res = CURLE_OK;
 
-    curl_global_init(CURL_GLOBAL_ALL);
-    curl_handle = curl_easy_init();
+    SDL_Log("Downloading: %s", url);
 
-    curl_easy_setopt(curl_handle, CURLOPT_URL, url);
-    curl_easy_setopt(curl_handle, CURLOPT_NOPROGRESS, 0L);
-    curl_easy_setopt(curl_handle, CURLOPT_VERBOSE, 0L);
-    curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, writeDataToFile);
+    curl_global_init(CURL_GLOBAL_ALL);
+    curl = curl_easy_init();
+
+    curl_easy_setopt(curl, CURLOPT_URL, url);
+    curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0L);
+    curl_easy_setopt(curl, CURLOPT_VERBOSE, 0L);
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeDataToFile);
 
 #if LIBCURL_VERSION_NUM >= 0x072000
-    curl_easy_setopt(curl_handle, CURLOPT_XFERINFOFUNCTION, xferinfo);
-    curl_easy_setopt(curl_handle, CURLOPT_XFERINFODATA, app);
+    curl_easy_setopt(curl, CURLOPT_XFERINFOFUNCTION, xferinfo);
+    curl_easy_setopt(curl, CURLOPT_XFERINFODATA, app);
 #else
     curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, older_progress);
     curl_easy_setopt(curl, CURLOPT_PROGRESSDATA, app);
@@ -81,11 +108,46 @@ int downloadURL(app_t *app, char *url, char *filename) {
 
     pagefile = fopen(filename, "wb");
     if (pagefile) {
-        curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, pagefile);
-        res = curl_easy_perform(curl_handle);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, pagefile);
+        res = curl_easy_perform(curl);
         fclose(pagefile);
     }
-    curl_easy_cleanup(curl_handle);
+    curl_easy_cleanup(curl);
+    curl_global_cleanup();
+    return res;
+}
+
+int downloadURLPost(app_t *app, char *url, char *data, char *filename) {
+    CURL *curl;
+    FILE *pagefile;
+    CURLcode res = CURLE_OK;
+
+    SDL_Log("Downloading via Post: %s", url);
+
+    curl_global_init(CURL_GLOBAL_ALL);
+    curl = curl_easy_init();
+
+    curl_easy_setopt(curl, CURLOPT_URL, url);
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data);
+    curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0L);
+    curl_easy_setopt(curl, CURLOPT_VERBOSE, 0L);
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeDataToFile);
+
+#if LIBCURL_VERSION_NUM >= 0x072000
+    curl_easy_setopt(curl, CURLOPT_XFERINFOFUNCTION, xferinfo);
+    curl_easy_setopt(curl, CURLOPT_XFERINFODATA, app);
+#else
+    curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, older_progress);
+    curl_easy_setopt(curl, CURLOPT_PROGRESSDATA, app);
+#endif
+
+    pagefile = fopen(filename, "wb");
+    if (pagefile) {
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, pagefile);
+        res = curl_easy_perform(curl);
+        fclose(pagefile);
+    }
+    curl_easy_cleanup(curl);
     curl_global_cleanup();
     return res;
 }

@@ -16,107 +16,107 @@
 
 #include "mapping.h"
 
-char *romsmania_deviceMapping(system_t *system) {
+char *romsdownload_deviceMapping(system_t *system) {
     char *deviceString = NULL;
 
     if (!strcmp(system->name, "3do")) {
 //         deviceString = "3do";
     } else if (!strcmp(system->name, "amiga")) {
-        deviceString = "agmia-500";
+        deviceString = "6";
     } else if (!strcmp(system->name, "atari2600")) {
-        deviceString = "atari-2600";
+        deviceString = "13";
     } else if (!strcmp(system->name, "atari7800")) {
-        deviceString = "atari-7800";
+        deviceString = "15";
     } else if (!strcmp(system->name, "atarijaguar")) {
-        deviceString = "atari-jaguar";
+        deviceString = "17";
     } else if (!strcmp(system->name, "atarilynx")) {
-        deviceString = "atari-lynx";
+        deviceString = "18";
     } else if (!strcmp(system->name, "atarist")) {
-        deviceString = "atari-st";
+        deviceString = "19";
     } else if (!strcmp(system->name, "c64")) {
-        deviceString = "commodore-64";
+        deviceString = "31";
     } else if (!strcmp(system->name, "dreamcast")) {
-        deviceString = "dreamcast";
+//        deviceString = "dreamcast";
     } else if (!strcmp(system->name, "fba")) {
 //        deviceString = "Final Burn Alpha";
     } else if (!strcmp(system->name, "fds")) {
-        deviceString = "nintendo";
+        deviceString = "77";
     } else if (!strcmp(system->name, "gamegear")) {
-        deviceString = "game-gear";
+        deviceString = "46";
     } else if (!strcmp(system->name, "gb")) {
-        deviceString = "gameboy";
+        deviceString = "47";
     } else if (!strcmp(system->name, "gba")) {
-        deviceString = "gameboy-advanced";
+        deviceString = "48";
     } else if (!strcmp(system->name, "gbc")) {
-        deviceString = "gameboy-color";
+        deviceString = "49";
     } else if (!strcmp(system->name, "gc")) {
-        deviceString = "gamecube";
+        deviceString = "50";
     } else if (!strcmp(system->name, "genesis")) {
-        deviceString = "sega-genesis";
+        deviceString = "98";
     } else if (!strcmp(system->name, "gw")) {
 //        deviceString = "Game and Watch";
     } else if (!strcmp(system->name, "love")) {
 //        deviceString = "LÖVE";
     } else if (!strcmp(system->name, "mame")) {
-        deviceString = "mame-037b11";
+        deviceString = "61";
     } else if (!strcmp(system->name, "mastersystem")) {
-        deviceString = "sega-master-system";
+        deviceString = "99";
     } else if (!strcmp(system->name, "megadrive")) {
-        deviceString = "sega-genesis";
+        deviceString = "98";
     } else if (!strcmp(system->name, "msx")) {
-        deviceString = "msx-computer";
+        deviceString = "67";
     } else if (!strcmp(system->name, "n64")) {
-        deviceString = "nintendo-64";
+        deviceString = "75";
     } else if (!strcmp(system->name, "nds")) {
-        deviceString = "nintendo-ds";
+        deviceString = "76";
     } else if (!strcmp(system->name, "neogeo")) {
-        deviceString = "neo-geo";
+        deviceString = "70";
     } else if (!strcmp(system->name, "nes")) {
-        deviceString = "nintendo";
+        deviceString = "73";
     } else if (!strcmp(system->name, "ngp")) {
-        deviceString = "neo-geo-pocket";
+        deviceString = "71";
     } else if (!strcmp(system->name, "ngpc")) {
-        deviceString = "neo-geo-pocket-color";
+        deviceString = "72";
     } else if (!strcmp(system->name, "pc")) {
 //        deviceString = "PC (x86)";
     } else if (!strcmp(system->name, "pcengine")) {
-        deviceString = "turbografx-16";
+        deviceString = "115";
     } else if (!strcmp(system->name, "pcfx")) {
 //        deviceString = "PC-FX";
     } else if (!strcmp(system->name, "ps2")) {
-        deviceString = "playstation-2";
+        deviceString = "89";
     } else if (!strcmp(system->name, "psp")) {
-        deviceString = "playstation-portable";
+        deviceString = "91";
     } else if (!strcmp(system->name, "psx")) {
-        deviceString = "playstation";
+        deviceString = "88";
     } else if (!strcmp(system->name, "saturn")) {
 //        deviceString = "Sega Saturn";
     } else if (!strcmp(system->name, "scummvm")) {
 //        deviceString = "ScummVM";
     } else if (!strcmp(system->name, "sega32x")) {
-        deviceString = "sega-32x";
+        deviceString = "95";
     } else if (!strcmp(system->name, "segacd")) {
-        deviceString = "sega-genesis";
+        deviceString = "98";
     } else if (!strcmp(system->name, "sg-1000")) {
-        deviceString = "sega-sg1000";
+        deviceString = "102";
     } else if (!strcmp(system->name, "snes")) {
-        deviceString = "super-nintendo";
+        deviceString = "110";
     } else if (!strcmp(system->name, "vectrex")) {
-        deviceString = "gce-vectrex";
+        deviceString = "52";
     } else if (!strcmp(system->name, "videopac")) {
-        deviceString = "philips-videopac";
+        deviceString = "87";
     } else if (!strcmp(system->name, "virtualboy")) {
-        deviceString = "nintendo-virtual-boy";
+        deviceString = "79";
     } else if (!strcmp(system->name, "wii")) {
-        deviceString = "nintendo-wii";
+        deviceString = "80";
     } else if (!strcmp(system->name, "wiiu")) {
 //        deviceString = "Nintendo Wii U";
     } else if (!strcmp(system->name, "wonderswan")) {
-        deviceString = "wonderswan";
+        deviceString = "121";
     } else if (!strcmp(system->name, "wonderswancolor")) {
 //        deviceString = "Wonderswan Color";
     } else if (!strcmp(system->name, "zxspectrum")) {
-        deviceString = "zx-spectrum";
+        deviceString = "124";
     }
 
     return deviceString;

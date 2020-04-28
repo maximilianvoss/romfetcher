@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "romsmania.h"
+#include "romsemulator.h"
 #include "mapping.h"
 #include "../curlling.h"
 #include "../results.h"
@@ -23,7 +23,7 @@
 #include "../urlhandling.h"
 #include "../../helper/regex.h"
 
-#define URL_TEMPLATE "https://romsmania.cc/roms/%system%/search?name=%query%&genre=&region=&orderBy=name&orderAsc=1&page=%page%"
+#define URL_TEMPLATE "https://romsemulator.net/roms/%system%/page/%page%/?s=%query%"
 
 static searchresult_t *fetchingResultItems(system_t *system, searchresult_t *resultList, char *response);
 
@@ -31,14 +31,17 @@ static char *fetchDownloadPageLink(char *response);
 
 static char *fetchDownloadLink(char *response);
 
-searchresult_t *romsmania_search(app_t *app, system_t *system, char *searchString) {
+static char *fetchHiddenField(char *response, char *fieldname, int variant);
+
+searchresult_t *romsemulator_search(app_t *app, system_t *system, char *searchString) {
     uint32_t resultCount = 0;
     uint32_t page = 1;
     char *urlTemplate = URL_TEMPLATE;
 
     searchresult_t *resultList = NULL;
     do {
-        char *url = urlhandling_substitudeVariables(urlTemplate, system, &romsmania_deviceMapping, searchString, page);
+        char *url = urlhandling_substitudeVariables(urlTemplate, system, &romsemulator_deviceMapping, searchString,
+                                                    page);
         if (url == NULL) {
             break;
         }
@@ -51,12 +54,12 @@ searchresult_t *romsmania_search(app_t *app, system_t *system, char *searchStrin
         free(url);
 
         page++;
-    } while (resultCount != getResultListCount(resultList));
+    } while (resultCount != getResultListCount(resultList) && resultCount % 10 == 0);
 
     return resultList;
 }
 
-void romsmania_download(app_t *app, searchresult_t *item, void (*callback)(app_t *app)) {
+void romsemulator_download(app_t *app, searchresult_t *item, void (*callback)(app_t *app)) {
     if (item == NULL) {
         return;
     }
@@ -64,22 +67,70 @@ void romsmania_download(app_t *app, searchresult_t *item, void (*callback)(app_t
     char *linkDownloadPage = fetchDownloadPageLink(detailPageResponse);
 
     char *downloadPageResponse = fetchURL(linkDownloadPage);
-    char *linkDownload = fetchDownloadLink(downloadPageResponse);
 
-    char *filename = file_name(linkDownload);
-    char *decodedFilename = str_urlDecode(filename);
-    char *downloadPath = download_targetPath(item->system, decodedFilename);
+    char *pid = fetchHiddenField(downloadPageResponse, "pid", 0);
+    char *roms = fetchHiddenField(downloadPageResponse, "roms_download_file_nonce_field", 1);
+    char *referer = fetchHiddenField(downloadPageResponse, "_wp_http_referer", 0);
 
-    downloadURL(app, linkDownload, downloadPath);
+    char *payload = str_concat("action=roms_download_file&pid=", pid);
+    char *tmp = payload;
+    payload = str_concat(payload, "&roms_download_file_nonce_field=");
+    free(tmp);
+    tmp = payload;
+    payload = str_concat(payload, roms);
+    free(tmp);
+    tmp = payload;
+    payload = str_concat(payload, "&_wp_http_referer=");
+    free(tmp);
+    tmp = payload;
+    payload = str_concat(payload, referer);
+    free(tmp);
 
+    char *filename = calloc(sizeof(char), strlen(item->url) + 4);
+    strcpy(filename, item->url);
+    printf("old name: %s\n", filename);
+    tmp = filename;
+    while (*tmp != '\0') {
+        tmp++;
+    }
+    tmp--;
+    strcpy(tmp, ".zip");
+
+    char *decodeFilename = file_name(filename);
+    char *downloadPath = download_targetPath(item->system, decodeFilename);
+
+    downloadURLPost(app, linkDownloadPage, payload, downloadPath);
+
+    free(pid);
+    free(roms);
+    free(referer);
+    free(payload);
+    free(filename);
     free(downloadPageResponse);
     free(linkDownloadPage);
     free(detailPageResponse);
-    free(linkDownload);
     free(downloadPath);
-    free(decodedFilename);
 
     callback(app);
+}
+
+static char *fetchHiddenField(char *response, char *fieldname, int variant) {
+    char *regexStringTmpl;
+    if (variant == 0) {
+        regexStringTmpl = "<input type=\"[^\"]+\" name=\"%fieldname%\" value=\"([^\"]+)\"";
+    } else {
+        regexStringTmpl = "<input type=\"[^\"]+\" id=\"[^\"]+\" name=\"%fieldname%\" value=\"([^\"]+)\"";
+    };
+    char *regexString = str_replace(regexStringTmpl, "%fieldname%", fieldname);
+
+    regexMatches_t *matches = regex_getMatches(response, regexString, 1);
+    if (matches == NULL) {
+        return NULL;
+    }
+    char *link = regex_cpyGroupText(matches, 0);
+    regex_destroyMatches(matches);
+    free(regexString);
+    return link;
 }
 
 static char *fetchDownloadLink(char *response) {
@@ -95,7 +146,7 @@ static char *fetchDownloadLink(char *response) {
 }
 
 static char *fetchDownloadPageLink(char *response) {
-    char *regexString = "<a href=\"([^\"]+)\" rel=\"nofollow\" id=\"download_link\" class=\"btn is-with-ico\">";
+    char *regexString = "<a class=\"download\" href=\"([^\"]+)\" rel=\"nofollow\" id=\"download_link\">";
 
     regexMatches_t *matches = regex_getMatches(response, regexString, 1);
     if (matches == NULL) {
@@ -107,7 +158,7 @@ static char *fetchDownloadPageLink(char *response) {
 }
 
 static searchresult_t *fetchingResultItems(system_t *system, searchresult_t *resultList, char *response) {
-    char *regexString = "<a href=\"([^\"]+)\">([^<]+)</a>";
+    char *regexString = "<td><a href=\"([^\"]+)\">([^<]+)</a>";
 
     regexMatches_t *matches = regex_getMatches(response, regexString, 2);
     regexMatches_t *ptr = matches;

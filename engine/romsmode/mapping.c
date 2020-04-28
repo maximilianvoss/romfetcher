@@ -16,7 +16,7 @@
 
 #include "mapping.h"
 
-char *romsmania_deviceMapping(system_t *system) {
+char *romsmode_deviceMapping(system_t *system) {
     char *deviceString = NULL;
 
     if (!strcmp(system->name, "3do")) {
@@ -58,7 +58,7 @@ char *romsmania_deviceMapping(system_t *system) {
     } else if (!strcmp(system->name, "love")) {
 //        deviceString = "LÖVE";
     } else if (!strcmp(system->name, "mame")) {
-        deviceString = "mame-037b11";
+        deviceString = "mame";
     } else if (!strcmp(system->name, "mastersystem")) {
         deviceString = "sega-master-system";
     } else if (!strcmp(system->name, "megadrive")) {

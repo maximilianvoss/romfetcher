@@ -19,30 +19,32 @@
 #include "ui/inputhandler.h"
 #include "ui/core.h"
 #include "engine/results.h"
-#include "systems.h"
+#include "database/init.h"
+#include "database/sytems.h"
 
 int main() {
     app_t app;
     memset(&app, 0, sizeof(app_t));
 
-    initSDL(&app);
-    initSystems();
+    database_init(&app);
+    ui_init(&app);
 
-    system_t *systems = getSystemList();
+    system_t *systems = database_systemList(&app);
     app.search.systemActive = systems;
 
     uint8_t quit = 0;
     while (!quit) {
-        quit = processInputs(&app);
-        renderUi(&app);
+        quit = ui_processInputs(&app);
+        ui_render(&app);
         SDL_Delay(75);
     }
 
-    cleanUp(&app);
-    freeSystems();
+    ui_destroy(&app);
     if ( app.search.results != NULL ) {
         freeResultList(app.search.results);
     }
+    database_systemsDestroy();
+    database_destroy(&app);
     return 0;
 }
 

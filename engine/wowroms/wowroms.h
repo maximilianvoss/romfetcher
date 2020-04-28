@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-#ifndef UI_UIHANDLER_H
-#define UI_UIHANDLER_H
+#ifndef ENGINE_WOWROMS_WOWROMS_H
+#define ENGINE_WOWROMS_WOWROMS_H
 
-#include "../structs.h"
+#include "../../structs.h"
 
-void ui_render(app_t *app);
+searchresult_t *wowroms_search(app_t *app, system_t *system, char *searchString);
+
+void wowroms_download(app_t *app, searchresult_t *item, void (*callback)(app_t *app));
 
 #endif

@@ -21,13 +21,13 @@
 #include "uidownload.h"
 #include "rendering.h"
 #include "../config.h"
-#include "../structs.h"
 
 static void renderDefaults(app_t *app);
+
 static char *copyright();
 
 static char *copyright() {
-    char *text = malloc(sizeof(char) * strlen(COPYRIGHT) + 1);
+    char *text = calloc(sizeof(char), strlen(COPYRIGHT) + 1);
     strcpy (text, COPYRIGHT);
     *text = 0xA9;
     return text;
@@ -51,7 +51,7 @@ static void renderDefaults(app_t *app) {
 
 }
 
-void renderUi(app_t *app) {
+void ui_render(app_t *app) {
     void (*renderEngine)(app_t *app) = NULL;
     renderDefaults(app);
 

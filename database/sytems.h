@@ -14,11 +14,18 @@
  * limitations under the License.
  */
 
-#ifndef UI_UIHANDLER_H
-#define UI_UIHANDLER_H
+#ifndef DATABASE_SYTEMS_H
+#define DATABASE_SYTEMS_H
 
+#include <sqlite3.h>
 #include "../structs.h"
 
-void ui_render(app_t *app);
+void database_systemsInitTable(sqlite3 *db);
+
+void database_systemAdd(sqlite3 *db, char *name, char *fullname, char *path, int active);
+
+system_t *database_systemList(app_t *app);
+
+void database_systemsDestroy();
 
 #endif

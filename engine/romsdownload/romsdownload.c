@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "romsmania.h"
+#include "romsdownload.h"
 #include "mapping.h"
 #include "../curlling.h"
 #include "../results.h"
@@ -23,7 +23,9 @@
 #include "../urlhandling.h"
 #include "../../helper/regex.h"
 
-#define URL_TEMPLATE "https://romsmania.cc/roms/%system%/search?name=%query%&genre=&region=&orderBy=name&orderAsc=1&page=%page%"
+#define URL_TEMPLATE "https://roms-download.com/ajax.php?m=roms_j"
+#define DATA_TEMPLATE "sort=file_name%24ASC&page=%page%&search=%query%&rom_concole=%system%"
+#define URL_PREFIX "https://roms-download.com"
 
 static searchresult_t *fetchingResultItems(system_t *system, searchresult_t *resultList, char *response);
 
@@ -31,40 +33,37 @@ static char *fetchDownloadPageLink(char *response);
 
 static char *fetchDownloadLink(char *response);
 
-searchresult_t *romsmania_search(app_t *app, system_t *system, char *searchString) {
+searchresult_t *romsdownload_search(app_t *app, system_t *system, char *searchString) {
     uint32_t resultCount = 0;
     uint32_t page = 1;
-    char *urlTemplate = URL_TEMPLATE;
 
     searchresult_t *resultList = NULL;
     do {
-        char *url = urlhandling_substitudeVariables(urlTemplate, system, &romsmania_deviceMapping, searchString, page);
-        if (url == NULL) {
+        char *data = urlhandling_substitudeVariables(DATA_TEMPLATE, system, &romsdownload_deviceMapping, searchString,
+                                                     page);
+        if (data == NULL) {
             break;
         }
 
-        resultCount = getResultListCount(resultList);
-
-        char *response = fetchURL(url);
+        char *response = fetchURLPost(URL_TEMPLATE, data);
         resultList = fetchingResultItems(system, resultList, response);
         free(response);
-        free(url);
+        free(data);
+
+        resultCount = getResultListCount(resultList);
 
         page++;
-    } while (resultCount != getResultListCount(resultList));
+    } while (resultCount != getResultListCount(resultList) && resultCount % 20 == 0);
 
     return resultList;
 }
 
-void romsmania_download(app_t *app, searchresult_t *item, void (*callback)(app_t *app)) {
+void romsdownload_download(app_t *app, searchresult_t *item, void (*callback)(app_t *app)) {
     if (item == NULL) {
         return;
     }
     char *detailPageResponse = fetchURL(item->url);
-    char *linkDownloadPage = fetchDownloadPageLink(detailPageResponse);
-
-    char *downloadPageResponse = fetchURL(linkDownloadPage);
-    char *linkDownload = fetchDownloadLink(downloadPageResponse);
+    char *linkDownload = fetchDownloadLink(detailPageResponse);
 
     char *filename = file_name(linkDownload);
     char *decodedFilename = str_urlDecode(filename);
@@ -72,8 +71,6 @@ void romsmania_download(app_t *app, searchresult_t *item, void (*callback)(app_t
 
     downloadURL(app, linkDownload, downloadPath);
 
-    free(downloadPageResponse);
-    free(linkDownloadPage);
     free(detailPageResponse);
     free(linkDownload);
     free(downloadPath);
@@ -83,19 +80,7 @@ void romsmania_download(app_t *app, searchresult_t *item, void (*callback)(app_t
 }
 
 static char *fetchDownloadLink(char *response) {
-    char *regexString = "<a class=\"wait__link\" href=\"([^\"]+)\">";
-
-    regexMatches_t *matches = regex_getMatches(response, regexString, 1);
-    if (matches == NULL) {
-        return NULL;
-    }
-    char *link = regex_cpyGroupText(matches, 0);
-    regex_destroyMatches(matches);
-    return link;
-}
-
-static char *fetchDownloadPageLink(char *response) {
-    char *regexString = "<a href=\"([^\"]+)\" rel=\"nofollow\" id=\"download_link\" class=\"btn is-with-ico\">";
+    char *regexString = "<a href=\"([^\"]+)\" rel=\"nofollow\" itemprop=\"downloadUrl\">";
 
     regexMatches_t *matches = regex_getMatches(response, regexString, 1);
     if (matches == NULL) {
@@ -115,7 +100,10 @@ static searchresult_t *fetchingResultItems(system_t *system, searchresult_t *res
     while (ptr != NULL) {
         searchresult_t *item = newResultItem(system);
         item->system = system;
-        setUrl(item, ptr->groups[0]);
+
+        char *url = str_concat(URL_PREFIX, ptr->groups[0]);
+        setUrl(item, url);
+        free(url);
 
         char *title = str_htmlDecode(ptr->groups[1]);
         setTitle(item, title);

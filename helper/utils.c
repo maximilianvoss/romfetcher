@@ -19,7 +19,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <SDL_video.h>
 
 static int ishex(int x);
 
@@ -49,7 +48,7 @@ char *str_replace(char *orig, char *rep, char *with) {
         ins = tmp + len_rep;
     }
 
-    tmp = result = malloc(strlen(orig) + (len_with - len_rep) * count + 1);
+    tmp = result = calloc(sizeof(char), strlen(orig) + (len_with - len_rep) * count + 1);
 
     if (!result) {
         return NULL;
@@ -86,7 +85,7 @@ char *str_urlDecode(const char *string) {
     int length = strlen(string);
     const char *end = string + length;
     int c;
-    char *decoded = malloc(sizeof(char) * length + 1);
+    char *decoded = calloc(sizeof(char), length + 1);
 
     for (o = decoded; string <= end; o++) {
         c = *string++;
@@ -102,13 +101,46 @@ char *str_urlDecode(const char *string) {
 }
 
 char *str_htmlDecode(const char *string) {
-    char *decoded = malloc(sizeof(char) * strlen(string) + 1);
+    char *decoded = calloc(sizeof(char), strlen(string) + 1);
     decode_html_entities_utf8(decoded, string);
     return decoded;
 }
 
-char *path_toResource(char *path) {
+char *str_concat(char *str1, char *str2) {
+    if (str1 == NULL || str2 == NULL) {
+        return NULL;
+    }
+    int length = strlen(str1) + strlen(str2) + 1;
+    char *newStr = (char *) calloc(sizeof(char), length);
+    char *ptr = newStr;
+    while (*str1 != '\0') {
+        *ptr = *str1;
+        ptr++;
+        str1++;
+    }
+    while (*str2 != '\0') {
+        *ptr = *str2;
+        ptr++;
+        str2++;
+    }
+    *ptr = '\0';
+    return newStr;
+}
 
+char *str_quoteDecode(char *string) {
+    char *returnStr = calloc(sizeof(char), strlen(string) + 1);
+    char *strIn = string;
+    char *ptr = returnStr;
+
+    while (*strIn != '\0') {
+        if (*strIn == '\\') {
+            strIn++;
+        }
+        *ptr = *strIn;
+        ptr++;
+        strIn++;
+    }
+    return returnStr;
 }
 
 static int ishex(int x) {

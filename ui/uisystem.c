@@ -15,9 +15,8 @@
  */
 
 #include "uisystem.h"
-#include "../config.h"
 #include "rendering.h"
-#include "../systems.h"
+#include "../config.h"
 
 void renderSystemUI(app_t *app) {
     int width, height;
@@ -34,6 +33,9 @@ void renderSystemUI(app_t *app) {
 
     for (int i = 0; i < deviceCountToDisplay / 2 - 1 && systems->prev != NULL; i++) {
         systems = systems->prev;
+        while (!systems->active) {
+            systems = systems->prev;
+        }
     }
 
     for (int position = 50;

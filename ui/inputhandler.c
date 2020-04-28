@@ -16,8 +16,6 @@
 
 #include "inputhandler.h"
 #include "../config.h"
-#include "../structs.h"
-#include "../engine/results.h"
 #include "inputsearch.h"
 #include "inputsystemselect.h"
 #include "inputdownload.h"
@@ -47,16 +45,15 @@ static int gameControllerCount;
 
 
 void initGameController() {
-    if ( SDL_GameControllerAddMapping(CONTROLLER_MAPPING) ) {
-        printf("Failed to open add mapping: %s", SDL_GetError());
-        exit(1);
+    if (SDL_GameControllerAddMapping(CONTROLLER_MAPPING)) {
+        SDL_Log("Failed to add mapping: %s", SDL_GetError());
     }
 
     gameControllerCount = SDL_NumJoysticks();
     SDL_Log("There are %d gamepads attached\n", gameControllerCount);
 
     if (gameControllerCount > 0) {
-        gameControllers = (SDL_GameController **) malloc(sizeof(SDL_GameController *) * gameControllerCount);
+        gameControllers = (SDL_GameController **) calloc(sizeof(SDL_GameController *), gameControllerCount);
 
         for (int i = 0; i < gameControllerCount; ++i) {
             gameControllers[i] = SDL_GameControllerOpen(i);
@@ -71,7 +68,7 @@ void initGameController() {
     }
 }
 
-uint8_t processInputs(app_t *app) {
+uint8_t ui_processInputs(app_t *app) {
     switch (app->win) {
         case search:
             processUp = &search_processUp;
