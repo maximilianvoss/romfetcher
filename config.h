@@ -17,11 +17,14 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#define DATABASE_SCHEMA_VERSION 120
+#define DATABASE_SCHEMA_SUPPORTED_LEGACY_VERSION 120
+
 #define BACKGROUND_IMAGE "/usr/share/romfetcher/wallpaper.jpg"
 #define SELECTOR_ICON "/usr/share/romfetcher/selector.png"
+#define FONTS "/usr/share/romfetcher/FreeSans.ttf"
 #define ROM_BASE_DIR "/home/pi/RetroPie/roms"
 #define DATABASE_FILE "/home/pi/.romfetcher/romfetcher.db"
-#define FONTS "/usr/share/romfetcher/FreeSans.ttf"
 #define CONTROLLER_MAPPING "00000000526574726f53746f6e653200,RetroStone2,a:b0,b:b1,x:b2,y:b3,dpdown:b11,dpleft:b12,dpright:b13,dpup:b10,leftshoulder:b4,lefttrigger:b6,rightshoulder:b5,righttrigger:b7,start:b9,back:b8,leftx:a0,lefty:a1,platform:Linux"
 
 //#define START_IN_WINDOW

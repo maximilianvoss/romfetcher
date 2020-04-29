@@ -20,6 +20,8 @@ find_package(OpenSSL REQUIRED)
 set(SOURCES
         main.c
         config.h
+        database/config.c
+        database/config.h
         database/init.c
         database/init.h
         database/sytems.c

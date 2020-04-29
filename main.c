@@ -21,6 +21,7 @@
 #include "engine/results.h"
 #include "database/init.h"
 #include "database/sytems.h"
+#include "database/config.h"
 
 int main() {
     app_t app;
@@ -29,6 +30,7 @@ int main() {
     database_init(&app);
     ui_init(&app);
 
+    database_configLoad(&app);
     system_t *systems = database_systemList(&app);
     app.search.systemActive = systems;
 

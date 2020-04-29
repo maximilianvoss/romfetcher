@@ -17,10 +17,13 @@
 #include "init.h"
 #include "../config.h"
 #include "sytems.h"
+#include "config.h"
 
 static void initTables(sqlite3 *db);
 
 static uint8_t doesTableExist(sqlite3 *db, char *tableName);
+
+static void dropAllTables(sqlite3 *db);
 
 void database_init(app_t *app) {
     if (sqlite3_open(DATABASE_FILE, &app->database.db) != SQLITE_OK) {
@@ -38,8 +41,27 @@ void database_destroy(app_t *app) {
 }
 
 static void initTables(sqlite3 *db) {
+    if (!doesTableExist(db, "config")) {
+        database_configInitTable(db);
+    } else if (database_configCheckVersion(db)) {
+        dropAllTables(db);
+        database_configInitTable(db);
+    }
+
     if (!doesTableExist(db, "systems")) {
         database_systemsInitTable(db);
+    }
+}
+
+static void dropAllTables(sqlite3 *db) {
+    char *err_msg = 0;
+    char *query = "DROP TABLE IF EXISTS systems; DROP TABLE IF EXISTS config";
+
+    int rc = sqlite3_exec(db, query, 0, 0, &err_msg);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to create table\n");
+        fprintf(stderr, "SQL error: %s\n", err_msg);
+        sqlite3_free(err_msg);
     }
 }
 
