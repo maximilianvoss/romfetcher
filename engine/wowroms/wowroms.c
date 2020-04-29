@@ -49,15 +49,15 @@ searchresult_t *wowroms_search(app_t *app, system_t *system, char *searchString)
             break;
         }
 
-        resultCount = getResultListCount(resultList);
+        resultCount = result_getListCount(resultList);
 
-        char *response = fetchURL(url);
+        char *response = curlling_fetchURL(url);
         resultList = fetchingResultItems(system, resultList, response);
         free(response);
         free(url);
 
         page++;
-    } while (resultCount != getResultListCount(resultList) && resultCount % 30 != 0);
+    } while (resultCount != result_getListCount(resultList) && resultCount % 30 != 0);
 
     return resultList;
 }
@@ -73,11 +73,11 @@ void wowroms_download(app_t *app, searchresult_t *item, void (*callback)(app_t *
     char timeToken[255];
     snprintf(timeToken, 255, "?k=%s&t=%s", timestamp, timestampMD5);
 
-    char *detailPageResponse = fetchURL(item->url);
+    char *detailPageResponse = curlling_fetchURL(item->url);
     char *linkDownloadPageRelative = fetchDownloadPageLink(detailPageResponse);
     char *linkDownloadPage = str_concat(URL_PREFIX, linkDownloadPageRelative);
 
-    char *downloadPageResponse = fetchURL(linkDownloadPage);
+    char *downloadPageResponse = curlling_fetchURL(linkDownloadPage);
     char *downloadServletRel = fetchDownloadServlet(downloadPageResponse);
     char *downloadServlet = str_concat(URL_PREFIX, downloadServletRel);
 
@@ -86,7 +86,7 @@ void wowroms_download(app_t *app, searchresult_t *item, void (*callback)(app_t *
     char *emuid = fetchHiddenField(downloadPageResponse, "emuid");
     char *downloadServletUrl = str_concat(downloadServlet, timeToken);
 
-    char *downloadServletResponse = fetchURLPost(downloadServletUrl, "");
+    char *downloadServletResponse = curlling_fetchURLPost(downloadServletUrl, "");
     char *downloadLink = fetchDownloadLink(downloadServletResponse);
     char *decodedDownloadLink = str_quoteDecode(downloadLink);
 
@@ -107,7 +107,7 @@ void wowroms_download(app_t *app, searchresult_t *item, void (*callback)(app_t *
     char *decodedFilename = str_urlDecode(filename);
     char *downloadPath = download_targetPath(item->system, decodedFilename);
 
-    downloadURLPost(app, decodedDownloadLink, payload, downloadPath);
+    curlling_downloadURLPost(app, decodedDownloadLink, payload, downloadPath);
 
     free(decodedFilename);
     free(downloadPath);
@@ -187,18 +187,18 @@ static searchresult_t *fetchingResultItems(system_t *system, searchresult_t *res
     regexMatches_t *ptr = matches;
 
     while (ptr != NULL) {
-        searchresult_t *item = newResultItem(system);
+        searchresult_t *item = result_newItem(system);
         item->system = system;
 
         char *title = str_htmlDecode(ptr->groups[0]);
-        setTitle(item, title);
+        result_setTitle(item, title);
         free(title);
 
         char *url = str_concat(URL_PREFIX, ptr->groups[1]);
-        setUrl(item, url);
+        result_setUrl(item, url);
         free(url);
 
-        resultList = addResultItemIntoList(resultList, item);
+        resultList = result_addItemToList(resultList, item);
         ptr = ptr->next;
     }
     regex_destroyMatches(matches);

@@ -19,7 +19,7 @@
 
 #include "../structs.h"
 
-void renderSystemUI(app_t *app);
+void uisystem_render(app_t *app);
 
 #endif
 

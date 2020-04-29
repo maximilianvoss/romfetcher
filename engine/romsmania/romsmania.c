@@ -43,15 +43,15 @@ searchresult_t *romsmania_search(app_t *app, system_t *system, char *searchStrin
             break;
         }
 
-        resultCount = getResultListCount(resultList);
+        resultCount = result_getListCount(resultList);
 
-        char *response = fetchURL(url);
+        char *response = curlling_fetchURL(url);
         resultList = fetchingResultItems(system, resultList, response);
         free(response);
         free(url);
 
         page++;
-    } while (resultCount != getResultListCount(resultList));
+    } while (resultCount != result_getListCount(resultList));
 
     return resultList;
 }
@@ -60,17 +60,17 @@ void romsmania_download(app_t *app, searchresult_t *item, void (*callback)(app_t
     if (item == NULL) {
         return;
     }
-    char *detailPageResponse = fetchURL(item->url);
+    char *detailPageResponse = curlling_fetchURL(item->url);
     char *linkDownloadPage = fetchDownloadPageLink(detailPageResponse);
 
-    char *downloadPageResponse = fetchURL(linkDownloadPage);
+    char *downloadPageResponse = curlling_fetchURL(linkDownloadPage);
     char *linkDownload = fetchDownloadLink(downloadPageResponse);
 
     char *filename = file_name(linkDownload);
     char *decodedFilename = str_urlDecode(filename);
     char *downloadPath = download_targetPath(item->system, decodedFilename);
 
-    downloadURL(app, linkDownload, downloadPath);
+    curlling_downloadURL(app, linkDownload, downloadPath);
 
     free(downloadPageResponse);
     free(linkDownloadPage);
@@ -113,15 +113,15 @@ static searchresult_t *fetchingResultItems(system_t *system, searchresult_t *res
     regexMatches_t *ptr = matches;
 
     while (ptr != NULL) {
-        searchresult_t *item = newResultItem(system);
+        searchresult_t *item = result_newItem(system);
         item->system = system;
-        setUrl(item, ptr->groups[0]);
+        result_setUrl(item, ptr->groups[0]);
 
         char *title = str_htmlDecode(ptr->groups[1]);
-        setTitle(item, title);
+        result_setTitle(item, title);
         free(title);
 
-        resultList = addResultItemIntoList(resultList, item);
+        resultList = result_addItemToList(resultList, item);
         ptr = ptr->next;
     }
     regex_destroyMatches(matches);

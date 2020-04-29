@@ -19,6 +19,6 @@
 
 #include "../structs.h"
 
-void renderKeyboardUI(app_t *app);
+void uikeyboard_render(app_t *app);
 
 #endif

@@ -19,8 +19,8 @@
 
 #include "../structs.h"
 
-void initFonts(app_t *app);
+void fonts_init(app_t *app);
 
-void destroyFonts(app_t *app);
+void fonts_destroy(app_t *app);
 
 #endif

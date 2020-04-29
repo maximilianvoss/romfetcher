@@ -15,13 +15,12 @@
  */
 
 #include "inputkeyboard.h"
-#include "../structs.h"
 
 static void addActiveCharToText(app_t *app);
 
 static void removeLastCharFromText(app_t *app);
 
-void keyboard_processUp(app_t *app) {
+void inputkeyboard_processUp(app_t *app) {
     addActiveCharToText(app);
     app->keyboard.pointerPosition -= 3;
     if (app->keyboard.pointerPosition < 0) {
@@ -29,7 +28,7 @@ void keyboard_processUp(app_t *app) {
     }
 }
 
-void keyboard_processDown(app_t *app) {
+void inputkeyboard_processDown(app_t *app) {
     addActiveCharToText(app);
     app->keyboard.pointerPosition += 3;
     if (app->keyboard.pointerPosition > 11) {
@@ -37,7 +36,7 @@ void keyboard_processDown(app_t *app) {
     }
 }
 
-void keyboard_processLeft(app_t *app) {
+void inputkeyboard_processLeft(app_t *app) {
     addActiveCharToText(app);
     app->keyboard.pointerPosition--;
     if (app->keyboard.pointerPosition < 0 || app->keyboard.pointerPosition % 3 == 2) {
@@ -45,7 +44,7 @@ void keyboard_processLeft(app_t *app) {
     }
 }
 
-void keyboard_processRight(app_t *app) {
+void inputkeyboard_processRight(app_t *app) {
     addActiveCharToText(app);
     app->keyboard.pointerPosition++;
     if (app->keyboard.pointerPosition % 3 == 0) {
@@ -53,7 +52,7 @@ void keyboard_processRight(app_t *app) {
     }
 }
 
-void keyboard_processSelect(app_t *app) {
+void inputkeyboard_processSelect(app_t *app) {
     switch (app->keyboard.pointerPosition) {
         case 0:
             if (app->keyboard.activeChar < '0' || app->keyboard.activeChar > '9') {
@@ -172,11 +171,11 @@ void keyboard_processSelect(app_t *app) {
     }
 }
 
-void keyboard_processBack(app_t *app) {
+void inputkeyboard_processBack(app_t *app) {
     app->win = search;
 }
 
-void keyboard_processOtherButton(app_t *app, GameControllerState_t *state) {
+void inputkeyboard_processOtherButton(app_t *app, GameControllerState_t *state) {
     if (state->buttonY) {
         removeLastCharFromText(app);
     }

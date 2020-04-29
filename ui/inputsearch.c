@@ -16,10 +16,9 @@
 
 #include "inputsearch.h"
 #include "../engine/results.h"
-#include "../structs.h"
 #include "../engine/enginehandler.h"
 
-void search_processUp(app_t *app) {
+void inputsearch_processUp(app_t *app) {
     switch (app->search.position) {
         case searchsystem:
             break;
@@ -37,7 +36,7 @@ void search_processUp(app_t *app) {
     }
 }
 
-void search_processDown(app_t *app) {
+void inputsearch_processDown(app_t *app) {
     switch (app->search.position) {
         case searchsystem:
             app->search.position = searchfield;
@@ -57,7 +56,7 @@ void search_processDown(app_t *app) {
     }
 }
 
-void search_processLeft(app_t *app) {
+void inputsearch_processLeft(app_t *app) {
     switch (app->search.position) {
         case searchsystem:
             break;
@@ -77,7 +76,7 @@ void search_processLeft(app_t *app) {
     }
 }
 
-void search_processRight(app_t *app) {
+void inputsearch_processRight(app_t *app) {
     switch (app->search.position) {
         case searchsystem:
             app->search.position = searchfield;
@@ -99,7 +98,7 @@ void search_processRight(app_t *app) {
     }
 }
 
-void search_processSelect(app_t *app) {
+void inputsearch_processSelect(app_t *app) {
     switch (app->search.position) {
         case searchsystem:
             app->search.systemHovered = app->search.systemActive;
@@ -111,9 +110,9 @@ void search_processSelect(app_t *app) {
         case searchbutton:
             if (strlen(app->search.searchText) > 2) {
                 if (app->search.results != NULL) {
-                    freeResultList(app->search.results);
+                    result_freeList(app->search.results);
                 }
-                app->search.results = searchhandler_search(app, app->search.systemActive, app->search.searchText);
+                app->search.results = enginehandler_search(app, app->search.systemActive, app->search.searchText);
                 app->search.resultHovered = app->search.results;
             }
             break;
@@ -124,8 +123,8 @@ void search_processSelect(app_t *app) {
     }
 }
 
-void search_processBack(app_t *app) {
+void inputsearch_processBack(app_t *app) {
 }
 
-void search_processOtherButton(app_t *app, GameControllerState_t *state) {
+void inputsearch_processOtherButton(app_t *app, GameControllerState_t *state) {
 }

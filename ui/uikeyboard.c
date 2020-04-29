@@ -17,14 +17,13 @@
 #include "uikeyboard.h"
 #include "../config.h"
 #include "rendering.h"
-#include "../structs.h"
 
 static void renderSearchField(app_t *app);
 
 static void renderDailPad(app_t *app);
 
 
-void renderKeyboardUI(app_t *app) {
+void uikeyboard_render(app_t *app) {
     renderSearchField(app);
     renderDailPad(app);
 }
@@ -45,7 +44,7 @@ static void renderSearchField(app_t *app) {
     if (*(app->keyboard.text) != '\0') {
         SDL_Color textColor = TEXT_COLOR;
         texture_t texture;
-        loadText(app, &texture, app->keyboard.text, app->fonts.big, &textColor);
+        rendering_loadText(app, &texture, app->keyboard.text, app->fonts.big, &textColor);
         SDL_Rect renderQuad = {60, 55, texture.w, texture.h};
         SDL_RenderCopy(app->renderer, texture.texture, NULL, &renderQuad);
         charPos += texture.w;
@@ -56,7 +55,7 @@ static void renderSearchField(app_t *app) {
         char miniString[2] = {app->keyboard.activeChar, '\0'};
         SDL_Color textColor = TEXT_HIGHLIGHT_COLOR;
         texture_t texture;
-        loadText(app, &texture, miniString, app->fonts.big, &textColor);
+        rendering_loadText(app, &texture, miniString, app->fonts.big, &textColor);
         SDL_Rect renderQuad = {charPos, 55, texture.w, texture.h};
         SDL_RenderCopy(app->renderer, texture.texture, NULL, &renderQuad);
         SDL_DestroyTexture(texture.texture);
@@ -100,7 +99,7 @@ static void renderKey(app_t *app, int posx, int posy, int padWidth, int padHeigh
     if (text != NULL && *text != '\0') {
         SDL_Color textColor = TEXT_COLOR;
         texture_t texture;
-        loadText(app, &texture, text, app->fonts.huge, &textColor);
+        rendering_loadText(app, &texture, text, app->fonts.huge, &textColor);
         SDL_Rect renderQuad = {posx + 20, posy + 10, padWidth - 40, padHeight - 20};
         SDL_RenderCopy(app->renderer, texture.texture, NULL, &renderQuad);
         SDL_DestroyTexture(texture.texture);

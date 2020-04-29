@@ -19,11 +19,11 @@
 
 #include "../structs.h"
 
-void initGameController();
+void inputhandler_init();
 
-void freeGameController();
+void inputhandler_destroy();
 
-uint8_t ui_processInputs(app_t *app);
+uint8_t inputhandler_processInputs(app_t *app);
 
 
 #endif

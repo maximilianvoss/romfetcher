@@ -16,7 +16,7 @@
 
 #include "results.h"
 
-searchresult_t *newResultItem(system_t *system) {
+searchresult_t *result_newItem(system_t *system) {
     searchresult_t *resultList = (searchresult_t *) calloc(sizeof(searchresult_t), 1);
     resultList->title = NULL;
     resultList->url = NULL;
@@ -26,7 +26,7 @@ searchresult_t *newResultItem(system_t *system) {
     return resultList;
 }
 
-searchresult_t *addResultItemIntoList(searchresult_t *resultList, searchresult_t *newItem) {
+searchresult_t *result_addItemToList(searchresult_t *resultList, searchresult_t *newItem) {
     if (resultList == NULL) {
         return newItem;
     }
@@ -40,7 +40,7 @@ searchresult_t *addResultItemIntoList(searchresult_t *resultList, searchresult_t
     return resultList;
 }
 
-void setTitle(searchresult_t *resultList, char *title) {
+void result_setTitle(searchresult_t *resultList, char *title) {
     SDL_Log("Title: %s\n", title);
     if (resultList == NULL || title == NULL) {
         return;
@@ -50,7 +50,7 @@ void setTitle(searchresult_t *resultList, char *title) {
     memcpy(resultList->title, title, length);
 }
 
-void setUrl(searchresult_t *resultList, char *url) {
+void result_setUrl(searchresult_t *resultList, char *url) {
     SDL_Log("URL: %s\n", url);
     if (resultList == NULL || url == NULL) {
         return;
@@ -60,13 +60,13 @@ void setUrl(searchresult_t *resultList, char *url) {
     memcpy(resultList->url, url, length);
 }
 
-void freeResultList(searchresult_t *resultList) {
+void result_freeList(searchresult_t *resultList) {
     if (resultList == NULL) {
         return;
     }
     searchresult_t *next = resultList->next;
     if (next != NULL) {
-        freeResultList(next);
+        result_freeList(next);
     }
     if (resultList->title != NULL) {
         free(resultList->title);
@@ -77,7 +77,7 @@ void freeResultList(searchresult_t *resultList) {
     free(resultList);
 }
 
-uint32_t getResultListCount(searchresult_t *resultList) {
+uint32_t result_getListCount(searchresult_t *resultList) {
     uint32_t count = 0;
     while (resultList != NULL) {
         count++;

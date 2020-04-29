@@ -19,16 +19,16 @@
 
 #include "../structs.h"
 
-searchresult_t *addResultItemIntoList(searchresult_t *resultList, searchresult_t *newItem);
+searchresult_t *result_addItemToList(searchresult_t *resultList, searchresult_t *newItem);
 
-searchresult_t *newResultItem(system_t *system);
+searchresult_t *result_newItem(system_t *system);
 
-void setTitle(searchresult_t *resultList, char *title);
+void result_setTitle(searchresult_t *resultList, char *title);
 
-void setUrl(searchresult_t *resultList, char *url);
+void result_setUrl(searchresult_t *resultList, char *url);
 
-void freeResultList(searchresult_t *resultList);
+void result_freeList(searchresult_t *resultList);
 
-uint32_t getResultListCount(searchresult_t *resultList);
+uint32_t result_getListCount(searchresult_t *resultList);
 
 #endif

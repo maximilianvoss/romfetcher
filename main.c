@@ -36,14 +36,14 @@ int main() {
 
     uint8_t quit = 0;
     while (!quit) {
-        quit = ui_processInputs(&app);
-        ui_render(&app);
+        quit = inputhandler_processInputs(&app);
+        uihandler_render(&app);
         SDL_Delay(75);
     }
 
     ui_destroy(&app);
     if ( app.search.results != NULL ) {
-        freeResultList(app.search.results);
+        result_freeList(app.search.results);
     }
     database_systemsDestroy();
     database_destroy(&app);

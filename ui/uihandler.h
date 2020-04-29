@@ -19,6 +19,6 @@
 
 #include "../structs.h"
 
-void ui_render(app_t *app);
+void uihandler_render(app_t *app);
 
 #endif

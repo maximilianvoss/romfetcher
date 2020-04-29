@@ -18,15 +18,14 @@
 #include <SDL_image.h>
 #include "rendering.h"
 #include "../config.h"
-#include "../structs.h"
 
-void initTextures(app_t *app) {
+void textures_init(app_t *app) {
     IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
-    app->textures.backgroundImage = loadTexture(app, BACKGROUND_IMAGE);
-    app->textures.searchChevron = loadTexture(app, SELECTOR_ICON);
+    app->textures.backgroundImage = rendering_loadImage(app, BACKGROUND_IMAGE);
+    app->textures.searchChevron = rendering_loadImage(app, SELECTOR_ICON);
 }
 
-void destroyTextures(app_t *app) {
+void textures_destroy(app_t *app) {
     SDL_DestroyTexture(app->textures.backgroundImage);
     SDL_DestroyTexture(app->textures.searchChevron);
 }

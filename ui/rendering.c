@@ -17,14 +17,14 @@
 #include "rendering.h"
 #include <SDL_image.h>
 
-SDL_Texture *loadTexture(app_t *app, char *filename) {
+SDL_Texture *rendering_loadImage(app_t *app, char *filename) {
     SDL_Texture *texture;
     SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "Loading %s", filename);
     texture = IMG_LoadTexture(app->renderer, filename);
     return texture;
 }
 
-void loadText(app_t *app, texture_t *texture, char *str, TTF_Font *font, SDL_Color *color) {
+void rendering_loadText(app_t *app, texture_t *texture, char *str, TTF_Font *font, SDL_Color *color) {
     SDL_Surface *textSurface = TTF_RenderText_Blended(font, str, *color);
     if (textSurface != NULL) {
         texture->texture = SDL_CreateTextureFromSurface(app->renderer, textSurface);

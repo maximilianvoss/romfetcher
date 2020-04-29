@@ -16,7 +16,6 @@
 
 #include "inputdownload.h"
 #include <pthread.h>
-#include "../structs.h"
 #include "../engine/enginehandler.h"
 
 static void downloadCallback(app_t *app);
@@ -27,23 +26,23 @@ static void *executeThread(void *app_ptr);
 
 static void moveToNext(app_t *app);
 
-void download_processUp(app_t *app) {
+void inputdownload_processUp(app_t *app) {
     moveToNext(app);
 }
 
-void download_processDown(app_t *app) {
+void inputdownload_processDown(app_t *app) {
     moveToNext(app);
 }
 
-void download_processLeft(app_t *app) {
+void inputdownload_processLeft(app_t *app) {
     moveToNext(app);
 }
 
-void download_processRight(app_t *app) {
+void inputdownload_processRight(app_t *app) {
     moveToNext(app);
 }
 
-void download_processSelect(app_t *app) {
+void inputdownload_processSelect(app_t *app) {
     switch (app->download.cursorPos) {
         case posCancel:
             app->win = search;
@@ -61,10 +60,10 @@ void download_processSelect(app_t *app) {
     }
 }
 
-void download_processBack(app_t *app) {
+void inputdownload_processBack(app_t *app) {
 }
 
-void download_processOtherButton(app_t *app, GameControllerState_t *state) {
+void inputdownload_processOtherButton(app_t *app, GameControllerState_t *state) {
 }
 
 static void moveToNext(app_t *app) {
@@ -79,7 +78,7 @@ static void moveToNext(app_t *app) {
 
 static void *executeThread(void *app_ptr) {
     app_t *app = (app_t *) app_ptr;
-    searchhandler_download(app, app->search.resultActive, &downloadCallback);
+    enginehandler_download(app, app->search.resultActive, &downloadCallback);
     return NULL;
 }
 

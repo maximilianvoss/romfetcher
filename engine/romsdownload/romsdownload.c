@@ -45,15 +45,15 @@ searchresult_t *romsdownload_search(app_t *app, system_t *system, char *searchSt
             break;
         }
 
-        char *response = fetchURLPost(URL_TEMPLATE, data);
+        char *response = curlling_fetchURLPost(URL_TEMPLATE, data);
         resultList = fetchingResultItems(system, resultList, response);
         free(response);
         free(data);
 
-        resultCount = getResultListCount(resultList);
+        resultCount = result_getListCount(resultList);
 
         page++;
-    } while (resultCount != getResultListCount(resultList) && resultCount % 20 == 0);
+    } while (resultCount != result_getListCount(resultList) && resultCount % 20 == 0);
 
     return resultList;
 }
@@ -62,14 +62,14 @@ void romsdownload_download(app_t *app, searchresult_t *item, void (*callback)(ap
     if (item == NULL) {
         return;
     }
-    char *detailPageResponse = fetchURL(item->url);
+    char *detailPageResponse = curlling_fetchURL(item->url);
     char *linkDownload = fetchDownloadLink(detailPageResponse);
 
     char *filename = file_name(linkDownload);
     char *decodedFilename = str_urlDecode(filename);
     char *downloadPath = download_targetPath(item->system, decodedFilename);
 
-    downloadURL(app, linkDownload, downloadPath);
+    curlling_downloadURL(app, linkDownload, downloadPath);
 
     free(detailPageResponse);
     free(linkDownload);
@@ -98,18 +98,18 @@ static searchresult_t *fetchingResultItems(system_t *system, searchresult_t *res
     regexMatches_t *ptr = matches;
 
     while (ptr != NULL) {
-        searchresult_t *item = newResultItem(system);
+        searchresult_t *item = result_newItem(system);
         item->system = system;
 
         char *url = str_concat(URL_PREFIX, ptr->groups[0]);
-        setUrl(item, url);
+        result_setUrl(item, url);
         free(url);
 
         char *title = str_htmlDecode(ptr->groups[1]);
-        setTitle(item, title);
+        result_setTitle(item, title);
         free(title);
 
-        resultList = addResultItemIntoList(resultList, item);
+        resultList = result_addItemToList(resultList, item);
         ptr = ptr->next;
     }
     regex_destroyMatches(matches);

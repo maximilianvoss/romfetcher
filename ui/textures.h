@@ -19,8 +19,8 @@
 
 #include "../structs.h"
 
-void initTextures(app_t *app);
+void textures_init(app_t *app);
 
-void destroyTextures(app_t *app);
+void textures_destroy(app_t *app);
 
 #endif

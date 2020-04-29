@@ -67,15 +67,15 @@ void ui_init(app_t *app) {
     }
     SDL_SetRenderDrawBlendMode(app->renderer, SDL_BLENDMODE_BLEND);
 
-    initTextures(app);
-    initFonts(app);
-    initGameController();
+    textures_init(app);
+    fonts_init(app);
+    inputhandler_init();
 }
 
 void ui_destroy(app_t *app) {
-    freeGameController();
-    destroyTextures(app);
-    destroyFonts(app);
+    inputhandler_destroy();
+    textures_destroy(app);
+    fonts_destroy(app);
     SDL_DestroyRenderer(app->renderer);
     SDL_DestroyWindow(app->window);
     SDL_Quit();

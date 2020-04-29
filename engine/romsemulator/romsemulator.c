@@ -46,15 +46,15 @@ searchresult_t *romsemulator_search(app_t *app, system_t *system, char *searchSt
             break;
         }
 
-        resultCount = getResultListCount(resultList);
+        resultCount = result_getListCount(resultList);
 
-        char *response = fetchURL(url);
+        char *response = curlling_fetchURL(url);
         resultList = fetchingResultItems(system, resultList, response);
         free(response);
         free(url);
 
         page++;
-    } while (resultCount != getResultListCount(resultList) && resultCount % 10 == 0);
+    } while (resultCount != result_getListCount(resultList) && resultCount % 10 == 0);
 
     return resultList;
 }
@@ -63,10 +63,10 @@ void romsemulator_download(app_t *app, searchresult_t *item, void (*callback)(ap
     if (item == NULL) {
         return;
     }
-    char *detailPageResponse = fetchURL(item->url);
+    char *detailPageResponse = curlling_fetchURL(item->url);
     char *linkDownloadPage = fetchDownloadPageLink(detailPageResponse);
 
-    char *downloadPageResponse = fetchURL(linkDownloadPage);
+    char *downloadPageResponse = curlling_fetchURL(linkDownloadPage);
 
     char *pid = fetchHiddenField(downloadPageResponse, "pid", 0);
     char *roms = fetchHiddenField(downloadPageResponse, "roms_download_file_nonce_field", 1);
@@ -99,7 +99,7 @@ void romsemulator_download(app_t *app, searchresult_t *item, void (*callback)(ap
     char *decodeFilename = file_name(filename);
     char *downloadPath = download_targetPath(item->system, decodeFilename);
 
-    downloadURLPost(app, linkDownloadPage, payload, downloadPath);
+    curlling_downloadURLPost(app, linkDownloadPage, payload, downloadPath);
 
     free(pid);
     free(roms);
@@ -164,15 +164,15 @@ static searchresult_t *fetchingResultItems(system_t *system, searchresult_t *res
     regexMatches_t *ptr = matches;
 
     while (ptr != NULL) {
-        searchresult_t *item = newResultItem(system);
+        searchresult_t *item = result_newItem(system);
         item->system = system;
-        setUrl(item, ptr->groups[0]);
+        result_setUrl(item, ptr->groups[0]);
 
         char *title = str_htmlDecode(ptr->groups[1]);
-        setTitle(item, title);
+        result_setTitle(item, title);
         free(title);
 
-        resultList = addResultItemIntoList(resultList, item);
+        resultList = result_addItemToList(resultList, item);
         ptr = ptr->next;
     }
     regex_destroyMatches(matches);

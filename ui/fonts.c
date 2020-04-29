@@ -17,7 +17,7 @@
 #include "fonts.h"
 #include "../config.h"
 
-void initFonts(app_t *app) {
+void fonts_init(app_t *app) {
     TTF_Init();
 
     app->fonts.huge = TTF_OpenFont(FONTS, 144);
@@ -46,7 +46,7 @@ void initFonts(app_t *app) {
     }
 }
 
-void destroyFonts(app_t *app) {
+void fonts_destroy(app_t *app) {
     TTF_CloseFont(app->fonts.huge);
     TTF_CloseFont(app->fonts.big);
     TTF_CloseFont(app->fonts.medium);

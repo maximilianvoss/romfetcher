@@ -28,7 +28,7 @@ static void renderCancelButton(app_t *app);
 
 static void renderDoneButton(app_t *app);
 
-void renderDownloadUI(app_t *app) {
+void uidownload_render(app_t *app) {
     if (app->search.resultActive == NULL) {
         SDL_Log("Active search result is empty");
         return;
@@ -51,7 +51,7 @@ static void renderTitle(app_t *app) {
 
     SDL_Color textColor = TEXT_COLOR_INVERT;
     texture_t texture;
-    loadText(app, &texture, app->search.resultActive->title, app->fonts.big, &textColor);
+    rendering_loadText(app, &texture, app->search.resultActive->title, app->fonts.big, &textColor);
 
     int textureWidth = (texture.w > width + 100) ? width - 100 : texture.w;
     SDL_Rect renderQuad = {width / 2 - textureWidth / 2, 55, textureWidth, texture.h};
@@ -88,7 +88,7 @@ static void renderProgressBar(app_t *app) {
 
     SDL_Color textColor = TEXT_COLOR;
     texture_t texture;
-    loadText(app, &texture, percentText, app->fonts.big, &textColor);
+    rendering_loadText(app, &texture, percentText, app->fonts.big, &textColor);
     SDL_Rect renderQuad = {width / 2 - texture.w / 2, 205, texture.w, texture.h};
     SDL_RenderCopy(app->renderer, texture.texture, NULL, &renderQuad);
 
@@ -101,7 +101,7 @@ static void renderStartButton(app_t *app) {
 
     SDL_Color textColor = TEXT_COLOR;
     texture_t texture;
-    loadText(app, &texture, "Download", app->fonts.big, &textColor);
+    rendering_loadText(app, &texture, "Download", app->fonts.big, &textColor);
 
     SDL_Rect rect1 = {width - 50 - texture.w - 100, 300, texture.w + 100, 70};
     SDL_SetRenderDrawColor(app->renderer, 0, 0, app->download.cursorPos == posDownload ? 255 : 0, 150);
@@ -123,7 +123,7 @@ static void renderCancelButton(app_t *app) {
 
     SDL_Color textColor = TEXT_COLOR;
     texture_t texture;
-    loadText(app, &texture, "Cancel", app->fonts.big, &textColor);
+    rendering_loadText(app, &texture, "Cancel", app->fonts.big, &textColor);
 
     SDL_Rect rect1 = {50, 300, texture.w + 100, 70};
     SDL_SetRenderDrawColor(app->renderer, 0, 0, app->download.cursorPos == posCancel ? 255 : 0, 150);
@@ -145,7 +145,7 @@ static void renderDoneButton(app_t *app) {
 
     SDL_Color textColor = TEXT_COLOR;
     texture_t texture;
-    loadText(app, &texture, "Done", app->fonts.big, &textColor);
+    rendering_loadText(app, &texture, "Done", app->fonts.big, &textColor);
 
     SDL_Rect rect1 = {width / 2 - texture.w / 2 - 50, 300, texture.w + 100, 70};
     SDL_SetRenderDrawColor(app->renderer, 0, 0, app->download.cursorPos == posDone ? 255 : 0, 150);

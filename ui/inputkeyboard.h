@@ -19,18 +19,18 @@
 
 #include "../structs.h"
 
-void keyboard_processUp(app_t *app);
+void inputkeyboard_processUp(app_t *app);
 
-void keyboard_processDown(app_t *app);
+void inputkeyboard_processDown(app_t *app);
 
-void keyboard_processLeft(app_t *app);
+void inputkeyboard_processLeft(app_t *app);
 
-void keyboard_processRight(app_t *app);
+void inputkeyboard_processRight(app_t *app);
 
-void keyboard_processSelect(app_t *app);
+void inputkeyboard_processSelect(app_t *app);
 
-void keyboard_processBack(app_t *app);
+void inputkeyboard_processBack(app_t *app);
 
-void keyboard_processOtherButton(app_t *app, GameControllerState_t *state);
+void inputkeyboard_processOtherButton(app_t *app, GameControllerState_t *state);
 
 #endif

@@ -19,6 +19,6 @@
 
 #include "../structs.h"
 
-void renderSearchUI(app_t *app);
+void uisearch_render(app_t *app);
 
 #endif

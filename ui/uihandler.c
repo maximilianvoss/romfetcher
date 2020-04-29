@@ -42,7 +42,7 @@ static void renderDefaults(app_t *app) {
     char *text = copyright();
     SDL_Color textColor = TEXT_COLOR_INVERT;
     texture_t texture;
-    loadText(app, &texture, text, app->fonts.small, &textColor);
+    rendering_loadText(app, &texture, text, app->fonts.small, &textColor);
     SDL_Rect renderQuad = {50, height - 40, texture.w, texture.h};
     SDL_RenderCopy(app->renderer, texture.texture, NULL, &renderQuad);
     free(text);
@@ -51,22 +51,22 @@ static void renderDefaults(app_t *app) {
 
 }
 
-void ui_render(app_t *app) {
+void uihandler_render(app_t *app) {
     void (*renderEngine)(app_t *app) = NULL;
     renderDefaults(app);
 
     switch (app->win) {
         case search:
-            renderEngine = &renderSearchUI;
+            renderEngine = &uisearch_render;
             break;
         case systemselect:
-            renderEngine = &renderSystemUI;
+            renderEngine = &uisystem_render;
             break;
         case keyboard:
-            renderEngine = &renderKeyboardUI;
+            renderEngine = &uikeyboard_render;
             break;
         case download:
-            renderEngine = &renderDownloadUI;
+            renderEngine = &uidownload_render;
             break;
     }
 

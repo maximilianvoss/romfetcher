@@ -31,7 +31,7 @@ static int xferinfo(void *p, curl_off_t dltotal, curl_off_t dlnow, curl_off_t ul
 static int older_progress(void *p, double dltotal, double dlnow, double ultotal, double ulnow);
 #endif
 
-char *fetchURL(char *url) {
+char *curlling_fetchURL(char *url) {
     CURL *curl;
     CURLcode res;
 
@@ -56,7 +56,7 @@ char *fetchURL(char *url) {
     return data.data;
 }
 
-char *fetchURLPost(char *url, char *postData) {
+char *curlling_fetchURLPost(char *url, char *postData) {
     CURL *curl;
     CURLcode res;
 
@@ -83,7 +83,7 @@ char *fetchURLPost(char *url, char *postData) {
     return data.data;
 }
 
-int downloadURL(app_t *app, char *url, char *filename) {
+int curlling_downloadURL(app_t *app, char *url, char *filename) {
     CURL *curl;
     FILE *pagefile;
     CURLcode res = CURLE_OK;
@@ -117,7 +117,7 @@ int downloadURL(app_t *app, char *url, char *filename) {
     return res;
 }
 
-int downloadURLPost(app_t *app, char *url, char *data, char *filename) {
+int curlling_downloadURLPost(app_t *app, char *url, char *data, char *filename) {
     CURL *curl;
     FILE *pagefile;
     CURLcode res = CURLE_OK;

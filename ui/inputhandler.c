@@ -44,7 +44,7 @@ static GameControllerState_t gameControllerState;
 static int gameControllerCount;
 
 
-void initGameController() {
+void inputhandler_init() {
     if (SDL_GameControllerAddMapping(CONTROLLER_MAPPING)) {
         SDL_Log("Failed to add mapping: %s", SDL_GetError());
     }
@@ -68,49 +68,49 @@ void initGameController() {
     }
 }
 
-uint8_t ui_processInputs(app_t *app) {
+uint8_t inputhandler_processInputs(app_t *app) {
     switch (app->win) {
         case search:
-            processUp = &search_processUp;
-            processDown = &search_processDown;
-            processLeft = &search_processLeft;
-            processRight = &search_processRight;
-            processSelect = &search_processSelect;
-            processBack = &search_processBack;
-            processOtherButton = &search_processOtherButton;
+            processUp = &inputsearch_processUp;
+            processDown = &inputsearch_processDown;
+            processLeft = &inputsearch_processLeft;
+            processRight = &inputsearch_processRight;
+            processSelect = &inputsearch_processSelect;
+            processBack = &inputsearch_processBack;
+            processOtherButton = &inputsearch_processOtherButton;
             break;
         case systemselect:
-            processUp = &systemselect_processUp;
-            processDown = &systemselect_processDown;
-            processLeft = &systemselect_processLeft;
-            processRight = &systemselect_processRight;
-            processSelect = &systemselect_processSelect;
-            processBack = &systemselect_processBack;
-            processOtherButton = &systemselect_processOtherButton;
+            processUp = &inputsystemselect_processUp;
+            processDown = &inputsystemselect_processDown;
+            processLeft = &inputsystemselect_processLeft;
+            processRight = &inputsystemselect_processRight;
+            processSelect = &inputsystemselect_processSelect;
+            processBack = &inputsystemselect_processBack;
+            processOtherButton = &inputsystemselect_processOtherButton;
             break;
         case keyboard:
-            processUp = &keyboard_processUp;
-            processDown = &keyboard_processDown;
-            processLeft = &keyboard_processLeft;
-            processRight = &keyboard_processRight;
-            processSelect = &keyboard_processSelect;
-            processBack = &keyboard_processBack;
-            processOtherButton = &keyboard_processOtherButton;
+            processUp = &inputkeyboard_processUp;
+            processDown = &inputkeyboard_processDown;
+            processLeft = &inputkeyboard_processLeft;
+            processRight = &inputkeyboard_processRight;
+            processSelect = &inputkeyboard_processSelect;
+            processBack = &inputkeyboard_processBack;
+            processOtherButton = &inputkeyboard_processOtherButton;
             break;
         case download:
-            processUp = &download_processUp;
-            processDown = &download_processDown;
-            processLeft = &download_processLeft;
-            processRight = &download_processRight;
-            processSelect = &download_processSelect;
-            processBack = &download_processBack;
-            processOtherButton = &download_processOtherButton;
+            processUp = &inputdownload_processUp;
+            processDown = &inputdownload_processDown;
+            processLeft = &inputdownload_processLeft;
+            processRight = &inputdownload_processRight;
+            processSelect = &inputdownload_processSelect;
+            processBack = &inputdownload_processBack;
+            processOtherButton = &inputdownload_processOtherButton;
             break;
     }
     return processEvents(app);
 }
 
-void freeGameController() {
+void inputhandler_destroy() {
     for (int i = 0; i < gameControllerCount; i++) {
         SDL_GameControllerClose(gameControllers[i]);
     }

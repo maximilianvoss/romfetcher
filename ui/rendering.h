@@ -19,8 +19,8 @@
 
 #include "../structs.h"
 
-SDL_Texture *loadTexture(app_t *app, char *filename);
+SDL_Texture *rendering_loadImage(app_t *app, char *filename);
 
-void loadText(app_t *app, texture_t *texture, char *str, TTF_Font *font, SDL_Color *color);
+void rendering_loadText(app_t *app, texture_t *texture, char *str, TTF_Font *font, SDL_Color *color);
 
 #endif

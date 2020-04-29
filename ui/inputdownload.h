@@ -19,18 +19,18 @@
 
 #include "../structs.h"
 
-void download_processUp(app_t *app);
+void inputdownload_processUp(app_t *app);
 
-void download_processDown(app_t *app);
+void inputdownload_processDown(app_t *app);
 
-void download_processLeft(app_t *app);
+void inputdownload_processLeft(app_t *app);
 
-void download_processRight(app_t *app);
+void inputdownload_processRight(app_t *app);
 
-void download_processSelect(app_t *app);
+void inputdownload_processSelect(app_t *app);
 
-void download_processBack(app_t *app);
+void inputdownload_processBack(app_t *app);
 
-void download_processOtherButton(app_t *app, GameControllerState_t *state);
+void inputdownload_processOtherButton(app_t *app, GameControllerState_t *state);
 
 #endif

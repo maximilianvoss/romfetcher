@@ -19,18 +19,18 @@
 
 #include "../structs.h"
 
-void systemselect_processUp(app_t *app);
+void inputsystemselect_processUp(app_t *app);
 
-void systemselect_processDown(app_t *app);
+void inputsystemselect_processDown(app_t *app);
 
-void systemselect_processLeft(app_t *app);
+void inputsystemselect_processLeft(app_t *app);
 
-void systemselect_processRight(app_t *app);
+void inputsystemselect_processRight(app_t *app);
 
-void systemselect_processSelect(app_t *app);
+void inputsystemselect_processSelect(app_t *app);
 
-void systemselect_processBack(app_t *app);
+void inputsystemselect_processBack(app_t *app);
 
-void systemselect_processOtherButton(app_t *app, GameControllerState_t *state);
+void inputsystemselect_processOtherButton(app_t *app, GameControllerState_t *state);
 
 #endif

@@ -19,18 +19,18 @@
 
 #include "../structs.h"
 
-void search_processUp(app_t *app);
+void inputsearch_processUp(app_t *app);
 
-void search_processDown(app_t *app);
+void inputsearch_processDown(app_t *app);
 
-void search_processLeft(app_t *app);
+void inputsearch_processLeft(app_t *app);
 
-void search_processRight(app_t *app);
+void inputsearch_processRight(app_t *app);
 
-void search_processSelect(app_t *app);
+void inputsearch_processSelect(app_t *app);
 
-void search_processBack(app_t *app);
+void inputsearch_processBack(app_t *app);
 
-void search_processOtherButton(app_t *app, GameControllerState_t *state);
+void inputsearch_processOtherButton(app_t *app, GameControllerState_t *state);
 
 #endif

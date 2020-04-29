@@ -17,8 +17,6 @@
 #include "uisearch.h"
 #include "../config.h"
 #include "rendering.h"
-#include "../structs.h"
-#include "../helper/utils.h"
 
 static void renderSearchField(app_t *app);
 
@@ -28,7 +26,7 @@ static void renderDeviceSelector(app_t *app);
 
 static void renderSearchResults(app_t *app);
 
-void renderSearchUI(app_t *app) {
+void uisearch_render(app_t *app) {
     renderDeviceSelector(app);
     renderSearchField(app);
     renderSearchButton(app);
@@ -52,7 +50,7 @@ static void renderDeviceSelector(app_t *app) {
 
     SDL_Color textColor = TEXT_COLOR;
     texture_t texture;
-    loadText(app, &texture, app->search.systemActive->fullname, app->fonts.big, &textColor);
+    rendering_loadText(app, &texture, app->search.systemActive->fullname, app->fonts.big, &textColor);
     SDL_Rect renderQuad = {60, 55, texture.w, texture.h};
     SDL_RenderCopy(app->renderer, texture.texture, NULL, &renderQuad);
     SDL_DestroyTexture(texture.texture);
@@ -74,7 +72,7 @@ static void renderSearchField(app_t *app) {
     if (*(app->search.searchText) != '\0') {
         SDL_Color textColor = TEXT_COLOR;
         texture_t texture;
-        loadText(app, &texture, app->search.searchText, app->fonts.big, &textColor);
+        rendering_loadText(app, &texture, app->search.searchText, app->fonts.big, &textColor);
         SDL_Rect renderQuad = {60, 125, texture.w, texture.h};
         SDL_RenderCopy(app->renderer, texture.texture, NULL, &renderQuad);
         SDL_DestroyTexture(texture.texture);
@@ -95,7 +93,7 @@ static void renderSearchButton(app_t *app) {
 
     SDL_Color textColor = TEXT_COLOR;
     texture_t texture;
-    loadText(app, &texture, "Search", app->fonts.big, &textColor);
+    rendering_loadText(app, &texture, "Search", app->fonts.big, &textColor);
     SDL_Rect renderQuad = {width - 180, 125, texture.w, texture.h};
     SDL_RenderCopy(app->renderer, texture.texture, NULL, &renderQuad);
     SDL_DestroyTexture(texture.texture);
@@ -120,7 +118,7 @@ static void renderSearchResults(app_t *app) {
 
     for (int position = 190;
          position <= height - 80 && result != NULL; position += 35, result = result->next) {
-        loadText(app, &texture, result->title, app->fonts.medium, &textColor);
+        rendering_loadText(app, &texture, result->title, app->fonts.medium, &textColor);
 
         SDL_Rect r2 = {48, position - 2, width - 96, 40};
         SDL_SetRenderDrawColor(app->renderer, 0, 0,

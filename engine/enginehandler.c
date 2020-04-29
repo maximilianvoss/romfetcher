@@ -27,7 +27,7 @@ static searchresult_t *(*searchFunction)(app_t *app, system_t *system, char *sea
 
 static void (*downloadFunction)(app_t *app, searchresult_t *item, void (*callback)(app_t *app));
 
-searchresult_t *searchhandler_search(app_t *app, system_t *system, char *searchString) {
+searchresult_t *enginehandler_search(app_t *app, system_t *system, char *searchString) {
     determineSearchEngine(app);
     if (searchFunction != NULL) {
         return searchFunction(app, system, searchString);
@@ -35,7 +35,7 @@ searchresult_t *searchhandler_search(app_t *app, system_t *system, char *searchS
     return NULL;
 }
 
-void searchhandler_download(app_t *app, searchresult_t *item, void (*callback)(app_t *app)) {
+void enginehandler_download(app_t *app, searchresult_t *item, void (*callback)(app_t *app)) {
     determineSearchEngine(app);
     if (downloadFunction != NULL) {
         downloadFunction(app, item, callback);

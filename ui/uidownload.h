@@ -19,6 +19,6 @@
 
 #include "../structs.h"
 
-void renderDownloadUI(app_t *app);
+void uidownload_render(app_t *app);
 
 #endif
