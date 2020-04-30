@@ -23,31 +23,41 @@
 #include <sqlite3.h>
 
 typedef enum {
-    search,
-    systemselect,
-    keyboard,
-    download
+    window_search,
+    window_system,
+    window_keyboard,
+    window_download,
+    window_config,
+    window_config_engine,
+    window_config_systems
 } window_t;
 
 typedef enum {
-    romsmania,
-    romsmode,
-    wowroms,
-    romsdownload,
-    romsemulator
+    engine_notdefined,
+    engine_romsmania,
+    engine_romsmode,
+    engine_wowroms,
+    engine_romsdownload,
+    engine_romsemulator
 } engine_t;
 
 typedef enum {
-    searchsystem,
-    searchfield,
-    searchbutton,
-    searchresults
+    config_engine,
+    config_systems
+} config_t;
+
+typedef enum {
+    searchactivity_system,
+    searchactivity_field,
+    searchactivity_button,
+    searchactivity_results,
+    searchactivity_config
 } searchactivity_t;
 
 typedef enum {
-    posCancel,
-    posDownload,
-    posDone
+    downloadActivity_cancel,
+    downloadActivity_start,
+    downloadActivity_done
 } downloadactivity_t;
 
 typedef struct system_s {
@@ -71,11 +81,25 @@ typedef struct {
     SDL_Renderer *renderer;
     SDL_Window *window;
     struct {
+        system_t *all;
+        system_t *enabled;
+    } systems;
+
+    struct {
         sqlite3 *db;
     } database;
     struct {
+        config_t configCursor;
+        engine_t engineCursor;
+        system_t *systems;
+        system_t *systemCursor;
+    } config;
+    struct {
         SDL_Texture *backgroundImage;
         SDL_Texture *searchChevron;
+        SDL_Texture *settingsIcon;
+        SDL_Texture *checkboxChecked;
+        SDL_Texture *checkboxUnchecked;
     } textures;
     struct {
         TTF_Font *huge;

@@ -20,15 +20,18 @@
 
 void inputsearch_processUp(app_t *app) {
     switch (app->search.position) {
-        case searchsystem:
+        case searchactivity_config:
             break;
-        case searchfield:
-        case searchbutton:
-            app->search.position = searchsystem;
+        case searchactivity_system:
+            app->search.position = searchactivity_config;
             break;
-        case searchresults:
+        case searchactivity_field:
+        case searchactivity_button:
+            app->search.position = searchactivity_system;
+            break;
+        case searchactivity_results:
             if (app->search.resultHovered->prev == NULL) {
-                app->search.position = searchfield;
+                app->search.position = searchactivity_field;
             } else {
                 app->search.resultHovered = app->search.resultHovered->prev;
             }
@@ -38,17 +41,20 @@ void inputsearch_processUp(app_t *app) {
 
 void inputsearch_processDown(app_t *app) {
     switch (app->search.position) {
-        case searchsystem:
-            app->search.position = searchfield;
+        case searchactivity_config:
+            app->search.position = searchactivity_system;
             break;
-        case searchfield:
-        case searchbutton:
+        case searchactivity_system:
+            app->search.position = searchactivity_field;
+            break;
+        case searchactivity_field:
+        case searchactivity_button:
             if (app->search.results != NULL) {
                 app->search.resultHovered = app->search.results;
-                app->search.position = searchresults;
+                app->search.position = searchactivity_results;
             }
             break;
-        case searchresults:
+        case searchactivity_results:
             if (app->search.resultHovered->next != NULL) {
                 app->search.resultHovered = app->search.resultHovered->next;
             }
@@ -58,17 +64,20 @@ void inputsearch_processDown(app_t *app) {
 
 void inputsearch_processLeft(app_t *app) {
     switch (app->search.position) {
-        case searchsystem:
+        case searchactivity_config:
+            app->search.position = searchactivity_system;
             break;
-        case searchfield:
-            app->search.position = searchsystem;
+        case searchactivity_system:
             break;
-        case searchbutton:
-            app->search.position = searchfield;
+        case searchactivity_field:
+            app->search.position = searchactivity_system;
             break;
-        case searchresults:
+        case searchactivity_button:
+            app->search.position = searchactivity_field;
+            break;
+        case searchactivity_results:
             if (app->search.resultHovered->prev == NULL) {
-                app->search.position = searchbutton;
+                app->search.position = searchactivity_button;
             } else {
                 app->search.resultHovered = app->search.resultHovered->prev;
             }
@@ -78,19 +87,21 @@ void inputsearch_processLeft(app_t *app) {
 
 void inputsearch_processRight(app_t *app) {
     switch (app->search.position) {
-        case searchsystem:
-            app->search.position = searchfield;
+        case searchactivity_config:
             break;
-        case searchfield:
-            app->search.position = searchbutton;
+        case searchactivity_system:
+            app->search.position = searchactivity_field;
             break;
-        case searchbutton:
+        case searchactivity_field:
+            app->search.position = searchactivity_button;
+            break;
+        case searchactivity_button:
             if (app->search.results != NULL) {
                 app->search.resultHovered = app->search.results;
-                app->search.position = searchresults;
+                app->search.position = searchactivity_results;
             }
             break;
-        case searchresults:
+        case searchactivity_results:
             if (app->search.resultHovered->next != NULL) {
                 app->search.resultHovered = app->search.resultHovered->next;
             }
@@ -100,14 +111,16 @@ void inputsearch_processRight(app_t *app) {
 
 void inputsearch_processSelect(app_t *app) {
     switch (app->search.position) {
-        case searchsystem:
-            app->search.systemHovered = app->search.systemActive;
-            app->win = systemselect;
+        case searchactivity_config:
+            app->win = window_config;
             break;
-        case searchfield:
-            app->win = keyboard;
+        case searchactivity_system:
+            app->win = window_system;
             break;
-        case searchbutton:
+        case searchactivity_field:
+            app->win = window_keyboard;
+            break;
+        case searchactivity_button:
             if (strlen(app->search.searchText) > 2) {
                 if (app->search.results != NULL) {
                     result_freeList(app->search.results);
@@ -116,9 +129,9 @@ void inputsearch_processSelect(app_t *app) {
                 app->search.resultHovered = app->search.results;
             }
             break;
-        case searchresults:
+        case searchactivity_results:
             app->search.resultActive = app->search.resultHovered;
-            app->win = download;
+            app->win = window_download;
             break;
     }
 }

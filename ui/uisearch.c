@@ -22,23 +22,40 @@ static void renderSearchField(app_t *app);
 
 static void renderSearchButton(app_t *app);
 
-static void renderDeviceSelector(app_t *app);
+static void renderSystemSelector(app_t *app);
 
 static void renderSearchResults(app_t *app);
 
+static void renderSettingsIcon(app_t *app);
+
 void uisearch_render(app_t *app) {
-    renderDeviceSelector(app);
+    renderSettingsIcon(app);
+    renderSystemSelector(app);
     renderSearchField(app);
     renderSearchButton(app);
     renderSearchResults(app);
 }
 
-static void renderDeviceSelector(app_t *app) {
+static void renderSettingsIcon(app_t *app) {
+    int width, height;
+    SDL_GL_GetDrawableSize(app->window, &width, &height);
+
+    if (app->search.position == searchactivity_config) {
+        SDL_Rect r2 = {width - 37, 8, 27, 27};
+        SDL_SetRenderDrawColor(app->renderer, 0, 0, 255, 150);
+        SDL_RenderFillRect(app->renderer, &r2);
+    }
+
+    SDL_Rect texture_rect = {width - 35, 10, 25, 25};
+    SDL_RenderCopy(app->renderer, app->textures.settingsIcon, NULL, &texture_rect);
+}
+
+static void renderSystemSelector(app_t *app) {
     int width, height;
     SDL_GL_GetDrawableSize(app->window, &width, &height);
 
     SDL_Rect r2 = {48, 50, width - 96, 54};
-    SDL_SetRenderDrawColor(app->renderer, 0, 0, (app->search.position == searchsystem) ? 255 : 0, 150);
+    SDL_SetRenderDrawColor(app->renderer, 0, 0, (app->search.position == searchactivity_system) ? 255 : 0, 150);
     SDL_RenderFillRect(app->renderer, &r2);
 
     SDL_Rect r = {50, 52, width - 100, 50};
@@ -61,7 +78,7 @@ static void renderSearchField(app_t *app) {
     SDL_GL_GetDrawableSize(app->window, &width, &height);
 
     SDL_Rect r2 = {48, 118, width - 266, 54};
-    SDL_SetRenderDrawColor(app->renderer, 0, 0, (app->search.position == searchfield) ? 255 : 0, 150);
+    SDL_SetRenderDrawColor(app->renderer, 0, 0, (app->search.position == searchactivity_field) ? 255 : 0, 150);
     SDL_RenderFillRect(app->renderer, &r2);
 
     SDL_Rect r = {50, 120, width - 270, 50};
@@ -84,7 +101,7 @@ static void renderSearchButton(app_t *app) {
     SDL_GL_GetDrawableSize(app->window, &width, &height);
 
     SDL_Rect r2 = {width - 202, 118, 154, 54};
-    SDL_SetRenderDrawColor(app->renderer, 0, 0, (app->search.position == searchbutton) ? 255 : 0, 150);
+    SDL_SetRenderDrawColor(app->renderer, 0, 0, (app->search.position == searchactivity_button) ? 255 : 0, 150);
     SDL_RenderFillRect(app->renderer, &r2);
 
     SDL_Rect r = {width - 200, 120, 150, 50};
@@ -118,11 +135,14 @@ static void renderSearchResults(app_t *app) {
 
     for (int position = 190;
          position <= height - 80 && result != NULL; position += 35, result = result->next) {
+
+        //TODO: handle overflow
         rendering_loadText(app, &texture, result->title, app->fonts.medium, &textColor);
 
         SDL_Rect r2 = {48, position - 2, width - 96, 40};
         SDL_SetRenderDrawColor(app->renderer, 0, 0,
-                               (result == app->search.resultHovered && app->search.position == searchresults) ? 255 : 0,
+                               (result == app->search.resultHovered && app->search.position == searchactivity_results)
+                               ? 255 : 0,
                                150);
         SDL_RenderFillRect(app->renderer, &r2);
 

@@ -44,18 +44,18 @@ void inputdownload_processRight(app_t *app) {
 
 void inputdownload_processSelect(app_t *app) {
     switch (app->download.cursorPos) {
-        case posCancel:
-            app->win = search;
+        case downloadActivity_cancel:
+            app->win = window_search;
             break;
-        case posDownload:
+        case downloadActivity_start:
             app->download.started = 1;
             startThread(app);
             break;
-        case posDone:
-            app->download.cursorPos = posCancel;
+        case downloadActivity_done:
+            app->download.cursorPos = downloadActivity_cancel;
             app->download.started = 0;
             app->download.complete = 0;
-            app->win = search;
+            app->win = window_search;
             break;
     }
 }
@@ -67,12 +67,12 @@ void inputdownload_processOtherButton(app_t *app, GameControllerState_t *state) 
 }
 
 static void moveToNext(app_t *app) {
-    if (app->download.cursorPos == posDone) {
+    if (app->download.cursorPos == downloadActivity_done) {
         return;
     }
     app->download.cursorPos++;
     if (app->download.cursorPos > 1) {
-        app->download.cursorPos = posCancel;
+        app->download.cursorPos = downloadActivity_cancel;
     }
 }
 
@@ -97,5 +97,5 @@ static void downloadCallback(app_t *app) {
     app->download.complete = 1;
     app->download.current = 0;
     app->download.total = 0;
-    app->download.cursorPos = posDone;
+    app->download.cursorPos = downloadActivity_done;
 }

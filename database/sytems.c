@@ -26,7 +26,7 @@ static system_t *createSystemItem(char *name, char *fullname, char *path, int ac
 
 static void freeSystemList(system_t *system);
 
-static system_t *systems = NULL;
+static int database_systemListCallback(void *p_data, int num_fields, char **p_fields, char **p_col_names);
 
 void database_systemsInitTable(sqlite3 *db) {
     char *err_msg = 0;
@@ -71,25 +71,52 @@ void database_systemAdd(sqlite3 *db, char *name, char *fullname, char *path, int
     sqlite3_finalize(stmt);
 }
 
-int database_systemListCallback(void *p_data, int num_fields, char **p_fields, char **p_col_names) {
+void database_systemStore(sqlite3 *db, system_t *systems) {
+    char *err_msg = 0;
+    char *query = "DELETE FROM systems";
+
+    int rc = sqlite3_exec(db, query, 0, 0, &err_msg);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to delete table\n");
+        fprintf(stderr, "SQL error: %s\n", err_msg);
+        sqlite3_free(err_msg);
+    }
+
+    while (systems != NULL) {
+        database_systemAdd(db, systems->name, systems->fullname, systems->path, systems->active);
+        systems = systems->next;
+    }
+}
+
+static int database_systemListCallback(void *p_data, int num_fields, char **p_fields, char **p_col_names) {
     system_t *system = createSystemItem(p_fields[0], p_fields[1], p_fields[2], atoi(p_fields[3]));
-    systems = addSystemToList(systems, system);
+    system_t **systemPtr = (system_t **) p_data;
+    *systemPtr = addSystemToList(*systemPtr, system);
     return 0;
 }
 
-system_t *database_systemList(app_t *app) {
+system_t *database_systemList(app_t *app, uint8_t active) {
     char *errmsg;
-    char *query = "SELECT name, fullname, path, active FROM systems";
+    char *query;
+    if (active) {
+        query = "SELECT name, fullname, path, active FROM systems WHERE active=1";
+    } else {
+        query = "SELECT name, fullname, path, active FROM systems";
+    }
 
-    if (systems == NULL) {
-        int ret = sqlite3_exec(app->database.db, query, database_systemListCallback, NULL, &errmsg);
-        if (ret != SQLITE_OK) {
-            printf("Error in select statement %s [%s].\n", query, errmsg);
-            return NULL;
-        }
+    system_t *systems = NULL;
+    int ret = sqlite3_exec(app->database.db, query, database_systemListCallback, &systems, &errmsg);
+    if (ret != SQLITE_OK) {
+        printf("Error in select statement %s [%s].\n", query, errmsg);
+        return NULL;
     }
     return systems;
+}
 
+void database_systemsDestroy(system_t *systems) {
+    if (systems != NULL) {
+        freeSystemList(systems);
+    }
 }
 
 static void addDefaultSystems(sqlite3 *db) {
@@ -98,13 +125,13 @@ static void addDefaultSystems(sqlite3 *db) {
     database_systemAdd(db, "gba", "Game Boy Advance", "/gba", 1);
     database_systemAdd(db, "nes", "Nintendo Entertainment System", "/nes", 1);
     database_systemAdd(db, "snes", "Super Nintendo Entertainment System", "/snes", 1);
-    database_systemAdd(db, "gc", "Nintendo GameCube", "/gc", 1);
+    database_systemAdd(db, "gc", "Nintendo GameCube", "/gc", 0);
     database_systemAdd(db, "nds", "Nintendo DS", "/nds", 1);
-    database_systemAdd(db, "n64", "Nintendo 64", "/n64", 1);
+    database_systemAdd(db, "n64", "Nintendo 64", "/n64", 0);
     database_systemAdd(db, "wii", "Nintendo Wii", "/wii", 1);
-    database_systemAdd(db, "wiiu", "Nintendo Wii U", "/wiiu", 1);
-    database_systemAdd(db, "gw", "Game and Watch", "/gw", 1);
-    database_systemAdd(db, "fds", "Famicom Disk System", "/fds", 1);
+    database_systemAdd(db, "wiiu", "Nintendo Wii U", "/wiiu", 0);
+    database_systemAdd(db, "gw", "Game and Watch", "/gw", 0);
+    database_systemAdd(db, "fds", "Famicom Disk System", "/fds", 0);
 
     database_systemAdd(db, "dreamcast", "Sega Dreamcast", "/dreamcast", 1);
     database_systemAdd(db, "gamegear", "Sega Gamegear", "/gamegear", 1);
@@ -126,34 +153,30 @@ static void addDefaultSystems(sqlite3 *db) {
     database_systemAdd(db, "ps2", "Playstation 2", "/ps2", 1);
     database_systemAdd(db, "psp", "Playstation Portable", "/psp", 1);
 
-    database_systemAdd(db, "atari2600", "Atari 2600", "/atari2600", 1);
-    database_systemAdd(db, "atari7800", "Atari 7800 Prosystem", "/atari7800", 1);
-    database_systemAdd(db, "atarijaguar", "Atari Jaguar", "/atarijaguar", 1);
-    database_systemAdd(db, "atarilynx", "Atari Lynx", "/atarilynx", 1);
-    database_systemAdd(db, "atarist", "Atari ST, STE, Falcon", "/atarist", 1);
+    database_systemAdd(db, "atari2600", "Atari 2600", "/atari2600", 0);
+    database_systemAdd(db, "atari7800", "Atari 7800 Prosystem", "/atari7800", 0);
+    database_systemAdd(db, "atarijaguar", "Atari Jaguar", "/atarijaguar", 0);
+    database_systemAdd(db, "atarilynx", "Atari Lynx", "/atarilynx", 0);
+    database_systemAdd(db, "atarist", "Atari ST, STE, Falcon", "/atarist", 0);
 
     database_systemAdd(db, "c64", "Commodore 64", "/c64", 1);
     database_systemAdd(db, "amiga", "Amiga", "/amiga", 1);
-    database_systemAdd(db, "msx", "MSX", "/msx", 1);
-    database_systemAdd(db, "zxspectrum", "ZX Spectrum", "/zxspectrum", 1);
-    database_systemAdd(db, "pc", "PC (x86)", "/pc", 1);
+    database_systemAdd(db, "msx", "MSX", "/msx", 0);
+    database_systemAdd(db, "zxspectrum", "ZX Spectrum", "/zxspectrum", 0);
+    database_systemAdd(db, "pc", "PC (x86)", "/pc", 0);
 
-    database_systemAdd(db, "fba", "Final Burn Alpha", "/fba", 1);
+    database_systemAdd(db, "fba", "Final Burn Alpha", "/fba", 0);
     database_systemAdd(db, "vectrex", "Vectrex", "/vectrex", 1);
 
-    database_systemAdd(db, "3do", "3do", "/3do", 1);
-    database_systemAdd(db, "pcengine", "TurboGrafx 16 (PC Engine)", "/pcengine", 1);
-    database_systemAdd(db, "pcfx", "PC-FX", "/pcfx", 1);
-    database_systemAdd(db, "videopac", "Odyssey 2 / Videopac", "/videopac", 1);
-    database_systemAdd(db, "virtualboy", "Virtual Boy", "/virtualboy", 1);
+    database_systemAdd(db, "3do", "3do", "/3do", 0);
+    database_systemAdd(db, "pcengine", "TurboGrafx 16 (PC Engine)", "/pcengine", 0);
+    database_systemAdd(db, "pcfx", "PC-FX", "/pcfx", 0);
+    database_systemAdd(db, "videopac", "Odyssey 2 / Videopac", "/videopac", 0);
+    database_systemAdd(db, "virtualboy", "Virtual Boy", "/virtualboy", 0);
 
-    database_systemAdd(db, "love", "LOVE", "/love", 1);
-    database_systemAdd(db, "mame", "MAME", "/mame", 1);
-    database_systemAdd(db, "scummvm", "ScummVM", "/scummvm", 1);
-}
-
-void database_systemsDestroy() {
-    freeSystemList(systems);
+    database_systemAdd(db, "love", "LOVE", "/love", 0);
+    database_systemAdd(db, "mame", "MAME", "/mame", 0);
+    database_systemAdd(db, "scummvm", "ScummVM", "/scummvm", 0);
 }
 
 static system_t *createSystemItem(char *name, char *fullname, char *path, int active) {

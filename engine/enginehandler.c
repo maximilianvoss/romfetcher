@@ -44,23 +44,27 @@ void enginehandler_download(app_t *app, searchresult_t *item, void (*callback)(a
 
 static void determineSearchEngine(app_t *app) {
     switch (app->search.engine) {
-        case romsmania:
+        case engine_notdefined:
+            searchFunction = NULL;
+            downloadFunction = NULL;
+            break;
+        case engine_romsmania:
             searchFunction = &romsmania_search;
             downloadFunction = &romsmania_download;
             break;
-        case romsmode:
+        case engine_romsmode:
             searchFunction = &romsmode_search;
             downloadFunction = &romsmode_download;
             break;
-        case wowroms:
+        case engine_wowroms:
             searchFunction = &wowroms_search;
             downloadFunction = &wowroms_download;
             break;
-        case romsdownload:
+        case engine_romsdownload:
             searchFunction = &romsdownload_search;
             downloadFunction = &romsdownload_download;
             break;
-        case romsemulator:
+        case engine_romsemulator:
             searchFunction = &romsemulator_search;
             downloadFunction = &romsemulator_download;
     }

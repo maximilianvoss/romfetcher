@@ -14,41 +14,42 @@
  * limitations under the License.
  */
 
-#include "inputsystemselect.h"
+#include "inputsystem.h"
 
 
-void inputsystemselect_processUp(app_t *app) {
+void inputsystem_processUp(app_t *app) {
     if (app->search.systemHovered->prev != NULL) {
         app->search.systemHovered = app->search.systemHovered->prev;
     }
 }
 
-void inputsystemselect_processDown(app_t *app) {
+void inputsystem_processDown(app_t *app) {
     if (app->search.systemHovered->next != NULL) {
         app->search.systemHovered = app->search.systemHovered->next;
     }
 }
 
-void inputsystemselect_processLeft(app_t *app) {
+void inputsystem_processLeft(app_t *app) {
     if (app->search.systemHovered->prev != NULL) {
         app->search.systemHovered = app->search.systemHovered->prev;
     }
 }
 
-void inputsystemselect_processRight(app_t *app) {
+void inputsystem_processRight(app_t *app) {
     if (app->search.systemHovered->next != NULL) {
         app->search.systemHovered = app->search.systemHovered->next;
     }
 }
 
-void inputsystemselect_processSelect(app_t *app) {
+void inputsystem_processSelect(app_t *app) {
     app->search.systemActive = app->search.systemHovered;
-    app->win = search;
+    app->search.systemHovered = NULL;
+    app->win = window_search;
 }
 
-void inputsystemselect_processBack(app_t *app) {
-    app->win = search;
+void inputsystem_processBack(app_t *app) {
+    app->win = window_search;
 }
 
-void inputsystemselect_processOtherButton(app_t *app, GameControllerState_t *state) {
+void inputsystem_processOtherButton(app_t *app, GameControllerState_t *state) {
 }

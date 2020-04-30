@@ -21,6 +21,9 @@
 #include "uidownload.h"
 #include "rendering.h"
 #include "../config.h"
+#include "uiconfig.h"
+#include "uiconfigengine.h"
+#include "uiconfigsystem.h"
 
 static void renderDefaults(app_t *app);
 
@@ -48,7 +51,6 @@ static void renderDefaults(app_t *app) {
     free(text);
 
     SDL_DestroyTexture(texture.texture);
-
 }
 
 void uihandler_render(app_t *app) {
@@ -56,23 +58,44 @@ void uihandler_render(app_t *app) {
     renderDefaults(app);
 
     switch (app->win) {
-        case search:
+        case window_search:
+            if (app->search.systemActive == NULL) {
+                app->search.systemActive = app->systems.enabled;
+            }
             renderEngine = &uisearch_render;
             break;
-        case systemselect:
+        case window_system:
+            if (app->search.systemHovered == NULL) {
+                app->search.systemHovered = app->search.systemActive;
+            }
             renderEngine = &uisystem_render;
             break;
-        case keyboard:
+        case window_keyboard:
             renderEngine = &uikeyboard_render;
             break;
-        case download:
+        case window_download:
             renderEngine = &uidownload_render;
+            break;
+        case window_config:
+            renderEngine = &uiconfig_render;
+            break;
+        case window_config_engine:
+            if (app->config.engineCursor == engine_notdefined) {
+                app->config.engineCursor = app->search.engine;
+            }
+            renderEngine = &uiconfigengine_render;
+            break;
+        case window_config_systems:
+            if (app->config.systems == NULL) {
+                app->config.systems = app->systems.all;
+                app->config.systemCursor = app->systems.all;
+            }
+            renderEngine = &uiconfigsystem_render;
             break;
     }
 
     if (renderEngine != NULL) {
         renderEngine(app);
     }
-
     SDL_RenderPresent(app->renderer);
 }

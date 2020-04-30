@@ -26,4 +26,6 @@ uint8_t database_configCheckVersion(sqlite3 *db);
 
 void database_configLoad(app_t *app);
 
+void database_configPersist(app_t *app);
+
 #endif

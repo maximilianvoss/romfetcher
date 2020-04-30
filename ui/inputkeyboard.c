@@ -164,7 +164,7 @@ void inputkeyboard_processSelect(app_t *app) {
         case 11:
             addActiveCharToText(app);
             memcpy(app->search.searchText, app->keyboard.text, 256);
-            app->win = search;
+            app->win = window_search;
             break;
         default:
             break;
@@ -172,7 +172,7 @@ void inputkeyboard_processSelect(app_t *app) {
 }
 
 void inputkeyboard_processBack(app_t *app) {
-    app->win = search;
+    app->win = window_search;
 }
 
 void inputkeyboard_processOtherButton(app_t *app, GameControllerState_t *state) {
@@ -182,7 +182,7 @@ void inputkeyboard_processOtherButton(app_t *app, GameControllerState_t *state) 
     if (state->buttonX) {
         addActiveCharToText(app);
         memcpy(app->search.searchText, app->keyboard.text, 256);
-        app->win = search;
+        app->win = window_search;
     }
 }
 

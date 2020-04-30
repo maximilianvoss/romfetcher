@@ -23,9 +23,15 @@ void textures_init(app_t *app) {
     IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
     app->textures.backgroundImage = rendering_loadImage(app, BACKGROUND_IMAGE);
     app->textures.searchChevron = rendering_loadImage(app, SELECTOR_ICON);
+    app->textures.settingsIcon = rendering_loadImage(app, SETTINGS_ICON);
+    app->textures.checkboxChecked = rendering_loadImage(app, CHECKBOX_CHECKED_ICON);
+    app->textures.checkboxUnchecked = rendering_loadImage(app, CHECKBOX_UNCHECKED_ICON);
 }
 
 void textures_destroy(app_t *app) {
     SDL_DestroyTexture(app->textures.backgroundImage);
     SDL_DestroyTexture(app->textures.searchChevron);
+    SDL_DestroyTexture(app->textures.settingsIcon);
+    SDL_DestroyTexture(app->textures.checkboxChecked);
+    SDL_DestroyTexture(app->textures.checkboxUnchecked);
 }

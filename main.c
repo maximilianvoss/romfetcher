@@ -31,8 +31,8 @@ int main() {
     ui_init(&app);
 
     database_configLoad(&app);
-    system_t *systems = database_systemList(&app);
-    app.search.systemActive = systems;
+    app.systems.all = database_systemList(&app, 0);
+    app.systems.enabled = database_systemList(&app, 1);
 
     uint8_t quit = 0;
     while (!quit) {
@@ -45,7 +45,8 @@ int main() {
     if ( app.search.results != NULL ) {
         result_freeList(app.search.results);
     }
-    database_systemsDestroy();
+    database_systemsDestroy(app.systems.all);
+    database_systemsDestroy(app.systems.enabled);
     database_destroy(&app);
     return 0;
 }

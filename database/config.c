@@ -68,8 +68,29 @@ void database_configLoad(app_t *app) {
     sqlite3_finalize(stmt);
 }
 
+void database_configPersist(app_t *app) {
+    char *query = "UPDATE config SET engine=@engine";
+
+    sqlite3_stmt *stmt;
+    int rc = sqlite3_prepare_v2(app->database.db, query, -1, &stmt, 0);
+    if (rc == SQLITE_OK) {
+        int idx;
+        idx = sqlite3_bind_parameter_index(stmt, "@engine");
+        sqlite3_bind_int(stmt, idx, app->search.engine);
+    } else {
+        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(app->database.db));
+    }
+
+    rc = sqlite3_step(stmt);
+    if (SQLITE_DONE != rc) {
+        fprintf(stderr, "update statement didn't return DONE (%i): %s\n", rc, sqlite3_errmsg(app->database.db));
+    }
+    sqlite3_clear_bindings(stmt);
+    sqlite3_finalize(stmt);
+}
+
 static void fillStandardValues(sqlite3 *db) {
-    char *query = "INSERT INTO config (version, engine) VALUES (@version, 0)";
+    char *query = "INSERT INTO config (version, engine) VALUES (@version, 1)";
 
     sqlite3_stmt *stmt;
     int rc = sqlite3_prepare_v2(db, query, -1, &stmt, 0);

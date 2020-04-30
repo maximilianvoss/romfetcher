@@ -34,6 +34,14 @@ set(SOURCES
         engine/enginehandler.h
         engine/results.c
         engine/results.h
+        engine/romsdownload/mapping.c
+        engine/romsdownload/mapping.h
+        engine/romsdownload/romsdownload.c
+        engine/romsdownload/romsdownload.h
+        engine/romsemulator/mapping.c
+        engine/romsemulator/mapping.h
+        engine/romsemulator/romsemulator.c
+        engine/romsemulator/romsemulator.h
         engine/romsmania/mapping.c
         engine/romsmania/mapping.h
         engine/romsmania/romsmania.c
@@ -42,14 +50,6 @@ set(SOURCES
         engine/romsmode/mapping.h
         engine/romsmode/romsmode.c
         engine/romsmode/romsmode.h
-        engine/romsdownload/mapping.h
-        engine/romsdownload/romsdownload.c
-        engine/romsdownload/romsdownload.h
-        engine/romsdownload/mapping.c
-        engine/romsemulator/mapping.c
-        engine/romsemulator/mapping.h
-        engine/romsemulator/romsemulator.c
-        engine/romsemulator/romsemulator.h
         engine/urlhandling.c
         engine/urlhandling.h
         engine/wowroms/mapping.c
@@ -69,6 +69,12 @@ set(SOURCES
         ui/core.h
         ui/fonts.c
         ui/fonts.h
+        ui/inputconfig.c
+        ui/inputconfig.h
+        ui/inputconfigengine.c
+        ui/inputconfigengine.h
+        ui/inputconfigsystem.c
+        ui/inputconfigsystem.h
         ui/inputdownload.c
         ui/inputdownload.h
         ui/inputhandler.c
@@ -77,12 +83,18 @@ set(SOURCES
         ui/inputkeyboard.h
         ui/inputsearch.c
         ui/inputsearch.h
-        ui/inputsystemselect.c
-        ui/inputsystemselect.h
+        ui/inputsystem.c
+        ui/inputsystem.h
         ui/rendering.c
         ui/rendering.h
         ui/textures.c
         ui/textures.h
+        ui/uiconfig.c
+        ui/uiconfig.h
+        ui/uiconfigengine.c
+        ui/uiconfigengine.h
+        ui/uiconfigsystem.c
+        ui/uiconfigsystem.h
         ui/uidownload.c
         ui/uidownload.h
         ui/uihandler.c
@@ -97,8 +109,12 @@ set(SOURCES
 
 set(RESOURCE_FILES
         resources/gfx/FreeSans.ttf
+        resources/gfx/checkbox_checked.png
+        resources/gfx/checkbox_unchecked.png
         resources/gfx/selector.png
+        resources/gfx/settings.png
         resources/gfx/wallpaper.jpg
+
         )
 
 set(SCRIPT_FILES

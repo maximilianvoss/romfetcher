@@ -14,20 +14,23 @@
  * limitations under the License.
  */
 
-#ifndef DATABASE_SYTEMS_H
-#define DATABASE_SYTEMS_H
+#ifndef UI_INPUTSYSTEM_H
+#define UI_INPUTSYSTEM_H
 
-#include <sqlite3.h>
 #include "../structs.h"
 
-void database_systemsInitTable(sqlite3 *db);
+void inputsystem_processUp(app_t *app);
 
-void database_systemAdd(sqlite3 *db, char *name, char *fullname, char *path, int active);
+void inputsystem_processDown(app_t *app);
 
-system_t *database_systemList(app_t *app, uint8_t active);
+void inputsystem_processLeft(app_t *app);
 
-void database_systemStore(sqlite3 *db, system_t *systems);
+void inputsystem_processRight(app_t *app);
 
-void database_systemsDestroy(system_t *systems);
+void inputsystem_processSelect(app_t *app);
+
+void inputsystem_processBack(app_t *app);
+
+void inputsystem_processOtherButton(app_t *app, GameControllerState_t *state);
 
 #endif

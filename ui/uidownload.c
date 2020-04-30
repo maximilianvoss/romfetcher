@@ -104,7 +104,7 @@ static void renderStartButton(app_t *app) {
     rendering_loadText(app, &texture, "Download", app->fonts.big, &textColor);
 
     SDL_Rect rect1 = {width - 50 - texture.w - 100, 300, texture.w + 100, 70};
-    SDL_SetRenderDrawColor(app->renderer, 0, 0, app->download.cursorPos == posDownload ? 255 : 0, 150);
+    SDL_SetRenderDrawColor(app->renderer, 0, 0, app->download.cursorPos == downloadActivity_start ? 255 : 0, 150);
     SDL_RenderFillRect(app->renderer, &rect1);
 
     SDL_Rect rect2 = {width - 50 + 2 - texture.w - 100, 300 + 2, texture.w + 100 - 4, 70 - 4};
@@ -126,7 +126,7 @@ static void renderCancelButton(app_t *app) {
     rendering_loadText(app, &texture, "Cancel", app->fonts.big, &textColor);
 
     SDL_Rect rect1 = {50, 300, texture.w + 100, 70};
-    SDL_SetRenderDrawColor(app->renderer, 0, 0, app->download.cursorPos == posCancel ? 255 : 0, 150);
+    SDL_SetRenderDrawColor(app->renderer, 0, 0, app->download.cursorPos == downloadActivity_cancel ? 255 : 0, 150);
     SDL_RenderFillRect(app->renderer, &rect1);
 
     SDL_Rect rect2 = {50 + 2, 300 + 2, texture.w + 100 - 4, 70 - 4};
@@ -148,7 +148,7 @@ static void renderDoneButton(app_t *app) {
     rendering_loadText(app, &texture, "Done", app->fonts.big, &textColor);
 
     SDL_Rect rect1 = {width / 2 - texture.w / 2 - 50, 300, texture.w + 100, 70};
-    SDL_SetRenderDrawColor(app->renderer, 0, 0, app->download.cursorPos == posDone ? 255 : 0, 150);
+    SDL_SetRenderDrawColor(app->renderer, 0, 0, app->download.cursorPos == downloadActivity_done ? 255 : 0, 150);
     SDL_RenderFillRect(app->renderer, &rect1);
 
     SDL_Rect rect2 = {width / 2 - texture.w / 2 - 50 + 2, 300 + 2, texture.w + 100 - 4, 70 - 4};

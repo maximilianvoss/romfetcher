@@ -17,9 +17,12 @@
 #include "inputhandler.h"
 #include "../config.h"
 #include "inputsearch.h"
-#include "inputsystemselect.h"
+#include "inputsystem.h"
 #include "inputdownload.h"
 #include "inputkeyboard.h"
+#include "inputconfig.h"
+#include "inputconfigengine.h"
+#include "inputconfigsystem.h"
 
 static uint8_t processGameController(app_t *app);
 
@@ -70,7 +73,7 @@ void inputhandler_init() {
 
 uint8_t inputhandler_processInputs(app_t *app) {
     switch (app->win) {
-        case search:
+        case window_search:
             processUp = &inputsearch_processUp;
             processDown = &inputsearch_processDown;
             processLeft = &inputsearch_processLeft;
@@ -79,16 +82,16 @@ uint8_t inputhandler_processInputs(app_t *app) {
             processBack = &inputsearch_processBack;
             processOtherButton = &inputsearch_processOtherButton;
             break;
-        case systemselect:
-            processUp = &inputsystemselect_processUp;
-            processDown = &inputsystemselect_processDown;
-            processLeft = &inputsystemselect_processLeft;
-            processRight = &inputsystemselect_processRight;
-            processSelect = &inputsystemselect_processSelect;
-            processBack = &inputsystemselect_processBack;
-            processOtherButton = &inputsystemselect_processOtherButton;
+        case window_system:
+            processUp = &inputsystem_processUp;
+            processDown = &inputsystem_processDown;
+            processLeft = &inputsystem_processLeft;
+            processRight = &inputsystem_processRight;
+            processSelect = &inputsystem_processSelect;
+            processBack = &inputsystem_processBack;
+            processOtherButton = &inputsystem_processOtherButton;
             break;
-        case keyboard:
+        case window_keyboard:
             processUp = &inputkeyboard_processUp;
             processDown = &inputkeyboard_processDown;
             processLeft = &inputkeyboard_processLeft;
@@ -97,7 +100,7 @@ uint8_t inputhandler_processInputs(app_t *app) {
             processBack = &inputkeyboard_processBack;
             processOtherButton = &inputkeyboard_processOtherButton;
             break;
-        case download:
+        case window_download:
             processUp = &inputdownload_processUp;
             processDown = &inputdownload_processDown;
             processLeft = &inputdownload_processLeft;
@@ -105,6 +108,33 @@ uint8_t inputhandler_processInputs(app_t *app) {
             processSelect = &inputdownload_processSelect;
             processBack = &inputdownload_processBack;
             processOtherButton = &inputdownload_processOtherButton;
+            break;
+        case window_config:
+            processUp = &inputconfig_processUp;
+            processDown = &inputconfig_processDown;
+            processLeft = &inputconfig_processLeft;
+            processRight = &inputconfig_processRight;
+            processSelect = &inputconfig_processSelect;
+            processBack = &inputconfig_processBack;
+            processOtherButton = &inputconfig_processOtherButton;
+            break;
+        case window_config_engine:
+            processUp = &inputconfigengine_processUp;
+            processDown = &inputconfigengine_processDown;
+            processLeft = &inputconfigengine_processLeft;
+            processRight = &inputconfigengine_processRight;
+            processSelect = &inputconfigengine_processSelect;
+            processBack = &inputconfigengine_processBack;
+            processOtherButton = &inputconfigengine_processOtherButton;
+            break;
+        case window_config_systems:
+            processUp = &inputconfigsystem_processUp;
+            processDown = &inputconfigsystem_processDown;
+            processLeft = &inputconfigsystem_processLeft;
+            processRight = &inputconfigsystem_processRight;
+            processSelect = &inputconfigsystem_processSelect;
+            processBack = &inputconfigsystem_processBack;
+            processOtherButton = &inputconfigsystem_processOtherButton;
             break;
     }
     return processEvents(app);

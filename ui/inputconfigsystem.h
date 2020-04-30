@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-#ifndef UI_INPUTSYSTEMSELECT_H
-#define UI_INPUTSYSTEMSELECT_H
+#ifndef UI_INPUTCONFIGSYSTEM_H
+#define UI_INPUTCONFIGSYSTEM_H
 
 #include "../structs.h"
 
-void inputsystemselect_processUp(app_t *app);
+void inputconfigsystem_processUp(app_t *app);
 
-void inputsystemselect_processDown(app_t *app);
+void inputconfigsystem_processDown(app_t *app);
 
-void inputsystemselect_processLeft(app_t *app);
+void inputconfigsystem_processLeft(app_t *app);
 
-void inputsystemselect_processRight(app_t *app);
+void inputconfigsystem_processRight(app_t *app);
 
-void inputsystemselect_processSelect(app_t *app);
+void inputconfigsystem_processSelect(app_t *app);
 
-void inputsystemselect_processBack(app_t *app);
+void inputconfigsystem_processBack(app_t *app);
 
-void inputsystemselect_processOtherButton(app_t *app, GameControllerState_t *state);
+void inputconfigsystem_processOtherButton(app_t *app, GameControllerState_t *state);
 
 #endif
