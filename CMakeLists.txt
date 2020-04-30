@@ -4,7 +4,6 @@ project(romfetcher C)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_INSTALL_PREFIX /usr)
-set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS})
 set(CMAKE_VERBOSE_MAKEFILE on)
 set(THREADS_PREFER_PTHREAD_FLAG on)
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH true)
@@ -16,6 +15,11 @@ find_package(CURL REQUIRED)
 find_package(SQLite3 REQUIRED)
 find_package(Threads REQUIRED)
 find_package(OpenSSL REQUIRED)
+
+if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DDEVELOP")
+    set(CMAKE_INSTALL_PREFIX /usr/local)
+endif ()
 
 set(SOURCES
         main.c

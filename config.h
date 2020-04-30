@@ -20,6 +20,17 @@
 #define DATABASE_SCHEMA_VERSION 120
 #define DATABASE_SCHEMA_SUPPORTED_LEGACY_VERSION 120
 
+#ifdef DEVELOP
+#define START_IN_WINDOW
+#define BACKGROUND_IMAGE "/usr/local/share/romfetcher/wallpaper.jpg"
+#define SELECTOR_ICON "/usr/local/share/romfetcher/selector.png"
+#define SETTINGS_ICON "/usr/local/share/romfetcher/settings.png"
+#define CHECKBOX_CHECKED_ICON "/usr/local/share/romfetcher/checkbox_checked.png"
+#define CHECKBOX_UNCHECKED_ICON "/usr/local/share/romfetcher/checkbox_unchecked.png"
+#define FONTS "/usr/local/share/romfetcher/FreeSans.ttf"
+#define ROM_BASE_DIR "/home/pi/RetroPie/roms"
+#define DATABASE_FILE "/Users/voss/.romfetcher/romfetcher.db"
+#else
 #define BACKGROUND_IMAGE "/usr/share/romfetcher/wallpaper.jpg"
 #define SELECTOR_ICON "/usr/share/romfetcher/selector.png"
 #define SETTINGS_ICON "/usr/share/romfetcher/settings.png"
@@ -28,9 +39,10 @@
 #define FONTS "/usr/share/romfetcher/FreeSans.ttf"
 #define ROM_BASE_DIR "/home/pi/RetroPie/roms"
 #define DATABASE_FILE "/home/pi/.romfetcher/romfetcher.db"
+#endif
+
 #define CONTROLLER_MAPPING "00000000526574726f53746f6e653200,RetroStone2,a:b0,b:b1,x:b2,y:b3,dpdown:b11,dpleft:b12,dpright:b13,dpup:b10,leftshoulder:b4,lefttrigger:b6,rightshoulder:b5,righttrigger:b7,start:b9,back:b8,leftx:a0,lefty:a1,platform:Linux"
 
-//#define START_IN_WINDOW
 #define INIT_SCREEN_WIDTH  640
 #define INIT_SCREEN_HEIGHT 480
 #define TEXT_COLOR {0, 0, 0, 255}
