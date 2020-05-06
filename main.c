@@ -22,12 +22,16 @@
 #include "database/init.h"
 #include "database/sytems.h"
 #include "database/config.h"
+#include "helper/path.h"
+#include "themes/themes.h"
 
 int main() {
     app_t app;
     memset(&app, 0, sizeof(app_t));
 
+    path_initRomfetchersHome();
     database_init(&app);
+    themes_init(&app);
     ui_init(&app);
 
     database_configLoad(&app);
@@ -42,12 +46,14 @@ int main() {
     }
 
     ui_destroy(&app);
+    themes_destroy(&app);
     if ( app.search.results != NULL ) {
         result_freeList(app.search.results);
     }
     database_systemsDestroy(app.systems.all);
     database_systemsDestroy(app.systems.enabled);
     database_destroy(&app);
+
     return 0;
 }
 

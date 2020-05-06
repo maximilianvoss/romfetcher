@@ -39,7 +39,7 @@ char *curlling_fetchURL(char *url) {
 
     struct url_data data;
     data.size = 0;
-    data.data = calloc(sizeof(char), 16386);
+    data.data = calloc(16386, sizeof(char));
 
     curl = curl_easy_init();
     if (curl) {
@@ -64,7 +64,7 @@ char *curlling_fetchURLPost(char *url, char *postData) {
 
     struct url_data data;
     data.size = 0;
-    data.data = calloc(sizeof(char), 16386);
+    data.data = calloc(16386, sizeof(char));
 
     curl = curl_easy_init();
     if (curl) {
@@ -88,7 +88,7 @@ int curlling_downloadURL(app_t *app, char *url, char *filename) {
     FILE *pagefile;
     CURLcode res = CURLE_OK;
 
-    SDL_Log("Downloading: %s", url);
+    SDL_Log("Downloading: %s to %s", url, filename);
 
     curl_global_init(CURL_GLOBAL_ALL);
     curl = curl_easy_init();
@@ -122,7 +122,7 @@ int curlling_downloadURLPost(app_t *app, char *url, char *data, char *filename) 
     FILE *pagefile;
     CURLcode res = CURLE_OK;
 
-    SDL_Log("Downloading via Post: %s", url);
+    SDL_Log("Downloading via Post: %s to %s", url, filename);
 
     curl_global_init(CURL_GLOBAL_ALL);
     curl = curl_easy_init();

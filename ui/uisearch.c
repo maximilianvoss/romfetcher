@@ -15,7 +15,6 @@
  */
 
 #include "uisearch.h"
-#include "../config.h"
 #include "rendering.h"
 
 static void renderSearchField(app_t *app);
@@ -65,9 +64,8 @@ static void renderSystemSelector(app_t *app) {
     SDL_Rect texture_rect = {width - 100, 51, 52, 52};
     SDL_RenderCopy(app->renderer, app->textures.searchChevron, NULL, &texture_rect);
 
-    SDL_Color textColor = TEXT_COLOR;
     texture_t texture;
-    rendering_loadText(app, &texture, app->search.systemActive->fullname, app->fonts.big, &textColor);
+    rendering_loadText(app, &texture, app->search.systemActive->fullname, app->fonts.big, &app->theme->colors.text);
     SDL_Rect renderQuad = {60, 55, texture.w, texture.h};
     SDL_RenderCopy(app->renderer, texture.texture, NULL, &renderQuad);
     SDL_DestroyTexture(texture.texture);
@@ -87,9 +85,8 @@ static void renderSearchField(app_t *app) {
 
     // TODO: Handle overflow
     if (*(app->search.searchText) != '\0') {
-        SDL_Color textColor = TEXT_COLOR;
         texture_t texture;
-        rendering_loadText(app, &texture, app->search.searchText, app->fonts.big, &textColor);
+        rendering_loadText(app, &texture, app->search.searchText, app->fonts.big, &app->theme->colors.text);
         SDL_Rect renderQuad = {60, 125, texture.w, texture.h};
         SDL_RenderCopy(app->renderer, texture.texture, NULL, &renderQuad);
         SDL_DestroyTexture(texture.texture);
@@ -108,9 +105,8 @@ static void renderSearchButton(app_t *app) {
     SDL_SetRenderDrawColor(app->renderer, 255, 255, 255, 150);
     SDL_RenderFillRect(app->renderer, &r);
 
-    SDL_Color textColor = TEXT_COLOR;
     texture_t texture;
-    rendering_loadText(app, &texture, "Search", app->fonts.big, &textColor);
+    rendering_loadText(app, &texture, "Search", app->fonts.big, &app->theme->colors.text);
     SDL_Rect renderQuad = {width - 180, 125, texture.w, texture.h};
     SDL_RenderCopy(app->renderer, texture.texture, NULL, &renderQuad);
     SDL_DestroyTexture(texture.texture);
@@ -120,7 +116,6 @@ static void renderSearchResults(app_t *app) {
     int width, height;
     SDL_GL_GetDrawableSize(app->window, &width, &height);
 
-    SDL_Color textColor = TEXT_COLOR;
     texture_t texture;
 
     int deviceCountToDisplay = (height - 190 - 50) / 35 + 1;
@@ -137,7 +132,7 @@ static void renderSearchResults(app_t *app) {
          position <= height - 80 && result != NULL; position += 35, result = result->next) {
 
         //TODO: handle overflow
-        rendering_loadText(app, &texture, result->title, app->fonts.medium, &textColor);
+        rendering_loadText(app, &texture, result->title, app->fonts.medium, &app->theme->colors.text);
 
         SDL_Rect r2 = {48, position - 2, width - 96, 40};
         SDL_SetRenderDrawColor(app->renderer, 0, 0,

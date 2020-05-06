@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
+#include <csafestring.h>
 #include "wowroms.h"
 #include "mapping.h"
 #include "../curlling.h"
 #include "../results.h"
 #include "../../helper/utils.h"
-#include "../../download/utils.h"
 #include "../../helper/md5.h"
 #include "../../helper/regex.h"
 #include "../urlhandling.h"
+#include "../../helper/path.h"
 
 #define URL_TEMPLATE "https://wowroms.com/en/roms/list/%system%?search=%query%&page=%page%"
 #define URL_PREFIX "https://wowroms.com"
@@ -90,28 +91,20 @@ void wowroms_download(app_t *app, searchresult_t *item, void (*callback)(app_t *
     char *downloadLink = fetchDownloadLink(downloadServletResponse);
     char *decodedDownloadLink = str_quoteDecode(downloadLink);
 
-    char *payload = str_concat("emuid=", emuid);
-    char *tmp = payload;
-    payload = str_concat(payload, "&id=");
-    free(tmp);
-    tmp = payload;
-    payload = str_concat(payload, id);
-    free(tmp);
-    tmp = payload;
-    payload = str_concat(payload, "&file=");
-    free(tmp);
-    tmp = payload;
-    payload = str_concat(payload, filename);
-    free(tmp);
+
+    csafestring_t *payload = safe_create("emuid=");
+    safe_strcat(payload, emuid);
+    safe_strcat(payload, "&id=");
+    safe_strcat(payload, id);
+    safe_strcat(payload, "&file=");
+    safe_strcat(payload, filename);
 
     char *decodedFilename = str_urlDecode(filename);
-    char *downloadPath = download_targetPath(item->system, decodedFilename);
+    csafestring_t *downloadPath = path_downloadTarget(item->system, decodedFilename);
 
-    curlling_downloadURLPost(app, decodedDownloadLink, payload, downloadPath);
+    curlling_downloadURLPost(app, decodedDownloadLink, payload->data, downloadPath->data);
 
     free(decodedFilename);
-    free(downloadPath);
-    free(payload);
     free(decodedDownloadLink);
     free(downloadServletUrl);
     free(downloadServletResponse);
@@ -126,6 +119,8 @@ void wowroms_download(app_t *app, searchresult_t *item, void (*callback)(app_t *
     free(downloadPageResponse);
     free(downloadServlet);
     free(downloadLink);
+    safe_destroy(payload);
+    safe_destroy(downloadPath);
 
     callback(app);
 }

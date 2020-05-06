@@ -16,13 +16,11 @@
 
 #include "uisystem.h"
 #include "rendering.h"
-#include "../config.h"
 
 void uisystem_render(app_t *app) {
     int width, height;
     SDL_GL_GetDrawableSize(app->window, &width, &height);
 
-    SDL_Color textColor = TEXT_COLOR;
     texture_t texture;
 
     int deviceCountToDisplay = (height - 80 - 50) / 35 + 1;
@@ -37,7 +35,7 @@ void uisystem_render(app_t *app) {
 
     for (int position = 50;
          position <= height - 80 && systems != NULL; position += 35, systems = systems->next) {
-        rendering_loadText(app, &texture, systems->fullname, app->fonts.medium, &textColor);
+        rendering_loadText(app, &texture, systems->fullname, app->fonts.medium, &app->theme->colors.text);
 
         SDL_Rect r2 = {48, position - 2, width - 96, 40};
         SDL_SetRenderDrawColor(app->renderer, 0, 0, (systems == app->search.systemHovered) ? 255 : 0,

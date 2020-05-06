@@ -48,7 +48,7 @@ char *str_replace(char *orig, char *rep, char *with) {
         ins = tmp + len_rep;
     }
 
-    tmp = result = calloc(sizeof(char), strlen(orig) + (len_with - len_rep) * count + 1);
+    tmp = result = calloc(strlen(orig) + (len_with - len_rep) * count + 1, sizeof(char));
 
     if (!result) {
         return NULL;
@@ -85,7 +85,7 @@ char *str_urlDecode(const char *string) {
     int length = strlen(string);
     const char *end = string + length;
     int c;
-    char *decoded = calloc(sizeof(char), length + 1);
+    char *decoded = calloc(length + 1, sizeof(char));
 
     for (o = decoded; string <= end; o++) {
         c = *string++;
@@ -101,7 +101,7 @@ char *str_urlDecode(const char *string) {
 }
 
 char *str_htmlDecode(const char *string) {
-    char *decoded = calloc(sizeof(char), strlen(string) + 1);
+    char *decoded = calloc(strlen(string) + 1, sizeof(char));
     decode_html_entities_utf8(decoded, string);
     return decoded;
 }
@@ -111,7 +111,7 @@ char *str_concat(char *str1, char *str2) {
         return NULL;
     }
     int length = strlen(str1) + strlen(str2) + 1;
-    char *newStr = (char *) calloc(sizeof(char), length);
+    char *newStr = (char *) calloc(length, sizeof(char));
     char *ptr = newStr;
     while (*str1 != '\0') {
         *ptr = *str1;
@@ -128,7 +128,7 @@ char *str_concat(char *str1, char *str2) {
 }
 
 char *str_quoteDecode(char *string) {
-    char *returnStr = calloc(sizeof(char), strlen(string) + 1);
+    char *returnStr = calloc(strlen(string) + 1, sizeof(char));
     char *strIn = string;
     char *ptr = returnStr;
 

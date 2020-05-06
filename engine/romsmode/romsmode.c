@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
+#include <csafestring.h>
 #include "romsmode.h"
 #include "mapping.h"
 #include "../curlling.h"
 #include "../results.h"
 #include "../../helper/utils.h"
-#include "../../download/utils.h"
 #include "../../helper/regex.h"
 #include "../urlhandling.h"
+#include "../../helper/path.h"
 
 #define URL_TEMPLATE "https://romsmode.com/roms/%system%/%page%?name=%query%"
 
@@ -72,16 +73,16 @@ void romsmode_download(app_t *app, searchresult_t *item, void (*callback)(app_t 
     char *filename = file_name(linkDownloadArtifact);
     char *decodedFilename = str_urlDecode(filename);
 
-    char *downloadPath = download_targetPath(item->system, decodedFilename);
+    csafestring_t *downloadPath = path_downloadTarget(item->system, decodedFilename);
 
-    curlling_downloadURL(app, linkDownloadArtifact, downloadPath);
+    curlling_downloadURL(app, linkDownloadArtifact, downloadPath->data);
 
     free(downloadPageResponse);
     free(linkDownloadPage);
     free(decodedFilename);
     free(detailPageResponse);
     free(linkDownloadArtifact);
-    free(downloadPath);
+    safe_destroy(downloadPath);
 
     callback(app);
 }

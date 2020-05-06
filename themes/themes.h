@@ -14,16 +14,13 @@
  * limitations under the License.
  */
 
-#include "utils.h"
-#include "../config.h"
+#ifndef THEMES_THEMES_H
+#define THEMES_THEMES_H
 
-char *download_targetPath(system_t *system, char *filename) {
-    int arrayLength = strlen(ROM_BASE_DIR) + strlen(system->path) + 1 + strlen(filename) + 1;
-    char *filepath = calloc(sizeof(char), arrayLength);
-    strcat(filepath, ROM_BASE_DIR);
-    strcat(filepath, system->path);
-    strcat(filepath, "/");
-    strcat(filepath, filename);
+#include "../structs.h"
 
-    return filepath;
-}
+void themes_init(app_t *app);
+
+void themes_destroy(app_t *app);
+
+#endif

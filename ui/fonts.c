@@ -15,31 +15,30 @@
  */
 
 #include "fonts.h"
-#include "../config.h"
 
 void fonts_init(app_t *app) {
     TTF_Init();
 
-    app->fonts.huge = TTF_OpenFont(FONTS, 144);
+    app->fonts.huge = TTF_OpenFont(app->theme->font, 144);
     if (app->fonts.huge == NULL) {
         printf("Failed to load headlineFont! SDL_ttf Error: %s\n", TTF_GetError());
         exit(1);
     }
 
 
-    app->fonts.big = TTF_OpenFont(FONTS, 34);
+    app->fonts.big = TTF_OpenFont(app->theme->font, 34);
     if (app->fonts.big == NULL) {
         printf("Failed to load headlineFont! SDL_ttf Error: %s\n", TTF_GetError());
         exit(1);
     }
 
-    app->fonts.medium = TTF_OpenFont(FONTS, 24);
+    app->fonts.medium = TTF_OpenFont(app->theme->font, 24);
     if (app->fonts.medium == NULL) {
         printf("Failed to load headlineFont! SDL_ttf Error: %s\n", TTF_GetError());
         exit(1);
     }
 
-    app->fonts.small = TTF_OpenFont(FONTS, 12);
+    app->fonts.small = TTF_OpenFont(app->theme->font, 12);
     if (app->fonts.small == NULL) {
         printf("Failed to load headlineFont! SDL_ttf Error: %s\n", TTF_GetError());
         exit(1);

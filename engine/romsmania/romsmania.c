@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
+#include <csafestring.h>
 #include "romsmania.h"
 #include "mapping.h"
 #include "../curlling.h"
 #include "../results.h"
 #include "../../helper/utils.h"
-#include "../../download/utils.h"
 #include "../urlhandling.h"
 #include "../../helper/regex.h"
+#include "../../helper/path.h"
 
 #define URL_TEMPLATE "https://romsmania.cc/roms/%system%/search?name=%query%&genre=&region=&orderBy=name&orderAsc=1&page=%page%"
 
@@ -68,16 +69,16 @@ void romsmania_download(app_t *app, searchresult_t *item, void (*callback)(app_t
 
     char *filename = file_name(linkDownload);
     char *decodedFilename = str_urlDecode(filename);
-    char *downloadPath = download_targetPath(item->system, decodedFilename);
+    csafestring_t *downloadPath = path_downloadTarget(item->system, decodedFilename);
 
-    curlling_downloadURL(app, linkDownload, downloadPath);
+    curlling_downloadURL(app, linkDownload, downloadPath->data);
 
     free(downloadPageResponse);
     free(linkDownloadPage);
     free(detailPageResponse);
     free(linkDownload);
-    free(downloadPath);
     free(decodedFilename);
+    safe_destroy(downloadPath);
 
     callback(app);
 }

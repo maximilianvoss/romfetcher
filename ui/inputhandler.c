@@ -56,7 +56,7 @@ void inputhandler_init() {
     SDL_Log("There are %d gamepads attached\n", gameControllerCount);
 
     if (gameControllerCount > 0) {
-        gameControllers = (SDL_GameController **) calloc(sizeof(SDL_GameController *), gameControllerCount);
+        gameControllers = (SDL_GameController **) calloc(gameControllerCount, sizeof(SDL_GameController *));
 
         for (int i = 0; i < gameControllerCount; ++i) {
             gameControllers[i] = SDL_GameControllerOpen(i);

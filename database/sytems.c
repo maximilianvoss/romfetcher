@@ -181,20 +181,20 @@ static void addDefaultSystems(sqlite3 *db) {
 
 static system_t *createSystemItem(char *name, char *fullname, char *path, int active) {
     int length;
-    system_t *system = calloc(sizeof(system_t), 1);
+    system_t *system = calloc(1, sizeof(system_t));
     if (name != NULL) {
         length = strlen(name) + 1;
-        system->name = (char *) calloc(sizeof(char), length);
+        system->name = (char *) calloc(length, sizeof(char));
         strcpy(system->name, name);
     }
     if (fullname != NULL) {
         length = strlen(fullname) + 1;
-        system->fullname = (char *) calloc(sizeof(char), length);
+        system->fullname = (char *) calloc(length, sizeof(char));
         strcpy(system->fullname, fullname);
     }
     if (path != NULL) {
         length = strlen(path) + 1;
-        system->path = (char *) calloc(sizeof(char), length);
+        system->path = (char *) calloc(length, sizeof(char));
         strcpy(system->path, path);
     }
     system->active = active;

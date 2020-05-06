@@ -30,7 +30,7 @@ static void renderDefaults(app_t *app);
 static char *copyright();
 
 static char *copyright() {
-    char *text = calloc(sizeof(char), strlen(COPYRIGHT) + 1);
+    char *text = calloc(strlen(COPYRIGHT) + 1, sizeof(char));
     strcpy (text, COPYRIGHT);
     *text = 0xA9;
     return text;
@@ -43,9 +43,8 @@ static void renderDefaults(app_t *app) {
     SDL_RenderCopy(app->renderer, app->textures.backgroundImage, NULL, NULL);
 
     char *text = copyright();
-    SDL_Color textColor = TEXT_COLOR_INVERT;
     texture_t texture;
-    rendering_loadText(app, &texture, text, app->fonts.small, &textColor);
+    rendering_loadText(app, &texture, text, app->fonts.small, &app->theme->colors.textInverted);
     SDL_Rect renderQuad = {50, height - 40, texture.w, texture.h};
     SDL_RenderCopy(app->renderer, texture.texture, NULL, &renderQuad);
     free(text);

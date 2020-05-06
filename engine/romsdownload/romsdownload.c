@@ -14,22 +14,21 @@
  * limitations under the License.
  */
 
+#include <csafestring.h>
 #include "romsdownload.h"
 #include "mapping.h"
 #include "../curlling.h"
 #include "../results.h"
 #include "../../helper/utils.h"
-#include "../../download/utils.h"
 #include "../urlhandling.h"
 #include "../../helper/regex.h"
+#include "../../helper/path.h"
 
 #define URL_TEMPLATE "https://roms-download.com/ajax.php?m=roms_j"
 #define DATA_TEMPLATE "sort=file_name%24ASC&page=%page%&search=%query%&rom_concole=%system%"
 #define URL_PREFIX "https://roms-download.com"
 
 static searchresult_t *fetchingResultItems(system_t *system, searchresult_t *resultList, char *response);
-
-static char *fetchDownloadPageLink(char *response);
 
 static char *fetchDownloadLink(char *response);
 
@@ -67,14 +66,14 @@ void romsdownload_download(app_t *app, searchresult_t *item, void (*callback)(ap
 
     char *filename = file_name(linkDownload);
     char *decodedFilename = str_urlDecode(filename);
-    char *downloadPath = download_targetPath(item->system, decodedFilename);
+    csafestring_t *downloadPath = path_downloadTarget(item->system, decodedFilename);
 
-    curlling_downloadURL(app, linkDownload, downloadPath);
+    curlling_downloadURL(app, linkDownload, downloadPath->data);
 
     free(detailPageResponse);
     free(linkDownload);
-    free(downloadPath);
     free(decodedFilename);
+    safe_destroy(downloadPath);
 
     callback(app);
 }

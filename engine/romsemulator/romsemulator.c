@@ -14,22 +14,21 @@
  * limitations under the License.
  */
 
+#include <csafestring.h>
 #include "romsemulator.h"
 #include "mapping.h"
 #include "../curlling.h"
 #include "../results.h"
 #include "../../helper/utils.h"
-#include "../../download/utils.h"
 #include "../urlhandling.h"
 #include "../../helper/regex.h"
+#include "../../helper/path.h"
 
 #define URL_TEMPLATE "https://romsemulator.net/roms/%system%/page/%page%/?s=%query%"
 
 static searchresult_t *fetchingResultItems(system_t *system, searchresult_t *resultList, char *response);
 
 static char *fetchDownloadPageLink(char *response);
-
-static char *fetchDownloadLink(char *response);
 
 static char *fetchHiddenField(char *response, char *fieldname, int variant);
 
@@ -72,44 +71,30 @@ void romsemulator_download(app_t *app, searchresult_t *item, void (*callback)(ap
     char *roms = fetchHiddenField(downloadPageResponse, "roms_download_file_nonce_field", 1);
     char *referer = fetchHiddenField(downloadPageResponse, "_wp_http_referer", 0);
 
-    char *payload = str_concat("action=roms_download_file&pid=", pid);
-    char *tmp = payload;
-    payload = str_concat(payload, "&roms_download_file_nonce_field=");
-    free(tmp);
-    tmp = payload;
-    payload = str_concat(payload, roms);
-    free(tmp);
-    tmp = payload;
-    payload = str_concat(payload, "&_wp_http_referer=");
-    free(tmp);
-    tmp = payload;
-    payload = str_concat(payload, referer);
-    free(tmp);
+    csafestring_t *payload = safe_create("action=roms_download_file&pid=");
+    safe_strcat(payload, pid);
+    safe_strcat(payload, "&roms_download_file_nonce_field=");
+    safe_strcat(payload, roms);
+    safe_strcat(payload, "&_wp_http_referer=");
+    safe_strcat(payload, referer);
 
-    char *filename = calloc(sizeof(char), strlen(item->url) + 4);
-    strcpy(filename, item->url);
-    printf("old name: %s\n", filename);
-    tmp = filename;
-    while (*tmp != '\0') {
-        tmp++;
-    }
-    tmp--;
-    strcpy(tmp, ".zip");
+    csafestring_t *filename = safe_create(item->url);
+    safe_strcat(filename, ".zip");
 
-    char *decodeFilename = file_name(filename);
-    char *downloadPath = download_targetPath(item->system, decodeFilename);
+    char *decodeFilename = file_name(filename->data);
+    csafestring_t *downloadPath = path_downloadTarget(item->system, decodeFilename);
 
-    curlling_downloadURLPost(app, linkDownloadPage, payload, downloadPath);
+    curlling_downloadURLPost(app, linkDownloadPage, payload->data, downloadPath->data);
 
     free(pid);
     free(roms);
     free(referer);
-    free(payload);
-    free(filename);
     free(downloadPageResponse);
     free(linkDownloadPage);
     free(detailPageResponse);
-    free(downloadPath);
+    safe_destroy(filename);
+    safe_destroy(payload);
+    safe_destroy(downloadPath);
 
     callback(app);
 }
@@ -130,18 +115,6 @@ static char *fetchHiddenField(char *response, char *fieldname, int variant) {
     char *link = regex_cpyGroupText(matches, 0);
     regex_destroyMatches(matches);
     free(regexString);
-    return link;
-}
-
-static char *fetchDownloadLink(char *response) {
-    char *regexString = "<a class=\"wait__link\" href=\"([^\"]+)\">";
-
-    regexMatches_t *matches = regex_getMatches(response, regexString, 1);
-    if (matches == NULL) {
-        return NULL;
-    }
-    char *link = regex_cpyGroupText(matches, 0);
-    regex_destroyMatches(matches);
     return link;
 }
 

@@ -17,7 +17,7 @@
 #include "results.h"
 
 searchresult_t *result_newItem(system_t *system) {
-    searchresult_t *resultList = (searchresult_t *) calloc(sizeof(searchresult_t), 1);
+    searchresult_t *resultList = (searchresult_t *) calloc(1, sizeof(searchresult_t));
     resultList->title = NULL;
     resultList->url = NULL;
     resultList->system = system;
@@ -46,7 +46,7 @@ void result_setTitle(searchresult_t *resultList, char *title) {
         return;
     }
     int length = strlen(title) + 1;
-    resultList->title = (char *) calloc(sizeof(char), length);
+    resultList->title = (char *) calloc(length, sizeof(char));
     memcpy(resultList->title, title, length);
 }
 
@@ -56,7 +56,7 @@ void result_setUrl(searchresult_t *resultList, char *url) {
         return;
     }
     int length = strlen(url) + 1;
-    resultList->url = (char *) calloc(sizeof(char), length);
+    resultList->url = (char *) calloc(length, sizeof(char));
     memcpy(resultList->url, url, length);
 }
 

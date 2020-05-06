@@ -60,6 +60,24 @@ typedef enum {
     downloadActivity_done
 } downloadactivity_t;
 
+typedef struct theme_s {
+    struct {
+        SDL_Color text;
+        SDL_Color textHighlight;
+        SDL_Color textInverted;
+    } colors;
+    char *font;
+    struct {
+        char *background;
+        char *checkboxChecked;
+        char *checkboxUnchecked;
+        char *selectorIcon;
+        char *settingsIcon;
+    } images;
+    struct theme_s *prev;
+    struct theme_s *next;
+} theme_t;
+
 typedef struct system_s {
     char *name;
     char *fullname;
@@ -80,6 +98,9 @@ typedef struct searchresult_s {
 typedef struct {
     SDL_Renderer *renderer;
     SDL_Window *window;
+    window_t win;
+    theme_t *theme;
+
     struct {
         system_t *all;
         system_t *enabled;
@@ -88,12 +109,14 @@ typedef struct {
     struct {
         sqlite3 *db;
     } database;
+
     struct {
         config_t configCursor;
         engine_t engineCursor;
         system_t *systems;
         system_t *systemCursor;
     } config;
+
     struct {
         SDL_Texture *backgroundImage;
         SDL_Texture *searchChevron;
@@ -101,17 +124,20 @@ typedef struct {
         SDL_Texture *checkboxChecked;
         SDL_Texture *checkboxUnchecked;
     } textures;
+
     struct {
         TTF_Font *huge;
         TTF_Font *big;
         TTF_Font *medium;
         TTF_Font *small;
     } fonts;
+
     struct {
         char activeChar;
         char text[256];
         int8_t pointerPosition;
     } keyboard;
+
     struct {
         volatile uint8_t started;
         volatile uint8_t complete;
@@ -119,6 +145,7 @@ typedef struct {
         volatile curl_off_t current;
         volatile curl_off_t total;
     } download;
+
     struct {
         engine_t engine;
         system_t *systemActive;
@@ -129,7 +156,6 @@ typedef struct {
         searchactivity_t position;
         char searchText[256];
     } search;
-    window_t win;
 } app_t;
 
 typedef struct {

@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
+#include <csafestring.h>
 #include "init.h"
 #include "../config.h"
 #include "sytems.h"
 #include "config.h"
+#include "../helper/path.h"
 
 static void initTables(sqlite3 *db);
 
@@ -25,12 +27,17 @@ static uint8_t doesTableExist(sqlite3 *db, char *tableName);
 
 static void dropAllTables(sqlite3 *db);
 
+static csafestring_t *buildDBPath();
+
 void database_init(app_t *app) {
-    if (sqlite3_open(DATABASE_FILE, &app->database.db) != SQLITE_OK) {
+    csafestring_t *dbPath = buildDBPath();
+    if (sqlite3_open(dbPath->data, &app->database.db) != SQLITE_OK) {
         printf("Could not initialize database: %s\n", sqlite3_errmsg(app->database.db));
         sqlite3_close(app->database.db);
+        safe_destroy(dbPath);
         exit(1);
     }
+    safe_destroy(dbPath);
     initTables(app->database.db);
 }
 
@@ -38,6 +45,12 @@ void database_destroy(app_t *app) {
     if (sqlite3_close(app->database.db) != SQLITE_OK) {
         printf("Could not destruct database: %s\n", sqlite3_errmsg(app->database.db));
     }
+}
+
+static csafestring_t *buildDBPath() {
+    csafestring_t *path = path_romfetchersHome();
+    safe_strcat(path, DATABASE_FILE);
+    return path;
 }
 
 static void initTables(sqlite3 *db) {

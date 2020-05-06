@@ -37,8 +37,8 @@ regexMatches_t *regex_getMatches(char *text, char *regexString, size_t maxGroups
             break;  // No more matches
         }
 
-        regexMatches_t *match = (regexMatches_t *) calloc(sizeof(regexMatches_t), 1);
-        match->groups = (char **) calloc(sizeof(char *), maxGroups);
+        regexMatches_t *match = (regexMatches_t *) calloc(1, sizeof(regexMatches_t));
+        match->groups = (char **) calloc(maxGroups, sizeof(char *));
         match->maxGroups = maxGroups;
 
         if (matches == NULL) {
@@ -64,7 +64,7 @@ regexMatches_t *regex_getMatches(char *text, char *regexString, size_t maxGroups
                 strcpy(cursorCopy, cursor);
                 cursorCopy[groupArray[g].rm_eo] = 0;
 
-                match->groups[g - 1] = (char *) calloc(sizeof(char), strlen(cursorCopy + groupArray[g].rm_so) + 1);
+                match->groups[g - 1] = (char *) calloc(strlen(cursorCopy + groupArray[g].rm_so) + 1, sizeof(char));
                 strcpy(match->groups[g - 1], cursorCopy + groupArray[g].rm_so);
             }
         }
@@ -81,7 +81,7 @@ char *regex_cpyGroupText(regexMatches_t *match, int group) {
     if (match->groups[group] == NULL) {
         return NULL;
     }
-    char *str = calloc(sizeof(char), strlen(match->groups[group]) + 1);
+    char *str = calloc(strlen(match->groups[group]) + 1, sizeof(char));
     strcpy(str, match->groups[group]);
     return str;
 }

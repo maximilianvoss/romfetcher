@@ -14,11 +14,16 @@
  * limitations under the License.
  */
 
+#ifndef HELPER_PATH_H
+#define HELPER_PATH_H
+
+#include <csafestring.h>
 #include "../structs.h"
 
-#ifndef DOWNLOAD_UTILS_H
-#define DOWNLOAD_UTILS_H
+void path_initRomfetchersHome();
 
-char *download_targetPath(system_t *system, char *filename);
+csafestring_t *path_romfetchersHome();
+
+csafestring_t *path_downloadTarget(system_t *system, char *filename);
 
 #endif

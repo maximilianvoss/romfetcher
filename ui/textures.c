@@ -17,15 +17,14 @@
 #include "textures.h"
 #include <SDL_image.h>
 #include "rendering.h"
-#include "../config.h"
 
 void textures_init(app_t *app) {
     IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
-    app->textures.backgroundImage = rendering_loadImage(app, BACKGROUND_IMAGE);
-    app->textures.searchChevron = rendering_loadImage(app, SELECTOR_ICON);
-    app->textures.settingsIcon = rendering_loadImage(app, SETTINGS_ICON);
-    app->textures.checkboxChecked = rendering_loadImage(app, CHECKBOX_CHECKED_ICON);
-    app->textures.checkboxUnchecked = rendering_loadImage(app, CHECKBOX_UNCHECKED_ICON);
+    app->textures.backgroundImage = rendering_loadImage(app, app->theme->images.background);
+    app->textures.searchChevron = rendering_loadImage(app, app->theme->images.selectorIcon);
+    app->textures.settingsIcon = rendering_loadImage(app, app->theme->images.settingsIcon);
+    app->textures.checkboxChecked = rendering_loadImage(app, app->theme->images.checkboxChecked);
+    app->textures.checkboxUnchecked = rendering_loadImage(app, app->theme->images.checkboxUnchecked);
 }
 
 void textures_destroy(app_t *app) {

@@ -26,8 +26,8 @@ char *md5_file2md5(char *filename) {
     int i;
     MD5_CTX c;
     unsigned char digest[16];
-    char *out = (char *) calloc(sizeof(char), 33);
-    char *buffer = calloc(sizeof(char), FILE_BUFFER_SIZE);
+    char *out = (char *) calloc(33, sizeof(char));
+    char *buffer = calloc(FILE_BUFFER_SIZE, sizeof(char));
 
     MD5_Init(&c);
 
@@ -54,7 +54,7 @@ char *md5_str2md5(char *string) {
     int i;
     MD5_CTX c;
     unsigned char digest[16];
-    char *out = (char *) calloc(sizeof(char), 33);
+    char *out = (char *) calloc(33, sizeof(char));
 
     MD5_Init(&c);
     MD5_Update(&c, string, strlen(string));

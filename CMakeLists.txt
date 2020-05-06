@@ -3,6 +3,7 @@ project(romfetcher C)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -O3")
 set(CMAKE_INSTALL_PREFIX /usr)
 set(CMAKE_VERBOSE_MAKEFILE on)
 set(THREADS_PREFER_PTHREAD_FLAG on)
@@ -15,6 +16,10 @@ find_package(CURL REQUIRED)
 find_package(SQLite3 REQUIRED)
 find_package(Threads REQUIRED)
 find_package(OpenSSL REQUIRED)
+
+
+add_subdirectory(libs/csafestring)
+include_directories(libs/csafestring)
 
 if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DDEVELOP")
@@ -30,8 +35,6 @@ set(SOURCES
         database/init.h
         database/sytems.c
         database/sytems.h
-        download/utils.c
-        download/utils.h
         engine/curlling.c
         engine/curlling.h
         engine/enginehandler.c
@@ -64,6 +67,8 @@ set(SOURCES
         helper/entities.h
         helper/md5.c
         helper/md5.h
+        helper/path.c
+        helper/path.h
         helper/regex.c
         helper/regex.h
         helper/utils.c
@@ -109,7 +114,7 @@ set(SOURCES
         ui/uisearch.h
         ui/uisystem.c
         ui/uisystem.h
-        )
+        themes/themes.c themes/themes.h)
 
 set(RESOURCE_FILES
         resources/gfx/FreeSans.ttf
@@ -127,7 +132,7 @@ set(SCRIPT_FILES
 
 include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${SDL2TTF_INCLUDE_DIRS} ${CURL_INCLUDE_DIRS} ${SQLite3_INCLUDE_DIRS} ${OPENSSL_INCLUDE_DIR})
 add_executable(romfetcher ${SOURCES})
-target_link_libraries(romfetcher ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2TTF_LIBRARY} ${CURL_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} ${SQLite3_LIBRARIES} ${OPENSSL_LIBRARIES})
+target_link_libraries(romfetcher csafestring ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2TTF_LIBRARY} ${CURL_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} ${SQLite3_LIBRARIES} ${OPENSSL_LIBRARIES})
 install(TARGETS romfetcher DESTINATION bin)
 install(FILES ${RESOURCE_FILES} DESTINATION share/romfetcher)
 install(FILES ${SCRIPT_FILES} DESTINATION /home/pi/RetroPie/retropiemenu)

@@ -16,13 +16,11 @@
 
 #include "uiconfigengine.h"
 #include "rendering.h"
-#include "../config.h"
 
 void uiconfigengine_render(app_t *app) {
     int width, height;
     SDL_GL_GetDrawableSize(app->window, &width, &height);
 
-    SDL_Color textColor = TEXT_COLOR;
     texture_t texture;
 
     char menuEntries[5][18] = {
@@ -30,7 +28,7 @@ void uiconfigengine_render(app_t *app) {
     };
 
     for (int i = 0, position = 80; i < 5; i++, position += 35) {
-        rendering_loadText(app, &texture, menuEntries[i], app->fonts.medium, &textColor);
+        rendering_loadText(app, &texture, menuEntries[i], app->fonts.medium, &app->theme->colors.text);
         SDL_Rect r2 = {48, position - 2, width - 96, 40};
         SDL_SetRenderDrawColor(app->renderer, 0, 0, (app->config.engineCursor == i + 1) ? 255 : 0, 150);
         SDL_RenderFillRect(app->renderer, &r2);

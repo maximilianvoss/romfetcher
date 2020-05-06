@@ -15,7 +15,6 @@
  */
 
 #include "uikeyboard.h"
-#include "../config.h"
 #include "rendering.h"
 
 static void renderSearchField(app_t *app);
@@ -42,9 +41,8 @@ static void renderSearchField(app_t *app) {
     SDL_RenderFillRect(app->renderer, &r);
 
     if (*(app->keyboard.text) != '\0') {
-        SDL_Color textColor = TEXT_COLOR;
         texture_t texture;
-        rendering_loadText(app, &texture, app->keyboard.text, app->fonts.big, &textColor);
+        rendering_loadText(app, &texture, app->keyboard.text, app->fonts.big, &app->theme->colors.text);
         SDL_Rect renderQuad = {60, 55, texture.w, texture.h};
         SDL_RenderCopy(app->renderer, texture.texture, NULL, &renderQuad);
         charPos += texture.w;
@@ -53,9 +51,8 @@ static void renderSearchField(app_t *app) {
 
     if (app->keyboard.activeChar != '\0') {
         char miniString[2] = {app->keyboard.activeChar, '\0'};
-        SDL_Color textColor = TEXT_HIGHLIGHT_COLOR;
         texture_t texture;
-        rendering_loadText(app, &texture, miniString, app->fonts.big, &textColor);
+        rendering_loadText(app, &texture, miniString, app->fonts.big, &app->theme->colors.textHighlight);
         SDL_Rect renderQuad = {charPos, 55, texture.w, texture.h};
         SDL_RenderCopy(app->renderer, texture.texture, NULL, &renderQuad);
         SDL_DestroyTexture(texture.texture);
@@ -66,10 +63,10 @@ static void renderKey(app_t *app, int posx, int posy, int padWidth, int padHeigh
 
 static void renderDailPad(app_t *app) {
     const char keys[4][3][6] = {
-            "0-9", "ABC", "DEF",
-            "GHI", "JKL", "MNO",
-            "PQRS", "TUV", "WXYZ",
-            "DEL", "SPACE", "SAVE"
+            {"0-9",  "ABC",   "DEF"},
+            {"GHI",  "JKL",   "MNO"},
+            {"PQRS", "TUV",   "WXYZ"},
+            {"DEL",  "SPACE", "SAVE"}
     };
 
     int width, height;
@@ -97,9 +94,8 @@ static void renderKey(app_t *app, int posx, int posy, int padWidth, int padHeigh
     SDL_RenderFillRect(app->renderer, &rect);
 
     if (text != NULL && *text != '\0') {
-        SDL_Color textColor = TEXT_COLOR;
         texture_t texture;
-        rendering_loadText(app, &texture, text, app->fonts.huge, &textColor);
+        rendering_loadText(app, &texture, text, app->fonts.huge, &app->theme->colors.text);
         SDL_Rect renderQuad = {posx + 20, posy + 10, padWidth - 40, padHeight - 20};
         SDL_RenderCopy(app->renderer, texture.texture, NULL, &renderQuad);
         SDL_DestroyTexture(texture.texture);
