@@ -63,8 +63,11 @@ typedef enum {
 typedef struct theme_s {
     struct {
         SDL_Color background;
-        SDL_Color highlight;
+        SDL_Color field;
+        SDL_Color fieldBackground;
+        SDL_Color fieldHighlight;
         SDL_Color text;
+        SDL_Color textHighlight;
         SDL_Color textInverted;
     } colors;
     char *fileReference;

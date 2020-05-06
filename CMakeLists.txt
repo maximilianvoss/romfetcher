@@ -119,8 +119,10 @@ set(SOURCES
         ui/uisearch.h
         ui/uisystem.c
         ui/uisystem.h
-        themes/themes.c
-        themes/themes.h
+        themes/loading.c
+        themes/loading.h
+        themes/rendering.c
+        themes/rendering.h
         )
 
 set(DEFAULT_THEME

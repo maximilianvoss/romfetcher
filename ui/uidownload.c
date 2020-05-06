@@ -16,6 +16,7 @@
 
 #include "uidownload.h"
 #include "rendering.h"
+#include "../themes/rendering.h"
 
 static void renderTitle(app_t *app);
 
@@ -64,10 +65,11 @@ static void renderProgressBar(app_t *app) {
     SDL_GL_GetDrawableSize(app->window, &width, &height);
 
     SDL_Rect rect1 = {50, 200, width - 100, 50};
-    SDL_SetRenderDrawColor(app->renderer, 0, 0, 0, 150);
+    themes_setDrawColor(app, fieldBackground);
     SDL_RenderFillRect(app->renderer, &rect1);
 
     SDL_Rect rect2 = {50 + 2, 200 + 2, width - 100 - 4, 50 - 4};
+    themes_setDrawColor(app, field);
     SDL_SetRenderDrawColor(app->renderer, 255, 255, 255, 150);
     SDL_RenderFillRect(app->renderer, &rect2);
 
@@ -82,7 +84,7 @@ static void renderProgressBar(app_t *app) {
     snprintf(percentText, 4, "%.0f%c", percentage * 100, '%');
 
     SDL_Rect rect3 = {50 + 2, 200 + 2, (width - 100 - 4) * percentage, 50 - 4};
-    SDL_SetRenderDrawColor(app->renderer, 0, 0, 255, 150);
+    themes_setDrawColor(app, fieldActive);
     SDL_RenderFillRect(app->renderer, &rect3);
 
     texture_t texture;
@@ -101,11 +103,11 @@ static void renderStartButton(app_t *app) {
     rendering_loadText(app, &texture, "Download", app->fonts.big, &app->themes.enabled->colors.text);
 
     SDL_Rect rect1 = {width - 50 - texture.w - 100, 300, texture.w + 100, 70};
-    SDL_SetRenderDrawColor(app->renderer, 0, 0, app->download.cursorPos == downloadActivity_start ? 255 : 0, 150);
+    themes_setDrawColorBackground(app, (app->download.cursorPos == downloadActivity_start));
     SDL_RenderFillRect(app->renderer, &rect1);
 
     SDL_Rect rect2 = {width - 50 + 2 - texture.w - 100, 300 + 2, texture.w + 100 - 4, 70 - 4};
-    SDL_SetRenderDrawColor(app->renderer, 255, 255, 255, 150);
+    themes_setDrawColorField(app);
     SDL_RenderFillRect(app->renderer, &rect2);
 
     SDL_Rect renderQuad = {width - texture.w - 100, 315, texture.w, texture.h};
@@ -122,11 +124,11 @@ static void renderCancelButton(app_t *app) {
     rendering_loadText(app, &texture, "Cancel", app->fonts.big, &app->themes.enabled->colors.text);
 
     SDL_Rect rect1 = {50, 300, texture.w + 100, 70};
-    SDL_SetRenderDrawColor(app->renderer, 0, 0, app->download.cursorPos == downloadActivity_cancel ? 255 : 0, 150);
+    themes_setDrawColorBackground(app, (app->download.cursorPos == downloadActivity_cancel));
     SDL_RenderFillRect(app->renderer, &rect1);
 
     SDL_Rect rect2 = {50 + 2, 300 + 2, texture.w + 100 - 4, 70 - 4};
-    SDL_SetRenderDrawColor(app->renderer, 255, 255, 255, 150);
+    themes_setDrawColorField(app);
     SDL_RenderFillRect(app->renderer, &rect2);
 
     SDL_Rect renderQuad = {100, 315, texture.w, texture.h};
@@ -143,11 +145,11 @@ static void renderDoneButton(app_t *app) {
     rendering_loadText(app, &texture, "Done", app->fonts.big, &app->themes.enabled->colors.text);
 
     SDL_Rect rect1 = {width / 2 - texture.w / 2 - 50, 300, texture.w + 100, 70};
-    SDL_SetRenderDrawColor(app->renderer, 0, 0, app->download.cursorPos == downloadActivity_done ? 255 : 0, 150);
+    themes_setDrawColorBackground(app, (app->download.cursorPos == downloadActivity_done));
     SDL_RenderFillRect(app->renderer, &rect1);
 
     SDL_Rect rect2 = {width / 2 - texture.w / 2 - 50 + 2, 300 + 2, texture.w + 100 - 4, 70 - 4};
-    SDL_SetRenderDrawColor(app->renderer, 255, 255, 255, 150);
+    themes_setDrawColorField(app);
     SDL_RenderFillRect(app->renderer, &rect2);
 
     SDL_Rect renderQuad = {width / 2 - texture.w / 2, 315, texture.w, texture.h};

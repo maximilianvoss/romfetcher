@@ -16,6 +16,7 @@
 
 #include "uiconfig.h"
 #include "rendering.h"
+#include "../themes/rendering.h"
 
 void uiconfig_render(app_t *app) {
     int width, height;
@@ -30,11 +31,11 @@ void uiconfig_render(app_t *app) {
     for (int i = 0, position = 80; i < 2; i++, position += 35) {
         rendering_loadText(app, &texture, menuEntries[i], app->fonts.medium, &app->themes.enabled->colors.text);
         SDL_Rect r2 = {48, position - 2, width - 96, 40};
-        SDL_SetRenderDrawColor(app->renderer, 0, 0, (app->config.configCursor == i) ? 255 : 0, 150);
+        themes_setDrawColorBackground(app, (app->config.configCursor == i));
         SDL_RenderFillRect(app->renderer, &r2);
 
         SDL_Rect r = {50, position, width - 100, 38};
-        SDL_SetRenderDrawColor(app->renderer, 255, 255, 255, 150);
+        themes_setDrawColorField(app);
         SDL_RenderFillRect(app->renderer, &r);
 
         SDL_Rect renderQuad = {60, position + 3, texture.w, texture.h};

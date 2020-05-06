@@ -23,7 +23,7 @@
 #include "database/sytems.h"
 #include "database/config.h"
 #include "helper/path.h"
-#include "themes/themes.h"
+#include "themes/loading.h"
 
 int main() {
     app_t app;

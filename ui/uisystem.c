@@ -16,6 +16,7 @@
 
 #include "uisystem.h"
 #include "rendering.h"
+#include "../themes/rendering.h"
 
 void uisystem_render(app_t *app) {
     int width, height;
@@ -38,12 +39,11 @@ void uisystem_render(app_t *app) {
         rendering_loadText(app, &texture, systems->fullname, app->fonts.medium, &app->themes.enabled->colors.text);
 
         SDL_Rect r2 = {48, position - 2, width - 96, 40};
-        SDL_SetRenderDrawColor(app->renderer, 0, 0, (systems == app->search.systemHovered) ? 255 : 0,
-                               150);
+        themes_setDrawColorBackground(app, (systems == app->search.systemHovered));
         SDL_RenderFillRect(app->renderer, &r2);
 
         SDL_Rect r = {50, position, width - 100, 38};
-        SDL_SetRenderDrawColor(app->renderer, 255, 255, 255, 150);
+        themes_setDrawColorField(app);
         SDL_RenderFillRect(app->renderer, &r);
 
         SDL_Rect texture_rect = {60, position + 5, 25, 25};

@@ -8,16 +8,34 @@
       0,
       255
     ],
-    "highlight": [
+    "field": [
+      255,
+      255,
+      255,
+      150
+    ],
+    "fieldBackground": [
+      0,
+      0,
+      0,
+      150
+    ],
+    "fieldHighlight": [
       0,
       0,
       255,
-      255
+      150
     ],
     "text": [
       0,
       0,
       0,
+      255
+    ],
+    "textHighlight": [
+      0,
+      0,
+      255,
       255
     ],
     "textInverted": [

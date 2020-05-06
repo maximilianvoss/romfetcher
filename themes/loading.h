@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef THEMES_THEMES_H
-#define THEMES_THEMES_H
+#ifndef THEMES_LOADING_H
+#define THEMES_LOADING_H
 
 #include "../structs.h"
 

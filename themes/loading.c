@@ -18,7 +18,7 @@
 #include <csafestring.h>
 #include <sys/stat.h>
 #include <json2map.h>
-#include "themes.h"
+#include "loading.h"
 #include "../config.h"
 #include "../helper/path.h"
 #include "../helper/map.h"
@@ -36,7 +36,7 @@ static void json2maphook(void *data, char *key, char *value);
 
 static theme_t *createThemeByMap(char *path, void *map);
 
-static char *copyString(char *strIn);
+static char *cloneString(char *strIn);
 
 static char *createFullQualifiedPath(char *path, char *file);
 
@@ -163,12 +163,15 @@ static void addThemeToList(app_t *app, theme_t *theme) {
 static theme_t *createThemeByMap(char *path, void *map) {
     theme_t *theme = (theme_t *) calloc(1, sizeof(theme_t));
     loadColor(&theme->colors.background, map, "colors.background");
+    loadColor(&theme->colors.field, map, "colors.field");
+    loadColor(&theme->colors.fieldBackground, map, "colors.fieldBackground");
+    loadColor(&theme->colors.fieldHighlight, map, "colors.fieldHighlight");
     loadColor(&theme->colors.text, map, "colors.text");
-    loadColor(&theme->colors.highlight, map, "colors.highlight");
+    loadColor(&theme->colors.textHighlight, map, "colors.textHighlight");
     loadColor(&theme->colors.textInverted, map, "colors.textInverted");
 
-    theme->fileReference = copyString(path);
-    theme->name = copyString(hash_get(map, "name"));
+    theme->fileReference = cloneString(path);
+    theme->name = cloneString(hash_get(map, "name"));
 
     theme->font = createFullQualifiedPath(path, hash_get(map, "font"));
     theme->images.background = createFullQualifiedPath(path, hash_get(map, "images.background"));
@@ -226,18 +229,18 @@ static int mapToInt(void *map, char *key) {
 
 static char *createFullQualifiedPath(char *path, char *file) {
     if (*file == '/') {
-        return copyString(file);
+        return cloneString(file);
     }
     csafestring_t *filepath = safe_create(path);
     safe_strchrappend(filepath, '/');
     safe_strcat(filepath, file);
 
-    char *str = copyString(filepath->data);
+    char *str = cloneString(filepath->data);
     safe_destroy(filepath);
     return str;
 }
 
-static char *copyString(char *strIn) {
+static char *cloneString(char *strIn) {
     if (strIn == NULL) {
         return NULL;
     }

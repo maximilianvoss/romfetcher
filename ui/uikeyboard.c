@@ -16,6 +16,7 @@
 
 #include "uikeyboard.h"
 #include "rendering.h"
+#include "../themes/rendering.h"
 
 static void renderSearchField(app_t *app);
 
@@ -33,11 +34,11 @@ static void renderSearchField(app_t *app) {
     SDL_GL_GetDrawableSize(app->window, &width, &height);
 
     SDL_Rect r2 = {48, 50, width - 96, 54};
-    SDL_SetRenderDrawColor(app->renderer, 0, 0, 0, 150);
+    themes_setDrawColor(app, fieldBackground);
     SDL_RenderFillRect(app->renderer, &r2);
 
     SDL_Rect r = {50, 52, width - 100, 50};
-    SDL_SetRenderDrawColor(app->renderer, 255, 255, 255, 150);
+    themes_setDrawColorField(app);
     SDL_RenderFillRect(app->renderer, &r);
 
     if (*(app->keyboard.text) != '\0') {
@@ -52,7 +53,7 @@ static void renderSearchField(app_t *app) {
     if (app->keyboard.activeChar != '\0') {
         char miniString[2] = {app->keyboard.activeChar, '\0'};
         texture_t texture;
-        rendering_loadText(app, &texture, miniString, app->fonts.big, &app->themes.enabled->colors.highlight);
+        rendering_loadText(app, &texture, miniString, app->fonts.big, &app->themes.enabled->colors.textHighlight);
         SDL_Rect renderQuad = {charPos, 55, texture.w, texture.h};
         SDL_RenderCopy(app->renderer, texture.texture, NULL, &renderQuad);
         SDL_DestroyTexture(texture.texture);
@@ -86,11 +87,11 @@ static void renderDailPad(app_t *app) {
 
 static void renderKey(app_t *app, int posx, int posy, int padWidth, int padHeight, uint8_t active, char *text) {
     SDL_Rect rectShadow = {posx, posy, padWidth, padHeight};
-    SDL_SetRenderDrawColor(app->renderer, 0, 0, active ? 255 : 0, 150);
+    themes_setDrawColorBackground(app, active);
     SDL_RenderFillRect(app->renderer, &rectShadow);
 
     SDL_Rect rect = {posx + 2, posy + 2, padWidth - 4, padHeight - 4};
-    SDL_SetRenderDrawColor(app->renderer, 255, 255, 255, 150);
+    themes_setDrawColorField(app);
     SDL_RenderFillRect(app->renderer, &rect);
 
     if (text != NULL && *text != '\0') {
