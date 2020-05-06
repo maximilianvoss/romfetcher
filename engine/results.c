@@ -15,6 +15,7 @@
  */
 
 #include "results.h"
+#include "../helper/utils.h"
 
 searchresult_t *result_newItem(system_t *system) {
     searchresult_t *resultList = (searchresult_t *) calloc(1, sizeof(searchresult_t));
@@ -68,12 +69,8 @@ void result_freeList(searchresult_t *resultList) {
     if (next != NULL) {
         result_freeList(next);
     }
-    if (resultList->title != NULL) {
-        free(resultList->title);
-    }
-    if (resultList->url != NULL) {
-        free(resultList->url);
-    }
+    FREENOTNULL(resultList->title);
+    FREENOTNULL(resultList->url);
     free(resultList);
 }
 

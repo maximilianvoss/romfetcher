@@ -42,7 +42,7 @@ static void renderSearchField(app_t *app) {
 
     if (*(app->keyboard.text) != '\0') {
         texture_t texture;
-        rendering_loadText(app, &texture, app->keyboard.text, app->fonts.big, &app->theme->colors.text);
+        rendering_loadText(app, &texture, app->keyboard.text, app->fonts.big, &app->themes.enabled->colors.text);
         SDL_Rect renderQuad = {60, 55, texture.w, texture.h};
         SDL_RenderCopy(app->renderer, texture.texture, NULL, &renderQuad);
         charPos += texture.w;
@@ -52,7 +52,7 @@ static void renderSearchField(app_t *app) {
     if (app->keyboard.activeChar != '\0') {
         char miniString[2] = {app->keyboard.activeChar, '\0'};
         texture_t texture;
-        rendering_loadText(app, &texture, miniString, app->fonts.big, &app->theme->colors.textHighlight);
+        rendering_loadText(app, &texture, miniString, app->fonts.big, &app->themes.enabled->colors.highlight);
         SDL_Rect renderQuad = {charPos, 55, texture.w, texture.h};
         SDL_RenderCopy(app->renderer, texture.texture, NULL, &renderQuad);
         SDL_DestroyTexture(texture.texture);
@@ -95,7 +95,7 @@ static void renderKey(app_t *app, int posx, int posy, int padWidth, int padHeigh
 
     if (text != NULL && *text != '\0') {
         texture_t texture;
-        rendering_loadText(app, &texture, text, app->fonts.huge, &app->theme->colors.text);
+        rendering_loadText(app, &texture, text, app->fonts.huge, &app->themes.enabled->colors.text);
         SDL_Rect renderQuad = {posx + 20, posy + 10, padWidth - 40, padHeight - 20};
         SDL_RenderCopy(app->renderer, texture.texture, NULL, &renderQuad);
         SDL_DestroyTexture(texture.texture);

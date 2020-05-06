@@ -65,7 +65,8 @@ static void renderSystemSelector(app_t *app) {
     SDL_RenderCopy(app->renderer, app->textures.searchChevron, NULL, &texture_rect);
 
     texture_t texture;
-    rendering_loadText(app, &texture, app->search.systemActive->fullname, app->fonts.big, &app->theme->colors.text);
+    rendering_loadText(app, &texture, app->search.systemActive->fullname, app->fonts.big,
+                       &app->themes.enabled->colors.text);
     SDL_Rect renderQuad = {60, 55, texture.w, texture.h};
     SDL_RenderCopy(app->renderer, texture.texture, NULL, &renderQuad);
     SDL_DestroyTexture(texture.texture);
@@ -86,7 +87,7 @@ static void renderSearchField(app_t *app) {
     // TODO: Handle overflow
     if (*(app->search.searchText) != '\0') {
         texture_t texture;
-        rendering_loadText(app, &texture, app->search.searchText, app->fonts.big, &app->theme->colors.text);
+        rendering_loadText(app, &texture, app->search.searchText, app->fonts.big, &app->themes.enabled->colors.text);
         SDL_Rect renderQuad = {60, 125, texture.w, texture.h};
         SDL_RenderCopy(app->renderer, texture.texture, NULL, &renderQuad);
         SDL_DestroyTexture(texture.texture);
@@ -106,7 +107,7 @@ static void renderSearchButton(app_t *app) {
     SDL_RenderFillRect(app->renderer, &r);
 
     texture_t texture;
-    rendering_loadText(app, &texture, "Search", app->fonts.big, &app->theme->colors.text);
+    rendering_loadText(app, &texture, "Search", app->fonts.big, &app->themes.enabled->colors.text);
     SDL_Rect renderQuad = {width - 180, 125, texture.w, texture.h};
     SDL_RenderCopy(app->renderer, texture.texture, NULL, &renderQuad);
     SDL_DestroyTexture(texture.texture);
@@ -132,7 +133,7 @@ static void renderSearchResults(app_t *app) {
          position <= height - 80 && result != NULL; position += 35, result = result->next) {
 
         //TODO: handle overflow
-        rendering_loadText(app, &texture, result->title, app->fonts.medium, &app->theme->colors.text);
+        rendering_loadText(app, &texture, result->title, app->fonts.medium, &app->themes.enabled->colors.text);
 
         SDL_Rect r2 = {48, position - 2, width - 96, 40};
         SDL_SetRenderDrawColor(app->renderer, 0, 0,

@@ -1,0 +1,37 @@
+{
+  "name": "Default",
+  "font": "FreeSans.ttf",
+  "colors": {
+    "background": [
+      0,
+      0,
+      0,
+      255
+    ],
+    "highlight": [
+      0,
+      0,
+      255,
+      255
+    ],
+    "text": [
+      0,
+      0,
+      0,
+      255
+    ],
+    "textInverted": [
+      255,
+      255,
+      255,
+      255
+    ]
+  },
+  "images": {
+    "background": "wallpaper.jpg",
+    "checkboxChecked": "checkbox_checked.png",
+    "checkboxUnchecked": "checkbox_unchecked.png",
+    "selectorIcon": "selector.png",
+    "settingsIcon": "settings.png"
+  }
+}

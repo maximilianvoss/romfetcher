@@ -44,7 +44,7 @@ static void renderDefaults(app_t *app) {
 
     char *text = copyright();
     texture_t texture;
-    rendering_loadText(app, &texture, text, app->fonts.small, &app->theme->colors.textInverted);
+    rendering_loadText(app, &texture, text, app->fonts.small, &app->themes.enabled->colors.textInverted);
     SDL_Rect renderQuad = {50, height - 40, texture.w, texture.h};
     SDL_RenderCopy(app->renderer, texture.texture, NULL, &renderQuad);
     free(text);

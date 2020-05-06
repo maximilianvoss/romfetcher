@@ -3,7 +3,6 @@ project(romfetcher C)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 set(CMAKE_C_STANDARD 99)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -O3")
 set(CMAKE_INSTALL_PREFIX /usr)
 set(CMAKE_VERBOSE_MAKEFILE on)
 set(THREADS_PREFER_PTHREAD_FLAG on)
@@ -20,10 +19,14 @@ find_package(OpenSSL REQUIRED)
 
 add_subdirectory(libs/csafestring)
 include_directories(libs/csafestring)
+add_subdirectory(libs/json2map)
+include_directories(libs/json2map)
 
 if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DDEVELOP")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -Wall -DDEVELOP")
     set(CMAKE_INSTALL_PREFIX /usr/local)
+else ()
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -O3")
 endif ()
 
 set(SOURCES
@@ -65,6 +68,8 @@ set(SOURCES
         engine/wowroms/wowroms.h
         helper/entities.c
         helper/entities.h
+        helper/map.c
+        helper/map.h
         helper/md5.c
         helper/md5.h
         helper/path.c
@@ -114,16 +119,18 @@ set(SOURCES
         ui/uisearch.h
         ui/uisystem.c
         ui/uisystem.h
-        themes/themes.c themes/themes.h)
+        themes/themes.c
+        themes/themes.h
+        )
 
-set(RESOURCE_FILES
-        resources/gfx/FreeSans.ttf
-        resources/gfx/checkbox_checked.png
-        resources/gfx/checkbox_unchecked.png
-        resources/gfx/selector.png
-        resources/gfx/settings.png
-        resources/gfx/wallpaper.jpg
-
+set(DEFAULT_THEME
+        resources/themes/default/FreeSans.ttf
+        resources/themes/default/checkbox_checked.png
+        resources/themes/default/checkbox_unchecked.png
+        resources/themes/default/selector.png
+        resources/themes/default/settings.png
+        resources/themes/default/wallpaper.jpg
+        resources/themes/default/theme.json
         )
 
 set(SCRIPT_FILES
@@ -132,9 +139,9 @@ set(SCRIPT_FILES
 
 include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${SDL2TTF_INCLUDE_DIRS} ${CURL_INCLUDE_DIRS} ${SQLite3_INCLUDE_DIRS} ${OPENSSL_INCLUDE_DIR})
 add_executable(romfetcher ${SOURCES})
-target_link_libraries(romfetcher csafestring ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2TTF_LIBRARY} ${CURL_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} ${SQLite3_LIBRARIES} ${OPENSSL_LIBRARIES})
+target_link_libraries(romfetcher csafestring json2map ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2TTF_LIBRARY} ${CURL_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} ${SQLite3_LIBRARIES} ${OPENSSL_LIBRARIES})
 install(TARGETS romfetcher DESTINATION bin)
-install(FILES ${RESOURCE_FILES} DESTINATION share/romfetcher)
+install(FILES ${DEFAULT_THEME} DESTINATION share/romfetcher/themes/default)
 install(FILES ${SCRIPT_FILES} DESTINATION /home/pi/RetroPie/retropiemenu)
 
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "ROM Fetcher for Emulationstation")

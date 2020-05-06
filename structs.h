@@ -62,10 +62,12 @@ typedef enum {
 
 typedef struct theme_s {
     struct {
+        SDL_Color background;
+        SDL_Color highlight;
         SDL_Color text;
-        SDL_Color textHighlight;
         SDL_Color textInverted;
     } colors;
+    char *fileReference;
     char *font;
     struct {
         char *background;
@@ -74,6 +76,7 @@ typedef struct theme_s {
         char *selectorIcon;
         char *settingsIcon;
     } images;
+    char *name;
     struct theme_s *prev;
     struct theme_s *next;
 } theme_t;
@@ -99,7 +102,11 @@ typedef struct {
     SDL_Renderer *renderer;
     SDL_Window *window;
     window_t win;
-    theme_t *theme;
+
+    struct {
+        theme_t *all;
+        theme_t *enabled;
+    } themes;
 
     struct {
         system_t *all;

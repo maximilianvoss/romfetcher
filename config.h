@@ -23,7 +23,7 @@
 #define HOMEDIR_PATH ".romfetcher"
 #define DATABASE_FILE "romfetcher.db"
 #define ROM_BASE_DIR "RetroPie/roms"
-#define THEMES_SYSTEM_DIRS { "/usr/share/romfetcher", "/usr/local/share/romfetcher"};
+#define THEMES_SYSTEM_DIRS { "/usr/share/romfetcher/themes", "/usr/local/share/romfetcher/themes"};
 #define THEME_HOME "themes"
 
 #ifdef DEVELOP

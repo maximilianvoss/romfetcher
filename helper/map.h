@@ -14,21 +14,17 @@
  * limitations under the License.
  */
 
-#ifndef HELPER_UTILS_H
-#define HELPER_UTILS_H
+#ifndef HELPER_MAP_H
+#define HELPER_MAP_H
 
-#define FREENOTNULL(x) if (x != NULL) free (x)
+void *hash_createMap();
 
-char *str_replace(char *orig, char *rep, char *with);
+void hash_destroyMap(void *map);
 
-char *file_name(char *path);
+void hash_set(void *data, char *key, char *value);
 
-char *str_urlDecode(const char *string);
+void hash_unset(void *data, char *key);
 
-char *str_htmlDecode(const char *string);
-
-char *str_concat(char *str1, char *str2);
-
-char *str_quoteDecode(char *strIn);
+char *hash_get(void *data, char *key);
 
 #endif

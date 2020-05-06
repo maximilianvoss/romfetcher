@@ -19,26 +19,26 @@
 void fonts_init(app_t *app) {
     TTF_Init();
 
-    app->fonts.huge = TTF_OpenFont(app->theme->font, 144);
+    app->fonts.huge = TTF_OpenFont(app->themes.enabled->font, 144);
     if (app->fonts.huge == NULL) {
         printf("Failed to load headlineFont! SDL_ttf Error: %s\n", TTF_GetError());
         exit(1);
     }
 
 
-    app->fonts.big = TTF_OpenFont(app->theme->font, 34);
+    app->fonts.big = TTF_OpenFont(app->themes.enabled->font, 34);
     if (app->fonts.big == NULL) {
         printf("Failed to load headlineFont! SDL_ttf Error: %s\n", TTF_GetError());
         exit(1);
     }
 
-    app->fonts.medium = TTF_OpenFont(app->theme->font, 24);
+    app->fonts.medium = TTF_OpenFont(app->themes.enabled->font, 24);
     if (app->fonts.medium == NULL) {
         printf("Failed to load headlineFont! SDL_ttf Error: %s\n", TTF_GetError());
         exit(1);
     }
 
-    app->fonts.small = TTF_OpenFont(app->theme->font, 12);
+    app->fonts.small = TTF_OpenFont(app->themes.enabled->font, 12);
     if (app->fonts.small == NULL) {
         printf("Failed to load headlineFont! SDL_ttf Error: %s\n", TTF_GetError());
         exit(1);
