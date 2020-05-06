@@ -24,24 +24,6 @@
 #include "../helper/map.h"
 #include "../helper/utils.h"
 
-
-#ifdef DEVELOP
-#define START_IN_WINDOW
-#define BACKGROUND_IMAGE "/usr/local/share/romfetcher/wallpaper.jpg"
-#define SELECTOR_ICON "/usr/local/share/romfetcher/selector.png"
-#define SETTINGS_ICON "/usr/local/share/romfetcher/settings.png"
-#define CHECKBOX_CHECKED_ICON "/usr/local/share/romfetcher/checkbox_checked.png"
-#define CHECKBOX_UNCHECKED_ICON "/usr/local/share/romfetcher/checkbox_unchecked.png"
-#define FONTS "/usr/local/share/romfetcher/FreeSans.ttf"
-#else
-#define BACKGROUND_IMAGE "/usr/share/romfetcher/wallpaper.jpg"
-#define SELECTOR_ICON "/usr/share/romfetcher/selector.png"
-#define SETTINGS_ICON "/usr/share/romfetcher/settings.png"
-#define CHECKBOX_CHECKED_ICON "/usr/share/romfetcher/checkbox_checked.png"
-#define CHECKBOX_UNCHECKED_ICON "/usr/share/romfetcher/checkbox_unchecked.png"
-#define FONTS "/usr/share/romfetcher/FreeSans.ttf"
-#endif
-
 static void colorSetter(SDL_Color *color, int r, int g, int b, int a);
 
 static void loadThemes(app_t *app, char *path);
