@@ -38,6 +38,8 @@ int main() {
     app.systems.all = database_systemList(&app, 0);
     app.systems.enabled = database_systemList(&app, 1);
 
+    strcpy(app.search.searchText, "Super");
+
     uint8_t quit = 0;
     while (!quit) {
         quit = inputhandler_processInputs(&app);

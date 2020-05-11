@@ -92,8 +92,8 @@ set(SOURCES
         ui/inputconfig.h
         ui/inputconfigengine.c
         ui/inputconfigengine.h
-        ui/inputconfigsystem.c
-        ui/inputconfigsystem.h
+        ui/inputlist.c
+        ui/inputlist.h
         ui/inputdownload.c
         ui/inputdownload.h
         ui/inputhandler.c
@@ -102,8 +102,6 @@ set(SOURCES
         ui/inputkeyboard.h
         ui/inputsearch.c
         ui/inputsearch.h
-        ui/inputsystem.c
-        ui/inputsystem.h
         ui/rendering.c
         ui/rendering.h
         ui/statehandler.c
@@ -114,8 +112,8 @@ set(SOURCES
         ui/uiconfig.h
         ui/uiconfigengine.c
         ui/uiconfigengine.h
-        ui/uiconfigsystem.c
-        ui/uiconfigsystem.h
+        ui/uilist.c
+        ui/uilist.h
         ui/uidownload.c
         ui/uidownload.h
         ui/uihandler.c
@@ -124,8 +122,6 @@ set(SOURCES
         ui/uikeyboard.h
         ui/uisearch.c
         ui/uisearch.h
-        ui/uisystem.c
-        ui/uisystem.h
         )
 
 set(DEFAULT_THEME

@@ -33,6 +33,7 @@ void inputsearch_processUp(app_t *app) {
         case searchactivity_results:
             if (app->search.cursor->prev == NULL) {
                 app->search.position = searchactivity_field;
+                app->search.cursor = NULL;
             } else {
                 app->search.cursor = app->search.cursor->prev;
             }
@@ -127,7 +128,6 @@ void inputsearch_processSelect(app_t *app) {
                     result_freeList(app->search.all);
                 }
                 app->search.all = enginehandler_search(app, app->systems.active, app->search.searchText);
-                app->search.cursor = app->search.all;
             }
             break;
         case searchactivity_results:

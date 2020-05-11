@@ -16,14 +16,13 @@
 
 #include "uihandler.h"
 #include "uisearch.h"
-#include "uisystem.h"
 #include "uikeyboard.h"
 #include "uidownload.h"
 #include "rendering.h"
 #include "../config.h"
 #include "uiconfig.h"
 #include "uiconfigengine.h"
-#include "uiconfigsystem.h"
+#include "uilist.h"
 
 static void renderDefaults(app_t *app);
 
@@ -64,10 +63,7 @@ void uihandler_render(app_t *app) {
             renderEngine = &uisearch_render;
             break;
         case window_system:
-            if (app->systems.cursor == NULL) {
-                app->systems.cursor = app->systems.active;
-            }
-            renderEngine = &uisystem_render;
+            renderEngine = &uilist_render;
             break;
         case window_keyboard:
             renderEngine = &uikeyboard_render;
@@ -79,17 +75,10 @@ void uihandler_render(app_t *app) {
             renderEngine = &uiconfig_render;
             break;
         case window_config_engine:
-            if (app->engine.cursor == engine_notdefined) {
-                app->engine.cursor = app->engine.active;
-            }
             renderEngine = &uiconfigengine_render;
             break;
         case window_config_systems:
-            if (app->systems.active == NULL) {
-                app->systems.active = app->systems.enabled;
-                app->systems.cursor = app->systems.enabled;
-            }
-            renderEngine = &uiconfigsystem_render;
+            renderEngine = &uilist_render;
             break;
     }
 

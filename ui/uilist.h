@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-#ifndef UI_UICONFIGSYSTEM_H
-#define UI_UICONFIGSYSTEM_H
+#ifndef UI_UILIST_H
+#define UI_UILIST_H
 
 #include "../structs.h"
 
-void uiconfigsystem_render(app_t *app);
+void uilist_render(app_t *app);
+
+void uilist_renderList(app_t *app, int position);
 
 #endif

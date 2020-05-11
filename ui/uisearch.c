@@ -17,6 +17,7 @@
 #include "uisearch.h"
 #include "rendering.h"
 #include "../themes/rendering.h"
+#include "uilist.h"
 
 static void renderSearchField(app_t *app);
 
@@ -118,40 +119,12 @@ static void renderSearchButton(app_t *app) {
 }
 
 static void renderSearchResults(app_t *app) {
-    int width, height;
-    SDL_GL_GetDrawableSize(app->sdlWindow, &width, &height);
+    app->list.all = app->search.all;
+    app->list.active = app->search.active;
+    app->list.cursor = app->search.cursor;
+    app->list.multi = 0;
+    app->list.checkbox = 0;
 
-    texture_t texture;
-
-    int deviceCountToDisplay = (height - 190 - 50) / 35 + 1;
-    searchresult_t *result = app->search.cursor;
-    if (app->search.cursor == NULL) {
-        return;
-    }
-
-    for (int i = 0; i < deviceCountToDisplay / 2 - 1 && result->prev != NULL; i++) {
-        result = result->prev;
-    }
-
-    for (int position = 190;
-         position <= height - 80 && result != NULL; position += 35, result = result->next) {
-
-        rendering_loadText(app, &texture, result->title, app->fonts.medium, &app->themes.enabled->colors.text);
-
-        SDL_Rect r2 = {48, position - 2, width - 96, 40};
-        themes_setDrawColorBackground(app, (result == app->search.cursor &&
-                                            app->search.position == searchactivity_results));
-        SDL_RenderFillRect(app->sdlRenderer, &r2);
-
-        SDL_Rect r = {50, position, width - 100, 38};
-        themes_setDrawColorField(app);
-        SDL_RenderFillRect(app->sdlRenderer, &r);
-
-        SDL_Rect srcQuad = {0, 0, width - 120, texture.h};
-        SDL_Rect renderQuad = {60, position + 3, (texture.w > width - 120) ? width - 120 : texture.w, texture.h};
-
-        SDL_RenderCopy(app->sdlRenderer, texture.texture, &srcQuad, &renderQuad);
-        SDL_DestroyTexture(texture.texture);
-    }
+    uilist_renderList(app, 190);
 }
 

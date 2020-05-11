@@ -23,6 +23,13 @@
 #include <curl/curl.h>
 #include <sqlite3.h>
 
+typedef struct linkedlist_s {
+    struct linkedlist_s *prev;
+    struct linkedlist_s *next;
+    char *name;
+    int active;
+} linkedlist_t;
+
 typedef struct theme_s {
     struct theme_s *prev;
     struct theme_s *next;
@@ -51,9 +58,9 @@ typedef struct system_s {
     struct system_s *prev;
     struct system_s *next;
     char *fullname;
+    int active;
     char *name;
     char *path;
-    int active;
 } system_t;
 
 typedef struct searchresult_s {
@@ -72,6 +79,15 @@ typedef struct {
     struct {
         sqlite3 *db;
     } database;
+
+    struct {
+        linkedlist_t *active;
+        linkedlist_t *all;
+        linkedlist_t *cursor;
+        uint8_t multi;
+        uint8_t checkbox;
+        window_t destiny;
+    } list;
 
     struct {
         SDL_Texture *backgroundImage;
@@ -110,7 +126,6 @@ typedef struct {
 
     struct {
         engine_t active;
-        engine_t all;
         engine_t cursor;
     } engine;
 

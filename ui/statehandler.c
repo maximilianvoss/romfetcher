@@ -67,12 +67,21 @@ static void handleSearch(app_t *app, window_t destiny) {
         case window_keyboard:
             strcpy(app->keyboard.text, app->search.searchText);
             break;
+        case window_system:
+            app->list.active = (linkedlist_t *) app->systems.active;
+            app->list.all = (linkedlist_t *) app->systems.all;
+            app->list.cursor = (linkedlist_t *) app->systems.active;
+            app->list.multi = 0;
+            app->list.checkbox = 0;
+            app->list.destiny = window_search;
         default:
             break;
     }
 }
 
-static void handleSystem(app_t *app, window_t destiny) {}
+static void handleSystem(app_t *app, window_t destiny) {
+    app->systems.active = (system_t *) app->list.active;
+}
 
 static void handleKeyboard(app_t *app, window_t destiny) {}
 
@@ -83,8 +92,21 @@ static void handleDownload(app_t *app, window_t destiny) {
 }
 
 static void handleConfig(app_t *app, window_t destiny) {
-    if (destiny == window_config_systems) {
-        app->systems.cursor = app->systems.all;
+    switch (destiny) {
+        case window_config_systems:
+            app->list.cursor = (linkedlist_t *) app->systems.all;
+            app->list.all = (linkedlist_t *) app->systems.all;
+            app->list.multi = 1;
+            app->list.checkbox = 1;
+            app->list.destiny = window_config;
+            break;
+        case window_config_engine:
+            if (app->engine.cursor == engine_notdefined) {
+                app->engine.cursor = app->engine.active;
+            }
+            break;
+        default:
+            break;
     }
 }
 

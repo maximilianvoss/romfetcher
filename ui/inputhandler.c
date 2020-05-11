@@ -17,12 +17,11 @@
 #include "inputhandler.h"
 #include "../config.h"
 #include "inputsearch.h"
-#include "inputsystem.h"
 #include "inputdownload.h"
 #include "inputkeyboard.h"
 #include "inputconfig.h"
 #include "inputconfigengine.h"
-#include "inputconfigsystem.h"
+#include "inputlist.h"
 
 static uint8_t processGameController(app_t *app);
 
@@ -83,13 +82,13 @@ uint8_t inputhandler_processInputs(app_t *app) {
             processOtherButton = &inputsearch_processOtherButton;
             break;
         case window_system:
-            processUp = &inputsystem_processUp;
-            processDown = &inputsystem_processDown;
-            processLeft = &inputsystem_processLeft;
-            processRight = &inputsystem_processRight;
-            processSelect = &inputsystem_processSelect;
-            processBack = &inputsystem_processBack;
-            processOtherButton = &inputsystem_processOtherButton;
+            processUp = &inputlist_processUp;
+            processDown = &inputlist_processDown;
+            processLeft = &inputlist_processLeft;
+            processRight = &inputlist_processRight;
+            processSelect = &inputlist_processSelect;
+            processBack = &inputlist_processBack;
+            processOtherButton = &inputlist_processOtherButton;
             break;
         case window_keyboard:
             processUp = &inputkeyboard_processUp;
@@ -128,13 +127,13 @@ uint8_t inputhandler_processInputs(app_t *app) {
             processOtherButton = &inputconfigengine_processOtherButton;
             break;
         case window_config_systems:
-            processUp = &inputconfigsystem_processUp;
-            processDown = &inputconfigsystem_processDown;
-            processLeft = &inputconfigsystem_processLeft;
-            processRight = &inputconfigsystem_processRight;
-            processSelect = &inputconfigsystem_processSelect;
-            processBack = &inputconfigsystem_processBack;
-            processOtherButton = &inputconfigsystem_processOtherButton;
+            processUp = &inputlist_processUp;
+            processDown = &inputlist_processDown;
+            processLeft = &inputlist_processLeft;
+            processRight = &inputlist_processRight;
+            processSelect = &inputlist_processSelect;
+            processBack = &inputlist_processBack;
+            processOtherButton = &inputlist_processOtherButton;
             break;
     }
     return processEvents(app);
