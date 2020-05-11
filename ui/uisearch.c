@@ -119,9 +119,9 @@ static void renderSearchButton(app_t *app) {
 }
 
 static void renderSearchResults(app_t *app) {
-    app->list.all = app->search.all;
-    app->list.active = app->search.active;
-    app->list.cursor = app->search.cursor;
+    app->list.all = (linkedlist_t *) app->search.all;
+    app->list.active = (linkedlist_t *) app->search.active;
+    app->list.cursor = (linkedlist_t *) app->search.cursor;
     app->list.multi = 0;
     app->list.checkbox = 0;
 
