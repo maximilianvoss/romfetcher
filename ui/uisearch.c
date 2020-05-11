@@ -136,7 +136,6 @@ static void renderSearchResults(app_t *app) {
     for (int position = 190;
          position <= height - 80 && result != NULL; position += 35, result = result->next) {
 
-        //TODO: handle overflow
         rendering_loadText(app, &texture, result->title, app->fonts.medium, &app->themes.enabled->colors.text);
 
         SDL_Rect r2 = {48, position - 2, width - 96, 40};
@@ -148,8 +147,10 @@ static void renderSearchResults(app_t *app) {
         themes_setDrawColorField(app);
         SDL_RenderFillRect(app->sdlRenderer, &r);
 
-        SDL_Rect renderQuad = {60, position + 3, texture.w, texture.h};
-        SDL_RenderCopy(app->sdlRenderer, texture.texture, NULL, &renderQuad);
+        SDL_Rect srcQuad = {0, 0, width - 120, texture.h};
+        SDL_Rect renderQuad = {60, position + 3, (texture.w > width - 120) ? width - 120 : texture.w, texture.h};
+
+        SDL_RenderCopy(app->sdlRenderer, texture.texture, &srcQuad, &renderQuad);
         SDL_DestroyTexture(texture.texture);
     }
 }
