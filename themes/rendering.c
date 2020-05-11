@@ -51,5 +51,5 @@ void themes_setDrawColor(app_t *app, enum theme_color color) {
             a = app->themes.enabled->colors.fieldHighlight.a;
             break;
     }
-    SDL_SetRenderDrawColor(app->renderer, r, g, b, a);
+    SDL_SetRenderDrawColor(app->sdlRenderer, r, g, b, a);
 }

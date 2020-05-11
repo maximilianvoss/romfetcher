@@ -31,21 +31,21 @@ void uikeyboard_render(app_t *app) {
 static void renderSearchField(app_t *app) {
     int width, height;
     int charPos = 60;
-    SDL_GL_GetDrawableSize(app->window, &width, &height);
+    SDL_GL_GetDrawableSize(app->sdlWindow, &width, &height);
 
     SDL_Rect r2 = {48, 50, width - 96, 54};
     themes_setDrawColor(app, fieldBackground);
-    SDL_RenderFillRect(app->renderer, &r2);
+    SDL_RenderFillRect(app->sdlRenderer, &r2);
 
     SDL_Rect r = {50, 52, width - 100, 50};
     themes_setDrawColorField(app);
-    SDL_RenderFillRect(app->renderer, &r);
+    SDL_RenderFillRect(app->sdlRenderer, &r);
 
     if (*(app->keyboard.text) != '\0') {
         texture_t texture;
         rendering_loadText(app, &texture, app->keyboard.text, app->fonts.big, &app->themes.enabled->colors.text);
         SDL_Rect renderQuad = {60, 55, texture.w, texture.h};
-        SDL_RenderCopy(app->renderer, texture.texture, NULL, &renderQuad);
+        SDL_RenderCopy(app->sdlRenderer, texture.texture, NULL, &renderQuad);
         charPos += texture.w;
         SDL_DestroyTexture(texture.texture);
     }
@@ -55,7 +55,7 @@ static void renderSearchField(app_t *app) {
         texture_t texture;
         rendering_loadText(app, &texture, miniString, app->fonts.big, &app->themes.enabled->colors.textHighlight);
         SDL_Rect renderQuad = {charPos, 55, texture.w, texture.h};
-        SDL_RenderCopy(app->renderer, texture.texture, NULL, &renderQuad);
+        SDL_RenderCopy(app->sdlRenderer, texture.texture, NULL, &renderQuad);
         SDL_DestroyTexture(texture.texture);
     }
 }
@@ -71,7 +71,7 @@ static void renderDailPad(app_t *app) {
     };
 
     int width, height;
-    SDL_GL_GetDrawableSize(app->window, &width, &height);
+    SDL_GL_GetDrawableSize(app->sdlWindow, &width, &height);
 
     int padWidth = (width - 100) / 4;
     int padHeight = (height - 100 - 120) / 4 - 20;
@@ -88,17 +88,17 @@ static void renderDailPad(app_t *app) {
 static void renderKey(app_t *app, int posx, int posy, int padWidth, int padHeight, uint8_t active, char *text) {
     SDL_Rect rectShadow = {posx, posy, padWidth, padHeight};
     themes_setDrawColorBackground(app, active);
-    SDL_RenderFillRect(app->renderer, &rectShadow);
+    SDL_RenderFillRect(app->sdlRenderer, &rectShadow);
 
     SDL_Rect rect = {posx + 2, posy + 2, padWidth - 4, padHeight - 4};
     themes_setDrawColorField(app);
-    SDL_RenderFillRect(app->renderer, &rect);
+    SDL_RenderFillRect(app->sdlRenderer, &rect);
 
     if (text != NULL && *text != '\0') {
         texture_t texture;
         rendering_loadText(app, &texture, text, app->fonts.huge, &app->themes.enabled->colors.text);
         SDL_Rect renderQuad = {posx + 20, posy + 10, padWidth - 40, padHeight - 20};
-        SDL_RenderCopy(app->renderer, texture.texture, NULL, &renderQuad);
+        SDL_RenderCopy(app->sdlRenderer, texture.texture, NULL, &renderQuad);
         SDL_DestroyTexture(texture.texture);
     }
 }

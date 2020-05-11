@@ -66,6 +66,7 @@ set(SOURCES
         engine/wowroms/mapping.h
         engine/wowroms/wowroms.c
         engine/wowroms/wowroms.h
+        enums.h
         helper/entities.c
         helper/entities.h
         helper/map.c
@@ -79,6 +80,10 @@ set(SOURCES
         helper/utils.c
         helper/utils.h
         structs.h
+        themes/loading.c
+        themes/loading.h
+        themes/rendering.c
+        themes/rendering.h
         ui/core.c
         ui/core.h
         ui/fonts.c
@@ -101,6 +106,8 @@ set(SOURCES
         ui/inputsystem.h
         ui/rendering.c
         ui/rendering.h
+        ui/statehandler.c
+        ui/statehandler.h
         ui/textures.c
         ui/textures.h
         ui/uiconfig.c
@@ -119,10 +126,6 @@ set(SOURCES
         ui/uisearch.h
         ui/uisystem.c
         ui/uisystem.h
-        themes/loading.c
-        themes/loading.h
-        themes/rendering.c
-        themes/rendering.h
         )
 
 set(DEFAULT_THEME

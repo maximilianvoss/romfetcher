@@ -52,20 +52,20 @@ void ui_init(app_t *app) {
     screenHeight = INIT_SCREEN_HEIGHT;
 #endif
 
-    app->window = SDL_CreateWindow("ROM Fetcher", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, screenWidth,
-                                   screenHeight, windowFlags);
-    if (!app->window) {
+    app->sdlWindow = SDL_CreateWindow("ROM Fetcher", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, screenWidth,
+                                      screenHeight, windowFlags);
+    if (!app->sdlWindow) {
         printf("Failed to open %d x %d window: %s\n", screenWidth, screenHeight, SDL_GetError());
         exit(1);
     }
 
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "best");
-    app->renderer = SDL_CreateRenderer(app->window, -1, rendererFlags);
-    if (!app->renderer) {
+    app->sdlRenderer = SDL_CreateRenderer(app->sdlWindow, -1, rendererFlags);
+    if (!app->sdlRenderer) {
         printf("Failed to create renderer: %s\n", SDL_GetError());
         exit(1);
     }
-    SDL_SetRenderDrawBlendMode(app->renderer, SDL_BLENDMODE_BLEND);
+    SDL_SetRenderDrawBlendMode(app->sdlRenderer, SDL_BLENDMODE_BLEND);
 
     textures_init(app);
     fonts_init(app);
@@ -76,7 +76,7 @@ void ui_destroy(app_t *app) {
     inputhandler_destroy();
     textures_destroy(app);
     fonts_destroy(app);
-    SDL_DestroyRenderer(app->renderer);
-    SDL_DestroyWindow(app->window);
+    SDL_DestroyRenderer(app->sdlRenderer);
+    SDL_DestroyWindow(app->sdlWindow);
     SDL_Quit();
 }

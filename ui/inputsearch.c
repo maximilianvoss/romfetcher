@@ -17,6 +17,7 @@
 #include "inputsearch.h"
 #include "../engine/results.h"
 #include "../engine/enginehandler.h"
+#include "statehandler.h"
 
 void inputsearch_processUp(app_t *app) {
     switch (app->search.position) {
@@ -30,10 +31,10 @@ void inputsearch_processUp(app_t *app) {
             app->search.position = searchactivity_system;
             break;
         case searchactivity_results:
-            if (app->search.resultHovered->prev == NULL) {
+            if (app->search.cursor->prev == NULL) {
                 app->search.position = searchactivity_field;
             } else {
-                app->search.resultHovered = app->search.resultHovered->prev;
+                app->search.cursor = app->search.cursor->prev;
             }
             break;
     }
@@ -49,14 +50,14 @@ void inputsearch_processDown(app_t *app) {
             break;
         case searchactivity_field:
         case searchactivity_button:
-            if (app->search.results != NULL) {
-                app->search.resultHovered = app->search.results;
+            if (app->search.all != NULL) {
+                app->search.cursor = app->search.all;
                 app->search.position = searchactivity_results;
             }
             break;
         case searchactivity_results:
-            if (app->search.resultHovered->next != NULL) {
-                app->search.resultHovered = app->search.resultHovered->next;
+            if (app->search.cursor->next != NULL) {
+                app->search.cursor = app->search.cursor->next;
             }
             break;
     }
@@ -76,10 +77,10 @@ void inputsearch_processLeft(app_t *app) {
             app->search.position = searchactivity_field;
             break;
         case searchactivity_results:
-            if (app->search.resultHovered->prev == NULL) {
+            if (app->search.cursor->prev == NULL) {
                 app->search.position = searchactivity_button;
             } else {
-                app->search.resultHovered = app->search.resultHovered->prev;
+                app->search.cursor = app->search.cursor->prev;
             }
             break;
     }
@@ -96,14 +97,14 @@ void inputsearch_processRight(app_t *app) {
             app->search.position = searchactivity_button;
             break;
         case searchactivity_button:
-            if (app->search.results != NULL) {
-                app->search.resultHovered = app->search.results;
+            if (app->search.all != NULL) {
+                app->search.cursor = app->search.all;
                 app->search.position = searchactivity_results;
             }
             break;
         case searchactivity_results:
-            if (app->search.resultHovered->next != NULL) {
-                app->search.resultHovered = app->search.resultHovered->next;
+            if (app->search.cursor->next != NULL) {
+                app->search.cursor = app->search.cursor->next;
             }
             break;
     }
@@ -112,26 +113,25 @@ void inputsearch_processRight(app_t *app) {
 void inputsearch_processSelect(app_t *app) {
     switch (app->search.position) {
         case searchactivity_config:
-            app->win = window_config;
+            statehandler_change(app, window_config);
             break;
         case searchactivity_system:
-            app->win = window_system;
+            statehandler_change(app, window_system);
             break;
         case searchactivity_field:
-            app->win = window_keyboard;
+            statehandler_change(app, window_keyboard);
             break;
         case searchactivity_button:
             if (strlen(app->search.searchText) > 2) {
-                if (app->search.results != NULL) {
-                    result_freeList(app->search.results);
+                if (app->search.all != NULL) {
+                    result_freeList(app->search.all);
                 }
-                app->search.results = enginehandler_search(app, app->search.systemActive, app->search.searchText);
-                app->search.resultHovered = app->search.results;
+                app->search.all = enginehandler_search(app, app->systems.active, app->search.searchText);
+                app->search.cursor = app->search.all;
             }
             break;
         case searchactivity_results:
-            app->search.resultActive = app->search.resultHovered;
-            app->win = window_download;
+            statehandler_change(app, window_download);
             break;
     }
 }

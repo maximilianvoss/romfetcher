@@ -63,7 +63,7 @@ void database_configLoad(app_t *app) {
 
     int step = sqlite3_step(stmt);
     if (step == SQLITE_ROW) {
-        app->search.engine = sqlite3_column_int(stmt, 0);
+        app->engine.active = sqlite3_column_int(stmt, 0);
     }
     sqlite3_finalize(stmt);
 }
@@ -76,7 +76,7 @@ void database_configPersist(app_t *app) {
     if (rc == SQLITE_OK) {
         int idx;
         idx = sqlite3_bind_parameter_index(stmt, "@engine");
-        sqlite3_bind_int(stmt, idx, app->search.engine);
+        sqlite3_bind_int(stmt, idx, app->engine.active);
     } else {
         fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(app->database.db));
     }

@@ -15,40 +15,39 @@
  */
 
 #include "inputsystem.h"
+#include "statehandler.h"
 
 
 void inputsystem_processUp(app_t *app) {
-    if (app->search.systemHovered->prev != NULL) {
-        app->search.systemHovered = app->search.systemHovered->prev;
+    if (app->systems.cursor->prev != NULL) {
+        app->systems.cursor = app->systems.cursor->prev;
     }
 }
 
 void inputsystem_processDown(app_t *app) {
-    if (app->search.systemHovered->next != NULL) {
-        app->search.systemHovered = app->search.systemHovered->next;
+    if (app->systems.cursor->next != NULL) {
+        app->systems.cursor = app->systems.cursor->next;
     }
 }
 
 void inputsystem_processLeft(app_t *app) {
-    if (app->search.systemHovered->prev != NULL) {
-        app->search.systemHovered = app->search.systemHovered->prev;
+    if (app->systems.cursor->prev != NULL) {
+        app->systems.cursor = app->systems.cursor->prev;
     }
 }
 
 void inputsystem_processRight(app_t *app) {
-    if (app->search.systemHovered->next != NULL) {
-        app->search.systemHovered = app->search.systemHovered->next;
+    if (app->systems.cursor->next != NULL) {
+        app->systems.cursor = app->systems.cursor->next;
     }
 }
 
 void inputsystem_processSelect(app_t *app) {
-    app->search.systemActive = app->search.systemHovered;
-    app->search.systemHovered = NULL;
-    app->win = window_search;
+    app->systems.active = app->systems.cursor;
 }
 
 void inputsystem_processBack(app_t *app) {
-    app->win = window_search;
+    statehandler_change(app, window_search);
 }
 
 void inputsystem_processOtherButton(app_t *app, GameControllerState_t *state) {

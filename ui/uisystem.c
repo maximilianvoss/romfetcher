@@ -20,12 +20,12 @@
 
 void uisystem_render(app_t *app) {
     int width, height;
-    SDL_GL_GetDrawableSize(app->window, &width, &height);
+    SDL_GL_GetDrawableSize(app->sdlWindow, &width, &height);
 
     texture_t texture;
 
     int deviceCountToDisplay = (height - 80 - 50) / 35 + 1;
-    system_t *systems = app->search.systemHovered;
+    system_t *systems = app->systems.cursor;
     if (systems == NULL) {
         return;
     }
@@ -39,21 +39,21 @@ void uisystem_render(app_t *app) {
         rendering_loadText(app, &texture, systems->fullname, app->fonts.medium, &app->themes.enabled->colors.text);
 
         SDL_Rect r2 = {48, position - 2, width - 96, 40};
-        themes_setDrawColorBackground(app, (systems == app->search.systemHovered));
-        SDL_RenderFillRect(app->renderer, &r2);
+        themes_setDrawColorBackground(app, (systems == app->systems.cursor));
+        SDL_RenderFillRect(app->sdlRenderer, &r2);
 
         SDL_Rect r = {50, position, width - 100, 38};
         themes_setDrawColorField(app);
-        SDL_RenderFillRect(app->renderer, &r);
+        SDL_RenderFillRect(app->sdlRenderer, &r);
 
         SDL_Rect texture_rect = {60, position + 5, 25, 25};
-        SDL_RenderCopy(app->renderer,
-                       systems == app->search.systemActive == 1 ? app->textures.checkboxChecked
-                                                                : app->textures.checkboxUnchecked, NULL,
+        SDL_RenderCopy(app->sdlRenderer,
+                       systems == app->systems.active == 1 ? app->textures.checkboxChecked
+                                                           : app->textures.checkboxUnchecked, NULL,
                        &texture_rect);
 
         SDL_Rect renderQuad = {100, position + 3, texture.w, texture.h};
-        SDL_RenderCopy(app->renderer, texture.texture, NULL, &renderQuad);
+        SDL_RenderCopy(app->sdlRenderer, texture.texture, NULL, &renderQuad);
         SDL_DestroyTexture(texture.texture);
     }
 }

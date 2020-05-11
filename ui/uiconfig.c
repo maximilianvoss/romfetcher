@@ -20,7 +20,7 @@
 
 void uiconfig_render(app_t *app) {
     int width, height;
-    SDL_GL_GetDrawableSize(app->window, &width, &height);
+    SDL_GL_GetDrawableSize(app->sdlWindow, &width, &height);
 
     texture_t texture;
 
@@ -31,15 +31,15 @@ void uiconfig_render(app_t *app) {
     for (int i = 0, position = 80; i < 2; i++, position += 35) {
         rendering_loadText(app, &texture, menuEntries[i], app->fonts.medium, &app->themes.enabled->colors.text);
         SDL_Rect r2 = {48, position - 2, width - 96, 40};
-        themes_setDrawColorBackground(app, (app->config.configCursor == i));
-        SDL_RenderFillRect(app->renderer, &r2);
+        themes_setDrawColorBackground(app, (app->config.cursor == i));
+        SDL_RenderFillRect(app->sdlRenderer, &r2);
 
         SDL_Rect r = {50, position, width - 100, 38};
         themes_setDrawColorField(app);
-        SDL_RenderFillRect(app->renderer, &r);
+        SDL_RenderFillRect(app->sdlRenderer, &r);
 
         SDL_Rect renderQuad = {60, position + 3, texture.w, texture.h};
-        SDL_RenderCopy(app->renderer, texture.texture, NULL, &renderQuad);
+        SDL_RenderCopy(app->sdlRenderer, texture.texture, NULL, &renderQuad);
         SDL_DestroyTexture(texture.texture);
     }
 }

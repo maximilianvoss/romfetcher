@@ -43,7 +43,7 @@ void enginehandler_download(app_t *app, searchresult_t *item, void (*callback)(a
 }
 
 static void determineSearchEngine(app_t *app) {
-    switch (app->search.engine) {
+    switch (app->engine.active) {
         case engine_notdefined:
             searchFunction = NULL;
             downloadFunction = NULL;

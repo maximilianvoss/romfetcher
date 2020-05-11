@@ -15,7 +15,7 @@
  */
 
 #include "inputconfig.h"
-#include "../database/config.h"
+#include "statehandler.h"
 
 static void moveToNext(app_t *app);
 
@@ -38,26 +38,23 @@ void inputconfigengine_processRight(app_t *app) {
 }
 
 void inputconfigengine_processSelect(app_t *app) {
-    app->search.engine = app->config.engineCursor;
-    database_configPersist(app);
-    app->config.engineCursor = engine_notdefined;
-    app->win = window_config;
+    app->engine.active = app->engine.cursor;
 }
 
 void inputconfigengine_processBack(app_t *app) {
-    app->win = window_config;
+    statehandler_change(app, window_config);
 }
 
 void inputconfigengine_processOtherButton(app_t *app, GameControllerState_t *state) {}
 
 static void moveToNext(app_t *app) {
-    if (app->config.engineCursor < 5) {
-        app->config.engineCursor++;
+    if (app->engine.cursor < 5) {
+        app->engine.cursor++;
     }
 }
 
 static void moveToPrev(app_t *app) {
-    if (app->config.engineCursor > 1) {
-        app->config.engineCursor--;
+    if (app->engine.cursor > 1) {
+        app->engine.cursor--;
     }
 }

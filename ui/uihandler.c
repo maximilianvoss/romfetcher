@@ -38,15 +38,15 @@ static char *copyright() {
 
 static void renderDefaults(app_t *app) {
     int width, height;
-    SDL_GL_GetDrawableSize(app->window, &width, &height);
+    SDL_GL_GetDrawableSize(app->sdlWindow, &width, &height);
 
-    SDL_RenderCopy(app->renderer, app->textures.backgroundImage, NULL, NULL);
+    SDL_RenderCopy(app->sdlRenderer, app->textures.backgroundImage, NULL, NULL);
 
     char *text = copyright();
     texture_t texture;
     rendering_loadText(app, &texture, text, app->fonts.small, &app->themes.enabled->colors.textInverted);
     SDL_Rect renderQuad = {50, height - 40, texture.w, texture.h};
-    SDL_RenderCopy(app->renderer, texture.texture, NULL, &renderQuad);
+    SDL_RenderCopy(app->sdlRenderer, texture.texture, NULL, &renderQuad);
     free(text);
 
     SDL_DestroyTexture(texture.texture);
@@ -58,14 +58,14 @@ void uihandler_render(app_t *app) {
 
     switch (app->win) {
         case window_search:
-            if (app->search.systemActive == NULL) {
-                app->search.systemActive = app->systems.enabled;
+            if (app->systems.active == NULL) {
+                app->systems.active = app->systems.enabled;
             }
             renderEngine = &uisearch_render;
             break;
         case window_system:
-            if (app->search.systemHovered == NULL) {
-                app->search.systemHovered = app->search.systemActive;
+            if (app->systems.cursor == NULL) {
+                app->systems.cursor = app->systems.active;
             }
             renderEngine = &uisystem_render;
             break;
@@ -79,15 +79,15 @@ void uihandler_render(app_t *app) {
             renderEngine = &uiconfig_render;
             break;
         case window_config_engine:
-            if (app->config.engineCursor == engine_notdefined) {
-                app->config.engineCursor = app->search.engine;
+            if (app->engine.cursor == engine_notdefined) {
+                app->engine.cursor = app->engine.active;
             }
             renderEngine = &uiconfigengine_render;
             break;
         case window_config_systems:
-            if (app->config.systems == NULL) {
-                app->config.systems = app->systems.all;
-                app->config.systemCursor = app->systems.all;
+            if (app->systems.active == NULL) {
+                app->systems.active = app->systems.enabled;
+                app->systems.cursor = app->systems.enabled;
             }
             renderEngine = &uiconfigsystem_render;
             break;
@@ -96,5 +96,5 @@ void uihandler_render(app_t *app) {
     if (renderEngine != NULL) {
         renderEngine(app);
     }
-    SDL_RenderPresent(app->renderer);
+    SDL_RenderPresent(app->sdlRenderer);
 }

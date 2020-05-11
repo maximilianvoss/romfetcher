@@ -47,8 +47,8 @@ int main() {
 
     ui_destroy(&app);
     themes_destroy(&app);
-    if ( app.search.results != NULL ) {
-        result_freeList(app.search.results);
+    if (app.search.all != NULL) {
+        result_freeList(app.search.all);
     }
     database_systemsDestroy(app.systems.all);
     database_systemsDestroy(app.systems.enabled);

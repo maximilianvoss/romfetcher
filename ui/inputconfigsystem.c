@@ -15,52 +15,42 @@
  */
 
 #include "inputconfigsystem.h"
-#include "../database/sytems.h"
+#include "statehandler.h"
 
 void inputconfigsystem_processUp(app_t *app) {
-    if (app->config.systemCursor->prev != NULL) {
-        app->config.systemCursor = app->config.systemCursor->prev;
+    if (app->systems.cursor->prev != NULL) {
+        app->systems.cursor = app->systems.cursor->prev;
     }
 }
 
 void inputconfigsystem_processDown(app_t *app) {
-    if (app->config.systemCursor->next != NULL) {
-        app->config.systemCursor = app->config.systemCursor->next;
+    if (app->systems.cursor->next != NULL) {
+        app->systems.cursor = app->systems.cursor->next;
     }
 }
 
 void inputconfigsystem_processLeft(app_t *app) {
-    if (app->config.systemCursor->prev != NULL) {
-        app->config.systemCursor = app->config.systemCursor->prev;
+    if (app->systems.cursor->prev != NULL) {
+        app->systems.cursor = app->systems.cursor->prev;
     }
 }
 
 void inputconfigsystem_processRight(app_t *app) {
-    if (app->config.systemCursor->next != NULL) {
-        app->config.systemCursor = app->config.systemCursor->next;
+    if (app->systems.cursor->next != NULL) {
+        app->systems.cursor = app->systems.cursor->next;
     }
 }
 
 void inputconfigsystem_processSelect(app_t *app) {
-    if (app->config.systemCursor->active) {
-        app->config.systemCursor->active = 0;
+    if (app->systems.cursor->active) {
+        app->systems.cursor->active = 0;
     } else {
-        app->config.systemCursor->active = 1;
+        app->systems.cursor->active = 1;
     }
 }
 
 void inputconfigsystem_processBack(app_t *app) {
-    database_systemStore(app->database.db, app->config.systems);
-    app->search.systemActive = NULL;
-    app->search.systemHovered = NULL;
-    app->config.systems = NULL;
-
-    database_systemsDestroy(app->systems.all);
-    database_systemsDestroy(app->systems.enabled);
-    app->systems.all = database_systemList(app, 0);
-    app->systems.enabled = database_systemList(app, 1);
-
-    app->win = window_config;
+    statehandler_change(app, window_config);
 }
 
 void inputconfigsystem_processOtherButton(app_t *app, GameControllerState_t *state) {

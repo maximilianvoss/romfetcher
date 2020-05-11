@@ -17,50 +17,16 @@
 #ifndef STRUCTS_H
 #define STRUCTS_H
 
+#include "enums.h"
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <curl/curl.h>
 #include <sqlite3.h>
 
-typedef enum {
-    window_search,
-    window_system,
-    window_keyboard,
-    window_download,
-    window_config,
-    window_config_engine,
-    window_config_systems
-} window_t;
-
-typedef enum {
-    engine_notdefined,
-    engine_romsmania,
-    engine_romsmode,
-    engine_wowroms,
-    engine_romsdownload,
-    engine_romsemulator
-} engine_t;
-
-typedef enum {
-    config_engine,
-    config_systems
-} config_t;
-
-typedef enum {
-    searchactivity_system,
-    searchactivity_field,
-    searchactivity_button,
-    searchactivity_results,
-    searchactivity_config
-} searchactivity_t;
-
-typedef enum {
-    downloadActivity_cancel,
-    downloadActivity_start,
-    downloadActivity_done
-} downloadactivity_t;
-
 typedef struct theme_s {
+    struct theme_s *prev;
+    struct theme_s *next;
+    char *name;
     struct {
         SDL_Color background;
         SDL_Color field;
@@ -79,53 +45,33 @@ typedef struct theme_s {
         char *selectorIcon;
         char *settingsIcon;
     } images;
-    char *name;
-    struct theme_s *prev;
-    struct theme_s *next;
 } theme_t;
 
 typedef struct system_s {
-    char *name;
-    char *fullname;
-    char *path;
-    int active;
     struct system_s *prev;
     struct system_s *next;
+    char *fullname;
+    char *name;
+    char *path;
+    int active;
 } system_t;
 
 typedef struct searchresult_s {
+    struct searchresult_s *prev;
+    struct searchresult_s *next;
     char *title;
     char *url;
     system_t *system;
-    struct searchresult_s *prev;
-    struct searchresult_s *next;
 } searchresult_t;
 
 typedef struct {
-    SDL_Renderer *renderer;
-    SDL_Window *window;
+    SDL_Renderer *sdlRenderer;
+    SDL_Window *sdlWindow;
     window_t win;
-
-    struct {
-        theme_t *all;
-        theme_t *enabled;
-    } themes;
-
-    struct {
-        system_t *all;
-        system_t *enabled;
-    } systems;
 
     struct {
         sqlite3 *db;
     } database;
-
-    struct {
-        config_t configCursor;
-        engine_t engineCursor;
-        system_t *systems;
-        system_t *systemCursor;
-    } config;
 
     struct {
         SDL_Texture *backgroundImage;
@@ -136,10 +82,10 @@ typedef struct {
     } textures;
 
     struct {
-        TTF_Font *huge;
-        TTF_Font *big;
-        TTF_Font *medium;
         TTF_Font *small;
+        TTF_Font *medium;
+        TTF_Font *big;
+        TTF_Font *huge;
     } fonts;
 
     struct {
@@ -149,23 +95,44 @@ typedef struct {
     } keyboard;
 
     struct {
-        volatile uint8_t started;
-        volatile uint8_t complete;
-        downloadactivity_t cursorPos;
-        volatile curl_off_t current;
-        volatile curl_off_t total;
-    } download;
+        theme_t *active;
+        theme_t *all;
+        theme_t *cursor;
+        theme_t *enabled;
+    } themes;
 
     struct {
-        engine_t engine;
-        system_t *systemActive;
-        system_t *systemHovered;
-        searchresult_t *results;
-        searchresult_t *resultHovered;
-        searchresult_t *resultActive;
-        searchactivity_t position;
+        system_t *active;
+        system_t *all;
+        system_t *cursor;
+        system_t *enabled;
+    } systems;
+
+    struct {
+        engine_t active;
+        engine_t all;
+        engine_t cursor;
+    } engine;
+
+    struct {
+        config_t cursor;
+    } config;
+
+    struct {
+        searchresult_t *active;
+        searchresult_t *cursor;
+        searchresult_t *all;
         char searchText[256];
+        searchactivity_t position;
     } search;
+
+    struct {
+        volatile uint8_t started;
+        volatile uint8_t complete;
+        volatile curl_off_t current;
+        volatile curl_off_t total;
+        downloadactivity_t cursorPos;
+    } download;
 } app_t;
 
 typedef struct {

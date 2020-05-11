@@ -15,22 +15,23 @@
  */
 
 #include "inputconfig.h"
+#include "statehandler.h"
 
 
 void inputconfig_processUp(app_t *app) {
-    switch (app->config.configCursor) {
+    switch (app->config.cursor) {
         case config_engine:
             break;
         case config_systems:
-            app->config.configCursor = config_engine;
+            app->config.cursor = config_engine;
             break;
     }
 }
 
 void inputconfig_processDown(app_t *app) {
-    switch (app->config.configCursor) {
+    switch (app->config.cursor) {
         case config_engine:
-            app->config.configCursor = config_systems;
+            app->config.cursor = config_systems;
             break;
         case config_systems:
             break;
@@ -44,12 +45,12 @@ void inputconfig_processRight(app_t *app) {
 }
 
 void inputconfig_processSelect(app_t *app) {
-    switch (app->config.configCursor) {
+    switch (app->config.cursor) {
         case config_engine:
-            app->win = window_config_engine;
+            statehandler_change(app, window_config_engine);
             break;
         case config_systems:
-            app->win = window_config_systems;
+            statehandler_change(app, window_config_systems);
             break;
     }
 }
