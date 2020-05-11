@@ -74,7 +74,7 @@ static void renderDailPad(app_t *app) {
     SDL_GL_GetDrawableSize(app->sdlWindow, &width, &height);
 
     int padWidth = (width - 100) / 4;
-    int padHeight = (height - 100 - 120) / 4 - 20;
+    int padHeight = (height - 100 - 50) / 4 - 20;
     int posX = (width / 2) - 1.5 * padWidth - 20;
 
     for (int i = 0; i < 3; i++) {
@@ -96,9 +96,18 @@ static void renderKey(app_t *app, int posx, int posy, int padWidth, int padHeigh
 
     if (text != NULL && *text != '\0') {
         texture_t texture;
-        rendering_loadText(app, &texture, text, app->fonts.huge, &app->themes.enabled->colors.text);
-        SDL_Rect renderQuad = {posx + 20, posy + 10, padWidth - 40, padHeight - 20};
-        SDL_RenderCopy(app->sdlRenderer, texture.texture, NULL, &renderQuad);
+        rendering_loadText(app, &texture, text, app->fonts.medium, &app->themes.enabled->colors.text);
+
+        int width = (texture.w > padWidth - 40) ? padWidth - 40 : texture.w;
+        int offsetX = (padWidth - width) / 2;
+
+        int height = (texture.h > padHeight - 20) ? padHeight - 20 : texture.h;
+        int offsetY = (padHeight - height) / 2;
+
+        SDL_Rect srcQuad = {0, 0, padWidth - 40, padHeight - 20};
+        SDL_Rect renderQuad = {posx + offsetX, posy + offsetY, width, height};
+
+        SDL_RenderCopy(app->sdlRenderer, texture.texture, &srcQuad, &renderQuad);
         SDL_DestroyTexture(texture.texture);
     }
 }
