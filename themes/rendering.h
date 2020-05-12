@@ -20,6 +20,7 @@
 #include "../structs.h"
 
 enum theme_color {
+    background,
     field,
     fieldBackground,
     fieldActive

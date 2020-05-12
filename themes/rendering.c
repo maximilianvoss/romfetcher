@@ -32,6 +32,12 @@ void themes_setDrawColorBackground(app_t *app, uint8_t active) {
 void themes_setDrawColor(app_t *app, enum theme_color color) {
     int r, g, b, a;
     switch (color) {
+        case background:
+            r = app->themes.enabled->colors.background.r;
+            g = app->themes.enabled->colors.background.g;
+            b = app->themes.enabled->colors.background.b;
+            a = app->themes.enabled->colors.background.a;
+            break;
         case field:
             r = app->themes.enabled->colors.field.r;
             g = app->themes.enabled->colors.field.g;

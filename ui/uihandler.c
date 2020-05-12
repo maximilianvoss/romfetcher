@@ -22,6 +22,7 @@
 #include "../config.h"
 #include "uiconfig.h"
 #include "uilist.h"
+#include "../themes/rendering.h"
 
 static void renderDefaults(app_t *app);
 
@@ -38,6 +39,8 @@ static void renderDefaults(app_t *app) {
     int width, height;
     SDL_GL_GetDrawableSize(app->sdlWindow, &width, &height);
 
+    themes_setDrawColor(app, background);
+    SDL_RenderClear(app->sdlRenderer);
     SDL_RenderCopy(app->sdlRenderer, app->textures.backgroundImage, NULL, NULL);
 
     char *text = copyright();
