@@ -17,7 +17,6 @@
 #include <stdio.h>
 #include <string.h>
 #include "sytems.h"
-#include "../helper/linkedlist.h"
 #include "../helper/utils.h"
 
 static void addDefaultSystems(sqlite3 *db);

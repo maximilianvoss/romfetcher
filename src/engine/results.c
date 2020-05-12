@@ -16,7 +16,6 @@
 
 #include "results.h"
 #include "../helper/utils.h"
-#include "../helper/linkedlist.h"
 
 static void freeFields(void *ptr);
 
