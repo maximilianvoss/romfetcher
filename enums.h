@@ -28,15 +28,6 @@ typedef enum {
 } window_t;
 
 typedef enum {
-    engine_notdefined,
-    engine_romsmania,
-    engine_romsmode,
-    engine_wowroms,
-    engine_romsdownload,
-    engine_romsemulator
-} engine_t;
-
-typedef enum {
     config_engine,
     config_systems
 } config_t;

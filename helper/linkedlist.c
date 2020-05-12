@@ -37,7 +37,9 @@ void linkedlist_freeList(void *list, void (*callback)(void *)) {
     if (next != NULL) {
         linkedlist_freeList(next, callback);
     }
-    callback(list);
+    if (callback != NULL) {
+        callback(list);
+    }
     free(list);
 }
 
@@ -48,4 +50,19 @@ uint32_t linkedlist_getElementCount(void *list) {
         list = ((linkedlist_t *) list)->next;
     }
     return count;
+}
+
+void *linkedlist_findElementByName(void *ptr, char *name) {
+    linkedlist_t *list = (linkedlist_t *) ptr;
+    if (list == NULL || name == NULL) {
+        return NULL;
+    }
+
+    while (list != NULL) {
+        if (list->name != NULL && !strcmp(list->name, name)) {
+            return list;
+        }
+        list = list->next;
+    }
+    return NULL;
 }

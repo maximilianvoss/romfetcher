@@ -92,8 +92,6 @@ set(SOURCES
         ui/fonts.h
         ui/inputconfig.c
         ui/inputconfig.h
-        ui/inputconfigengine.c
-        ui/inputconfigengine.h
         ui/inputlist.c
         ui/inputlist.h
         ui/inputdownload.c
@@ -112,8 +110,6 @@ set(SOURCES
         ui/textures.h
         ui/uiconfig.c
         ui/uiconfig.h
-        ui/uiconfigengine.c
-        ui/uiconfigengine.h
         ui/uilist.c
         ui/uilist.h
         ui/uidownload.c

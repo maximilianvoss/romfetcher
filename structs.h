@@ -18,17 +18,11 @@
 #define STRUCTS_H
 
 #include "enums.h"
+#include "helper/linkedlist.h"
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <curl/curl.h>
 #include <sqlite3.h>
-
-typedef struct {
-    void *prev;
-    void *next;
-    char *name;
-    int active;
-} linkedlist_t;
 
 typedef struct theme_s {
     struct theme_s *prev;
@@ -70,6 +64,16 @@ typedef struct searchresult_s {
     char *url;
     system_t *system;
 } searchresult_t;
+
+typedef struct engine_s {
+    struct engine_s *prev;
+    struct engine_s *next;
+    char *title;
+
+    searchresult_t *(*search)(void *app, system_t *system, char *searchString);
+
+    void (*download)(void *app, searchresult_t *item, void (*callback)(void *app));
+} engine_t;
 
 typedef struct {
     SDL_Renderer *sdlRenderer;
@@ -125,8 +129,9 @@ typedef struct {
     } systems;
 
     struct {
-        engine_t active;
-        engine_t cursor;
+        engine_t *active;
+        engine_t *all;
+        engine_t *cursor;
     } engine;
 
     struct {

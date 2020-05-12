@@ -23,7 +23,6 @@
 #include "../urlhandling.h"
 #include "../../helper/regex.h"
 #include "../../helper/path.h"
-#include "../../helper/linkedlist.h"
 
 #define URL_TEMPLATE "https://roms-download.com/ajax.php?m=roms_j"
 #define DATA_TEMPLATE "sort=file_name%24ASC&page=%page%&search=%query%&rom_concole=%system%"
@@ -33,7 +32,7 @@ static searchresult_t *fetchingResultItems(system_t *system, searchresult_t *res
 
 static char *fetchDownloadLink(char *response);
 
-searchresult_t *romsdownload_search(app_t *app, system_t *system, char *searchString) {
+searchresult_t *romsdownload_search(void *app, system_t *system, char *searchString) {
     uint32_t resultCount = 0;
     uint32_t page = 1;
 
@@ -58,7 +57,7 @@ searchresult_t *romsdownload_search(app_t *app, system_t *system, char *searchSt
     return resultList;
 }
 
-void romsdownload_download(app_t *app, searchresult_t *item, void (*callback)(app_t *app)) {
+void romsdownload_download(void *app, searchresult_t *item, void (*callback)(void *app)) {
     if (item == NULL) {
         return;
     }

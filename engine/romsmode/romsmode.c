@@ -23,7 +23,6 @@
 #include "../../helper/regex.h"
 #include "../urlhandling.h"
 #include "../../helper/path.h"
-#include "../../helper/linkedlist.h"
 
 #define URL_TEMPLATE "https://romsmode.com/roms/%system%/%page%?name=%query%"
 
@@ -35,7 +34,7 @@ static char *fetchDownloadLink(char *response);
 
 static void removeFastTag(char *link);
 
-searchresult_t *romsmode_search(app_t *app, system_t *system, char *searchString) {
+searchresult_t *romsmode_search(void *app, system_t *system, char *searchString) {
     uint32_t resultCount = 0;
     uint32_t page = 1;
     char *urlTemplate = URL_TEMPLATE;
@@ -60,7 +59,7 @@ searchresult_t *romsmode_search(app_t *app, system_t *system, char *searchString
     return resultList;
 }
 
-void romsmode_download(app_t *app, searchresult_t *item, void (*callback)(app_t *app)) {
+void romsmode_download(void *app, searchresult_t *item, void (*callback)(void *app)) {
     if (item == NULL) {
         return;
     }

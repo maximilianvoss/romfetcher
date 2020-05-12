@@ -21,7 +21,7 @@ static void fillStandardValues(sqlite3 *db);
 
 void database_configInitTable(sqlite3 *db) {
     char *err_msg = 0;
-    char *query = "CREATE TABLE config (version INT, engine INT);";
+    char *query = "CREATE TABLE config (version INT, engine TEXT);";
 
     int rc = sqlite3_exec(db, query, 0, 0, &err_msg);
     if (rc != SQLITE_OK) {
@@ -63,7 +63,11 @@ void database_configLoad(app_t *app) {
 
     int step = sqlite3_step(stmt);
     if (step == SQLITE_ROW) {
-        app->engine.active = sqlite3_column_int(stmt, 0);
+        const unsigned char *engineName = sqlite3_column_text(stmt, 0);
+        app->engine.active = linkedlist_findElementByName(app->engine.all, (char *) engineName);
+    }
+    if (app->engine.active == NULL) {
+        app->engine.active = app->engine.all;
     }
     sqlite3_finalize(stmt);
 }
@@ -76,7 +80,7 @@ void database_configPersist(app_t *app) {
     if (rc == SQLITE_OK) {
         int idx;
         idx = sqlite3_bind_parameter_index(stmt, "@engine");
-        sqlite3_bind_int(stmt, idx, app->engine.active);
+        sqlite3_bind_text(stmt, idx, app->engine.active->title, strlen(app->engine.active->title), NULL);
     } else {
         fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(app->database.db));
     }
@@ -90,7 +94,7 @@ void database_configPersist(app_t *app) {
 }
 
 static void fillStandardValues(sqlite3 *db) {
-    char *query = "INSERT INTO config (version, engine) VALUES (@version, 1)";
+    char *query = "INSERT INTO config (version, engine) VALUES (@version, NULL)";
 
     sqlite3_stmt *stmt;
     int rc = sqlite3_prepare_v2(db, query, -1, &stmt, 0);

@@ -24,6 +24,7 @@
 #include "database/config.h"
 #include "helper/path.h"
 #include "themes/loading.h"
+#include "engine/enginehandler.h"
 
 int main() {
     app_t app;
@@ -33,6 +34,7 @@ int main() {
     database_init(&app);
     themes_init(&app);
     ui_init(&app);
+    enginehandler_init(&app);
 
     database_configLoad(&app);
     app.systems.all = database_systemList(&app, 0);
@@ -51,6 +53,7 @@ int main() {
     database_systemsDestroy(app.systems.all);
     database_systemsDestroy(app.systems.enabled);
     database_destroy(&app);
+    enginehandler_destroy(&app);
 
     return 0;
 }

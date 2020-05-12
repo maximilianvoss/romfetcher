@@ -19,8 +19,8 @@
 
 #include "../../structs.h"
 
-searchresult_t *romsmania_search(app_t *app, system_t *system, char *searchString);
+searchresult_t *romsmania_search(void *app, system_t *system, char *searchString);
 
-void romsmania_download(app_t *app, searchresult_t *item, void (*callback)(app_t *app));
+void romsmania_download(void *app, searchresult_t *item, void (*callback)(void *app));
 
 #endif

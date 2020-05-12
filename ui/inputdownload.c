@@ -19,7 +19,7 @@
 #include "../engine/enginehandler.h"
 #include "statehandler.h"
 
-static void downloadCallback(app_t *app);
+static void downloadCallback(void *ptr);
 
 static void startThread(app_t *app);
 
@@ -91,7 +91,8 @@ static void startThread(app_t *app) {
     pthread_detach(downloadThread);
 }
 
-static void downloadCallback(app_t *app) {
+static void downloadCallback(void *ptr) {
+    app_t *app = (app_t *) ptr;
     app->download.started = 0;
     app->download.complete = 1;
     app->download.current = 0;

@@ -21,7 +21,6 @@
 #include "rendering.h"
 #include "../config.h"
 #include "uiconfig.h"
-#include "uiconfigengine.h"
 #include "uilist.h"
 
 static void renderDefaults(app_t *app);
@@ -44,7 +43,7 @@ static void renderDefaults(app_t *app) {
     char *text = copyright();
     texture_t texture;
     rendering_loadText(app, &texture, text, app->fonts.small, &app->themes.enabled->colors.textInverted);
-    SDL_Rect renderQuad = {50, height - 40, texture.w, texture.h};
+    SDL_Rect renderQuad = {50, height - 30, texture.w, texture.h};
     SDL_RenderCopy(app->sdlRenderer, texture.texture, NULL, &renderQuad);
     free(text);
 
@@ -62,9 +61,6 @@ void uihandler_render(app_t *app) {
             }
             renderEngine = &uisearch_render;
             break;
-        case window_system:
-            renderEngine = &uilist_render;
-            break;
         case window_keyboard:
             renderEngine = &uikeyboard_render;
             break;
@@ -75,8 +71,7 @@ void uihandler_render(app_t *app) {
             renderEngine = &uiconfig_render;
             break;
         case window_config_engine:
-            renderEngine = &uiconfigengine_render;
-            break;
+        case window_system:
         case window_config_systems:
             renderEngine = &uilist_render;
             break;

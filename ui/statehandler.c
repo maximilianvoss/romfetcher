@@ -101,9 +101,11 @@ static void handleConfig(app_t *app, window_t destiny) {
             app->list.destiny = window_config;
             break;
         case window_config_engine:
-            if (app->engine.cursor == engine_notdefined) {
-                app->engine.cursor = app->engine.active;
-            }
+            app->list.cursor = (linkedlist_t *) app->engine.active;
+            app->list.all = (linkedlist_t *) app->engine.all;
+            app->list.multi = 0;
+            app->list.checkbox = 0;
+            app->list.destiny = window_config;
             break;
         default:
             break;
@@ -111,9 +113,8 @@ static void handleConfig(app_t *app, window_t destiny) {
 }
 
 static void handleConfigEngine(app_t *app, window_t destiny) {
-    app->engine.active = app->engine.cursor;
+    app->engine.active = (engine_t *) app->list.cursor;
     database_configPersist(app);
-    app->engine.cursor = engine_notdefined;
     app->win = window_config;
 }
 

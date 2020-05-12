@@ -23,7 +23,6 @@
 #include "../urlhandling.h"
 #include "../../helper/regex.h"
 #include "../../helper/path.h"
-#include "../../helper/linkedlist.h"
 
 #define URL_TEMPLATE "https://romsmania.cc/roms/%system%/search?name=%query%&genre=&region=&orderBy=name&orderAsc=1&page=%page%"
 
@@ -33,7 +32,7 @@ static char *fetchDownloadPageLink(char *response);
 
 static char *fetchDownloadLink(char *response);
 
-searchresult_t *romsmania_search(app_t *app, system_t *system, char *searchString) {
+searchresult_t *romsmania_search(void *app, system_t *system, char *searchString) {
     uint32_t resultCount = 0;
     uint32_t page = 1;
     char *urlTemplate = URL_TEMPLATE;
@@ -58,7 +57,7 @@ searchresult_t *romsmania_search(app_t *app, system_t *system, char *searchStrin
     return resultList;
 }
 
-void romsmania_download(app_t *app, searchresult_t *item, void (*callback)(app_t *app)) {
+void romsmania_download(void *app, searchresult_t *item, void (*callback)(void *app)) {
     if (item == NULL) {
         return;
     }

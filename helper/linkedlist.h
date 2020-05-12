@@ -17,6 +17,15 @@
 #ifndef HELPER_LINKEDLIST_H
 #define HELPER_LINKEDLIST_H
 
+#include <stdlib.h>
+
+typedef struct {
+    void *prev;
+    void *next;
+    char *name;
+    int active;
+} linkedlist_t;
+
 #include "../structs.h"
 
 void *linkedlist_appendElement(void *list, void *element);
@@ -24,5 +33,7 @@ void *linkedlist_appendElement(void *list, void *element);
 void linkedlist_freeList(void *list, void (*callback)(void *));
 
 uint32_t linkedlist_getElementCount(void *list);
+
+void *linkedlist_findElementByName(void *ptr, char *name);
 
 #endif

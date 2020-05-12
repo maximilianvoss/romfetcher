@@ -24,7 +24,6 @@
 #include "../../helper/regex.h"
 #include "../urlhandling.h"
 #include "../../helper/path.h"
-#include "../../helper/linkedlist.h"
 
 #define URL_TEMPLATE "https://wowroms.com/en/roms/list/%system%?search=%query%&page=%page%"
 #define URL_PREFIX "https://wowroms.com"
@@ -39,7 +38,7 @@ static char *fetchHiddenField(char *text, char *fieldname);
 
 static char *fetchDownloadLink(char *response);
 
-searchresult_t *wowroms_search(app_t *app, system_t *system, char *searchString) {
+searchresult_t *wowroms_search(void *app, system_t *system, char *searchString) {
     uint32_t resultCount = 0;
     uint32_t page = 1;
     char *urlTemplate = URL_TEMPLATE;
@@ -64,7 +63,7 @@ searchresult_t *wowroms_search(app_t *app, system_t *system, char *searchString)
     return resultList;
 }
 
-void wowroms_download(app_t *app, searchresult_t *item, void (*callback)(app_t *app)) {
+void wowroms_download(void *app, searchresult_t *item, void (*callback)(void *app)) {
     if (item == NULL) {
         return;
     }

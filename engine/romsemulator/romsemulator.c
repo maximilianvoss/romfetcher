@@ -23,7 +23,6 @@
 #include "../urlhandling.h"
 #include "../../helper/regex.h"
 #include "../../helper/path.h"
-#include "../../helper/linkedlist.h"
 
 #define URL_TEMPLATE "https://romsemulator.net/roms/%system%/page/%page%/?s=%query%"
 
@@ -33,7 +32,7 @@ static char *fetchDownloadPageLink(char *response);
 
 static char *fetchHiddenField(char *response, char *fieldname, int variant);
 
-searchresult_t *romsemulator_search(app_t *app, system_t *system, char *searchString) {
+searchresult_t *romsemulator_search(void *app, system_t *system, char *searchString) {
     uint32_t resultCount = 0;
     uint32_t page = 1;
     char *urlTemplate = URL_TEMPLATE;
@@ -59,7 +58,7 @@ searchresult_t *romsemulator_search(app_t *app, system_t *system, char *searchSt
     return resultList;
 }
 
-void romsemulator_download(app_t *app, searchresult_t *item, void (*callback)(app_t *app)) {
+void romsemulator_download(void *app, searchresult_t *item, void (*callback)(void *app)) {
     if (item == NULL) {
         return;
     }

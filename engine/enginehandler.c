@@ -21,51 +21,49 @@
 #include "romsdownload/romsdownload.h"
 #include "romsemulator/romsemulator.h"
 
-static void determineSearchEngine(app_t *app);
-
-static searchresult_t *(*searchFunction)(app_t *app, system_t *system, char *searchString);
-
-static void (*downloadFunction)(app_t *app, searchresult_t *item, void (*callback)(app_t *app));
+engine_t *createEngine(char *title, searchresult_t *(*search)(void *app, system_t *system, char *searchString),
+                       void (*download)(void *app, searchresult_t *item, void (*callback)(void *app)));
 
 searchresult_t *enginehandler_search(app_t *app, system_t *system, char *searchString) {
-    determineSearchEngine(app);
-    if (searchFunction != NULL) {
-        return searchFunction(app, system, searchString);
+    if (app->engine.active != NULL) {
+        return app->engine.active->search(app, system, searchString);
     }
     return NULL;
 }
 
-void enginehandler_download(app_t *app, searchresult_t *item, void (*callback)(app_t *app)) {
-    determineSearchEngine(app);
-    if (downloadFunction != NULL) {
-        downloadFunction(app, item, callback);
+void enginehandler_download(app_t *app, searchresult_t *item, void (*callback)(void *app)) {
+    if (app->engine.active != NULL) {
+        return app->engine.active->download(app, item, callback);
     }
 }
 
-static void determineSearchEngine(app_t *app) {
-    switch (app->engine.active) {
-        case engine_notdefined:
-            searchFunction = NULL;
-            downloadFunction = NULL;
-            break;
-        case engine_romsmania:
-            searchFunction = &romsmania_search;
-            downloadFunction = &romsmania_download;
-            break;
-        case engine_romsmode:
-            searchFunction = &romsmode_search;
-            downloadFunction = &romsmode_download;
-            break;
-        case engine_wowroms:
-            searchFunction = &wowroms_search;
-            downloadFunction = &wowroms_download;
-            break;
-        case engine_romsdownload:
-            searchFunction = &romsdownload_search;
-            downloadFunction = &romsdownload_download;
-            break;
-        case engine_romsemulator:
-            searchFunction = &romsemulator_search;
-            downloadFunction = &romsemulator_download;
-    }
+void enginehandler_init(app_t *app) {
+    app->engine.all = linkedlist_appendElement(app->engine.all,
+                                               createEngine("https://www.romsmania.cc", &romsmania_search,
+                                                            &romsmania_download));
+    app->engine.all = linkedlist_appendElement(app->engine.all,
+                                               createEngine("https://www.romsmode.com", &romsmode_search,
+                                                            &romsmode_download));
+    app->engine.all = linkedlist_appendElement(app->engine.all,
+                                               createEngine("https://www.wowroms.com", &wowroms_search,
+                                                            &wowroms_download));
+    app->engine.all = linkedlist_appendElement(app->engine.all,
+                                               createEngine("https://www.roms-download.com", &romsdownload_search,
+                                                            &romsdownload_download));
+    app->engine.all = linkedlist_appendElement(app->engine.all,
+                                               createEngine("https://www.romsemulator.net", &romsemulator_search,
+                                                            &romsemulator_download));
+}
+
+void enginehandler_destroy(app_t *app) {
+    linkedlist_freeList(app->engine.all, NULL);
+}
+
+engine_t *createEngine(char *title, searchresult_t *(*search)(void *app, system_t *system, char *searchString),
+                       void (*download)(void *app, searchresult_t *item, void (*callback)(void *app))) {
+    engine_t *engine = calloc(1, sizeof(engine_t));
+    engine->title = title;
+    engine->search = search;
+    engine->download = download;
+    return engine;
 }
