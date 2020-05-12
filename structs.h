@@ -23,9 +23,9 @@
 #include <curl/curl.h>
 #include <sqlite3.h>
 
-typedef struct linkedlist_s {
-    struct linkedlist_s *prev;
-    struct linkedlist_s *next;
+typedef struct {
+    void *prev;
+    void *next;
     char *name;
     int active;
 } linkedlist_t;

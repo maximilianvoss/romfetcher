@@ -16,6 +16,9 @@
 
 #include "results.h"
 #include "../helper/utils.h"
+#include "../helper/linkedlist.h"
+
+static void freeFields(void *ptr);
 
 searchresult_t *result_newItem(system_t *system) {
     searchresult_t *resultList = (searchresult_t *) calloc(1, sizeof(searchresult_t));
@@ -24,20 +27,6 @@ searchresult_t *result_newItem(system_t *system) {
     resultList->system = system;
     resultList->prev = NULL;
     resultList->next = NULL;
-    return resultList;
-}
-
-searchresult_t *result_addItemToList(searchresult_t *resultList, searchresult_t *newItem) {
-    if (resultList == NULL) {
-        return newItem;
-    }
-
-    searchresult_t *tmp = resultList;
-    while (tmp->next != NULL) {
-        tmp = tmp->next;
-    }
-    tmp->next = newItem;
-    newItem->prev = tmp;
     return resultList;
 }
 
@@ -62,23 +51,11 @@ void result_setUrl(searchresult_t *resultList, char *url) {
 }
 
 void result_freeList(searchresult_t *resultList) {
-    if (resultList == NULL) {
-        return;
-    }
-    searchresult_t *next = resultList->next;
-    if (next != NULL) {
-        result_freeList(next);
-    }
-    FREENOTNULL(resultList->title);
-    FREENOTNULL(resultList->url);
-    free(resultList);
+    linkedlist_freeList(resultList, &freeFields);
 }
 
-uint32_t result_getListCount(searchresult_t *resultList) {
-    uint32_t count = 0;
-    while (resultList != NULL) {
-        count++;
-        resultList = resultList->next;
-    }
-    return count;
+static void freeFields(void *ptr) {
+    searchresult_t *resultList = (searchresult_t *) ptr;
+    FREENOTNULL(resultList->title);
+    FREENOTNULL(resultList->url);
 }

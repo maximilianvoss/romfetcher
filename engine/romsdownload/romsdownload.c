@@ -23,6 +23,7 @@
 #include "../urlhandling.h"
 #include "../../helper/regex.h"
 #include "../../helper/path.h"
+#include "../../helper/linkedlist.h"
 
 #define URL_TEMPLATE "https://roms-download.com/ajax.php?m=roms_j"
 #define DATA_TEMPLATE "sort=file_name%24ASC&page=%page%&search=%query%&rom_concole=%system%"
@@ -49,10 +50,10 @@ searchresult_t *romsdownload_search(app_t *app, system_t *system, char *searchSt
         free(response);
         free(data);
 
-        resultCount = result_getListCount(resultList);
+        resultCount = linkedlist_getElementCount(resultList);
 
         page++;
-    } while (resultCount != result_getListCount(resultList) && resultCount % 20 == 0);
+    } while (resultCount != linkedlist_getElementCount(resultList) && resultCount % 20 == 0);
 
     return resultList;
 }
@@ -108,7 +109,7 @@ static searchresult_t *fetchingResultItems(system_t *system, searchresult_t *res
         result_setTitle(item, title);
         free(title);
 
-        resultList = result_addItemToList(resultList, item);
+        resultList = linkedlist_appendElement(resultList, item);
         ptr = ptr->next;
     }
     regex_destroyMatches(matches);

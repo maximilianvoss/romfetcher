@@ -23,6 +23,7 @@
 #include "../../helper/regex.h"
 #include "../urlhandling.h"
 #include "../../helper/path.h"
+#include "../../helper/linkedlist.h"
 
 #define URL_TEMPLATE "https://romsmode.com/roms/%system%/%page%?name=%query%"
 
@@ -46,7 +47,7 @@ searchresult_t *romsmode_search(app_t *app, system_t *system, char *searchString
             break;
         }
 
-        resultCount = result_getListCount(resultList);
+        resultCount = linkedlist_getElementCount(resultList);
 
         char *response = curlling_fetchURL(url);
         resultList = fetchingResultItems(system, resultList, response);
@@ -54,7 +55,7 @@ searchresult_t *romsmode_search(app_t *app, system_t *system, char *searchString
         free(url);
 
         page++;
-    } while (resultCount != result_getListCount(resultList));
+    } while (resultCount != linkedlist_getElementCount(resultList));
 
     return resultList;
 }
@@ -136,7 +137,7 @@ static searchresult_t *fetchingResultItems(system_t *system, searchresult_t *res
         result_setTitle(item, title);
         free(title);
 
-        resultList = result_addItemToList(resultList, item);
+        resultList = linkedlist_appendElement(resultList, item);
         ptr = ptr->next;
     }
     regex_destroyMatches(matches);

@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-#ifndef ENGINE_RESULTS_H
-#define ENGINE_RESULTS_H
+#ifndef HELPER_LINKEDLIST_H
+#define HELPER_LINKEDLIST_H
 
 #include "../structs.h"
 
-searchresult_t *result_newItem(system_t *system);
+void *linkedlist_appendElement(void *list, void *element);
 
-void result_setTitle(searchresult_t *resultList, char *title);
+void linkedlist_freeList(void *list, void (*callback)(void *));
 
-void result_setUrl(searchresult_t *resultList, char *url);
-
-void result_freeList(searchresult_t *resultList);
+uint32_t linkedlist_getElementCount(void *list);
 
 #endif

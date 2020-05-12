@@ -69,6 +69,8 @@ set(SOURCES
         enums.h
         helper/entities.c
         helper/entities.h
+        helper/linkedlist.c
+        helper/linkedlist.h
         helper/map.c
         helper/map.h
         helper/md5.c

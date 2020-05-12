@@ -23,6 +23,7 @@
 #include "../urlhandling.h"
 #include "../../helper/regex.h"
 #include "../../helper/path.h"
+#include "../../helper/linkedlist.h"
 
 #define URL_TEMPLATE "https://romsmania.cc/roms/%system%/search?name=%query%&genre=&region=&orderBy=name&orderAsc=1&page=%page%"
 
@@ -44,7 +45,7 @@ searchresult_t *romsmania_search(app_t *app, system_t *system, char *searchStrin
             break;
         }
 
-        resultCount = result_getListCount(resultList);
+        resultCount = linkedlist_getElementCount(resultList);
 
         char *response = curlling_fetchURL(url);
         resultList = fetchingResultItems(system, resultList, response);
@@ -52,7 +53,7 @@ searchresult_t *romsmania_search(app_t *app, system_t *system, char *searchStrin
         free(url);
 
         page++;
-    } while (resultCount != result_getListCount(resultList));
+    } while (resultCount != linkedlist_getElementCount(resultList));
 
     return resultList;
 }
@@ -122,7 +123,7 @@ static searchresult_t *fetchingResultItems(system_t *system, searchresult_t *res
         result_setTitle(item, title);
         free(title);
 
-        resultList = result_addItemToList(resultList, item);
+        resultList = linkedlist_appendElement(resultList, item);
         ptr = ptr->next;
     }
     regex_destroyMatches(matches);

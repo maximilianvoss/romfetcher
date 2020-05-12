@@ -17,14 +17,14 @@
 #include <stdio.h>
 #include <string.h>
 #include "sytems.h"
+#include "../helper/linkedlist.h"
+#include "../helper/utils.h"
 
 static void addDefaultSystems(sqlite3 *db);
 
-static system_t *addSystemToList(system_t *list, system_t *item);
-
 static system_t *createSystemItem(char *name, char *fullname, char *path, int active);
 
-static void freeSystemList(system_t *system);
+static void freeSystemList(void *ptr);
 
 static int database_systemListCallback(void *p_data, int num_fields, char **p_fields, char **p_col_names);
 
@@ -91,7 +91,7 @@ void database_systemStore(sqlite3 *db, system_t *systems) {
 static int database_systemListCallback(void *p_data, int num_fields, char **p_fields, char **p_col_names) {
     system_t *system = createSystemItem(p_fields[0], p_fields[1], p_fields[2], atoi(p_fields[3]));
     system_t **systemPtr = (system_t **) p_data;
-    *systemPtr = addSystemToList(*systemPtr, system);
+    *systemPtr = linkedlist_appendElement(*systemPtr, system);
     return 0;
 }
 
@@ -114,9 +114,7 @@ system_t *database_systemList(app_t *app, uint8_t active) {
 }
 
 void database_systemsDestroy(system_t *systems) {
-    if (systems != NULL) {
-        freeSystemList(systems);
-    }
+    linkedlist_freeList(systems, &freeSystemList);
 }
 
 static void addDefaultSystems(sqlite3 *db) {
@@ -203,29 +201,9 @@ static system_t *createSystemItem(char *name, char *fullname, char *path, int ac
     return system;
 }
 
-static system_t *addSystemToList(system_t *list, system_t *item) {
-    system_t *ptr = list;
-    if (ptr == NULL) {
-        return item;
-    }
-    while (ptr->next != NULL) {
-        ptr = ptr->next;
-    }
-    ptr->next = item;
-    item->prev = ptr;
-    return list;
-}
-
-static void freeSystemList(system_t *system) {
-    if (system == NULL) {
-        return;
-    }
-    system_t *next = system->next;
-    if (next != NULL) {
-        freeSystemList(next);
-    }
-    free(system->name);
-    free(system->fullname);
-    free(system->path);
-    free(system);
+static void freeSystemList(void *ptr) {
+    system_t *system = (system_t *) ptr;
+    FREENOTNULL(system->name);
+    FREENOTNULL(system->fullname);
+    FREENOTNULL(system->path);
 }

@@ -23,6 +23,7 @@
 #include "../urlhandling.h"
 #include "../../helper/regex.h"
 #include "../../helper/path.h"
+#include "../../helper/linkedlist.h"
 
 #define URL_TEMPLATE "https://romsemulator.net/roms/%system%/page/%page%/?s=%query%"
 
@@ -45,7 +46,7 @@ searchresult_t *romsemulator_search(app_t *app, system_t *system, char *searchSt
             break;
         }
 
-        resultCount = result_getListCount(resultList);
+        resultCount = linkedlist_getElementCount(resultList);
 
         char *response = curlling_fetchURL(url);
         resultList = fetchingResultItems(system, resultList, response);
@@ -53,7 +54,7 @@ searchresult_t *romsemulator_search(app_t *app, system_t *system, char *searchSt
         free(url);
 
         page++;
-    } while (resultCount != result_getListCount(resultList) && resultCount % 10 == 0);
+    } while (resultCount != linkedlist_getElementCount(resultList) && resultCount % 10 == 0);
 
     return resultList;
 }
@@ -145,7 +146,7 @@ static searchresult_t *fetchingResultItems(system_t *system, searchresult_t *res
         result_setTitle(item, title);
         free(title);
 
-        resultList = result_addItemToList(resultList, item);
+        resultList = linkedlist_appendElement(resultList, item);
         ptr = ptr->next;
     }
     regex_destroyMatches(matches);

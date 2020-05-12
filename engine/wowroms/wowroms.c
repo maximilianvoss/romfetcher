@@ -24,6 +24,7 @@
 #include "../../helper/regex.h"
 #include "../urlhandling.h"
 #include "../../helper/path.h"
+#include "../../helper/linkedlist.h"
 
 #define URL_TEMPLATE "https://wowroms.com/en/roms/list/%system%?search=%query%&page=%page%"
 #define URL_PREFIX "https://wowroms.com"
@@ -50,7 +51,7 @@ searchresult_t *wowroms_search(app_t *app, system_t *system, char *searchString)
             break;
         }
 
-        resultCount = result_getListCount(resultList);
+        resultCount = linkedlist_getElementCount(resultList);
 
         char *response = curlling_fetchURL(url);
         resultList = fetchingResultItems(system, resultList, response);
@@ -58,7 +59,7 @@ searchresult_t *wowroms_search(app_t *app, system_t *system, char *searchString)
         free(url);
 
         page++;
-    } while (resultCount != result_getListCount(resultList) && resultCount % 30 != 0);
+    } while (resultCount != linkedlist_getElementCount(resultList) && resultCount % 30 != 0);
 
     return resultList;
 }
@@ -193,7 +194,7 @@ static searchresult_t *fetchingResultItems(system_t *system, searchresult_t *res
         result_setUrl(item, url);
         free(url);
 
-        resultList = result_addItemToList(resultList, item);
+        resultList = linkedlist_appendElement(resultList, item);
         ptr = ptr->next;
     }
     regex_destroyMatches(matches);
