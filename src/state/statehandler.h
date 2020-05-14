@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-#ifndef UI_UICONFIG_H
-#define UI_UICONFIG_H
+#ifndef STATE_STATEHANDLER_H
+#define STATE_STATEHANDLER_H
 
 #include "../structs.h"
 
-void uiconfig_render(app_t *app);
+void statehandler_switch(app_t *app, uint8_t isSelectButton);
 
 #endif

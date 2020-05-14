@@ -40,11 +40,11 @@ static char *cloneString(char *strIn);
 
 static char *createFullQualifiedPath(char *path, char *file);
 
-static void addThemeToList(app_t *app, theme_t *theme);
-
 static void loadColor(SDL_Color *color, void *map, char *key);
 
 static int mapToInt(void *map, char *key);
+
+static void freetheme(void *ptr);
 
 void themes_init(app_t *app) {
     char themedirs[255][255] = THEMES_SYSTEM_DIRS;
@@ -61,28 +61,35 @@ void themes_init(app_t *app) {
         printf("Was not able to init themes\n");
         exit(1);
     }
-    app->themes.enabled = app->themes.all;
+    app->themes.active = app->themes.all;
 }
 
 void themes_destroy(app_t *app) {
-    theme_t *current = app->themes.all;
-    theme_t *tmp;
+    linkedlist_freeList(app->themes.all, &freetheme);
+}
 
-    while (current != NULL) {
-        tmp = current->next;
-
-        FREENOTNULL(current->fileReference);
-        FREENOTNULL(current->font);
-        FREENOTNULL(current->images.background);
-        FREENOTNULL(current->images.checkboxChecked);
-        FREENOTNULL(current->images.checkboxUnchecked);
-        FREENOTNULL(current->images.selectorIcon);
-        FREENOTNULL(current->images.settingsIcon);
-        FREENOTNULL(current->name);
-        free(current);
-
-        current = tmp;
+theme_t *themes_getByFileRefrence(app_t *app, char *fileReference) {
+    theme_t *ptr = app->themes.all;
+    while (ptr != NULL) {
+        if (ptr->fileReference != NULL && !strcmp(fileReference, ptr->fileReference)) {
+            return ptr;
+        }
+        ptr = ptr->next;
     }
+    return NULL;
+}
+
+static void freetheme(void *ptr) {
+    theme_t *theme = (theme_t *) ptr;
+
+    FREENOTNULL(theme->fileReference);
+    FREENOTNULL(theme->font);
+    FREENOTNULL(theme->images.background);
+    FREENOTNULL(theme->images.checkboxChecked);
+    FREENOTNULL(theme->images.checkboxUnchecked);
+    FREENOTNULL(theme->images.selectorIcon);
+    FREENOTNULL(theme->images.settingsIcon);
+    FREENOTNULL(theme->name);
 }
 
 static void colorSetter(SDL_Color *color, int r, int g, int b, int a) {
@@ -140,24 +147,11 @@ static void loadTheme(app_t *app, char *path) {
 
     void *map = loadJsonMap(content->data);
     theme_t *theme = createThemeByMap(path, map);
-    addThemeToList(app, theme);
+    app->themes.all = linkedlist_appendElement(app->themes.all, theme);
     hash_destroyMap(map);
 
     safe_destroy(content);
     safe_destroy(filepath);
-}
-
-static void addThemeToList(app_t *app, theme_t *theme) {
-    if (app->themes.all == NULL) {
-        app->themes.all = theme;
-        return;
-    }
-    theme_t *ptr = app->themes.all;
-    while (ptr->next != NULL) {
-        ptr = ptr->next;
-    }
-    ptr->next = theme;
-    theme->prev = ptr;
 }
 
 static theme_t *createThemeByMap(char *path, void *map) {

@@ -14,11 +14,23 @@
  * limitations under the License.
  */
 
-#ifndef UI_STATEHANDLER_H
-#define UI_STATEHANDLER_H
+#include "stateconfigengine.h"
+#include "../database/config.h"
 
-#include "../structs.h"
+window_t stateconfigengine_target(app_t *app, uint8_t isSelectButton) {
+    return window_config;
+}
 
-void statehandler_change(app_t *app, window_t destiny);
+void stateconfigengine_persist(app_t *app) {
+    app->engine.active = (engine_t *) app->list.cursor;
+    database_configPersist(app);
+    app->win = window_config;
+}
 
-#endif
+void stateconfigengine_init(app_t *app) {
+    app->win = window_config_engine;
+    app->list.cursor = (linkedlist_t *) app->engine.active;
+    app->list.all = (linkedlist_t *) app->engine.all;
+    app->list.multi = 0;
+    app->list.checkbox = 0;
+}

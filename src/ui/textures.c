@@ -20,11 +20,11 @@
 
 void textures_init(app_t *app) {
     IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
-    app->textures.backgroundImage = rendering_loadImage(app, app->themes.enabled->images.background);
-    app->textures.searchChevron = rendering_loadImage(app, app->themes.enabled->images.selectorIcon);
-    app->textures.settingsIcon = rendering_loadImage(app, app->themes.enabled->images.settingsIcon);
-    app->textures.checkboxChecked = rendering_loadImage(app, app->themes.enabled->images.checkboxChecked);
-    app->textures.checkboxUnchecked = rendering_loadImage(app, app->themes.enabled->images.checkboxUnchecked);
+    app->textures.backgroundImage = rendering_loadImage(app, app->themes.active->images.background);
+    app->textures.searchChevron = rendering_loadImage(app, app->themes.active->images.selectorIcon);
+    app->textures.settingsIcon = rendering_loadImage(app, app->themes.active->images.settingsIcon);
+    app->textures.checkboxChecked = rendering_loadImage(app, app->themes.active->images.checkboxChecked);
+    app->textures.checkboxUnchecked = rendering_loadImage(app, app->themes.active->images.checkboxUnchecked);
 }
 
 void textures_destroy(app_t *app) {

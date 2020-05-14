@@ -15,7 +15,6 @@ find_package(SQLite3 REQUIRED)
 find_package(Threads REQUIRED)
 find_package(OpenSSL REQUIRED)
 
-
 add_subdirectory(libs/csafestring)
 include_directories(libs/csafestring)
 add_subdirectory(libs/json2map)
@@ -32,6 +31,8 @@ endif ()
 set(SOURCES
         src/main.c
         src/config.h
+        src/config/init.c
+        src/config/init.h
         src/database/config.c
         src/database/config.h
         src/database/init.c
@@ -81,6 +82,34 @@ set(SOURCES
         src/helper/regex.h
         src/helper/utils.c
         src/helper/utils.h
+        src/input/inputdownload.c
+        src/input/inputdownload.h
+        src/input/inputhandler.c
+        src/input/inputhandler.h
+        src/input/inputkeyboard.c
+        src/input/inputkeyboard.h
+        src/input/inputlist.c
+        src/input/inputlist.h
+        src/input/inputsearch.c
+        src/input/inputsearch.h
+        src/state/stateconfig.c
+        src/state/stateconfig.h
+        src/state/stateconfigengine.c
+        src/state/stateconfigengine.h
+        src/state/stateconfigsystems.c
+        src/state/stateconfigsystems.h
+        src/state/stateconfigthemes.c
+        src/state/stateconfigthemes.h
+        src/state/statedownload.c
+        src/state/statedownload.h
+        src/state/statehandler.c
+        src/state/statehandler.h
+        src/state/statekeyboard.c
+        src/state/statekeyboard.h
+        src/state/statesearch.c
+        src/state/statesearch.h
+        src/state/statesystem.c
+        src/state/statesystem.h
         src/structs.h
         src/themes/loading.c
         src/themes/loading.h
@@ -90,34 +119,18 @@ set(SOURCES
         src/ui/core.h
         src/ui/fonts.c
         src/ui/fonts.h
-        src/ui/inputconfig.c
-        src/ui/inputconfig.h
-        src/ui/inputlist.c
-        src/ui/inputlist.h
-        src/ui/inputdownload.c
-        src/ui/inputdownload.h
-        src/ui/inputhandler.c
-        src/ui/inputhandler.h
-        src/ui/inputkeyboard.c
-        src/ui/inputkeyboard.h
-        src/ui/inputsearch.c
-        src/ui/inputsearch.h
         src/ui/rendering.c
         src/ui/rendering.h
-        src/ui/statehandler.c
-        src/ui/statehandler.h
         src/ui/textures.c
         src/ui/textures.h
-        src/ui/uiconfig.c
-        src/ui/uiconfig.h
-        src/ui/uilist.c
-        src/ui/uilist.h
         src/ui/uidownload.c
         src/ui/uidownload.h
         src/ui/uihandler.c
         src/ui/uihandler.h
         src/ui/uikeyboard.c
         src/ui/uikeyboard.h
+        src/ui/uilist.c
+        src/ui/uilist.h
         src/ui/uisearch.c
         src/ui/uisearch.h
         )

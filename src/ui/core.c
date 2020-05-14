@@ -16,7 +16,7 @@
 
 #include "core.h"
 #include "../config.h"
-#include "inputhandler.h"
+#include "../input/inputhandler.h"
 #include "textures.h"
 #include "fonts.h"
 

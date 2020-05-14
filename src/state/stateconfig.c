@@ -14,15 +14,24 @@
  * limitations under the License.
  */
 
-#ifndef THEMES_LOADING_H
-#define THEMES_LOADING_H
+#include "stateconfig.h"
 
-#include "../structs.h"
+window_t stateconfig_target(app_t *app, uint8_t isSelectButton) {
+    if (isSelectButton) {
+        return ((config_t *) app->list.cursor)->destiny;
+    }
+    return window_search;
+}
 
-void themes_init(app_t *app);
+void stateconfig_persist(app_t *app) {
 
-void themes_destroy(app_t *app);
+}
 
-theme_t *themes_getByFileRefrence(app_t *app, char *fileReference);
-
-#endif
+void stateconfig_init(app_t *app) {
+    app->win = window_config;
+    app->list.active = (linkedlist_t *) app->config.active;
+    app->list.all = (linkedlist_t *) app->config.all;
+    app->list.cursor = (linkedlist_t *) app->config.active;
+    app->list.multi = 0;
+    app->list.checkbox = 0;
+}

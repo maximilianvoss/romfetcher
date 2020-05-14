@@ -20,7 +20,6 @@
 #include "uidownload.h"
 #include "rendering.h"
 #include "../config.h"
-#include "uiconfig.h"
 #include "uilist.h"
 #include "../themes/rendering.h"
 
@@ -45,7 +44,7 @@ static void renderDefaults(app_t *app) {
 
     char *text = copyright();
     texture_t texture;
-    rendering_loadText(app, &texture, text, app->fonts.small, &app->themes.enabled->colors.textInverted);
+    rendering_loadText(app, &texture, text, app->fonts.small, &app->themes.active->colors.textInverted);
     SDL_Rect renderQuad = {50, height - 30, texture.w, texture.h};
     SDL_RenderCopy(app->sdlRenderer, texture.texture, NULL, &renderQuad);
     free(text);
@@ -71,11 +70,10 @@ void uihandler_render(app_t *app) {
             renderEngine = &uidownload_render;
             break;
         case window_config:
-            renderEngine = &uiconfig_render;
-            break;
         case window_config_engine:
-        case window_system:
         case window_config_systems:
+        case window_config_themes:
+        case window_system:
             renderEngine = &uilist_render;
             break;
     }

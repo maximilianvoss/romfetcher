@@ -19,7 +19,6 @@
 #include "inputsearch.h"
 #include "inputdownload.h"
 #include "inputkeyboard.h"
-#include "inputconfig.h"
 #include "inputlist.h"
 
 static uint8_t processGameController(app_t *app);
@@ -99,17 +98,10 @@ uint8_t inputhandler_processInputs(app_t *app) {
             processOtherButton = &inputdownload_processOtherButton;
             break;
         case window_config:
-            processUp = &inputconfig_processUp;
-            processDown = &inputconfig_processDown;
-            processLeft = &inputconfig_processLeft;
-            processRight = &inputconfig_processRight;
-            processSelect = &inputconfig_processSelect;
-            processBack = &inputconfig_processBack;
-            processOtherButton = &inputconfig_processOtherButton;
-            break;
         case window_config_engine:
-        case window_system:
         case window_config_systems:
+        case window_config_themes:
+        case window_system:
             processUp = &inputlist_processUp;
             processDown = &inputlist_processDown;
             processLeft = &inputlist_processLeft;

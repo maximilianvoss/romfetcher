@@ -68,7 +68,7 @@ static void renderSystemSelector(app_t *app) {
 
     texture_t texture;
     rendering_loadText(app, &texture, app->systems.active->fullname, app->fonts.big,
-                       &app->themes.enabled->colors.text);
+                       &app->themes.active->colors.text);
     SDL_Rect srcQuad = {0, 0, width - 100 - 60, texture.h};
     SDL_Rect renderQuad = {60, 55, (texture.w > width - 100 - 60) ? width - 100 - 60 : texture.w, texture.h};
     SDL_RenderCopy(app->sdlRenderer, texture.texture, &srcQuad, &renderQuad);
@@ -89,7 +89,7 @@ static void renderSearchField(app_t *app) {
 
     if (*(app->search.searchText) != '\0') {
         texture_t texture;
-        rendering_loadText(app, &texture, app->search.searchText, app->fonts.big, &app->themes.enabled->colors.text);
+        rendering_loadText(app, &texture, app->search.searchText, app->fonts.big, &app->themes.active->colors.text);
 
         SDL_Rect srcQuad = {0, 0, width - 290, texture.h};
         SDL_Rect renderQuad = {60, 125, (texture.w > width - 290) ? width - 290 : texture.w, texture.h};
@@ -112,7 +112,7 @@ static void renderSearchButton(app_t *app) {
     SDL_RenderFillRect(app->sdlRenderer, &r);
 
     texture_t texture;
-    rendering_loadText(app, &texture, "Search", app->fonts.big, &app->themes.enabled->colors.text);
+    rendering_loadText(app, &texture, "Search", app->fonts.big, &app->themes.active->colors.text);
     SDL_Rect renderQuad = {width - 180, 125, texture.w, texture.h};
     SDL_RenderCopy(app->sdlRenderer, texture.texture, NULL, &renderQuad);
     SDL_DestroyTexture(texture.texture);

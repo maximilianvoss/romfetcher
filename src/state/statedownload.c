@@ -14,15 +14,19 @@
  * limitations under the License.
  */
 
-#ifndef THEMES_LOADING_H
-#define THEMES_LOADING_H
+#include "statedownload.h"
 
-#include "../structs.h"
+window_t statedownload_target(app_t *app, uint8_t isSelectButton) {
+    return window_search;
+}
 
-void themes_init(app_t *app);
+void statedownload_persist(app_t *app) {
+    app->download.cursorPos = downloadActivity_cancel;
+    app->download.started = 0;
+    app->download.complete = 0;
+}
 
-void themes_destroy(app_t *app);
-
-theme_t *themes_getByFileRefrence(app_t *app, char *fileReference);
-
-#endif
+void statedownload_init(app_t *app) {
+    app->win = window_download;
+    app->search.active = app->search.cursor;
+}

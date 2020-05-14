@@ -15,7 +15,7 @@
  */
 
 #include "inputkeyboard.h"
-#include "statehandler.h"
+#include "../state/statehandler.h"
 
 static void addActiveCharToText(app_t *app);
 
@@ -164,8 +164,7 @@ void inputkeyboard_processSelect(app_t *app) {
             break;
         case 11:
             addActiveCharToText(app);
-            memcpy(app->search.searchText, app->keyboard.text, 256);
-            app->win = window_search;
+            statehandler_switch(app, 1);
             break;
         default:
             break;
@@ -173,7 +172,7 @@ void inputkeyboard_processSelect(app_t *app) {
 }
 
 void inputkeyboard_processBack(app_t *app) {
-    statehandler_change(app, window_search);
+    statehandler_switch(app, 0);
 }
 
 void inputkeyboard_processOtherButton(app_t *app, GameControllerState_t *state) {
@@ -182,8 +181,7 @@ void inputkeyboard_processOtherButton(app_t *app, GameControllerState_t *state) 
     }
     if (state->buttonX) {
         addActiveCharToText(app);
-        memcpy(app->search.searchText, app->keyboard.text, 256);
-        statehandler_change(app, window_search);
+        statehandler_switch(app, 1);
     }
 }
 

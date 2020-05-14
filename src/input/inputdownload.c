@@ -17,7 +17,7 @@
 #include "inputdownload.h"
 #include <pthread.h>
 #include "../engine/enginehandler.h"
-#include "statehandler.h"
+#include "../state/statehandler.h"
 
 static void downloadCallback(void *ptr);
 
@@ -51,14 +51,14 @@ void inputdownload_processSelect(app_t *app) {
             break;
         case downloadActivity_done:
         case downloadActivity_cancel:
-            statehandler_change(app, window_search);
+            statehandler_switch(app, 1);
             break;
     }
 }
 
 void inputdownload_processBack(app_t *app) {
     if (!app->download.started) {
-        statehandler_change(app, window_search);
+        statehandler_switch(app, 0);
     }
 }
 

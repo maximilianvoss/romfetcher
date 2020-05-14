@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-#ifndef THEMES_LOADING_H
-#define THEMES_LOADING_H
+#include "statekeyboard.h"
 
-#include "../structs.h"
+window_t statekeyboard_target(app_t *app, uint8_t isSelectButton) {
+    return window_search;
+}
 
-void themes_init(app_t *app);
+void statekeyboard_persist(app_t *app) {
+    memcpy(app->search.searchText, app->keyboard.text, 256);
+}
 
-void themes_destroy(app_t *app);
-
-theme_t *themes_getByFileRefrence(app_t *app, char *fileReference);
-
-#endif
+void statekeyboard_init(app_t *app) {
+    app->win = window_keyboard;
+    strcpy(app->keyboard.text, app->search.searchText);
+}

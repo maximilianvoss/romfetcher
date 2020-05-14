@@ -48,6 +48,13 @@ typedef struct theme_s {
     } images;
 } theme_t;
 
+typedef struct config_s {
+    struct config_s *prev;
+    struct config_s *next;
+    char *name;
+    window_t destiny;
+} config_t;
+
 typedef struct system_s {
     struct system_s *prev;
     struct system_s *next;
@@ -90,7 +97,6 @@ typedef struct {
         linkedlist_t *cursor;
         uint8_t multi;
         uint8_t checkbox;
-        window_t destiny;
     } list;
 
     struct {
@@ -118,7 +124,6 @@ typedef struct {
         theme_t *active;
         theme_t *all;
         theme_t *cursor;
-        theme_t *enabled;
     } themes;
 
     struct {
@@ -135,7 +140,9 @@ typedef struct {
     } engine;
 
     struct {
-        config_t cursor;
+        config_t *active;
+        config_t *all;
+        config_t *cursor;
     } config;
 
     struct {

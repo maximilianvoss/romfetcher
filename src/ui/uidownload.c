@@ -51,7 +51,7 @@ static void renderTitle(app_t *app) {
 
     texture_t texture;
     rendering_loadText(app, &texture, app->search.active->title, app->fonts.big,
-                       &app->themes.enabled->colors.textInverted);
+                       &app->themes.active->colors.textInverted);
 
     int textureWidth = (texture.w > width + 100) ? width - 100 : texture.w;
     SDL_Rect renderQuad = {width / 2 - textureWidth / 2, 55, textureWidth, texture.h};
@@ -88,7 +88,7 @@ static void renderProgressBar(app_t *app) {
     SDL_RenderFillRect(app->sdlRenderer, &rect3);
 
     texture_t texture;
-    rendering_loadText(app, &texture, percentText, app->fonts.big, &app->themes.enabled->colors.text);
+    rendering_loadText(app, &texture, percentText, app->fonts.big, &app->themes.active->colors.text);
     SDL_Rect renderQuad = {width / 2 - texture.w / 2, 205, texture.w, texture.h};
     SDL_RenderCopy(app->sdlRenderer, texture.texture, NULL, &renderQuad);
 
@@ -100,7 +100,7 @@ static void renderStartButton(app_t *app) {
     SDL_GL_GetDrawableSize(app->sdlWindow, &width, &height);
 
     texture_t texture;
-    rendering_loadText(app, &texture, "Download", app->fonts.big, &app->themes.enabled->colors.text);
+    rendering_loadText(app, &texture, "Download", app->fonts.big, &app->themes.active->colors.text);
 
     SDL_Rect rect1 = {width - 50 - texture.w - 100, 300, texture.w + 100, 70};
     themes_setDrawColorBackground(app, (app->download.cursorPos == downloadActivity_start));
@@ -121,7 +121,7 @@ static void renderCancelButton(app_t *app) {
     SDL_GL_GetDrawableSize(app->sdlWindow, &width, &height);
 
     texture_t texture;
-    rendering_loadText(app, &texture, "Cancel", app->fonts.big, &app->themes.enabled->colors.text);
+    rendering_loadText(app, &texture, "Cancel", app->fonts.big, &app->themes.active->colors.text);
 
     SDL_Rect rect1 = {50, 300, texture.w + 100, 70};
     themes_setDrawColorBackground(app, (app->download.cursorPos == downloadActivity_cancel));
@@ -142,7 +142,7 @@ static void renderDoneButton(app_t *app) {
     SDL_GL_GetDrawableSize(app->sdlWindow, &width, &height);
 
     texture_t texture;
-    rendering_loadText(app, &texture, "Done", app->fonts.big, &app->themes.enabled->colors.text);
+    rendering_loadText(app, &texture, "Done", app->fonts.big, &app->themes.active->colors.text);
 
     SDL_Rect rect1 = {width / 2 - texture.w / 2 - 50, 300, texture.w + 100, 70};
     themes_setDrawColorBackground(app, (app->download.cursorPos == downloadActivity_done));

@@ -24,13 +24,9 @@ typedef enum {
     window_download,
     window_config,
     window_config_engine,
-    window_config_systems
+    window_config_systems,
+    window_config_themes
 } window_t;
-
-typedef enum {
-    config_engine,
-    config_systems
-} config_t;
 
 typedef enum {
     searchactivity_system,

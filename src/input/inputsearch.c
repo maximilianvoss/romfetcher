@@ -15,9 +15,7 @@
  */
 
 #include "inputsearch.h"
-#include "../engine/results.h"
-#include "../engine/enginehandler.h"
-#include "statehandler.h"
+#include "../state/statehandler.h"
 
 void inputsearch_processUp(app_t *app) {
     switch (app->search.position) {
@@ -112,28 +110,7 @@ void inputsearch_processRight(app_t *app) {
 }
 
 void inputsearch_processSelect(app_t *app) {
-    switch (app->search.position) {
-        case searchactivity_config:
-            statehandler_change(app, window_config);
-            break;
-        case searchactivity_system:
-            statehandler_change(app, window_system);
-            break;
-        case searchactivity_field:
-            statehandler_change(app, window_keyboard);
-            break;
-        case searchactivity_button:
-            if (strlen(app->search.searchText) > 2) {
-                if (app->search.all != NULL) {
-                    result_freeList(app->search.all);
-                }
-                app->search.all = enginehandler_search(app, app->systems.active, app->search.searchText);
-            }
-            break;
-        case searchactivity_results:
-            statehandler_change(app, window_download);
-            break;
-    }
+    statehandler_switch(app, 1);
 }
 
 void inputsearch_processBack(app_t *app) {

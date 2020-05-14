@@ -14,23 +14,22 @@
  * limitations under the License.
  */
 
-#ifndef UI_INPUTCONFIG_H
-#define UI_INPUTCONFIG_H
+#include "statesystem.h"
 
-#include "../structs.h"
 
-void inputconfig_processUp(app_t *app);
+window_t statesystem_target(app_t *app, uint8_t isSelectButton) {
+    return window_search;
+}
 
-void inputconfig_processDown(app_t *app);
+void statesystem_persist(app_t *app) {
+    app->systems.active = (system_t *) app->list.active;
+}
 
-void inputconfig_processLeft(app_t *app);
-
-void inputconfig_processRight(app_t *app);
-
-void inputconfig_processSelect(app_t *app);
-
-void inputconfig_processBack(app_t *app);
-
-void inputconfig_processOtherButton(app_t *app, GameControllerState_t *state);
-
-#endif
+void statesystem_init(app_t *app) {
+    app->win = window_system;
+    app->list.active = (linkedlist_t *) app->systems.active;
+    app->list.all = (linkedlist_t *) app->systems.all;
+    app->list.cursor = (linkedlist_t *) app->systems.active;
+    app->list.multi = 0;
+    app->list.checkbox = 0;
+}

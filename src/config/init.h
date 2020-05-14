@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-#ifndef THEMES_LOADING_H
-#define THEMES_LOADING_H
+#ifndef CONFIG_INIT_H
+#define CONFIG_INIT_H
 
 #include "../structs.h"
 
-void themes_init(app_t *app);
+void config_init(app_t *app);
 
-void themes_destroy(app_t *app);
-
-theme_t *themes_getByFileRefrence(app_t *app, char *fileReference);
+void config_destroy(app_t *app);
 
 #endif

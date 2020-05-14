@@ -33,28 +33,28 @@ void themes_setDrawColor(app_t *app, enum theme_color color) {
     int r, g, b, a;
     switch (color) {
         case background:
-            r = app->themes.enabled->colors.background.r;
-            g = app->themes.enabled->colors.background.g;
-            b = app->themes.enabled->colors.background.b;
-            a = app->themes.enabled->colors.background.a;
+            r = app->themes.active->colors.background.r;
+            g = app->themes.active->colors.background.g;
+            b = app->themes.active->colors.background.b;
+            a = app->themes.active->colors.background.a;
             break;
         case field:
-            r = app->themes.enabled->colors.field.r;
-            g = app->themes.enabled->colors.field.g;
-            b = app->themes.enabled->colors.field.b;
-            a = app->themes.enabled->colors.field.a;
+            r = app->themes.active->colors.field.r;
+            g = app->themes.active->colors.field.g;
+            b = app->themes.active->colors.field.b;
+            a = app->themes.active->colors.field.a;
             break;
         case fieldBackground:
-            r = app->themes.enabled->colors.fieldBackground.r;
-            g = app->themes.enabled->colors.fieldBackground.g;
-            b = app->themes.enabled->colors.fieldBackground.b;
-            a = app->themes.enabled->colors.fieldBackground.a;
+            r = app->themes.active->colors.fieldBackground.r;
+            g = app->themes.active->colors.fieldBackground.g;
+            b = app->themes.active->colors.fieldBackground.b;
+            a = app->themes.active->colors.fieldBackground.a;
             break;
         case fieldActive:
-            r = app->themes.enabled->colors.fieldHighlight.r;
-            g = app->themes.enabled->colors.fieldHighlight.g;
-            b = app->themes.enabled->colors.fieldHighlight.b;
-            a = app->themes.enabled->colors.fieldHighlight.a;
+            r = app->themes.active->colors.fieldHighlight.r;
+            g = app->themes.active->colors.fieldHighlight.g;
+            b = app->themes.active->colors.fieldHighlight.b;
+            a = app->themes.active->colors.fieldHighlight.a;
             break;
     }
     SDL_SetRenderDrawColor(app->sdlRenderer, r, g, b, a);

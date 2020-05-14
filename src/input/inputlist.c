@@ -15,7 +15,7 @@
  */
 
 #include "inputlist.h"
-#include "statehandler.h"
+#include "../state/statehandler.h"
 
 void inputlist_processUp(app_t *app) {
     if (app->list.cursor->prev != NULL) {
@@ -51,10 +51,11 @@ void inputlist_processSelect(app_t *app) {
     } else {
         app->list.active = app->list.cursor;
     }
+    statehandler_switch(app, 1);
 }
 
 void inputlist_processBack(app_t *app) {
-    statehandler_change(app, app->list.destiny);
+    statehandler_switch(app, 0);
 }
 
 void inputlist_processOtherButton(app_t *app, GameControllerState_t *state) {

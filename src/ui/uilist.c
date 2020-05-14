@@ -48,7 +48,7 @@ void uilist_renderList(app_t *app, int offsetX) {
     for (int position = offsetX;
          position <= height - 80 && element != NULL; position += 35, element = element->next) {
 
-        rendering_loadText(app, &texture, element->name, app->fonts.medium, &app->themes.enabled->colors.text);
+        rendering_loadText(app, &texture, element->name, app->fonts.medium, &app->themes.active->colors.text);
 
         SDL_Rect r2 = {48, position - 2, width - 96, 40};
         themes_setDrawColorBackground(app, (element == app->list.cursor));

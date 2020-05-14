@@ -16,12 +16,13 @@
 
 #include "config.h"
 #include "../config.h"
+#include "../themes/loading.h"
 
 static void fillStandardValues(sqlite3 *db);
 
 void database_configInitTable(sqlite3 *db) {
     char *err_msg = 0;
-    char *query = "CREATE TABLE config (version INT, engine TEXT);";
+    char *query = "CREATE TABLE config (version INT, engine TEXT, theme TEXT);";
 
     int rc = sqlite3_exec(db, query, 0, 0, &err_msg);
     if (rc != SQLITE_OK) {
@@ -53,7 +54,7 @@ uint8_t database_configCheckVersion(sqlite3 *db) {
 }
 
 void database_configLoad(app_t *app) {
-    char *query = "SELECT engine FROM config";
+    char *query = "SELECT engine, theme FROM config";
 
     sqlite3_stmt *stmt;
     int rc = sqlite3_prepare_v2(app->database.db, query, -1, &stmt, 0);
@@ -63,17 +64,22 @@ void database_configLoad(app_t *app) {
 
     int step = sqlite3_step(stmt);
     if (step == SQLITE_ROW) {
-        const unsigned char *engineName = sqlite3_column_text(stmt, 0);
-        app->engine.active = linkedlist_findElementByName(app->engine.all, (char *) engineName);
+        char *engineName = (char *) sqlite3_column_text(stmt, 0);
+        app->engine.active = linkedlist_findElementByName(app->engine.all, engineName);
+        char *themePath = (char *) sqlite3_column_text(stmt, 1);
+        app->themes.active = themes_getByFileRefrence(app, themePath);
     }
     if (app->engine.active == NULL) {
         app->engine.active = app->engine.all;
+    }
+    if (app->themes.active == NULL) {
+        app->themes.active = app->themes.all;
     }
     sqlite3_finalize(stmt);
 }
 
 void database_configPersist(app_t *app) {
-    char *query = "UPDATE config SET engine=@engine";
+    char *query = "UPDATE config SET engine=@engine, theme=@theme";
 
     sqlite3_stmt *stmt;
     int rc = sqlite3_prepare_v2(app->database.db, query, -1, &stmt, 0);
@@ -81,6 +87,9 @@ void database_configPersist(app_t *app) {
         int idx;
         idx = sqlite3_bind_parameter_index(stmt, "@engine");
         sqlite3_bind_text(stmt, idx, app->engine.active->title, strlen(app->engine.active->title), NULL);
+        idx = sqlite3_bind_parameter_index(stmt, "@theme");
+        sqlite3_bind_text(stmt, idx, app->themes.active->fileReference, strlen(app->themes.active->fileReference),
+                          NULL);
     } else {
         fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(app->database.db));
     }

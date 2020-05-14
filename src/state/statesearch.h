@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-#ifndef THEMES_LOADING_H
-#define THEMES_LOADING_H
+#ifndef STATE_STATESEARCH_H
+#define STATE_STATESEARCH_H
 
 #include "../structs.h"
 
-void themes_init(app_t *app);
+window_t statesearch_target(app_t *app, uint8_t isSelectButton);
 
-void themes_destroy(app_t *app);
+void statesearch_persist(app_t *app);
 
-theme_t *themes_getByFileRefrence(app_t *app, char *fileReference);
+void statesearch_init(app_t *app);
+
 
 #endif

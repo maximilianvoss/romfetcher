@@ -16,7 +16,7 @@
 
 #include "structs.h"
 #include "ui/uihandler.h"
-#include "ui/inputhandler.h"
+#include "input/inputhandler.h"
 #include "ui/core.h"
 #include "engine/results.h"
 #include "database/init.h"
@@ -25,6 +25,7 @@
 #include "helper/path.h"
 #include "themes/loading.h"
 #include "engine/enginehandler.h"
+#include "config/init.h"
 
 int main() {
     app_t app;
@@ -33,12 +34,14 @@ int main() {
     path_initRomfetchersHome();
     database_init(&app);
     themes_init(&app);
-    ui_init(&app);
     enginehandler_init(&app);
+    config_init(&app);
 
     database_configLoad(&app);
     app.systems.all = database_systemList(&app, 0);
     app.systems.enabled = database_systemList(&app, 1);
+
+    ui_init(&app);
 
     uint8_t quit = 0;
     while (!quit) {
@@ -54,6 +57,7 @@ int main() {
     database_systemsDestroy(app.systems.enabled);
     database_destroy(&app);
     enginehandler_destroy(&app);
+    config_destroy(&app);
 
     return 0;
 }
