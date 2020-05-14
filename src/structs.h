@@ -64,6 +64,14 @@ typedef struct system_s {
     char *path;
 } system_t;
 
+typedef struct advancedconfig_s {
+    struct advancedconfig_s *prev;
+    struct advancedconfig_s *next;
+    char *name;
+    int active;
+    advancedConfigSetting_t setting;
+} advancedconfig_t;
+
 typedef struct searchresult_s {
     struct searchresult_s *prev;
     struct searchresult_s *next;
@@ -143,6 +151,15 @@ typedef struct {
         config_t *active;
         config_t *all;
         config_t *cursor;
+
+        struct {
+            advancedconfig_t *active;
+            advancedconfig_t *all;
+            advancedconfig_t *cursor;
+            uint8_t fullscreen;
+            uint8_t opengl;
+            uint8_t highdpi;
+        } advanced;
     } config;
 
     struct {

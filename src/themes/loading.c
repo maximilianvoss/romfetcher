@@ -69,6 +69,9 @@ void themes_destroy(app_t *app) {
 }
 
 theme_t *themes_getByFileRefrence(app_t *app, char *fileReference) {
+    if (fileReference == NULL) {
+        return app->themes.all;
+    }
     theme_t *ptr = app->themes.all;
     while (ptr != NULL) {
         if (ptr->fileReference != NULL && !strcmp(fileReference, ptr->fileReference)) {

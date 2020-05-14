@@ -98,6 +98,7 @@ uint8_t inputhandler_processInputs(app_t *app) {
             processOtherButton = &inputdownload_processOtherButton;
             break;
         case window_config:
+        case window_config_advanced:
         case window_config_engine:
         case window_config_systems:
         case window_config_themes:

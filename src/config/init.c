@@ -15,6 +15,7 @@
  */
 
 #include "init.h"
+#include "advanced.h"
 
 static config_t *createConfig(char *name, window_t destiny);
 
@@ -24,16 +25,19 @@ void config_init(app_t *app) {
     app->config.all = linkedlist_appendElement(app->config.all,
                                                createConfig("Enable/Disable Systems", window_config_systems));
     app->config.all = linkedlist_appendElement(app->config.all, createConfig("Select Theme", window_config_themes));
+    app->config.all = linkedlist_appendElement(app->config.all,
+                                               createConfig("Advanced Configurations", window_config_advanced));
 
     app->config.active = app->config.all;
     app->config.cursor = app->config.all;
-}
 
+    configadvanced_init(app);
+}
 
 void config_destroy(app_t *app) {
     linkedlist_freeList(app->config.all, NULL);
+    configadvanced_destroy(app);
 }
-
 
 static config_t *createConfig(char *name, window_t destiny) {
     config_t *config = (config_t *) calloc(1, sizeof(config_t));
@@ -41,3 +45,4 @@ static config_t *createConfig(char *name, window_t destiny) {
     config->destiny = destiny;
     return config;
 }
+

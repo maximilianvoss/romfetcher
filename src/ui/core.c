@@ -24,7 +24,7 @@ void ui_init(app_t *app) {
 
     int screenWidth;
     int screenHeight;
-    Uint32 windowFlags = 0; //SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_OPENGL;
+    Uint32 windowFlags = 0;
     Uint32 rendererFlags = SDL_RENDERER_ACCELERATED;
 
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER) < 0) {
@@ -32,25 +32,34 @@ void ui_init(app_t *app) {
         exit(1);
     }
 
-#ifndef START_IN_WINDOW
-    windowFlags |= SDL_WINDOW_FULLSCREEN;
+    if (app->config.advanced.opengl) {
+        windowFlags |= SDL_WINDOW_OPENGL;
+    }
 
-    SDL_DisplayMode current;
-    int retVal = SDL_GetCurrentDisplayMode(0, &current);
-    if (retVal != 0) {
-        SDL_Log("Could not get display mode for video display #%d: %s", 0, SDL_GetError());
+    if (app->config.advanced.highdpi) {
+        windowFlags |= SDL_WINDOW_ALLOW_HIGHDPI;
+    }
+
+    if (app->config.advanced.fullscreen) {
+        windowFlags |= SDL_WINDOW_FULLSCREEN;
+
+        SDL_DisplayMode current;
+        int retVal = SDL_GetCurrentDisplayMode(0, &current);
+        if (retVal != 0) {
+            SDL_Log("Could not get display mode for video display #%d: %s", 0, SDL_GetError());
+            screenWidth = INIT_SCREEN_WIDTH;
+            screenHeight = INIT_SCREEN_HEIGHT;
+        } else {
+            SDL_Log("Display #%d: current display mode is %dx%dpx @ %dhz.", 0, current.w, current.h,
+                    current.refresh_rate);
+            screenWidth = current.w;
+            screenHeight = current.h;
+        }
+    } else {
+        windowFlags |= SDL_WINDOW_RESIZABLE;
         screenWidth = INIT_SCREEN_WIDTH;
         screenHeight = INIT_SCREEN_HEIGHT;
-    } else {
-        SDL_Log("Display #%d: current display mode is %dx%dpx @ %dhz.", 0, current.w, current.h, current.refresh_rate);
-        screenWidth = current.w;
-        screenHeight = current.h;
     }
-#else
-    windowFlags |= SDL_WINDOW_RESIZABLE;
-    screenWidth = INIT_SCREEN_WIDTH;
-    screenHeight = INIT_SCREEN_HEIGHT;
-#endif
 
     app->sdlWindow = SDL_CreateWindow("ROM Fetcher", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, screenWidth,
                                       screenHeight, windowFlags);

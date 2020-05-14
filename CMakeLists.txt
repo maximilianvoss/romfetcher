@@ -31,6 +31,8 @@ endif ()
 set(SOURCES
         src/main.c
         src/config.h
+        src/config/advanced.c
+        src/config/advanced.h
         src/config/init.c
         src/config/init.h
         src/database/config.c
@@ -94,6 +96,8 @@ set(SOURCES
         src/input/inputsearch.h
         src/state/stateconfig.c
         src/state/stateconfig.h
+        src/state/stateconfigadvanced.c
+        src/state/stateconfigadvanced.h
         src/state/stateconfigengine.c
         src/state/stateconfigengine.h
         src/state/stateconfigsystems.c

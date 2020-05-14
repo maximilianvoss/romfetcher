@@ -23,6 +23,7 @@ typedef enum {
     window_keyboard,
     window_download,
     window_config,
+    window_config_advanced,
     window_config_engine,
     window_config_systems,
     window_config_themes
@@ -41,5 +42,11 @@ typedef enum {
     downloadActivity_start,
     downloadActivity_done
 } downloadactivity_t;
+
+typedef enum {
+    advancedConfig_fullscreen,
+    advancedConfig_openGL,
+    advancedConfig_highDPI
+} advancedConfigSetting_t;
 
 #endif

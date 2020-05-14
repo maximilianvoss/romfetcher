@@ -17,12 +17,13 @@
 #include "config.h"
 #include "../config.h"
 #include "../themes/loading.h"
+#include "../config/advanced.h"
 
 static void fillStandardValues(sqlite3 *db);
 
 void database_configInitTable(sqlite3 *db) {
     char *err_msg = 0;
-    char *query = "CREATE TABLE config (version INT, engine TEXT, theme TEXT);";
+    char *query = "CREATE TABLE config (version INT, engine TEXT, theme TEXT, fullscreen INT, opengl INT, highdpi INT);";
 
     int rc = sqlite3_exec(db, query, 0, 0, &err_msg);
     if (rc != SQLITE_OK) {
@@ -54,7 +55,7 @@ uint8_t database_configCheckVersion(sqlite3 *db) {
 }
 
 void database_configLoad(app_t *app) {
-    char *query = "SELECT engine, theme FROM config";
+    char *query = "SELECT engine, theme, fullscreen, opengl, highdpi FROM config";
 
     sqlite3_stmt *stmt;
     int rc = sqlite3_prepare_v2(app->database.db, query, -1, &stmt, 0);
@@ -68,6 +69,13 @@ void database_configLoad(app_t *app) {
         app->engine.active = linkedlist_findElementByName(app->engine.all, engineName);
         char *themePath = (char *) sqlite3_column_text(stmt, 1);
         app->themes.active = themes_getByFileRefrence(app, themePath);
+        int fullscreen = sqlite3_column_int(stmt, 2);
+        int opengl = sqlite3_column_int(stmt, 3);
+        int highdpi = sqlite3_column_int(stmt, 4);
+
+        configadvanced_setConfig(app, advancedConfig_fullscreen, fullscreen);
+        configadvanced_setConfig(app, advancedConfig_openGL, opengl);
+        configadvanced_setConfig(app, advancedConfig_highDPI, highdpi);
     }
     if (app->engine.active == NULL) {
         app->engine.active = app->engine.all;
@@ -79,9 +87,10 @@ void database_configLoad(app_t *app) {
 }
 
 void database_configPersist(app_t *app) {
-    char *query = "UPDATE config SET engine=@engine, theme=@theme";
+    char *query = "UPDATE config SET engine=@engine, theme=@theme, fullscreen=@fullscreen, opengl=@opengl, highdpi=@highdpi";
 
     sqlite3_stmt *stmt;
+    configadvanced_listToSettings(app);
     int rc = sqlite3_prepare_v2(app->database.db, query, -1, &stmt, 0);
     if (rc == SQLITE_OK) {
         int idx;
@@ -90,6 +99,12 @@ void database_configPersist(app_t *app) {
         idx = sqlite3_bind_parameter_index(stmt, "@theme");
         sqlite3_bind_text(stmt, idx, app->themes.active->fileReference, strlen(app->themes.active->fileReference),
                           NULL);
+        idx = sqlite3_bind_parameter_index(stmt, "@fullscreen");
+        sqlite3_bind_int(stmt, idx, app->config.advanced.fullscreen);
+        idx = sqlite3_bind_parameter_index(stmt, "@opengl");
+        sqlite3_bind_int(stmt, idx, app->config.advanced.opengl);
+        idx = sqlite3_bind_parameter_index(stmt, "@highdpi");
+        sqlite3_bind_int(stmt, idx, app->config.advanced.highdpi);
     } else {
         fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(app->database.db));
     }
