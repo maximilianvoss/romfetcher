@@ -22,7 +22,7 @@ include_directories(libs/json2map)
 
 if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
     set(CMAKE_VERBOSE_MAKEFILE on)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -Wall -DDEVELOP")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -Wall")
     set(CMAKE_INSTALL_PREFIX /usr/local)
 else ()
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -O3")
