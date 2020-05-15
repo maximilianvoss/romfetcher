@@ -23,7 +23,7 @@ static void fillStandardValues(sqlite3 *db);
 
 void database_configInitTable(sqlite3 *db) {
     char *err_msg = 0;
-    char *query = "CREATE TABLE config (version INT, engine TEXT, theme TEXT, fullscreen INT, opengl INT, highdpi INT);";
+    char *query = "CREATE TABLE config (version INT, theme TEXT, fullscreen INT, opengl INT, highdpi INT);";
 
     int rc = sqlite3_exec(db, query, 0, 0, &err_msg);
     if (rc != SQLITE_OK) {
@@ -55,7 +55,7 @@ uint8_t database_configCheckVersion(sqlite3 *db) {
 }
 
 void database_configLoad(app_t *app) {
-    char *query = "SELECT engine, theme, fullscreen, opengl, highdpi FROM config";
+    char *query = "SELECT theme, fullscreen, opengl, highdpi FROM config";
 
     sqlite3_stmt *stmt;
     int rc = sqlite3_prepare_v2(app->database.db, query, -1, &stmt, 0);
@@ -65,13 +65,11 @@ void database_configLoad(app_t *app) {
 
     int step = sqlite3_step(stmt);
     if (step == SQLITE_ROW) {
-        char *engineName = (char *) sqlite3_column_text(stmt, 0);
-        app->engine.active = linkedlist_findElementByName(app->engine.all, engineName);
-        char *themePath = (char *) sqlite3_column_text(stmt, 1);
+        char *themePath = (char *) sqlite3_column_text(stmt, 0);
         app->themes.active = themes_getByFileRefrence(app, themePath);
-        int fullscreen = sqlite3_column_int(stmt, 2);
-        int opengl = sqlite3_column_int(stmt, 3);
-        int highdpi = sqlite3_column_int(stmt, 4);
+        int fullscreen = sqlite3_column_int(stmt, 1);
+        int opengl = sqlite3_column_int(stmt, 2);
+        int highdpi = sqlite3_column_int(stmt, 3);
 
         configadvanced_setConfig(app, advancedConfig_fullscreen, fullscreen);
         configadvanced_setConfig(app, advancedConfig_openGL, opengl);
@@ -87,15 +85,13 @@ void database_configLoad(app_t *app) {
 }
 
 void database_configPersist(app_t *app) {
-    char *query = "UPDATE config SET engine=@engine, theme=@theme, fullscreen=@fullscreen, opengl=@opengl, highdpi=@highdpi";
+    char *query = "UPDATE config SET theme=@theme, fullscreen=@fullscreen, opengl=@opengl, highdpi=@highdpi";
 
     sqlite3_stmt *stmt;
     configadvanced_listToSettings(app);
     int rc = sqlite3_prepare_v2(app->database.db, query, -1, &stmt, 0);
     if (rc == SQLITE_OK) {
         int idx;
-        idx = sqlite3_bind_parameter_index(stmt, "@engine");
-        sqlite3_bind_text(stmt, idx, app->engine.active->fullname, strlen(app->engine.active->fullname), NULL);
         idx = sqlite3_bind_parameter_index(stmt, "@theme");
         sqlite3_bind_text(stmt, idx, app->themes.active->fileReference, strlen(app->themes.active->fileReference),
                           NULL);
@@ -118,7 +114,7 @@ void database_configPersist(app_t *app) {
 }
 
 static void fillStandardValues(sqlite3 *db) {
-    char *query = "INSERT INTO config (version, engine) VALUES (@version, NULL)";
+    char *query = "INSERT INTO config (version) VALUES (@version)";
 
     sqlite3_stmt *stmt;
     int rc = sqlite3_prepare_v2(db, query, -1, &stmt, 0);
