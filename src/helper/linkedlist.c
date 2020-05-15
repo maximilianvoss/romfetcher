@@ -66,3 +66,76 @@ void *linkedlist_findElementByName(void *ptr, char *name) {
     }
     return NULL;
 }
+
+void *linkedlist_sort(void *ptr) {
+    if (ptr == NULL) {
+        return NULL;
+    }
+
+    linkedlist_t *list = (linkedlist_t *) ptr;
+    while (list->prev != NULL) {
+        list = list->prev;
+    }
+
+    linkedlist_t *cur = list->next;
+    while (cur != NULL) {
+
+        linkedlist_t *check = cur->prev;
+        while (check != NULL) {
+            if (strcmp(check->name, cur->name) < 0) {
+                break;
+            }
+            check = check->prev;
+        }
+
+        if (check == NULL) {
+            linkedlist_t *prev = cur->prev;
+            linkedlist_t *next = cur->next;
+
+            if (prev != NULL) {
+                prev->next = next;
+            }
+            if (next != NULL) {
+                next->prev = prev;
+            }
+
+            if (cur != list) {
+                cur->next = list;
+            }
+            cur->prev = NULL;
+            list->prev = cur;
+            list = cur;
+
+            cur = next;
+        } else {
+            linkedlist_t *prev = cur->prev;
+            linkedlist_t *next = cur->next;
+
+            if (cur->prev != check) {
+
+                cur->next = check->next;
+                if (cur->next != NULL) {
+                    ((linkedlist_t *) cur->next)->prev = cur;
+                }
+
+                check->next = cur;
+                cur->prev = check;
+
+                if (prev != NULL) {
+                    prev->next = next;
+                }
+                if (next != NULL) {
+                    next->prev = prev;
+                }
+            }
+
+            cur = next;
+        }
+    }
+
+
+    while (list->prev != NULL) {
+        list = list->prev;
+    }
+    return list;
+}

@@ -30,7 +30,7 @@ searchresult_t *enginehandler_search(app_t *app, system_t *system, char *searchS
         result = linkedlist_appendElement(result, tmp);
         app->engine.active = app->engine.active->next;
     }
-    return result;
+    return linkedlist_sort(result);
 }
 
 void enginehandler_download(app_t *app, searchresult_t *item, void (*callback)(void *app)) {

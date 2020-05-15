@@ -36,4 +36,6 @@ uint32_t linkedlist_getElementCount(void *list);
 
 void *linkedlist_findElementByName(void *ptr, char *name);
 
+void *linkedlist_sort(void *ptr);
+
 #endif
