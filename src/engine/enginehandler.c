@@ -21,49 +21,43 @@
 #include "romsdownload/romsdownload.h"
 #include "romsemulator/romsemulator.h"
 
-engine_t *createEngine(char *title, searchresult_t *(*search)(void *app, system_t *system, char *searchString),
-                       void (*download)(void *app, searchresult_t *item, void (*callback)(void *app)));
-
 searchresult_t *enginehandler_search(app_t *app, system_t *system, char *searchString) {
-    if (app->engine.active != NULL) {
-        return app->engine.active->search(app, system, searchString);
+    searchresult_t *result = NULL;
+    app->engine.active = app->engine.enabled;
+
+    while (app->engine.active != NULL) {
+        searchresult_t *tmp = app->engine.active->search(app, system, searchString);
+        result = linkedlist_appendElement(result, tmp);
+        app->engine.active = app->engine.active->next;
     }
-    return NULL;
+    return result;
 }
 
 void enginehandler_download(app_t *app, searchresult_t *item, void (*callback)(void *app)) {
-    if (app->engine.active != NULL) {
-        return app->engine.active->download(app, item, callback);
+    ((engine_t *) item->engine)->download(app, item, callback);
+}
+
+void enginehandler_doMapping(engine_t *ptr) {
+    while (ptr != NULL) {
+        if (!strcmp(ptr->name, "RCC")) {
+            ptr->search = &romsmania_search;
+            ptr->download = &romsmania_download;
+        } else if (!strcmp(ptr->name, "MOD")) {
+            ptr->search = &romsmode_search;
+            ptr->download = &romsmode_download;
+        } else if (!strcmp(ptr->name, "WOW")) {
+            ptr->search = &wowroms_search;
+            ptr->download = &wowroms_download;
+        } else if (!strcmp(ptr->name, "RDC")) {
+            ptr->search = &romsdownload_search;
+            ptr->download = &romsdownload_download;
+        } else if (!strcmp(ptr->name, "REN")) {
+            ptr->search = &romsemulator_search;
+            ptr->download = &romsemulator_download;
+        } else {
+            SDL_Log("Mapping was not found for %s(%s)\n", ptr->fullname, ptr->name);
+        }
+
+        ptr = ptr->next;
     }
-}
-
-void enginehandler_init(app_t *app) {
-    app->engine.all = linkedlist_appendElement(app->engine.all,
-                                               createEngine("https://www.romsmania.cc", &romsmania_search,
-                                                            &romsmania_download));
-    app->engine.all = linkedlist_appendElement(app->engine.all,
-                                               createEngine("https://www.romsmode.com", &romsmode_search,
-                                                            &romsmode_download));
-    app->engine.all = linkedlist_appendElement(app->engine.all,
-                                               createEngine("https://www.wowroms.com", &wowroms_search,
-                                                            &wowroms_download));
-    app->engine.all = linkedlist_appendElement(app->engine.all,
-                                               createEngine("https://www.roms-download.com", &romsdownload_search,
-                                                            &romsdownload_download));
-    app->engine.all = linkedlist_appendElement(app->engine.all,
-                                               createEngine("https://www.romsemulator.net", &romsemulator_search,
-                                                            &romsemulator_download));
-}
-
-void enginehandler_destroy(app_t *app) {
-    linkedlist_freeList(app->engine.all, NULL);
-}
-
-engine_t *createEngine(char *title, searchresult_t *(*search)(void *app, system_t *system, char *searchString),
-                       void (*download)(void *app, searchresult_t *item, void (*callback)(void *app))) {
-    engine_t *engine = calloc(1, sizeof(engine_t));
-    engine->title = title;
-    engine->search = search;
-    engine->download = download;
-    return engine;
 }

@@ -27,6 +27,8 @@ static void freeSystemList(void *ptr);
 
 static int database_systemListCallback(void *p_data, int num_fields, char **p_fields, char **p_col_names);
 
+static void database_systemAdd(sqlite3 *db, char *name, char *fullname, char *path, int active);
+
 void database_systemsInitTable(sqlite3 *db) {
     char *err_msg = 0;
     char *query = "CREATE TABLE systems (id INT PRIMARY KEY, name TEXT, fullname TEXT, path TEXT, active INT)";
@@ -40,7 +42,46 @@ void database_systemsInitTable(sqlite3 *db) {
     addDefaultSystems(db);
 }
 
-void database_systemAdd(sqlite3 *db, char *name, char *fullname, char *path, int active) {
+void database_systemStore(sqlite3 *db, system_t *systems) {
+    char *err_msg = 0;
+    char *query = "DELETE FROM systems";
+
+    int rc = sqlite3_exec(db, query, 0, 0, &err_msg);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to delete table\n");
+        fprintf(stderr, "SQL error: %s\n", err_msg);
+        sqlite3_free(err_msg);
+    }
+
+    while (systems != NULL) {
+        database_systemAdd(db, systems->name, systems->fullname, systems->path, systems->active);
+        systems = systems->next;
+    }
+}
+
+system_t *database_systemList(app_t *app, uint8_t active) {
+    char *errmsg;
+    char *query;
+    if (active) {
+        query = "SELECT name, fullname, path, active FROM systems WHERE active=1";
+    } else {
+        query = "SELECT name, fullname, path, active FROM systems";
+    }
+
+    system_t *systems = NULL;
+    int ret = sqlite3_exec(app->database.db, query, database_systemListCallback, &systems, &errmsg);
+    if (ret != SQLITE_OK) {
+        printf("Error in select statement %s [%s].\n", query, errmsg);
+        return NULL;
+    }
+    return systems;
+}
+
+void database_systemsDestroy(system_t *systems) {
+    linkedlist_freeList(systems, &freeSystemList);
+}
+
+static void database_systemAdd(sqlite3 *db, char *name, char *fullname, char *path, int active) {
     char *query = "INSERT INTO systems (name, fullname, path, active) VALUES (@name, @fullname, @path, @active)";
 
     sqlite3_stmt *stmt;
@@ -68,52 +109,6 @@ void database_systemAdd(sqlite3 *db, char *name, char *fullname, char *path, int
     }
     sqlite3_clear_bindings(stmt);
     sqlite3_finalize(stmt);
-}
-
-void database_systemStore(sqlite3 *db, system_t *systems) {
-    char *err_msg = 0;
-    char *query = "DELETE FROM systems";
-
-    int rc = sqlite3_exec(db, query, 0, 0, &err_msg);
-    if (rc != SQLITE_OK) {
-        fprintf(stderr, "Failed to delete table\n");
-        fprintf(stderr, "SQL error: %s\n", err_msg);
-        sqlite3_free(err_msg);
-    }
-
-    while (systems != NULL) {
-        database_systemAdd(db, systems->name, systems->fullname, systems->path, systems->active);
-        systems = systems->next;
-    }
-}
-
-static int database_systemListCallback(void *p_data, int num_fields, char **p_fields, char **p_col_names) {
-    system_t *system = createSystemItem(p_fields[0], p_fields[1], p_fields[2], atoi(p_fields[3]));
-    system_t **systemPtr = (system_t **) p_data;
-    *systemPtr = linkedlist_appendElement(*systemPtr, system);
-    return 0;
-}
-
-system_t *database_systemList(app_t *app, uint8_t active) {
-    char *errmsg;
-    char *query;
-    if (active) {
-        query = "SELECT name, fullname, path, active FROM systems WHERE active=1";
-    } else {
-        query = "SELECT name, fullname, path, active FROM systems";
-    }
-
-    system_t *systems = NULL;
-    int ret = sqlite3_exec(app->database.db, query, database_systemListCallback, &systems, &errmsg);
-    if (ret != SQLITE_OK) {
-        printf("Error in select statement %s [%s].\n", query, errmsg);
-        return NULL;
-    }
-    return systems;
-}
-
-void database_systemsDestroy(system_t *systems) {
-    linkedlist_freeList(systems, &freeSystemList);
 }
 
 static void addDefaultSystems(sqlite3 *db) {
@@ -205,4 +200,11 @@ static void freeSystemList(void *ptr) {
     FREENOTNULL(system->name);
     FREENOTNULL(system->fullname);
     FREENOTNULL(system->path);
+}
+
+static int database_systemListCallback(void *p_data, int num_fields, char **p_fields, char **p_col_names) {
+    system_t *system = createSystemItem(p_fields[0], p_fields[1], p_fields[2], atoi(p_fields[3]));
+    system_t **systemPtr = (system_t **) p_data;
+    *systemPtr = linkedlist_appendElement(*systemPtr, system);
+    return 0;
 }

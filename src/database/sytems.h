@@ -22,8 +22,6 @@
 
 void database_systemsInitTable(sqlite3 *db);
 
-void database_systemAdd(sqlite3 *db, char *name, char *fullname, char *path, int active);
-
 system_t *database_systemList(app_t *app, uint8_t active);
 
 void database_systemStore(sqlite3 *db, system_t *systems);

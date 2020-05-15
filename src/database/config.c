@@ -95,7 +95,7 @@ void database_configPersist(app_t *app) {
     if (rc == SQLITE_OK) {
         int idx;
         idx = sqlite3_bind_parameter_index(stmt, "@engine");
-        sqlite3_bind_text(stmt, idx, app->engine.active->title, strlen(app->engine.active->title), NULL);
+        sqlite3_bind_text(stmt, idx, app->engine.active->fullname, strlen(app->engine.active->fullname), NULL);
         idx = sqlite3_bind_parameter_index(stmt, "@theme");
         sqlite3_bind_text(stmt, idx, app->themes.active->fileReference, strlen(app->themes.active->fileReference),
                           NULL);

@@ -19,7 +19,7 @@
 
 #include "../structs.h"
 
-searchresult_t *result_newItem(system_t *system);
+searchresult_t *result_newItem(system_t *system, engine_t *engine);
 
 void result_setTitle(searchresult_t *resultList, char *title);
 

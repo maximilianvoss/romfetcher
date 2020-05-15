@@ -15,22 +15,41 @@
  */
 
 #include "stateconfigengine.h"
-#include "../database/config.h"
+#include "../database/engines.h"
+
+static void persistEngines(app_t *app);
 
 window_t stateconfigengine_target(app_t *app, uint8_t isSelectButton) {
+    if (isSelectButton) {
+        return window_config_engine;
+    }
+    persistEngines(app);
     return window_config;
 }
 
 void stateconfigengine_persist(app_t *app) {
-    app->engine.active = (engine_t *) app->list.cursor;
-    database_configPersist(app);
-    app->win = window_config;
+
 }
 
 void stateconfigengine_init(app_t *app) {
-    app->win = window_config_engine;
-    app->list.cursor = (linkedlist_t *) app->engine.active;
-    app->list.all = (linkedlist_t *) app->engine.all;
-    app->list.multi = 0;
-    app->list.checkbox = 0;
+    if (app->win != window_config_engine) {
+        app->win = window_config_engine;
+        app->list.cursor = (linkedlist_t *) app->engine.all;
+        app->list.all = (linkedlist_t *) app->engine.all;
+        app->list.multi = 1;
+        app->list.checkbox = 1;
+    }
+}
+
+static void persistEngines(app_t *app) {
+    database_enginesStore(app->database.db, app->engine.all);
+
+    database_enginesDestroy(app->engine.all);
+    database_enginesDestroy(app->engine.enabled);
+
+    app->engine.all = database_engineList(app, 0);
+    app->engine.enabled = database_engineList(app, 1);
+
+    app->engine.active = app->engine.enabled;
+    app->engine.cursor = app->engine.enabled;
 }

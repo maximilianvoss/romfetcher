@@ -28,7 +28,7 @@
 #define URL_TEMPLATE "https://wowroms.com/en/roms/list/%system%?search=%query%&page=%page%"
 #define URL_PREFIX "https://wowroms.com"
 
-static searchresult_t *fetchingResultItems(system_t *system, searchresult_t *resultList, char *response);
+static searchresult_t *fetchingResultItems(app_t *app, system_t *system, searchresult_t *resultList, char *response);
 
 static char *fetchDownloadPageLink(char *response);
 
@@ -53,7 +53,7 @@ searchresult_t *wowroms_search(void *app, system_t *system, char *searchString) 
         resultCount = linkedlist_getElementCount(resultList);
 
         char *response = curlling_fetchURL(url);
-        resultList = fetchingResultItems(system, resultList, response);
+        resultList = fetchingResultItems(app, system, resultList, response);
         free(response);
         free(url);
 
@@ -175,14 +175,14 @@ static char *fetchDownloadPageLink(char *response) {
     return link;
 }
 
-static searchresult_t *fetchingResultItems(system_t *system, searchresult_t *resultList, char *response) {
+static searchresult_t *fetchingResultItems(app_t *app, system_t *system, searchresult_t *resultList, char *response) {
     char *regexString = "<a class=\"title-5 heighta\" title=\"([^\"]+)\" href=\"([^\"]+)\">[^<]+</a>";
 
     regexMatches_t *matches = regex_getMatches(response, regexString, 2);
     regexMatches_t *ptr = matches;
 
     while (ptr != NULL) {
-        searchresult_t *item = result_newItem(system);
+        searchresult_t *item = result_newItem(system, app->engine.active);
         item->system = system;
 
         char *title = str_htmlDecode(ptr->groups[0]);

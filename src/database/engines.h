@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-#ifndef ENGINE_ENGINEHANDLER_H
-#define ENGINE_ENGINEHANDLER_H
+#ifndef DATABASE_ENGINES_H
+#define DATABASE_ENGINES_H
 
+#include <sqlite3.h>
 #include "../structs.h"
 
-searchresult_t *enginehandler_search(app_t *app, system_t *system, char *searchString);
+void database_enginesInitTable(sqlite3 *db);
 
-void enginehandler_download(app_t *app, searchresult_t *item, void (*callback)(void *app));
+engine_t *database_engineList(app_t *app, uint8_t active);
 
-void enginehandler_doMapping(engine_t *engines);
+void database_enginesStore(sqlite3 *db, engine_t *engines);
+
+void database_enginesDestroy(engine_t *engines);
 
 #endif

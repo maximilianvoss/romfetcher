@@ -24,8 +24,8 @@
 #include "database/config.h"
 #include "helper/path.h"
 #include "themes/loading.h"
-#include "engine/enginehandler.h"
 #include "config/init.h"
+#include "database/engines.h"
 
 int main() {
     app_t app;
@@ -34,12 +34,14 @@ int main() {
     path_initRomfetchersHome();
     database_init(&app);
     themes_init(&app);
-    enginehandler_init(&app);
     config_init(&app);
 
     database_configLoad(&app);
     app.systems.all = database_systemList(&app, 0);
     app.systems.enabled = database_systemList(&app, 1);
+
+    app.engine.all = database_engineList(&app, 0);
+    app.engine.enabled = database_engineList(&app, 1);
 
     ui_init(&app);
 
@@ -55,8 +57,9 @@ int main() {
     result_freeList(app.search.all);
     database_systemsDestroy(app.systems.all);
     database_systemsDestroy(app.systems.enabled);
+    database_enginesDestroy(app.engine.all);
+    database_enginesDestroy(app.engine.enabled);
     database_destroy(&app);
-    enginehandler_destroy(&app);
     config_destroy(&app);
 
     return 0;

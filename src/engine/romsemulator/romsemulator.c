@@ -26,7 +26,7 @@
 
 #define URL_TEMPLATE "https://romsemulator.net/roms/%system%/page/%page%/?s=%query%"
 
-static searchresult_t *fetchingResultItems(system_t *system, searchresult_t *resultList, char *response);
+static searchresult_t *fetchingResultItems(app_t *app, system_t *system, searchresult_t *resultList, char *response);
 
 static char *fetchDownloadPageLink(char *response);
 
@@ -48,7 +48,7 @@ searchresult_t *romsemulator_search(void *app, system_t *system, char *searchStr
         resultCount = linkedlist_getElementCount(resultList);
 
         char *response = curlling_fetchURL(url);
-        resultList = fetchingResultItems(system, resultList, response);
+        resultList = fetchingResultItems(app, system, resultList, response);
         free(response);
         free(url);
 
@@ -130,14 +130,14 @@ static char *fetchDownloadPageLink(char *response) {
     return link;
 }
 
-static searchresult_t *fetchingResultItems(system_t *system, searchresult_t *resultList, char *response) {
+static searchresult_t *fetchingResultItems(app_t *app, system_t *system, searchresult_t *resultList, char *response) {
     char *regexString = "<td><a href=\"([^\"]+)\">([^<]+)</a>";
 
     regexMatches_t *matches = regex_getMatches(response, regexString, 2);
     regexMatches_t *ptr = matches;
 
     while (ptr != NULL) {
-        searchresult_t *item = result_newItem(system);
+        searchresult_t *item = result_newItem(system, app->engine.active);
         item->system = system;
         result_setUrl(item, ptr->groups[0]);
 

@@ -20,6 +20,7 @@
 #include "sytems.h"
 #include "config.h"
 #include "../helper/path.h"
+#include "engines.h"
 
 static void initTables(sqlite3 *db);
 
@@ -63,6 +64,10 @@ static void initTables(sqlite3 *db) {
 
     if (!doesTableExist(db, "systems")) {
         database_systemsInitTable(db);
+    }
+
+    if (!doesTableExist(db, "engines")) {
+        database_enginesInitTable(db);
     }
 }
 

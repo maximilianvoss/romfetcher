@@ -21,7 +21,7 @@ static config_t *createConfig(char *name, window_t destiny);
 
 void config_init(app_t *app) {
     app->config.all = linkedlist_appendElement(app->config.all,
-                                               createConfig("Select Search Engine", window_config_engine));
+                                               createConfig("Enable/Disable Search Engines", window_config_engine));
     app->config.all = linkedlist_appendElement(app->config.all,
                                                createConfig("Enable/Disable Systems", window_config_systems));
     app->config.all = linkedlist_appendElement(app->config.all, createConfig("Select Theme", window_config_themes));

@@ -37,6 +37,8 @@ set(SOURCES
         src/config/init.h
         src/database/config.c
         src/database/config.h
+        src/database/engines.c
+        src/database/engines.h
         src/database/init.c
         src/database/init.h
         src/database/sytems.c

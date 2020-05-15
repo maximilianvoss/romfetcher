@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
+#include <csafestring.h>
 #include "results.h"
 #include "../helper/utils.h"
 
 static void freeFields(void *ptr);
 
-searchresult_t *result_newItem(system_t *system) {
+searchresult_t *result_newItem(system_t *system, engine_t *engine) {
     searchresult_t *resultList = (searchresult_t *) calloc(1, sizeof(searchresult_t));
     resultList->title = NULL;
     resultList->url = NULL;
+    resultList->engine = engine;
     resultList->system = system;
     resultList->prev = NULL;
     resultList->next = NULL;
@@ -34,6 +36,7 @@ void result_setTitle(searchresult_t *resultList, char *title) {
     if (resultList == NULL || title == NULL) {
         return;
     }
+
     int length = strlen(title) + 1;
     resultList->title = (char *) calloc(length, sizeof(char));
     memcpy(resultList->title, title, length);

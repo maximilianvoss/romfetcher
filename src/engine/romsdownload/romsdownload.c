@@ -28,7 +28,7 @@
 #define DATA_TEMPLATE "sort=file_name%24ASC&page=%page%&search=%query%&rom_concole=%system%"
 #define URL_PREFIX "https://roms-download.com"
 
-static searchresult_t *fetchingResultItems(system_t *system, searchresult_t *resultList, char *response);
+static searchresult_t *fetchingResultItems(app_t *app, system_t *system, searchresult_t *resultList, char *response);
 
 static char *fetchDownloadLink(char *response);
 
@@ -45,7 +45,7 @@ searchresult_t *romsdownload_search(void *app, system_t *system, char *searchStr
         }
 
         char *response = curlling_fetchURLPost(URL_TEMPLATE, data);
-        resultList = fetchingResultItems(system, resultList, response);
+        resultList = fetchingResultItems(app, system, resultList, response);
         free(response);
         free(data);
 
@@ -90,14 +90,14 @@ static char *fetchDownloadLink(char *response) {
     return link;
 }
 
-static searchresult_t *fetchingResultItems(system_t *system, searchresult_t *resultList, char *response) {
+static searchresult_t *fetchingResultItems(app_t *app, system_t *system, searchresult_t *resultList, char *response) {
     char *regexString = "<a href=\"([^\"]+)\">([^<]+)</a>";
 
     regexMatches_t *matches = regex_getMatches(response, regexString, 2);
     regexMatches_t *ptr = matches;
 
     while (ptr != NULL) {
-        searchresult_t *item = result_newItem(system);
+        searchresult_t *item = result_newItem(system, app->engine.active);
         item->system = system;
 
         char *url = str_concat(URL_PREFIX, ptr->groups[0]);

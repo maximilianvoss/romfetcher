@@ -78,12 +78,15 @@ typedef struct searchresult_s {
     char *title;
     char *url;
     system_t *system;
+    void *engine;
 } searchresult_t;
 
 typedef struct engine_s {
     struct engine_s *prev;
     struct engine_s *next;
-    char *title;
+    char *fullname;
+    int active;
+    char *name;
 
     searchresult_t *(*search)(void *app, system_t *system, char *searchString);
 
@@ -145,6 +148,7 @@ typedef struct {
         engine_t *active;
         engine_t *all;
         engine_t *cursor;
+        engine_t *enabled;
     } engine;
 
     struct {
