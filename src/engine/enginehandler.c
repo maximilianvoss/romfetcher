@@ -50,7 +50,7 @@ searchresult_t *enginehandler_search(app_t *app, system_t *system, char *searchS
         pthread_create(&searches[i].thread, NULL, executeThread, &searches[i]);
     }
 
-    for (int i = count - 1; i >= 0; i--) {
+    for (int i = 0; i < count; i++) {
         pthread_join(searches[i].thread, NULL);
         result = linkedlist_appendElement(result, searches[i].result);
     }
