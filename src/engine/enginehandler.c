@@ -40,7 +40,7 @@ searchresult_t *enginehandler_search(app_t *app, system_t *system, char *searchS
     uint32_t count = linkedlist_getElementCount(ptr);
     search_t *searches = (search_t *) calloc(count, sizeof(search_t));
 
-    for (int i = 0; ptr != NULL; i++) {
+    for (int i = 0; ptr != NULL; i++, ptr = ptr->next) {
         searches[i].app = app;
         searches[i].engine = ptr;
         searches[i].system = system;
@@ -48,7 +48,6 @@ searchresult_t *enginehandler_search(app_t *app, system_t *system, char *searchS
         searches[i].thread = NULL;
         searches[i].result = NULL;
         pthread_create(&searches[i].thread, NULL, executeThread, &searches[i]);
-        ptr = ptr->next;
     }
 
     for (int i = count - 1; i >= 0; i--) {
