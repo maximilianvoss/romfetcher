@@ -23,6 +23,7 @@
 #include "../../helper/regex.h"
 #include "../urlhandling.h"
 #include "../../helper/path.h"
+#include "../enginehandler.h"
 
 #define URL_TEMPLATE "https://romsmode.com/roms/%system%/%page%?name=%query%"
 
@@ -87,6 +88,10 @@ void romsmode_download(void *app, searchresult_t *item, void (*callback)(void *a
     callback(app);
 }
 
+char *romsmode_shortname() {
+    return "MOD";
+}
+
 static void removeFastTag(char *link) {
     char *ptr = link;
     while (strcmp(ptr, "?fast")) {
@@ -128,7 +133,7 @@ static searchresult_t *fetchingResultItems(app_t *app, system_t *system, searchr
     regexMatches_t *ptr = matches;
 
     while (ptr != NULL) {
-        searchresult_t *item = result_newItem(system, app->engine.active);
+        searchresult_t *item = result_newItem(system, enginehandler_findEngine(app, romsmode_shortname()));
         item->system = system;
         result_setUrl(item, ptr->groups[0]);
 

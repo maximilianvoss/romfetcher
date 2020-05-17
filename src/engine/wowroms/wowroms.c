@@ -24,6 +24,7 @@
 #include "../../helper/regex.h"
 #include "../urlhandling.h"
 #include "../../helper/path.h"
+#include "../enginehandler.h"
 
 #define URL_TEMPLATE "https://wowroms.com/en/roms/list/%system%?search=%query%&page=%page%"
 #define URL_PREFIX "https://wowroms.com"
@@ -125,6 +126,10 @@ void wowroms_download(void *app, searchresult_t *item, void (*callback)(void *ap
     callback(app);
 }
 
+char *wowroms_shortname() {
+    return "WOW";
+}
+
 static char *fetchHiddenField(char *response, char *fieldname) {
     char *regexStringTmpl = "<input type=\"hidden\" name=\"%fieldname%\" value=\"([^\"]+)\" />";
     char *regexString = str_replace(regexStringTmpl, "%fieldname%", fieldname);
@@ -182,7 +187,7 @@ static searchresult_t *fetchingResultItems(app_t *app, system_t *system, searchr
     regexMatches_t *ptr = matches;
 
     while (ptr != NULL) {
-        searchresult_t *item = result_newItem(system, app->engine.active);
+        searchresult_t *item = result_newItem(system, enginehandler_findEngine(app, wowroms_shortname()));
         item->system = system;
 
         char *title = str_htmlDecode(ptr->groups[0]);

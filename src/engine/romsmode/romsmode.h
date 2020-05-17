@@ -23,4 +23,6 @@ searchresult_t *romsmode_search(void *app, system_t *system, char *searchString)
 
 void romsmode_download(void *app, searchresult_t *item, void (*callback)(void *app));
 
+char *romsmode_shortname();
+
 #endif

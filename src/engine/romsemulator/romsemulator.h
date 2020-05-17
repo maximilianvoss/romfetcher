@@ -23,4 +23,6 @@ searchresult_t *romsemulator_search(void *app, system_t *system, char *searchStr
 
 void romsemulator_download(void *app, searchresult_t *item, void (*callback)(void *app));
 
+char *romsemulator_shortname();
+
 #endif

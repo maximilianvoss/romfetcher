@@ -17,6 +17,11 @@
 #include "engines.h"
 #include "../helper/utils.h"
 #include "../engine/enginehandler.h"
+#include "../engine/romsmania/romsmania.h"
+#include "../engine/romsemulator/romsemulator.h"
+#include "../engine/romsdownload/romsdownload.h"
+#include "../engine/wowroms/wowroms.h"
+#include "../engine/romsmode/romsmode.h"
 
 static void addEngine(sqlite3 *db, char *name, char *fullname, int active);
 
@@ -53,7 +58,7 @@ void database_enginesStore(sqlite3 *db, engine_t *engines) {
     }
 
     while (engines != NULL) {
-        addEngine(db, engines->name, engines->fullname, engines->active);
+        addEngine(db, engines->shortname(), engines->fullname, engines->active);
         engines = engines->next;
     }
 }
@@ -82,11 +87,11 @@ void database_enginesDestroy(engine_t *engines) {
 }
 
 static void addDefaultEngines(sqlite3 *db) {
-    addEngine(db, "RCC", "https://www.romsmania.cc", 1);
-    addEngine(db, "MOD", "https://www.romsmode.com", 1);
-    addEngine(db, "WOW", "https://www.wowroms.com", 1);
-    addEngine(db, "RDC", "https://www.roms-download.com", 1);
-    addEngine(db, "REN", "https://www.romsemulator.net", 1);
+    addEngine(db, romsmania_shortname(), "https://www.romsmania.cc", 1);
+    addEngine(db, romsmode_shortname(), "https://www.romsmode.com", 1);
+    addEngine(db, wowroms_shortname(), "https://www.wowroms.com", 1);
+    addEngine(db, romsdownload_shortname(), "https://www.roms-download.com", 1);
+    addEngine(db, romsemulator_shortname(), "https://www.romsemulator.net", 1);
 }
 
 static void addEngine(sqlite3 *db, char *name, char *fullname, int active) {

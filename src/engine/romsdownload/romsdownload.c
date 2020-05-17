@@ -23,6 +23,7 @@
 #include "../urlhandling.h"
 #include "../../helper/regex.h"
 #include "../../helper/path.h"
+#include "../enginehandler.h"
 
 #define URL_TEMPLATE "https://roms-download.com/ajax.php?m=roms_j"
 #define DATA_TEMPLATE "sort=file_name%24ASC&page=%page%&search=%query%&rom_concole=%system%"
@@ -78,6 +79,10 @@ void romsdownload_download(void *app, searchresult_t *item, void (*callback)(voi
     callback(app);
 }
 
+char *romsdownload_shortname() {
+    return "RDC";
+}
+
 static char *fetchDownloadLink(char *response) {
     char *regexString = "<a href=\"([^\"]+)\" rel=\"nofollow\" itemprop=\"downloadUrl\">";
 
@@ -97,7 +102,7 @@ static searchresult_t *fetchingResultItems(app_t *app, system_t *system, searchr
     regexMatches_t *ptr = matches;
 
     while (ptr != NULL) {
-        searchresult_t *item = result_newItem(system, app->engine.active);
+        searchresult_t *item = result_newItem(system, enginehandler_findEngine(app, romsdownload_shortname()));
         item->system = system;
 
         char *url = str_concat(URL_PREFIX, ptr->groups[0]);

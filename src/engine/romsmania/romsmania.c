@@ -23,6 +23,7 @@
 #include "../urlhandling.h"
 #include "../../helper/regex.h"
 #include "../../helper/path.h"
+#include "../enginehandler.h"
 
 #define URL_TEMPLATE "https://romsmania.cc/roms/%system%/search?name=%query%&genre=&region=&orderBy=name&orderAsc=1&page=%page%"
 
@@ -83,6 +84,10 @@ void romsmania_download(void *app, searchresult_t *item, void (*callback)(void *
     callback(app);
 }
 
+char *romsmania_shortname() {
+    return "RCC";
+}
+
 static char *fetchDownloadLink(char *response) {
     char *regexString = "<a class=\"wait__link\" href=\"([^\"]+)\">";
 
@@ -114,7 +119,7 @@ static searchresult_t *fetchingResultItems(app_t *app, system_t *system, searchr
     regexMatches_t *ptr = matches;
 
     while (ptr != NULL) {
-        searchresult_t *item = result_newItem(system, app->engine.active);
+        searchresult_t *item = result_newItem(system, enginehandler_findEngine(app, romsmania_shortname()));
         item->system = system;
         result_setUrl(item, ptr->groups[0]);
 

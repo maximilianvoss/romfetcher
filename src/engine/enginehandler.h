@@ -25,4 +25,6 @@ void enginehandler_download(app_t *app, searchresult_t *item, void (*callback)(v
 
 void enginehandler_doMapping(engine_t *engines);
 
+engine_t *enginehandler_findEngine(app_t *app, char *name);
+
 #endif

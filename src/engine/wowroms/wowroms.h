@@ -23,4 +23,6 @@ searchresult_t *wowroms_search(void *app, system_t *system, char *searchString);
 
 void wowroms_download(void *app, searchresult_t *item, void (*callback)(void *app));
 
+char *wowroms_shortname();
+
 #endif

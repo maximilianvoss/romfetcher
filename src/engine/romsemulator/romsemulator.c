@@ -23,6 +23,7 @@
 #include "../urlhandling.h"
 #include "../../helper/regex.h"
 #include "../../helper/path.h"
+#include "../enginehandler.h"
 
 #define URL_TEMPLATE "https://romsemulator.net/roms/%system%/page/%page%/?s=%query%"
 
@@ -99,6 +100,10 @@ void romsemulator_download(void *app, searchresult_t *item, void (*callback)(voi
     callback(app);
 }
 
+char *romsemulator_shortname() {
+    return "REN";
+}
+
 static char *fetchHiddenField(char *response, char *fieldname, int variant) {
     char *regexStringTmpl;
     if (variant == 0) {
@@ -137,7 +142,7 @@ static searchresult_t *fetchingResultItems(app_t *app, system_t *system, searchr
     regexMatches_t *ptr = matches;
 
     while (ptr != NULL) {
-        searchresult_t *item = result_newItem(system, app->engine.active);
+        searchresult_t *item = result_newItem(system, enginehandler_findEngine(app, romsemulator_shortname()));
         item->system = system;
         result_setUrl(item, ptr->groups[0]);
 

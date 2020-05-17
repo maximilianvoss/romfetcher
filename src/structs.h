@@ -91,6 +91,8 @@ typedef struct engine_s {
     searchresult_t *(*search)(void *app, system_t *system, char *searchString);
 
     void (*download)(void *app, searchresult_t *item, void (*callback)(void *app));
+
+    char *(*shortname)(void);
 } engine_t;
 
 typedef struct {
