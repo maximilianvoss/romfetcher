@@ -53,11 +53,9 @@ searchresult_t *enginehandler_search(app_t *app, system_t *system, char *searchS
 
     for (int i = count - 1; i >= 0; i--) {
         pthread_join(searches[i].thread, NULL);
-    }
-
-    for (int i = 0; i < count; i++) {
         result = linkedlist_appendElement(result, searches[i].result);
     }
+
     return linkedlist_sort(result);
 }
 
