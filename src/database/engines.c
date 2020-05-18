@@ -22,6 +22,7 @@
 #include "../engine/romsdownload/romsdownload.h"
 #include "../engine/wowroms/wowroms.h"
 #include "../engine/romsmode/romsmode.h"
+#include "../engine/romhustler/romhustler.h"
 
 static void addEngine(sqlite3 *db, char *name, char *fullname, int active);
 
@@ -92,6 +93,7 @@ static void addDefaultEngines(sqlite3 *db) {
     addEngine(db, wowroms_shortname(), "https://www.wowroms.com", 1);
     addEngine(db, romsdownload_shortname(), "https://www.roms-download.com", 1);
     addEngine(db, romsemulator_shortname(), "https://www.romsemulator.net", 1);
+    addEngine(db, romhustler_shortname(), "https://romhustler.org", 1);
 }
 
 static void addEngine(sqlite3 *db, char *name, char *fullname, int active) {

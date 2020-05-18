@@ -45,13 +45,12 @@ searchresult_t *romsmania_search(void *app, system_t *system, char *searchString
             break;
         }
 
-        resultCount = linkedlist_getElementCount(resultList);
-
         char *response = curlling_fetchURL(url);
         resultList = fetchingResultItems(app, system, resultList, response);
         free(response);
         free(url);
 
+        resultCount = linkedlist_getElementCount(resultList);
         page++;
     } while (resultCount != linkedlist_getElementCount(resultList));
 

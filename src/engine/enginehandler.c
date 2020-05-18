@@ -21,6 +21,7 @@
 #include "wowroms/wowroms.h"
 #include "romsdownload/romsdownload.h"
 #include "romsemulator/romsemulator.h"
+#include "romhustler/romhustler.h"
 
 static void *executeThread(void *searchPtr);
 
@@ -84,6 +85,10 @@ void enginehandler_doMapping(engine_t *ptr) {
             ptr->search = &romsemulator_search;
             ptr->download = &romsemulator_download;
             ptr->shortname = &romsemulator_shortname;
+        } else if (!strcmp(ptr->name, romhustler_shortname())) {
+            ptr->search = &romhustler_search;
+            ptr->download = &romhustler_download;
+            ptr->shortname = &romhustler_shortname;
         } else {
             SDL_Log("Mapping was not found for %s(%s)\n", ptr->fullname, ptr->name);
         }

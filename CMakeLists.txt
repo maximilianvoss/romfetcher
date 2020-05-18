@@ -49,6 +49,10 @@ set(SOURCES
         src/engine/enginehandler.h
         src/engine/results.c
         src/engine/results.h
+        src/engine/romhustler/mapping.c
+        src/engine/romhustler/mapping.h
+        src/engine/romhustler/romhustler.c
+        src/engine/romhustler/romhustler.h
         src/engine/romsdownload/mapping.c
         src/engine/romsdownload/mapping.h
         src/engine/romsdownload/romsdownload.c

@@ -51,7 +51,6 @@ searchresult_t *romsdownload_search(void *app, system_t *system, char *searchStr
         free(data);
 
         resultCount = linkedlist_getElementCount(resultList);
-
         page++;
     } while (resultCount != linkedlist_getElementCount(resultList) && resultCount % 20 == 0);
 

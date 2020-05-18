@@ -46,13 +46,12 @@ searchresult_t *romsemulator_search(void *app, system_t *system, char *searchStr
             break;
         }
 
-        resultCount = linkedlist_getElementCount(resultList);
-
         char *response = curlling_fetchURL(url);
         resultList = fetchingResultItems(app, system, resultList, response);
         free(response);
         free(url);
 
+        resultCount = linkedlist_getElementCount(resultList);
         page++;
     } while (resultCount != linkedlist_getElementCount(resultList) && resultCount % 10 == 0);
 
