@@ -102,7 +102,6 @@ static searchresult_t *fetchingResultItems(app_t *app, system_t *system, searchr
 
     while (ptr != NULL) {
         searchresult_t *item = result_newItem(system, enginehandler_findEngine(app, romsdownload_shortname()));
-        item->system = system;
 
         char *url = str_concat(URL_PREFIX, ptr->groups[0]);
         result_setUrl(item, url);

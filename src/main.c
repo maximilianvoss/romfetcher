@@ -45,6 +45,8 @@ int main() {
 
     ui_init(&app);
 
+    strcpy(app.search.searchText, "SUPER");
+
     uint8_t quit = 0;
     while (!quit) {
         quit = inputhandler_processInputs(&app);

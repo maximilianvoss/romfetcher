@@ -37,6 +37,8 @@ set(SOURCES
         src/config/init.h
         src/database/config.c
         src/database/config.h
+        src/database/enginecache.c
+        src/database/enginecache.h
         src/database/engines.c
         src/database/engines.h
         src/database/init.c
@@ -47,6 +49,10 @@ set(SOURCES
         src/engine/curlling.h
         src/engine/enginehandler.c
         src/engine/enginehandler.h
+        src/engine/progameroms/mapping.c
+        src/engine/progameroms/mapping.h
+        src/engine/progameroms/progameroms.c
+        src/engine/progameroms/progameroms.h
         src/engine/results.c
         src/engine/results.h
         src/engine/romhustler/mapping.c

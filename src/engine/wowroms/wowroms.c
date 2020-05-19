@@ -187,7 +187,6 @@ static searchresult_t *fetchingResultItems(app_t *app, system_t *system, searchr
 
     while (ptr != NULL) {
         searchresult_t *item = result_newItem(system, enginehandler_findEngine(app, wowroms_shortname()));
-        item->system = system;
 
         char *title = str_htmlDecode(ptr->groups[0]);
         result_setTitle(item, title);

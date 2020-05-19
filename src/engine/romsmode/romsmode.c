@@ -133,7 +133,6 @@ static searchresult_t *fetchingResultItems(app_t *app, system_t *system, searchr
 
     while (ptr != NULL) {
         searchresult_t *item = result_newItem(system, enginehandler_findEngine(app, romsmode_shortname()));
-        item->system = system;
         result_setUrl(item, ptr->groups[0]);
 
         char *title = str_htmlDecode(ptr->groups[1]);

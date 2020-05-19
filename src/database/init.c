@@ -21,6 +21,7 @@
 #include "config.h"
 #include "../helper/path.h"
 #include "engines.h"
+#include "enginecache.h"
 
 static void initTables(sqlite3 *db);
 
@@ -32,12 +33,15 @@ static csafestring_t *buildDBPath();
 
 void database_init(app_t *app) {
     csafestring_t *dbPath = buildDBPath();
-    if (sqlite3_open(dbPath->data, &app->database.db) != SQLITE_OK) {
+    if (sqlite3_open_v2(dbPath->data, &app->database.db,
+                        SQLITE_OPEN_FULLMUTEX | SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL) != SQLITE_OK) {
+//    if (sqlite3_open(dbPath->data, &app->database.db) != SQLITE_OK) {
         printf("Could not initialize database %s: %s\n", dbPath->data, sqlite3_errmsg(app->database.db));
         sqlite3_close(app->database.db);
         safe_destroy(dbPath);
         exit(1);
     }
+
     safe_destroy(dbPath);
     initTables(app->database.db);
 }
@@ -68,6 +72,14 @@ static void initTables(sqlite3 *db) {
 
     if (!doesTableExist(db, "engines")) {
         database_enginesInitTable(db);
+    }
+
+    if (!doesTableExist(db, "enginecache")) {
+        enginecache_init(db);
+    }
+
+    if (!doesTableExist(db, "enginecachestate")) {
+        enginecache_initstate(db);
     }
 }
 

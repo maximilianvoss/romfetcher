@@ -21,6 +21,9 @@ void *linkedlist_appendElement(void *list, void *element) {
     if (ptr == NULL) {
         return element;
     }
+    if (element == NULL) {
+        return ptr;
+    }
     while (ptr->next != NULL) {
         ptr = ptr->next;
     }
