@@ -45,6 +45,10 @@ set(SOURCES
         src/database/init.h
         src/database/sytems.c
         src/database/sytems.h
+        src/engine/freeroms/freeroms.c
+        src/engine/freeroms/freeroms.h
+        src/engine/freeroms/mapping.c
+        src/engine/freeroms/mapping.h
         src/engine/curlling.c
         src/engine/curlling.h
         src/engine/enginehandler.c

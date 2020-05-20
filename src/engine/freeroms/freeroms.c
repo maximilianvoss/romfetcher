@@ -16,7 +16,7 @@
 
 #include <pthread.h>
 #include <csafestring.h>
-#include "progameroms.h"
+#include "freeroms.h"
 #include "../../database/enginecache.h"
 #include "../urlhandling.h"
 #include "mapping.h"
@@ -26,14 +26,17 @@
 #include "../../helper/utils.h"
 #include "../../helper/path.h"
 
-#define URL_TEMPLATE_NUM "https://progameroms.com/%system%/Numbers/Numbers.html"
-#define URL_TEMPLATE_CHAR "https://progameroms.com/%system%/%query%/%query%_section.html"
+#define URL_TEMPLATE_NUM "https://www.freeroms.com/%system%_roms_NUM.htm"
+#define URL_TEMPLATE_CHAR "https://www.freeroms.com/%system%_roms_%query%.htm"
+#define URL_TEMPLATE_DOWNLOAD "https://www.freeroms.com/dl_roms/rom_download_tr.php?system=%system%&game_id=%id%"
 
 static void fillCache(app_t *app, system_t *system);
 
 static void *executeThread(void *ptr);
 
 static void extractLink(app_t *app, system_t *system, char *response);
+
+static char *generateDownloadLink(system_t *system, char *id);
 
 struct s_download_filter {
     char start;
@@ -42,30 +45,32 @@ struct s_download_filter {
     system_t *system;
 };
 
-searchresult_t *progameroms_search(void *app, system_t *system, char *searchString) {
-    if (!enginecache_isCacheValid(app, progameroms_shortname(), system)) {
-        enginecache_clear(app, progameroms_shortname(), system);
+searchresult_t *freeroms_search(void *app, system_t *system, char *searchString) {
+    if (!enginecache_isCacheValid(app, freeroms_shortname(), system)) {
+        enginecache_clear(app, freeroms_shortname(), system);
         fillCache(app, system);
-        enginecache_updateTimestamp(app, progameroms_shortname(), system);
+        enginecache_updateTimestamp(app, freeroms_shortname(), system);
     }
-    return enginecache_getSearchResults(app, enginehandler_findEngine(app, progameroms_shortname()),
+    return enginecache_getSearchResults(app, enginehandler_findEngine(app, freeroms_shortname()),
                                         system, searchString);
 }
 
-void progameroms_download(void *app, searchresult_t *item, void (*callback)(void *app)) {
+void freeroms_download(void *app, searchresult_t *item, void (*callback)(void *app)) {
     if (item == NULL) {
         return;
     }
-    char *filename = file_name(item->url);
+
+    char *filename = str_concat(item->title, ".zip");
     csafestring_t *downloadPath = path_downloadTarget(item->system, filename);
 
     curlling_downloadURL(app, item->url, downloadPath->data);
+    free(filename);
     safe_destroy(downloadPath);
     callback(app);
 }
 
-char *progameroms_shortname() {
-    return "PRO";
+char *freeroms_shortname() {
+    return "FRE";
 }
 
 
@@ -101,7 +106,7 @@ static void *executeThread(void *ptr) {
         char *url;
         char *response;
         if (chr == '@') {
-            url = urlhandling_substitudeVariables(URL_TEMPLATE_NUM, filter->system, &progameroms_deviceMapping, "", 0);
+            url = urlhandling_substitudeVariables(URL_TEMPLATE_NUM, filter->system, &freeroms_deviceMapping, "", 0);
             if (url == NULL) {
                 break;
             }
@@ -110,7 +115,7 @@ static void *executeThread(void *ptr) {
         } else {
             char str[2] = {0, 0};
             str[0] = chr;
-            url = urlhandling_substitudeVariables(URL_TEMPLATE_CHAR, filter->system, &progameroms_deviceMapping, str,
+            url = urlhandling_substitudeVariables(URL_TEMPLATE_CHAR, filter->system, &freeroms_deviceMapping, str,
                                                   0);
             if (url == NULL) {
                 break;
@@ -126,14 +131,35 @@ static void *executeThread(void *ptr) {
 }
 
 static void extractLink(app_t *app, system_t *system, char *response) {
-    char *regexString = "<a href=\"([^\"]+.rar)\" target=\"_blank\">([^<]+)</a>";
+    char *regexString = "<span itemprop=\"name\">([^<]+)[^\']+\'\\/vote.php\\?game_id=([^\']+)";
 
     regexMatches_t *matches = regex_getMatches(response, regexString, 2);
     regexMatches_t *ptr = matches;
 
     while (ptr != NULL) {
-        enginecache_addEntry(app, progameroms_shortname(), system, ptr->groups[1], ptr->groups[0]);
+        enginecache_addEntry(app, freeroms_shortname(), system, ptr->groups[0],
+                             generateDownloadLink(system, ptr->groups[1]));
         ptr = ptr->next;
     }
     regex_destroyMatches(matches);
+}
+
+
+static char *generateDownloadLink(system_t *system, char *id) {
+    char *systemStr = freeroms_deviceMapping(system);
+    if (systemStr == NULL) {
+        fprintf(stderr, "Found no mapping for system: %s\n", system->fullname);
+        return NULL;
+    }
+
+    char *result;
+    char *tmp;
+
+    result = str_replace(URL_TEMPLATE_DOWNLOAD, "%id%", id);
+
+    tmp = result;
+    result = str_replace(tmp, "%system%", systemStr);
+    free(tmp);
+
+    return result;
 }
