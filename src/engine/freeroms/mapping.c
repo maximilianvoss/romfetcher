@@ -21,73 +21,73 @@ char *freeroms_deviceMapping(system_t *system) {
     if (!strcmp(system->name, "3do")) {
 //         deviceString = "3do";
     } else if (!strcmp(system->name, "amiga")) {
-//        deviceString = "agmia-500";
+        deviceString = "amiga";
     } else if (!strcmp(system->name, "atari2600")) {
-        deviceString = "atari2600";
+        deviceString = "atari";
     } else if (!strcmp(system->name, "atari7800")) {
-//        deviceString = "atari-7800";
+        deviceString = "atari";
     } else if (!strcmp(system->name, "atarijaguar")) {
-//        deviceString = "atari-jaguar";
+        deviceString = "atari_jaguar";
     } else if (!strcmp(system->name, "atarilynx")) {
-//        deviceString = "atari-lynx";
+        deviceString = "atari_lynx";
     } else if (!strcmp(system->name, "atarist")) {
 //        deviceString = "atari-st";
     } else if (!strcmp(system->name, "c64")) {
 //        deviceString = "commodore-64";
     } else if (!strcmp(system->name, "dreamcast")) {
-        deviceString = "segadreamcast";
+        deviceString = "sega_dreamcast";
     } else if (!strcmp(system->name, "fba")) {
 //        deviceString = "Final Burn Alpha";
     } else if (!strcmp(system->name, "fds")) {
 //        deviceString = "nintendo";
     } else if (!strcmp(system->name, "gamegear")) {
-//        deviceString = "game-gear";
+        deviceString = "game_gear";
     } else if (!strcmp(system->name, "gb")) {
         deviceString = "gameboy_color";
     } else if (!strcmp(system->name, "gba")) {
-        deviceString = "gameboyadvanced";
+        deviceString = "gba";
     } else if (!strcmp(system->name, "gbc")) {
         deviceString = "gameboy_color";
     } else if (!strcmp(system->name, "gc")) {
-//        deviceString = "gamecube";
+        deviceString = "nintendo_gamecube";
     } else if (!strcmp(system->name, "genesis")) {
-        deviceString = "segagenesis";
+        deviceString = "sega_genesis_32x";
     } else if (!strcmp(system->name, "gw")) {
 //        deviceString = "Game and Watch";
     } else if (!strcmp(system->name, "love")) {
 //        deviceString = "LÖVE";
     } else if (!strcmp(system->name, "mame")) {
-//        deviceString = "mame-037b11";
+        deviceString = "mame";
     } else if (!strcmp(system->name, "mastersystem")) {
-//        deviceString = "sega-master-system";
+        deviceString = "sega_master_system";
     } else if (!strcmp(system->name, "megadrive")) {
-        deviceString = "segagenesis";
+        deviceString = "sega_genesis_32x";
     } else if (!strcmp(system->name, "msx")) {
 //        deviceString = "msx-computer";
     } else if (!strcmp(system->name, "n64")) {
-//        deviceString = "nintendo-64";
+        deviceString = "n64";
     } else if (!strcmp(system->name, "nds")) {
-//        deviceString = "nintendo-ds";
+        deviceString = "nds";
     } else if (!strcmp(system->name, "neogeo")) {
-//        deviceString = "neo-geo";
+        deviceString = "neogeo";
     } else if (!strcmp(system->name, "nes")) {
-        deviceString = "nintendo";
+        deviceString = "nes";
     } else if (!strcmp(system->name, "ngp")) {
-//        deviceString = "neo-geo-pocket";
+        deviceString = "neogeo_pocket";
     } else if (!strcmp(system->name, "ngpc")) {
-//        deviceString = "neo-geo-pocket-color";
+        deviceString = "neogeo_pocket";
     } else if (!strcmp(system->name, "pc")) {
 //        deviceString = "PC (x86)";
     } else if (!strcmp(system->name, "pcengine")) {
-//        deviceString = "turbografx-16";
+        deviceString = "tg16";
     } else if (!strcmp(system->name, "pcfx")) {
 //        deviceString = "PC-FX";
     } else if (!strcmp(system->name, "ps2")) {
 //        deviceString = "playstation-2";
     } else if (!strcmp(system->name, "psp")) {
-//        deviceString = "playstation-portable";
+        deviceString = "psp";
     } else if (!strcmp(system->name, "psx")) {
-//        deviceString = "playstation";
+        deviceString = "psx";
     } else if (!strcmp(system->name, "saturn")) {
 //        deviceString = "Sega Saturn";
     } else if (!strcmp(system->name, "scummvm")) {
@@ -95,11 +95,11 @@ char *freeroms_deviceMapping(system_t *system) {
     } else if (!strcmp(system->name, "sega32x")) {
 //        deviceString = "sega-32x";
     } else if (!strcmp(system->name, "segacd")) {
-        deviceString = "segagenesis";
+        deviceString = "genesis";
     } else if (!strcmp(system->name, "sg-1000")) {
 //        deviceString = "sega-sg1000";
     } else if (!strcmp(system->name, "snes")) {
-        deviceString = "supernintendo";
+        deviceString = "snes";
     } else if (!strcmp(system->name, "vectrex")) {
 //        deviceString = "gce-vectrex";
     } else if (!strcmp(system->name, "videopac")) {
@@ -111,9 +111,9 @@ char *freeroms_deviceMapping(system_t *system) {
     } else if (!strcmp(system->name, "wiiu")) {
 //        deviceString = "Nintendo Wii U";
     } else if (!strcmp(system->name, "wonderswan")) {
-//        deviceString = "wonderswan";
+        deviceString = "wonderswan";
     } else if (!strcmp(system->name, "wonderswancolor")) {
-//        deviceString = "Wonderswan Color";
+//        deviceString = "wonderswan";
     } else if (!strcmp(system->name, "zxspectrum")) {
 //        deviceString = "zx-spectrum";
     }
