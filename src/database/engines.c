@@ -90,13 +90,13 @@ void database_enginesDestroy(engine_t *engines) {
 }
 
 static void addDefaultEngines(sqlite3 *db) {
-    addEngine(db, romsmania_shortname(), "https://www.romsmania.cc", 1);
-    addEngine(db, romsmode_shortname(), "https://www.romsmode.com", 1);
+    addEngine(db, romsmania_shortname(), "https://www.romsmania.cc", 0);
+    addEngine(db, romsmode_shortname(), "https://www.romsmode.com", 0);
     addEngine(db, wowroms_shortname(), "https://www.wowroms.com", 1);
-    addEngine(db, romsdownload_shortname(), "https://www.roms-download.com", 1);
-    addEngine(db, romsemulator_shortname(), "https://www.romsemulator.net", 1);
+    addEngine(db, romsdownload_shortname(), "https://www.roms-download.com", 0);
+    addEngine(db, romsemulator_shortname(), "https://www.romsemulator.net", 0);
     addEngine(db, romhustler_shortname(), "https://romhustler.org", 1);
-    addEngine(db, progameroms_shortname(), "https://progameroms.com", 1);
+    addEngine(db, progameroms_shortname(), "https://progameroms.com", 0);
     addEngine(db, freeroms_shortname(), "https://freeroms.com", 1);
 }
 
