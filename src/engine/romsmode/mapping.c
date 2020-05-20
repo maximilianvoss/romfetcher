@@ -22,7 +22,7 @@ char *romsmode_deviceMapping(system_t *system) {
     if (!strcmp(system->name, "3do")) {
 //         deviceString = "3do";
     } else if (!strcmp(system->name, "amiga")) {
-        deviceString = "agmia-500";
+        deviceString = "amiga-500";
     } else if (!strcmp(system->name, "atari2600")) {
         deviceString = "atari-2600";
     } else if (!strcmp(system->name, "atari7800")) {

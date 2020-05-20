@@ -22,7 +22,7 @@ char *wowroms_deviceMapping(system_t *system) {
     if (!strcmp(system->name, "3do")) {
 //         deviceString = "3do";
     } else if (!strcmp(system->name, "amiga")) {
-        deviceString = "agmia";
+        deviceString = "amiga";
     } else if (!strcmp(system->name, "atari2600")) {
         deviceString = "atari%2B2600";
     } else if (!strcmp(system->name, "atari7800")) {
