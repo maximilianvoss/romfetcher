@@ -26,6 +26,7 @@
 #include "../../helper/utils.h"
 #include "../../helper/path.h"
 
+#define THREADCOUNT 5
 #define URL_TEMPLATE_NUM "https://www.freeroms.com/%system%_roms_NUM.htm"
 #define URL_TEMPLATE_CHAR "https://www.freeroms.com/%system%_roms_%query%.htm"
 #define URL_TEMPLATE_DOWNLOAD "https://www.freeroms.com/dl_roms/rom_download_tr.php?system=%system%&game_id=%id%"
@@ -73,27 +74,23 @@ char *freeroms_shortname() {
     return "FRE";
 }
 
-
 static void fillCache(app_t *app, system_t *system) {
-    pthread_t thread[3];
-    struct s_download_filter filter[3];
-    filter[0].start = '@';
-    filter[0].end = 'I';
-    filter[0].app = app;
-    filter[0].system = system;
-    filter[1].start = 'J';
-    filter[1].end = 'S';
-    filter[1].app = app;
-    filter[1].system = system;
-    filter[2].start = 'T';
-    filter[2].end = 'Z';
-    filter[2].app = app;
-    filter[2].system = system;
+    pthread_t thread[THREADCOUNT];
+    struct s_download_filter filter[THREADCOUNT];
 
-    for (int i = 0; i < 3; i++) {
+    char chunks = ('Z' - '@') / THREADCOUNT;
+    for (int i = 0; i < THREADCOUNT; i++) {
+        filter[i].start = (char) '@' + i * chunks;
+        filter[i].end = (char) '@' + (i + 1) * chunks - 1;
+        filter[i].app = app;
+        filter[i].system = system;
+    }
+    filter[THREADCOUNT - 1].end = 'Z';
+
+    for (int i = 0; i < THREADCOUNT; i++) {
         pthread_create(&thread[i], NULL, executeThread, &filter[i]);
     }
-    for (int i = 2; i >= 0; i--) {
+    for (int i = THREADCOUNT - 1; i >= 0; i--) {
         pthread_join(thread[i], NULL);
     }
 }
