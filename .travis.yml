@@ -1,0 +1,7 @@
+language: c
+
+compiler:
+  - gcc
+
+script:
+  - cmake -G "Unix Makefiles" && make && make test
