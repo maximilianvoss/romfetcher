@@ -79,7 +79,7 @@ char *freeroms_deviceMapping(system_t *system) {
     } else if (!strcmp(system->name, "pc")) {
 //        deviceString = "PC (x86)";
     } else if (!strcmp(system->name, "pcengine")) {
-        deviceString = "tg16";
+//        deviceString = "tg16";
     } else if (!strcmp(system->name, "pcfx")) {
 //        deviceString = "PC-FX";
     } else if (!strcmp(system->name, "ps2")) {
@@ -95,7 +95,7 @@ char *freeroms_deviceMapping(system_t *system) {
     } else if (!strcmp(system->name, "sega32x")) {
 //        deviceString = "sega-32x";
     } else if (!strcmp(system->name, "segacd")) {
-        deviceString = "genesis";
+//        deviceString = "genesis";
     } else if (!strcmp(system->name, "sg-1000")) {
 //        deviceString = "sega-sg1000";
     } else if (!strcmp(system->name, "snes")) {

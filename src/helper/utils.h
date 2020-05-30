@@ -17,11 +17,15 @@
 #ifndef HELPER_UTILS_H
 #define HELPER_UTILS_H
 
+#include <stdlib.h>
+
 #define FREENOTNULL(x) if (x != NULL) free (x)
 
 char *str_replace(char *orig, char *rep, char *with);
 
 char *file_name(char *path);
+
+uint8_t file_exists(char *path);
 
 char *str_urlDecode(const char *string);
 

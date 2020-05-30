@@ -17,8 +17,8 @@
 #include "utils.h"
 #include "entities.h"
 #include <string.h>
-#include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
 
 static int ishex(int x);
 
@@ -141,6 +141,10 @@ char *str_quoteDecode(char *string) {
         strIn++;
     }
     return returnStr;
+}
+
+uint8_t file_exists(char *path) {
+    return (access(path, F_OK) != -1) ? 1 : 0;
 }
 
 static int ishex(int x) {

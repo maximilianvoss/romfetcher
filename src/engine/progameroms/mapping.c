@@ -35,7 +35,7 @@ char *progameroms_deviceMapping(system_t *system) {
     } else if (!strcmp(system->name, "c64")) {
 //        deviceString = "commodore-64";
     } else if (!strcmp(system->name, "dreamcast")) {
-        deviceString = "segadreamcast";
+//        deviceString = "segadreamcast";
     } else if (!strcmp(system->name, "fba")) {
 //        deviceString = "Final Burn Alpha";
     } else if (!strcmp(system->name, "fds")) {

@@ -17,6 +17,7 @@
 #include <csafestring.h>
 #include "enginecache.h"
 #include "../engine/results.h"
+#include "../helper/utils.h"
 
 static void deleteTimestamp(app_t *app, char *engine, system_t *system);
 
@@ -27,6 +28,14 @@ void enginecache_init(sqlite3 *db) {
 
     char *query = "CREATE TABLE enginecache (engine TEXT, system TEXT, title TEXT, link TEXT)";
     int rc = sqlite3_exec(db, query, 0, 0, &err_msg);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to create table\n");
+        fprintf(stderr, "SQL error: %s\n", err_msg);
+        sqlite3_free(err_msg);
+    }
+
+    query = "CREATE INDEX enginecache_idx ON enginecache (engine, title)";
+    rc = sqlite3_exec(db, query, 0, 0, &err_msg);
     if (rc != SQLITE_OK) {
         fprintf(stderr, "Failed to create table\n");
         fprintf(stderr, "SQL error: %s\n", err_msg);
@@ -141,6 +150,7 @@ searchresult_t *enginecache_getSearchResults(app_t *app, engine_t *engine, syste
     char *query = "SELECT title, link FROM enginecache WHERE engine=@engine AND system=@system AND UPPER(title) LIKE @searchString";
 
     sqlite3_stmt *stmt;
+    char *tmp;
     int rc = sqlite3_prepare_v2(app->database.db, query, -1, &stmt, 0);
     if (rc == SQLITE_OK) {
         int idx;
@@ -150,14 +160,14 @@ searchresult_t *enginecache_getSearchResults(app_t *app, engine_t *engine, syste
         idx = sqlite3_bind_parameter_index(stmt, "@system");
         sqlite3_bind_text(stmt, idx, system->name, strlen(system->name), NULL);
 
-        char *tmp = (char *) calloc(strlen(searchString) + 3, sizeof(char));
+        tmp = (char *) calloc(strlen(searchString) + 3, sizeof(char));
         tmp[0] = '%';
         strcpy(&tmp[1], searchString);
         tmp[strlen(tmp)] = '%';
 
         idx = sqlite3_bind_parameter_index(stmt, "@searchString");
         sqlite3_bind_text(stmt, idx, tmp, strlen(tmp), NULL);
-        free(tmp);
+
     } else {
         fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(app->database.db));
     }
@@ -180,6 +190,7 @@ searchresult_t *enginecache_getSearchResults(app_t *app, engine_t *engine, syste
 
     sqlite3_clear_bindings(stmt);
     sqlite3_finalize(stmt);
+    FREENOTNULL(tmp);
     return resultList;
 }
 

@@ -14,26 +14,20 @@
  * limitations under the License.
  */
 
-#ifndef HELPER_LINKEDLIST_H
-#define HELPER_LINKEDLIST_H
+#ifndef TEST_ENGINES_H
+#define TEST_ENGINES_H
 
-#include <stdlib.h>
+#include "../src/structs.h"
 
-typedef struct {
-    void *prev;
-    void *next;
-    char *name;
-    int active;
-} linkedlist_t;
+engine_t *romsmania;
+engine_t *romsmode;
+engine_t *wowroms;
+engine_t *romsdownload;
+engine_t *romsemulator;
+engine_t *romhustler;
+engine_t *progameroms;
+engine_t *freeroms;
 
-void *linkedlist_appendElement(void *list, void *element);
-
-void linkedlist_freeList(void *list, void (*callback)(void *));
-
-uint32_t linkedlist_getElementCount(void *list);
-
-void *linkedlist_findElementByName(void *ptr, char *name);
-
-void *linkedlist_sort(void *ptr);
+void testengines_init();
 
 #endif

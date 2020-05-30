@@ -33,8 +33,6 @@ static searchresult_t *fetchingResultItems(app_t *app, system_t *system, searchr
 
 static char *fetchId(char *response);
 
-static char *fetchFilename(char *response);
-
 static char *fetchDownloadLink(char *response);
 
 searchresult_t *romhustler_search(void *app, system_t *system, char *searchString) {
@@ -67,7 +65,6 @@ void romhustler_download(void *app, searchresult_t *item, void (*callback)(void 
     }
     char *detailPageResponse = curlling_fetchURL(item->url);
     char *id = fetchId(detailPageResponse);
-    char *filename = fetchFilename(detailPageResponse);
 
     csafestring_t *linkUrl = safe_create(URL_DOWNLOAD_LINK);
     safe_strcat(linkUrl, id);
@@ -75,13 +72,15 @@ void romhustler_download(void *app, searchresult_t *item, void (*callback)(void 
 
     char *downloadLink = fetchDownloadLink(linkJsonResponse);
     char *decodedDownloadLink = str_quoteDecode(downloadLink);
+    char *filename = file_name(decodedDownloadLink);
+    char *filenameDecoded = str_urlDecode(filename);
 
-    csafestring_t *downloadPath = path_downloadTarget(item->system, filename);
+    csafestring_t *downloadPath = path_downloadTarget(item->system, filenameDecoded);
     curlling_downloadURL(app, decodedDownloadLink, downloadPath->data);
 
     free(linkJsonResponse);
     free(id);
-    free(filename);
+    free(filenameDecoded);
     free(downloadLink);
     free(decodedDownloadLink);
     free(detailPageResponse);
@@ -129,18 +128,6 @@ static char *fetchId(char *response) {
     char *id = regex_cpyGroupText(matches, 0);
     regex_destroyMatches(matches);
     return id;
-}
-
-static char *fetchFilename(char *response) {
-    char *regexString = "data-filename=\"([^\"]+)\"";
-
-    regexMatches_t *matches = regex_getMatches(response, regexString, 1);
-    if (matches == NULL) {
-        return NULL;
-    }
-    char *filename = regex_cpyGroupText(matches, 0);
-    regex_destroyMatches(matches);
-    return filename;
 }
 
 static char *fetchDownloadLink(char *response) {

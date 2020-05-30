@@ -35,7 +35,6 @@ void database_init(app_t *app) {
     csafestring_t *dbPath = buildDBPath();
     if (sqlite3_open_v2(dbPath->data, &app->database.db,
                         SQLITE_OPEN_FULLMUTEX | SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL) != SQLITE_OK) {
-//    if (sqlite3_open(dbPath->data, &app->database.db) != SQLITE_OK) {
         printf("Could not initialize database %s: %s\n", dbPath->data, sqlite3_errmsg(app->database.db));
         sqlite3_close(app->database.db);
         safe_destroy(dbPath);
