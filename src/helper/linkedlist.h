@@ -18,6 +18,7 @@
 #define HELPER_LINKEDLIST_H
 
 #include <stdint.h>
+#include <stdlib.h>
 
 typedef struct {
     void *prev;
