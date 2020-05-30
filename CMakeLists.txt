@@ -52,10 +52,6 @@ set(SOURCES
         src/engine/curlling.h
         src/engine/enginehandler.c
         src/engine/enginehandler.h
-        src/engine/progameroms/mapping.c
-        src/engine/progameroms/mapping.h
-        src/engine/progameroms/progameroms.c
-        src/engine/progameroms/progameroms.h
         src/engine/results.c
         src/engine/results.h
         src/engine/romhustler/mapping.c
@@ -157,8 +153,6 @@ set(SOURCES
 set(TEST_SOURCES
         test/engine_freeroms.c
         test/engine_freeroms.h
-        test/engine_progameroms.c
-        test/engine_progameroms.h
         test/engine_romhustler.c
         test/engine_romhustler.h
         test/engines.c
@@ -258,57 +252,6 @@ add_test(NAME test_engine_freeroms_wonderswan COMMAND romfetcher_testcases test_
 add_test(NAME test_engine_freeroms_wonderswancolor COMMAND romfetcher_testcases test_engine_freeroms_wonderswancolor)
 add_test(NAME test_engine_freeroms_zxspectrum COMMAND romfetcher_testcases test_engine_freeroms_zxspectrum)
 add_test(NAME test_engine_freeroms_download COMMAND romfetcher_testcases test_engine_freeroms_download)
-
-add_test(NAME test_engine_progameroms_3do COMMAND romfetcher_testcases test_engine_progameroms_3do)
-add_test(NAME test_engine_progameroms_amiga COMMAND romfetcher_testcases test_engine_progameroms_amiga)
-add_test(NAME test_engine_progameroms_atari2600 COMMAND romfetcher_testcases test_engine_progameroms_atari2600)
-add_test(NAME test_engine_progameroms_atari7800 COMMAND romfetcher_testcases test_engine_progameroms_atari7800)
-add_test(NAME test_engine_progameroms_atarijaguar COMMAND romfetcher_testcases test_engine_progameroms_atarijaguar)
-add_test(NAME test_engine_progameroms_atarilynx COMMAND romfetcher_testcases test_engine_progameroms_atarilynx)
-add_test(NAME test_engine_progameroms_atarist COMMAND romfetcher_testcases test_engine_progameroms_atarist)
-add_test(NAME test_engine_progameroms_c64 COMMAND romfetcher_testcases test_engine_progameroms_c64)
-add_test(NAME test_engine_progameroms_dreamcast COMMAND romfetcher_testcases test_engine_progameroms_dreamcast)
-add_test(NAME test_engine_progameroms_fba COMMAND romfetcher_testcases test_engine_progameroms_fba)
-add_test(NAME test_engine_progameroms_fds COMMAND romfetcher_testcases test_engine_progameroms_fds)
-add_test(NAME test_engine_progameroms_gamegear COMMAND romfetcher_testcases test_engine_progameroms_gamegear)
-add_test(NAME test_engine_progameroms_gb COMMAND romfetcher_testcases test_engine_progameroms_gb)
-add_test(NAME test_engine_progameroms_gba COMMAND romfetcher_testcases test_engine_progameroms_gba)
-add_test(NAME test_engine_progameroms_gbc COMMAND romfetcher_testcases test_engine_progameroms_gbc)
-add_test(NAME test_engine_progameroms_gc COMMAND romfetcher_testcases test_engine_progameroms_gc)
-add_test(NAME test_engine_progameroms_genesis COMMAND romfetcher_testcases test_engine_progameroms_genesis)
-add_test(NAME test_engine_progameroms_gw COMMAND romfetcher_testcases test_engine_progameroms_gw)
-add_test(NAME test_engine_progameroms_love COMMAND romfetcher_testcases test_engine_progameroms_love)
-add_test(NAME test_engine_progameroms_mame COMMAND romfetcher_testcases test_engine_progameroms_mame)
-add_test(NAME test_engine_progameroms_mastersystem COMMAND romfetcher_testcases test_engine_progameroms_mastersystem)
-add_test(NAME test_engine_progameroms_megadrive COMMAND romfetcher_testcases test_engine_progameroms_megadrive)
-add_test(NAME test_engine_progameroms_msx COMMAND romfetcher_testcases test_engine_progameroms_msx)
-add_test(NAME test_engine_progameroms_n64 COMMAND romfetcher_testcases test_engine_progameroms_n64)
-add_test(NAME test_engine_progameroms_nds COMMAND romfetcher_testcases test_engine_progameroms_nds)
-add_test(NAME test_engine_progameroms_neogeo COMMAND romfetcher_testcases test_engine_progameroms_neogeo)
-add_test(NAME test_engine_progameroms_nes COMMAND romfetcher_testcases test_engine_progameroms_nes)
-add_test(NAME test_engine_progameroms_ngp COMMAND romfetcher_testcases test_engine_progameroms_ngp)
-add_test(NAME test_engine_progameroms_ngpc COMMAND romfetcher_testcases test_engine_progameroms_ngpc)
-add_test(NAME test_engine_progameroms_pc COMMAND romfetcher_testcases test_engine_progameroms_pc)
-add_test(NAME test_engine_progameroms_pcengine COMMAND romfetcher_testcases test_engine_progameroms_pcengine)
-add_test(NAME test_engine_progameroms_pcfx COMMAND romfetcher_testcases test_engine_progameroms_pcfx)
-add_test(NAME test_engine_progameroms_ps2 COMMAND romfetcher_testcases test_engine_progameroms_ps2)
-add_test(NAME test_engine_progameroms_psp COMMAND romfetcher_testcases test_engine_progameroms_psp)
-add_test(NAME test_engine_progameroms_psx COMMAND romfetcher_testcases test_engine_progameroms_psx)
-add_test(NAME test_engine_progameroms_saturn COMMAND romfetcher_testcases test_engine_progameroms_saturn)
-add_test(NAME test_engine_progameroms_scummvm COMMAND romfetcher_testcases test_engine_progameroms_scummvm)
-add_test(NAME test_engine_progameroms_sega32x COMMAND romfetcher_testcases test_engine_progameroms_sega32x)
-add_test(NAME test_engine_progameroms_segacd COMMAND romfetcher_testcases test_engine_progameroms_segacd)
-add_test(NAME test_engine_progameroms_sg1000 COMMAND romfetcher_testcases test_engine_progameroms_sg1000)
-add_test(NAME test_engine_progameroms_snes COMMAND romfetcher_testcases test_engine_progameroms_snes)
-add_test(NAME test_engine_progameroms_vectrex COMMAND romfetcher_testcases test_engine_progameroms_vectrex)
-add_test(NAME test_engine_progameroms_videopac COMMAND romfetcher_testcases test_engine_progameroms_videopac)
-add_test(NAME test_engine_progameroms_virtualboy COMMAND romfetcher_testcases test_engine_progameroms_virtualboy)
-add_test(NAME test_engine_progameroms_wii COMMAND romfetcher_testcases test_engine_progameroms_wii)
-add_test(NAME test_engine_progameroms_wiiu COMMAND romfetcher_testcases test_engine_progameroms_wiiu)
-add_test(NAME test_engine_progameroms_wonderswan COMMAND romfetcher_testcases test_engine_progameroms_wonderswan)
-add_test(NAME test_engine_progameroms_wonderswancolor COMMAND romfetcher_testcases test_engine_progameroms_wonderswancolor)
-add_test(NAME test_engine_progameroms_zxspectrum COMMAND romfetcher_testcases test_engine_progameroms_zxspectrum)
-add_test(NAME test_engine_progameroms_download COMMAND romfetcher_testcases test_engine_progameroms_download)
 
 add_test(NAME test_engine_romhustler_3do COMMAND romfetcher_testcases test_engine_romhustler_3do)
 add_test(NAME test_engine_romhustler_amiga COMMAND romfetcher_testcases test_engine_romhustler_amiga)

@@ -16,7 +16,6 @@
 
 #include "test.h"
 #include "engine_freeroms.h"
-#include "engine_progameroms.h"
 #include "engine_romhustler.h"
 #include "systems.h"
 #include "engines.h"
@@ -89,59 +88,6 @@ int main(int argc, char **argv) {
     TESTCALL("test_engine_freeroms_wonderswancolor", test_engine_freeroms_wonderswancolor, &app);
     TESTCALL("test_engine_freeroms_zxspectrum", test_engine_freeroms_zxspectrum, &app);
     TESTCALL("test_engine_freeroms_download", test_engine_freeroms_download, &app);
-
-    app.engine.all = progameroms;
-    app.engine.enabled = progameroms;
-    TESTCALL("test_engine_progameroms_3do", test_engine_progameroms_3do, &app);
-    TESTCALL("test_engine_progameroms_amiga", test_engine_progameroms_amiga, &app);
-    TESTCALL("test_engine_progameroms_atari2600", test_engine_progameroms_atari2600, &app);
-    TESTCALL("test_engine_progameroms_atari7800", test_engine_progameroms_atari7800, &app);
-    TESTCALL("test_engine_progameroms_atarijaguar", test_engine_progameroms_atarijaguar, &app);
-    TESTCALL("test_engine_progameroms_atarilynx", test_engine_progameroms_atarilynx, &app);
-    TESTCALL("test_engine_progameroms_atarist", test_engine_progameroms_atarist, &app);
-    TESTCALL("test_engine_progameroms_c64", test_engine_progameroms_c64, &app);
-    TESTCALL("test_engine_progameroms_dreamcast", test_engine_progameroms_dreamcast, &app);
-    TESTCALL("test_engine_progameroms_fba", test_engine_progameroms_fba, &app);
-    TESTCALL("test_engine_progameroms_fds", test_engine_progameroms_fds, &app);
-    TESTCALL("test_engine_progameroms_gamegear", test_engine_progameroms_gamegear, &app);
-    TESTCALL("test_engine_progameroms_gb", test_engine_progameroms_gb, &app);
-    TESTCALL("test_engine_progameroms_gba", test_engine_progameroms_gba, &app);
-    TESTCALL("test_engine_progameroms_gbc", test_engine_progameroms_gbc, &app);
-    TESTCALL("test_engine_progameroms_gc", test_engine_progameroms_gc, &app);
-    TESTCALL("test_engine_progameroms_genesis", test_engine_progameroms_genesis, &app);
-    TESTCALL("test_engine_progameroms_gw", test_engine_progameroms_gw, &app);
-    TESTCALL("test_engine_progameroms_love", test_engine_progameroms_love, &app);
-    TESTCALL("test_engine_progameroms_mame", test_engine_progameroms_mame, &app);
-    TESTCALL("test_engine_progameroms_mastersystem", test_engine_progameroms_mastersystem, &app);
-    TESTCALL("test_engine_progameroms_megadrive", test_engine_progameroms_megadrive, &app);
-    TESTCALL("test_engine_progameroms_msx", test_engine_progameroms_msx, &app);
-    TESTCALL("test_engine_progameroms_n64", test_engine_progameroms_n64, &app);
-    TESTCALL("test_engine_progameroms_nds", test_engine_progameroms_nds, &app);
-    TESTCALL("test_engine_progameroms_neogeo", test_engine_progameroms_neogeo, &app);
-    TESTCALL("test_engine_progameroms_nes", test_engine_progameroms_nes, &app);
-    TESTCALL("test_engine_progameroms_ngp", test_engine_progameroms_ngp, &app);
-    TESTCALL("test_engine_progameroms_ngpc", test_engine_progameroms_ngpc, &app);
-    TESTCALL("test_engine_progameroms_pc", test_engine_progameroms_pc, &app);
-    TESTCALL("test_engine_progameroms_pcengine", test_engine_progameroms_pcengine, &app);
-    TESTCALL("test_engine_progameroms_pcfx", test_engine_progameroms_pcfx, &app);
-    TESTCALL("test_engine_progameroms_ps2", test_engine_progameroms_ps2, &app);
-    TESTCALL("test_engine_progameroms_psp", test_engine_progameroms_psp, &app);
-    TESTCALL("test_engine_progameroms_psx", test_engine_progameroms_psx, &app);
-    TESTCALL("test_engine_progameroms_saturn", test_engine_progameroms_saturn, &app);
-    TESTCALL("test_engine_progameroms_scummvm", test_engine_progameroms_scummvm, &app);
-    TESTCALL("test_engine_progameroms_sega32x", test_engine_progameroms_sega32x, &app);
-    TESTCALL("test_engine_progameroms_segacd", test_engine_progameroms_segacd, &app);
-    TESTCALL("test_engine_progameroms_sg1000", test_engine_progameroms_sg1000, &app);
-    TESTCALL("test_engine_progameroms_snes", test_engine_progameroms_snes, &app);
-    TESTCALL("test_engine_progameroms_vectrex", test_engine_progameroms_vectrex, &app);
-    TESTCALL("test_engine_progameroms_videopac", test_engine_progameroms_videopac, &app);
-    TESTCALL("test_engine_progameroms_virtualboy", test_engine_progameroms_virtualboy, &app);
-    TESTCALL("test_engine_progameroms_wii", test_engine_progameroms_wii, &app);
-    TESTCALL("test_engine_progameroms_wiiu", test_engine_progameroms_wiiu, &app);
-    TESTCALL("test_engine_progameroms_wonderswan", test_engine_progameroms_wonderswan, &app);
-    TESTCALL("test_engine_progameroms_wonderswancolor", test_engine_progameroms_wonderswancolor, &app);
-    TESTCALL("test_engine_progameroms_zxspectrum", test_engine_progameroms_zxspectrum, &app);
-    TESTCALL("test_engine_progameroms_download", test_engine_progameroms_download, &app);
 
     app.engine.all = romhustler;
     app.engine.enabled = romhustler;

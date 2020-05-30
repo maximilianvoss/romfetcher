@@ -25,7 +25,6 @@ engine_t *wowroms;
 engine_t *romsdownload;
 engine_t *romsemulator;
 engine_t *romhustler;
-engine_t *progameroms;
 engine_t *freeroms;
 
 void testengines_init();

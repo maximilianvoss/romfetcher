@@ -22,7 +22,6 @@
 #include "../src/engine/romsdownload/romsdownload.h"
 #include "../src/engine/romsemulator/romsemulator.h"
 #include "../src/engine/romhustler/romhustler.h"
-#include "../src/engine/progameroms/progameroms.h"
 #include "../src/engine/freeroms/freeroms.h"
 
 static engine_t *createEngine(char *name, char *fullname) {
@@ -43,6 +42,5 @@ void testengines_init() {
     romsdownload = createEngine(romsdownload_shortname(), "https://www.roms-download.com");
     romsemulator = createEngine(romsemulator_shortname(), "https://www.romsemulator.net");
     romhustler = createEngine(romhustler_shortname(), "https://romhustler.org");
-    progameroms = createEngine(progameroms_shortname(), "https://progameroms.com");
     freeroms = createEngine(freeroms_shortname(), "https://freeroms.com");
 }

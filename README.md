@@ -11,7 +11,6 @@ Following ROM databases are supported:
 * https://roms-download.com/
 * https://romsemulator.net/
 * https://romhustler.org/
-* https://progameroms.com/
 
 Please note: This software is using the mentioned sites to download ROMs. You are responsible to have valid licenses
 to use the software. Rom Fetcher does not hold, provide, sell or distribute licenses.
