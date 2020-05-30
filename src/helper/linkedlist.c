@@ -15,6 +15,7 @@
  */
 
 #include "linkedlist.h"
+#include <string.h>
 
 void *linkedlist_appendElement(void *list, void *element) {
     linkedlist_t *ptr = list;
