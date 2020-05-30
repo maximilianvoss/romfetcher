@@ -17,12 +17,13 @@
 #ifndef STRUCTS_H
 #define STRUCTS_H
 
-#include "enums.h"
-#include "helper/linkedlist.h"
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <curl/curl.h>
 #include <sqlite3.h>
+#include <stdint.h>
+#include "helper/linkedlist.h"
+#include "enums.h"
 
 typedef struct theme_s {
     struct theme_s *prev;
