@@ -150,7 +150,7 @@ searchresult_t *enginecache_getSearchResults(app_t *app, engine_t *engine, syste
     char *query = "SELECT title, link FROM enginecache WHERE engine=@engine AND system=@system AND UPPER(title) LIKE @searchString";
 
     sqlite3_stmt *stmt;
-    char *tmp;
+    char *tmp = NULL;
     int rc = sqlite3_prepare_v2(app->database.db, query, -1, &stmt, 0);
     if (rc == SQLITE_OK) {
         int idx;

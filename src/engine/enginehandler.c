@@ -47,7 +47,6 @@ searchresult_t *enginehandler_search(app_t *app, system_t *system, char *searchS
         searches[i].engine = ptr;
         searches[i].system = system;
         searches[i].searchString = searchString;
-        searches[i].thread = NULL;
         searches[i].result = NULL;
         pthread_create(&searches[i].thread, NULL, executeThread, &searches[i]);
     }

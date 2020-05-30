@@ -18,6 +18,7 @@
 #define HELPER_UTILS_H
 
 #include <stdlib.h>
+#include <stdint.h>
 
 #define FREENOTNULL(x) if (x != NULL) free (x)
 
