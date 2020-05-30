@@ -23,8 +23,6 @@
 #include "engines.h"
 #include "enginecache.h"
 
-static void initTables(sqlite3 *db);
-
 static uint8_t doesTableExist(sqlite3 *db, char *tableName);
 
 static void dropAllTables(sqlite3 *db);
@@ -42,7 +40,7 @@ void database_init(app_t *app) {
     }
 
     safe_destroy(dbPath);
-    initTables(app->database.db);
+    database_initTables(app->database.db);
 }
 
 void database_destroy(app_t *app) {
@@ -57,7 +55,7 @@ static csafestring_t *buildDBPath() {
     return path;
 }
 
-static void initTables(sqlite3 *db) {
+void database_initTables(sqlite3 *db) {
     if (!doesTableExist(db, "config")) {
         database_configInitTable(db);
     } else if (database_configCheckVersion(db)) {

@@ -34,7 +34,13 @@ int main(int argc, char **argv) {
     memset(&app, 0, sizeof(app_t));
 
     path_initRomfetchersHome();
-    database_init(&app);
+    if (sqlite3_open_v2("file::memory:", &app.database.db,
+                        SQLITE_OPEN_FULLMUTEX | SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL) != SQLITE_OK) {
+        printf("Could not initialize database in memory: %s\n", sqlite3_errmsg(app.database.db));
+        sqlite3_close(app.database.db);
+        exit(1);
+    }
+    database_initTables(app.database.db);
 
     app.engine.all = freeroms;
     app.engine.enabled = freeroms;

@@ -23,4 +23,6 @@ void database_init(app_t *app);
 
 void database_destroy(app_t *app);
 
+void database_initTables(sqlite3 *db);
+
 #endif
