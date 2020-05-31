@@ -165,15 +165,35 @@ set(TEST_SOURCES
         test/test.h
         )
 
-set(DEFAULT_THEME
-        resources/themes/default/FreeSans.ttf
-        resources/themes/default/checkbox_checked.png
-        resources/themes/default/checkbox_unchecked.png
-        resources/themes/default/selector.png
-        resources/themes/default/settings.png
-        resources/themes/default/wallpaper.jpg
-        resources/themes/default/theme.json
+set(THEME_SUPERMARIO
+        resources/themes/supermario/FreeSans.ttf
+        resources/themes/supermario/checkbox_checked.png
+        resources/themes/supermario/checkbox_unchecked.png
+        resources/themes/supermario/selector.png
+        resources/themes/supermario/settings.png
+        resources/themes/supermario/wallpaper.jpg
+        resources/themes/supermario/theme.json
         )
+
+set(THEME_PEACH
+        resources/themes/peach/FreeSans.ttf
+        resources/themes/peach/checkbox_checked.png
+        resources/themes/peach/checkbox_unchecked.png
+        resources/themes/peach/selector.png
+        resources/themes/peach/settings.png
+        resources/themes/peach/wallpaper.png
+        resources/themes/peach/theme.json
+        )
+
+set(THEME_BLACK
+        resources/themes/black/FreeSans.ttf
+        resources/themes/black/checkbox_checked.png
+        resources/themes/black/checkbox_unchecked.png
+        resources/themes/black/selector.png
+        resources/themes/black/settings.png
+        resources/themes/peach/theme.json
+        )
+
 
 set(SCRIPT_FILES
         "resources/ROM Fetcher.sh"
@@ -183,7 +203,9 @@ include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${SDL2TTF_IN
 add_executable(romfetcher src/main.c ${SOURCES})
 target_link_libraries(romfetcher csafestring json2map ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2TTF_LIBRARY} ${CURL_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} ${SQLite3_LIBRARIES} ${OPENSSL_LIBRARIES})
 install(TARGETS romfetcher DESTINATION bin)
-install(FILES ${DEFAULT_THEME} DESTINATION share/romfetcher/themes/default)
+install(FILES ${THEME_SUPERMARIO} DESTINATION share/romfetcher/themes/supermario)
+install(FILES ${THEME_PEACH} DESTINATION share/romfetcher/themes/peach)
+install(FILES ${THEME_BLACK} DESTINATION share/romfetcher/themes/black)
 install(FILES ${SCRIPT_FILES} DESTINATION /home/pi/RetroPie/retropiemenu)
 
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "ROM Fetcher for Emulationstation")

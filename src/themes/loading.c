@@ -225,6 +225,9 @@ static int mapToInt(void *map, char *key) {
 }
 
 static char *createFullQualifiedPath(char *path, char *file) {
+    if (file == NULL) {
+        return NULL;
+    }
     if (*file == '/') {
         return cloneString(file);
     }

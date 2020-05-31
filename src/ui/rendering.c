@@ -18,6 +18,9 @@
 #include <SDL_image.h>
 
 SDL_Texture *rendering_loadImage(app_t *app, char *filename) {
+    if (filename == NULL) {
+        return NULL;
+    }
     SDL_Texture *texture;
     SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "Loading %s", filename);
     texture = IMG_LoadTexture(app->sdlRenderer, filename);

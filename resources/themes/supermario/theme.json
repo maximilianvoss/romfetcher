@@ -1,0 +1,55 @@
+{
+  "name": "Super Mario",
+  "font": "FreeSans.ttf",
+  "colors": {
+    "background": [
+      0,
+      0,
+      0,
+      255
+    ],
+    "field": [
+      255,
+      255,
+      255,
+      150
+    ],
+    "fieldBackground": [
+      0,
+      0,
+      0,
+      150
+    ],
+    "fieldHighlight": [
+      0,
+      0,
+      255,
+      150
+    ],
+    "text": [
+      0,
+      0,
+      0,
+      255
+    ],
+    "textHighlight": [
+      0,
+      0,
+      255,
+      255
+    ],
+    "textInverted": [
+      255,
+      255,
+      255,
+      255
+    ]
+  },
+  "images": {
+    "background": "wallpaper.jpg",
+    "checkboxChecked": "checkbox_checked.png",
+    "checkboxUnchecked": "checkbox_unchecked.png",
+    "selectorIcon": "selector.png",
+    "settingsIcon": "settings.png"
+  }
+}
