@@ -24,7 +24,7 @@ static void renderWithCheckbox(app_t *app, int position, linkedlist_t *element, 
 
 static void renderWithOutCheckbox(app_t *app, int position, linkedlist_t *element, texture_t *texture);
 
-void uilist_render(app_t *app) {
+void uilist_renderDefault(app_t *app) {
     uilist_renderList(app, 50);
 }
 
@@ -41,13 +41,27 @@ void uilist_renderList(app_t *app, int offsetX) {
         return;
     }
 
-    for (int i = 0; i < deviceCountToDisplay / 2 - 1 && element->prev != NULL; i++) {
-        element = element->prev;
+    int i = 0;
+    while (i < deviceCountToDisplay / 2 - 1) {
+        if (app->list.filterActive) {
+            linkedlist_t *tmp = linkedlist_getPrevActive(element);
+            if (linkedlist_getPrevActive(tmp) == NULL) {
+                break;
+            }
+            element = tmp;
+        } else {
+            if (element->prev != NULL) {
+                element = element->prev;
+            }
+            if (element->prev == NULL) {
+                break;
+            }
+        }
+        i++;
     }
 
-    for (int position = offsetX;
-         position <= height - 80 && element != NULL; position += 35, element = element->next) {
-
+    int position = offsetX;
+    while (element != NULL && position <= height - 80) {
         rendering_loadText(app, &texture, element->name, app->fonts.medium, &app->themes.active->colors.text);
 
         SDL_Rect r2 = {48, position - 2, width - 96, 40};
@@ -63,6 +77,13 @@ void uilist_renderList(app_t *app, int offsetX) {
         } else {
             renderWithOutCheckbox(app, position, element, &texture);
         }
+
+        if (app->list.filterActive) {
+            element = linkedlist_getNextActive(element);
+        } else {
+            element = element->next;
+        }
+        position += 35;
     }
 }
 
@@ -79,14 +100,8 @@ static void renderWithCheckbox(app_t *app, int position, linkedlist_t *element, 
 
     SDL_Rect texture_rect = {60, position + 5, 25, 25};
 
-    uint8_t active;
-    if (app->list.multi) {
-        active = element->active;
-    } else {
-        active = (app->list.active == element);
-    }
     SDL_RenderCopy(app->sdlRenderer,
-                   (active == 1) ? app->textures.checkboxChecked : app->textures.checkboxUnchecked, NULL,
+                   element->active ? app->textures.checkboxChecked : app->textures.checkboxUnchecked, NULL,
                    &texture_rect);
 }
 

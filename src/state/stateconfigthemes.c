@@ -38,6 +38,7 @@ void stateconfigthemes_init(app_t *app) {
     app->list.all = (linkedlist_t *) app->themes.all;
     app->list.multi = 0;
     app->list.checkbox = 0;
+    app->list.filterActive = 0;
 }
 
 static void persistTheme(app_t *app) {

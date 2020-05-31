@@ -23,17 +23,35 @@
 #include "../urlhandling.h"
 #include "../../helper/regex.h"
 #include "../../helper/path.h"
-#include "../enginehandler.h"
 
+#define SHORTNAME "RDC"
 #define URL_TEMPLATE "https://roms-download.com/ajax.php?m=roms_j"
 #define DATA_TEMPLATE "sort=file_name%24ASC&page=%page%&search=%query%&rom_concole=%system%"
 #define URL_PREFIX "https://roms-download.com"
+
+static searchresult_t *search(void *app, system_t *system, char *searchString);
+
+static void download(void *app, searchresult_t *item, void (*callback)(void *app));
 
 static searchresult_t *fetchingResultItems(app_t *app, system_t *system, searchresult_t *resultList, char *response);
 
 static char *fetchDownloadLink(char *response);
 
-searchresult_t *romsdownload_search(void *app, system_t *system, char *searchString) {
+static engine_t *engine = NULL;
+
+engine_t *romsdownload_getEngine() {
+    if (engine == NULL) {
+        engine = calloc(1, sizeof(engine_t));
+        engine->search = search;
+        engine->download = download;
+        engine->name = SHORTNAME;
+        engine->active = 0;
+        engine->fullname = "https://www.roms-download.com";
+    }
+    return engine;
+}
+
+static searchresult_t *search(void *app, system_t *system, char *searchString) {
     uint32_t resultCount = 0;
     uint32_t page = 1;
 
@@ -57,7 +75,7 @@ searchresult_t *romsdownload_search(void *app, system_t *system, char *searchStr
     return resultList;
 }
 
-void romsdownload_download(void *app, searchresult_t *item, void (*callback)(void *app)) {
+static void download(void *app, searchresult_t *item, void (*callback)(void *app)) {
     if (item == NULL) {
         return;
     }
@@ -76,10 +94,6 @@ void romsdownload_download(void *app, searchresult_t *item, void (*callback)(voi
     safe_destroy(downloadPath);
 
     callback(app);
-}
-
-char *romsdownload_shortname() {
-    return "RDC";
 }
 
 static char *fetchDownloadLink(char *response) {
@@ -101,7 +115,7 @@ static searchresult_t *fetchingResultItems(app_t *app, system_t *system, searchr
     regexMatches_t *ptr = matches;
 
     while (ptr != NULL) {
-        searchresult_t *item = result_newItem(system, enginehandler_findEngine(app, romsdownload_shortname()));
+        searchresult_t *item = result_newItem(system, romsdownload_getEngine());
 
         char *url = str_concat(URL_PREFIX, ptr->groups[0]);
         result_setUrl(item, url);

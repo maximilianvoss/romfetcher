@@ -36,7 +36,12 @@
         return 1;
 
 #define ASSERTINT(EXPECTED, ACTUAL)\
-    printf("Expected: \t%d\nActual: \t%ld\n\n", EXPECTED, ACTUAL);\
+    printf("Expected: \t%d\nActual: \t%d\n\n", EXPECTED, ACTUAL);\
+    if (EXPECTED != ACTUAL)\
+        return 1;
+
+#define ASSERTLONG(EXPECTED, ACTUAL)\
+    printf("Expected: \t%ld\nActual: \t%ld\n\n", EXPECTED, ACTUAL);\
     if (EXPECTED != ACTUAL)\
         return 1;
 
@@ -56,6 +61,12 @@
     printf("Expects file to exist: %s\n", PATH);\
     if ( ! file_exists(PATH) ) {\
         printf("File: %s doesn't exist\n", PATH);\
+        return 1;\
+    }
+
+#define ASSERTPTRNOTEQUAL(VALUE1, VALUE2)\
+    if ( VALUE1 == VALUE2 ) {\
+        printf("Expected that %p is not %p\n", VALUE1, VALUE2);\
         return 1;\
     }
 

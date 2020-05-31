@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/maximilianvoss/romfetcher.svg?branch=master)](https://travis-ci.org/maximilianvoss/romfetcher)      
+  
+  
 # ROM Fetcher
 ROM Fetcher is a small utility which helps you to fetch ROMs from existing websites directly on your Retropie, Retrostone
 or whatever is based on Retropie/RetrOrangePie. The UI is built for Emulationstation and is easy to navigate

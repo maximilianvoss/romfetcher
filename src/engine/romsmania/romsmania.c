@@ -23,9 +23,13 @@
 #include "../urlhandling.h"
 #include "../../helper/regex.h"
 #include "../../helper/path.h"
-#include "../enginehandler.h"
 
+#define SHORTNAME "RCC"
 #define URL_TEMPLATE "https://romsmania.cc/roms/%system%/search?name=%query%&genre=&region=&orderBy=name&orderAsc=1&page=%page%"
+
+static searchresult_t *search(void *app, system_t *system, char *searchString);
+
+static void download(void *app, searchresult_t *item, void (*callback)(void *app));
 
 static searchresult_t *fetchingResultItems(app_t *app, system_t *system, searchresult_t *resultList, char *response);
 
@@ -33,7 +37,21 @@ static char *fetchDownloadPageLink(char *response);
 
 static char *fetchDownloadLink(char *response);
 
-searchresult_t *romsmania_search(void *app, system_t *system, char *searchString) {
+static engine_t *engine = NULL;
+
+engine_t *romsmania_getEngine() {
+    if (engine == NULL) {
+        engine = calloc(1, sizeof(engine_t));
+        engine->search = search;
+        engine->download = download;
+        engine->name = SHORTNAME;
+        engine->active = 0;
+        engine->fullname = "https://www.romsmania.cc";
+    }
+    return engine;
+}
+
+static searchresult_t *search(void *app, system_t *system, char *searchString) {
     uint32_t resultCount = 0;
     uint32_t page = 1;
     char *urlTemplate = URL_TEMPLATE;
@@ -57,7 +75,7 @@ searchresult_t *romsmania_search(void *app, system_t *system, char *searchString
     return resultList;
 }
 
-void romsmania_download(void *app, searchresult_t *item, void (*callback)(void *app)) {
+static void download(void *app, searchresult_t *item, void (*callback)(void *app)) {
     if (item == NULL) {
         return;
     }
@@ -81,10 +99,6 @@ void romsmania_download(void *app, searchresult_t *item, void (*callback)(void *
     safe_destroy(downloadPath);
 
     callback(app);
-}
-
-char *romsmania_shortname() {
-    return "RCC";
 }
 
 static char *fetchDownloadLink(char *response) {
@@ -118,7 +132,7 @@ static searchresult_t *fetchingResultItems(app_t *app, system_t *system, searchr
     regexMatches_t *ptr = matches;
 
     while (ptr != NULL) {
-        searchresult_t *item = result_newItem(system, enginehandler_findEngine(app, romsmania_shortname()));
+        searchresult_t *item = result_newItem(system, romsmania_getEngine());
         result_setUrl(item, ptr->groups[0]);
 
         char *title = str_htmlDecode(ptr->groups[1]);

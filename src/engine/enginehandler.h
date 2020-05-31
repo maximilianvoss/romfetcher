@@ -19,12 +19,12 @@
 
 #include "../structs.h"
 
+void enginehandler_init(app_t *app);
+
 searchresult_t *enginehandler_search(app_t *app, system_t *system, char *searchString);
 
 void enginehandler_download(app_t *app, searchresult_t *item, void (*callback)(void *app));
 
-void enginehandler_doMapping(engine_t *engines);
-
-engine_t *enginehandler_findEngine(app_t *app, char *name);
+void enginehandler_destroy(app_t *app);
 
 #endif

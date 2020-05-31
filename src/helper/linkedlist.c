@@ -17,19 +17,64 @@
 #include "linkedlist.h"
 #include <string.h>
 
-void *linkedlist_appendElement(void *list, void *element) {
+void *linkedlist_appendElement(void *list, void *elementVoid) {
     linkedlist_t *ptr = list;
-    if (ptr == NULL) {
-        return element;
-    }
+    linkedlist_t *element = elementVoid;
+
     if (element == NULL) {
         return ptr;
     }
+
+    if (ptr == NULL) {
+        return element;
+    }
+
     while (ptr->next != NULL) {
         ptr = ptr->next;
     }
     ptr->next = element;
-    ((linkedlist_t *) element)->prev = ptr;
+    element->prev = ptr;
+    element->next = NULL;
+    return list;
+}
+
+void *linkedList_removeElement(void *list, void *element, void (*callback)(void *)) {
+    linkedlist_t *ptr = element;
+    linkedlist_t *tmp;
+
+    if (ptr == NULL) {
+        return NULL;
+    }
+
+    if (ptr->prev == NULL) {
+        tmp = ptr->next;
+        if (callback != NULL) {
+            callback(ptr);
+        }
+        free(ptr);
+        if (tmp != NULL) {
+            tmp->prev = NULL;
+        }
+        return tmp;
+    }
+
+    if (ptr->next == NULL) {
+        tmp = ptr->prev;
+        if (callback != NULL) {
+            callback(ptr);
+        }
+        free(ptr);
+        tmp->next = NULL;
+        return list;
+    }
+
+    tmp = ptr;
+    ((linkedlist_t *) ptr->prev)->next = tmp->next;
+    ((linkedlist_t *) ptr->next)->prev = tmp->prev;
+    if (callback != NULL) {
+        callback(tmp);
+    }
+    free(tmp);
     return list;
 }
 
@@ -142,4 +187,67 @@ void *linkedlist_sort(void *ptr) {
         list = list->prev;
     }
     return list;
+}
+
+void *linkedlist_clone(void *ptr, size_t size, void (*callback)(void *)) {
+    if (ptr == NULL) {
+        return NULL;
+    }
+    linkedlist_t *list = ptr;
+    linkedlist_t *clone = NULL;
+
+    while (list != NULL) {
+        linkedlist_t *clonedElement = calloc(1, size);
+        memcpy(clonedElement, list, size);
+        clonedElement->next = NULL;
+        clonedElement->prev = NULL;
+        if (callback != NULL) {
+            callback(clone);
+        }
+        clone = linkedlist_appendElement(clone, clonedElement);
+        list = list->next;
+    }
+    return clone;
+}
+
+void *linkedlist_getNextActive(void *ptr) {
+    linkedlist_t *list = ptr;
+    if (list == NULL) {
+        return NULL;
+    }
+    list = list->next;
+    while (list != NULL) {
+        if (list->active) {
+            return list;
+        }
+        list = list->next;
+    }
+    return NULL;
+}
+
+void *linkedlist_getPrevActive(void *ptr) {
+    linkedlist_t *list = ptr;
+    if (list == NULL) {
+        return NULL;
+    }
+    list = list->prev;
+    while (list != NULL) {
+        if (list->active) {
+            return list;
+        }
+        list = list->prev;
+    }
+    return NULL;
+}
+
+
+void *linkedlist_getFirstActive(void *ptr) {
+    linkedlist_t *list = ptr;
+    while (list != NULL) {
+        if (list->active) {
+            return list;
+        }
+        list = list->next;
+    }
+    return NULL;
 }

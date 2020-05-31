@@ -19,6 +19,7 @@
 #include "engine_romhustler.h"
 #include "systems.h"
 #include "engines.h"
+#include "linkedlist.h"
 #include "../src/helper/path.h"
 #include "../src/database/init.h"
 
@@ -42,8 +43,20 @@ int main(int argc, char **argv) {
     }
     database_initTables(app.database.db);
 
+    TESTCALL("test_linkedList_deleteElement0", test_linkedList_deleteElement0, NULL);
+    TESTCALL("test_linkedList_deleteElement1", test_linkedList_deleteElement1, NULL);
+    TESTCALL("test_linkedList_deleteElement2", test_linkedList_deleteElement2, NULL);
+    TESTCALL("test_linkedList_deleteElement3", test_linkedList_deleteElement3, NULL);
+    TESTCALL("test_linkedList_deleteElement4", test_linkedList_deleteElement4, NULL);
+    TESTCALL("test_linkedList_sortElements", test_linkedList_sortElements, NULL);
+    TESTCALL("test_linkedList_findElementFound", test_linkedList_findElementFound, NULL);
+    TESTCALL("test_linkedList_findElementNotFound", test_linkedList_findElementNotFound, NULL);
+    TESTCALL("test_linkedList_getElementCountNull", test_linkedList_getElementCountNull, NULL);
+    TESTCALL("test_linkedList_getElementCountNotNull", test_linkedList_getElementCountNotNull, NULL);
+    TESTCALL("test_linkedList_cloneListNull", test_linkedList_cloneListNull, NULL);
+    TESTCALL("test_linkedList_cloneListNotNull", test_linkedList_cloneListNotNull, NULL);
+
     app.engine.all = freeroms;
-    app.engine.enabled = freeroms;
     TESTCALL("test_engine_freeroms_3do", test_engine_freeroms_3do, &app);
     TESTCALL("test_engine_freeroms_amiga", test_engine_freeroms_amiga, &app);
     TESTCALL("test_engine_freeroms_atari2600", test_engine_freeroms_atari2600, &app);
@@ -96,7 +109,6 @@ int main(int argc, char **argv) {
     TESTCALL("test_engine_freeroms_download", test_engine_freeroms_download, &app);
 
     app.engine.all = romhustler;
-    app.engine.enabled = romhustler;
     TESTCALL("test_engine_romhustler_3do", test_engine_romhustler_3do, &app);
     TESTCALL("test_engine_romhustler_amiga", test_engine_romhustler_amiga, &app);
     TESTCALL("test_engine_romhustler_atari2600", test_engine_romhustler_atari2600, &app);

@@ -17,11 +17,10 @@
 #include <csafestring.h>
 #include "init.h"
 #include "../config.h"
-#include "sytems.h"
 #include "config.h"
 #include "../helper/path.h"
-#include "engines.h"
 #include "enginecache.h"
+#include "linkedlist.h"
 
 static uint8_t doesTableExist(sqlite3 *db, char *tableName);
 
@@ -63,12 +62,12 @@ void database_initTables(sqlite3 *db) {
         database_configInitTable(db);
     }
 
-    if (!doesTableExist(db, "systems")) {
-        database_systemsInitTable(db);
+    if (!doesTableExist(db, DATABASE_TABLE_SYSTEMS)) {
+        databaselinkedlist_init(db, DATABASE_TABLE_SYSTEMS);
     }
 
-    if (!doesTableExist(db, "engines")) {
-        database_enginesInitTable(db);
+    if (!doesTableExist(db, DATABASE_TABLE_ENGINES)) {
+        databaselinkedlist_init(db, DATABASE_TABLE_ENGINES);
     }
 
     if (!doesTableExist(db, "enginecache")) {
@@ -82,7 +81,7 @@ void database_initTables(sqlite3 *db) {
 
 static void dropAllTables(sqlite3 *db) {
     char *err_msg = 0;
-    char *query = "DROP TABLE IF EXISTS systems; DROP TABLE IF EXISTS config";
+    char *query = "DROP TABLE IF EXISTS systems; DROP TABLE IF EXISTS config; DROP TABLE IF EXISTS enginecache; DROP TABLE IF EXISTS enginecachestate; DROP TABLE IF EXISTS engines";
 
     int rc = sqlite3_exec(db, query, 0, 0, &err_msg);
     if (rc != SQLITE_OK) {

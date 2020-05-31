@@ -20,6 +20,9 @@
 #define DATABASE_SCHEMA_VERSION 130
 #define DATABASE_SCHEMA_SUPPORTED_LEGACY_VERSION 130
 
+#define DATABASE_TABLE_ENGINES "engines"
+#define DATABASE_TABLE_SYSTEMS "systems"
+
 #define HOMEDIR_PATH ".romfetcher"
 #define DATABASE_FILE "romfetcher.db"
 #define ROM_BASE_DIR "RetroPie/roms"

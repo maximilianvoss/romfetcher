@@ -15,7 +15,6 @@
  */
 
 #include "engines.h"
-#include "../src/engine/enginehandler.h"
 #include "../src/engine/romsmania/romsmania.h"
 #include "../src/engine/romsmode/romsmode.h"
 #include "../src/engine/wowroms/wowroms.h"
@@ -24,23 +23,12 @@
 #include "../src/engine/romhustler/romhustler.h"
 #include "../src/engine/freeroms/freeroms.h"
 
-static engine_t *createEngine(char *name, char *fullname) {
-    engine_t *engine = (engine_t *) calloc(1, sizeof(engine_t));
-    engine->prev = NULL;
-    engine->next = NULL;
-    engine->active = 1;
-    engine->name = name;
-    engine->fullname = fullname;
-    enginehandler_doMapping(engine);
-    return engine;
-}
-
 void testengines_init() {
-    romsmania = createEngine(romsmania_shortname(), "https://www.romsmania.cc");
-    romsmode = createEngine(romsmode_shortname(), "https://www.romsmode.com");
-    wowroms = createEngine(wowroms_shortname(), "https://www.wowroms.com");
-    romsdownload = createEngine(romsdownload_shortname(), "https://www.roms-download.com");
-    romsemulator = createEngine(romsemulator_shortname(), "https://www.romsemulator.net");
-    romhustler = createEngine(romhustler_shortname(), "https://romhustler.org");
-    freeroms = createEngine(freeroms_shortname(), "https://freeroms.com");
+    romsmania = romsmania_getEngine();
+    romsmode = romsmode_getEngine();
+    wowroms = wowroms_getEngine();
+    romsdownload = romsdownload_getEngine();
+    romsemulator = romsemulator_getEngine();
+    romhustler = romhustler_getEngine();
+    freeroms = freeroms_getEngine();
 }

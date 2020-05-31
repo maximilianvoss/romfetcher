@@ -23,9 +23,13 @@
 #include "../urlhandling.h"
 #include "../../helper/regex.h"
 #include "../../helper/path.h"
-#include "../enginehandler.h"
 
+#define SHORTNAME "REN"
 #define URL_TEMPLATE "https://romsemulator.net/roms/%system%/page/%page%/?s=%query%"
+
+static searchresult_t *search(void *app, system_t *system, char *searchString);
+
+static void download(void *app, searchresult_t *item, void (*callback)(void *app));
 
 static searchresult_t *fetchingResultItems(app_t *app, system_t *system, searchresult_t *resultList, char *response);
 
@@ -33,7 +37,21 @@ static char *fetchDownloadPageLink(char *response);
 
 static char *fetchHiddenField(char *response, char *fieldname, int variant);
 
-searchresult_t *romsemulator_search(void *app, system_t *system, char *searchString) {
+static engine_t *engine = NULL;
+
+engine_t *romsemulator_getEngine() {
+    if (engine == NULL) {
+        engine = calloc(1, sizeof(engine_t));
+        engine->search = search;
+        engine->download = download;
+        engine->name = SHORTNAME;
+        engine->active = 0;
+        engine->fullname = "https://www.romsemulator.net";
+    }
+    return engine;
+}
+
+static searchresult_t *search(void *app, system_t *system, char *searchString) {
     uint32_t resultCount = 0;
     uint32_t page = 1;
     char *urlTemplate = URL_TEMPLATE;
@@ -58,7 +76,7 @@ searchresult_t *romsemulator_search(void *app, system_t *system, char *searchStr
     return resultList;
 }
 
-void romsemulator_download(void *app, searchresult_t *item, void (*callback)(void *app)) {
+static void download(void *app, searchresult_t *item, void (*callback)(void *app)) {
     if (item == NULL) {
         return;
     }
@@ -99,10 +117,6 @@ void romsemulator_download(void *app, searchresult_t *item, void (*callback)(voi
     callback(app);
 }
 
-char *romsemulator_shortname() {
-    return "REN";
-}
-
 static char *fetchHiddenField(char *response, char *fieldname, int variant) {
     char *regexStringTmpl;
     if (variant == 0) {
@@ -141,7 +155,7 @@ static searchresult_t *fetchingResultItems(app_t *app, system_t *system, searchr
     regexMatches_t *ptr = matches;
 
     while (ptr != NULL) {
-        searchresult_t *item = result_newItem(system, enginehandler_findEngine(app, romsemulator_shortname()));
+        searchresult_t *item = result_newItem(system, romsemulator_getEngine());
         result_setUrl(item, ptr->groups[0]);
 
         char *title = str_htmlDecode(ptr->groups[1]);

@@ -23,6 +23,7 @@ static void freeFields(void *ptr);
 searchresult_t *result_newItem(system_t *system, engine_t *engine) {
     searchresult_t *resultList = (searchresult_t *) calloc(1, sizeof(searchresult_t));
     resultList->title = NULL;
+    resultList->active = 1;
     resultList->url = NULL;
     resultList->engine = engine;
     resultList->system = system;

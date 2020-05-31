@@ -14,18 +14,13 @@
  * limitations under the License.
  */
 
-#ifndef DATABASE_ENGINES_H
-#define DATABASE_ENGINES_H
+#ifndef SYSTEM_SYSTEMHANDLER_H
+#define SYSTEM_SYSTEMHANDLER_H
 
-#include <sqlite3.h>
 #include "../structs.h"
 
-void database_enginesInitTable(sqlite3 *db);
+void systemhandler_init(app_t *app);
 
-engine_t *database_engineList(app_t *app, uint8_t active);
-
-void database_enginesStore(sqlite3 *db, engine_t *engines);
-
-void database_enginesDestroy(engine_t *engines);
+void systemhandler_destroy(app_t *app);
 
 #endif

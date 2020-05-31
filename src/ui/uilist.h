@@ -19,7 +19,7 @@
 
 #include "../structs.h"
 
-void uilist_render(app_t *app);
+void uilist_renderDefault(app_t *app);
 
 void uilist_renderList(app_t *app, int position);
 

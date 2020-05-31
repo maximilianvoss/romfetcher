@@ -24,10 +24,14 @@
 #include "../../helper/regex.h"
 #include "../urlhandling.h"
 #include "../../helper/path.h"
-#include "../enginehandler.h"
 
+#define SHORTNAME "WOW"
 #define URL_TEMPLATE "https://wowroms.com/en/roms/list/%system%?search=%query%&page=%page%"
 #define URL_PREFIX "https://wowroms.com"
+
+static searchresult_t *search(void *app, system_t *system, char *searchString);
+
+static void download(void *app, searchresult_t *item, void (*callback)(void *app));
 
 static searchresult_t *fetchingResultItems(app_t *app, system_t *system, searchresult_t *resultList, char *response);
 
@@ -39,7 +43,21 @@ static char *fetchHiddenField(char *text, char *fieldname);
 
 static char *fetchDownloadLink(char *response);
 
-searchresult_t *wowroms_search(void *app, system_t *system, char *searchString) {
+static engine_t *engine = NULL;
+
+engine_t *wowroms_getEngine() {
+    if (engine == NULL) {
+        engine = calloc(1, sizeof(engine_t));
+        engine->search = search;
+        engine->download = download;
+        engine->name = SHORTNAME;
+        engine->active = 1;
+        engine->fullname = "https://www.wowroms.com";
+    }
+    return engine;
+}
+
+static searchresult_t *search(void *app, system_t *system, char *searchString) {
     uint32_t resultCount = 0;
     uint32_t page = 1;
     char *urlTemplate = URL_TEMPLATE;
@@ -63,7 +81,7 @@ searchresult_t *wowroms_search(void *app, system_t *system, char *searchString) 
     return resultList;
 }
 
-void wowroms_download(void *app, searchresult_t *item, void (*callback)(void *app)) {
+static void download(void *app, searchresult_t *item, void (*callback)(void *app)) {
     if (item == NULL) {
         return;
     }
@@ -125,10 +143,6 @@ void wowroms_download(void *app, searchresult_t *item, void (*callback)(void *ap
     callback(app);
 }
 
-char *wowroms_shortname() {
-    return "WOW";
-}
-
 static char *fetchHiddenField(char *response, char *fieldname) {
     char *regexStringTmpl = "<input type=\"hidden\" name=\"%fieldname%\" value=\"([^\"]+)\" />";
     char *regexString = str_replace(regexStringTmpl, "%fieldname%", fieldname);
@@ -186,7 +200,7 @@ static searchresult_t *fetchingResultItems(app_t *app, system_t *system, searchr
     regexMatches_t *ptr = matches;
 
     while (ptr != NULL) {
-        searchresult_t *item = result_newItem(system, enginehandler_findEngine(app, wowroms_shortname()));
+        searchresult_t *item = result_newItem(system, wowroms_getEngine());
 
         char *title = str_htmlDecode(ptr->groups[0]);
         result_setTitle(item, title);

@@ -15,7 +15,8 @@
  */
 
 #include "stateconfigsystems.h"
-#include "../database/sytems.h"
+#include "../database/linkedlist.h"
+#include "../config.h"
 
 static void persistSystems(app_t *app);
 
@@ -38,18 +39,11 @@ void stateconfigsystems_init(app_t *app) {
         app->list.all = (linkedlist_t *) app->systems.all;
         app->list.multi = 1;
         app->list.checkbox = 1;
+        app->list.filterActive = 0;
     }
 }
 
 static void persistSystems(app_t *app) {
-    database_systemStore(app->database.db, app->systems.all);
-
-    database_systemsDestroy(app->systems.all);
-    database_systemsDestroy(app->systems.enabled);
-
-    app->systems.all = database_systemList(app, 0);
-    app->systems.enabled = database_systemList(app, 1);
-
-    app->systems.active = app->systems.enabled;
-    app->systems.cursor = app->systems.enabled;
+    databaselinkedlist_persist(app->database.db, DATABASE_TABLE_SYSTEMS, (linkedlist_t *) app->systems.all);
+    app->systems.active = linkedlist_getFirstActive(app->systems.all);
 }

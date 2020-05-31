@@ -22,14 +22,18 @@
 #include "mapping.h"
 #include "../curlling.h"
 #include "../../helper/regex.h"
-#include "../enginehandler.h"
 #include "../../helper/utils.h"
 #include "../../helper/path.h"
 
 #define THREADCOUNT 5
+#define SHORTNAME "FRE"
 #define URL_TEMPLATE_NUM "https://www.freeroms.com/%system%_roms_NUM.htm"
 #define URL_TEMPLATE_CHAR "https://www.freeroms.com/%system%_roms_%query%.htm"
 #define URL_TEMPLATE_DOWNLOAD "https://www.freeroms.com/dl_roms/rom_download_tr.php?system=%system%&game_id=%id%"
+
+static searchresult_t *search(void *app, system_t *system, char *searchString);
+
+static void download(void *app, searchresult_t *item, void (*callback)(void *app));
 
 static void fillCache(app_t *app, system_t *system);
 
@@ -46,17 +50,30 @@ struct s_download_filter {
     system_t *system;
 };
 
-searchresult_t *freeroms_search(void *app, system_t *system, char *searchString) {
-    if (!enginecache_isCacheValid(app, freeroms_shortname(), system)) {
-        enginecache_clear(app, freeroms_shortname(), system);
-        fillCache(app, system);
-        enginecache_updateTimestamp(app, freeroms_shortname(), system);
+static engine_t *engine = NULL;
+
+engine_t *freeroms_getEngine() {
+    if (engine == NULL) {
+        engine = calloc(1, sizeof(engine_t));
+        engine->search = search;
+        engine->download = download;
+        engine->name = SHORTNAME;
+        engine->active = 1;
+        engine->fullname = "https://freeroms.com";
     }
-    return enginecache_getSearchResults(app, enginehandler_findEngine(app, freeroms_shortname()),
-                                        system, searchString);
+    return engine;
 }
 
-void freeroms_download(void *app, searchresult_t *item, void (*callback)(void *app)) {
+static searchresult_t *search(void *app, system_t *system, char *searchString) {
+    if (!enginecache_isCacheValid(app, SHORTNAME, system)) {
+        enginecache_clear(app, SHORTNAME, system);
+        fillCache(app, system);
+        enginecache_updateTimestamp(app, SHORTNAME, system);
+    }
+    return enginecache_getSearchResults(app, freeroms_getEngine(), system, searchString);
+}
+
+static void download(void *app, searchresult_t *item, void (*callback)(void *app)) {
     if (item == NULL) {
         return;
     }
@@ -68,10 +85,6 @@ void freeroms_download(void *app, searchresult_t *item, void (*callback)(void *a
     free(filename);
     safe_destroy(downloadPath);
     callback(app);
-}
-
-char *freeroms_shortname() {
-    return "FRE";
 }
 
 static void fillCache(app_t *app, system_t *system) {
@@ -134,8 +147,7 @@ static void extractLink(app_t *app, system_t *system, char *response) {
     regexMatches_t *ptr = matches;
 
     while (ptr != NULL) {
-        enginecache_addEntry(app, freeroms_shortname(), system, ptr->groups[0],
-                             generateDownloadLink(system, ptr->groups[1]));
+        enginecache_addEntry(app, SHORTNAME, system, ptr->groups[0], generateDownloadLink(system, ptr->groups[1]));
         ptr = ptr->next;
     }
     regex_destroyMatches(matches);

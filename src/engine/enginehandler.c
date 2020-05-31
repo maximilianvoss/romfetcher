@@ -23,6 +23,8 @@
 #include "romsemulator/romsemulator.h"
 #include "romhustler/romhustler.h"
 #include "freeroms/freeroms.h"
+#include "../database/linkedlist.h"
+#include "../config.h"
 
 static void *executeThread(void *searchPtr);
 
@@ -35,23 +37,41 @@ typedef struct {
     searchresult_t *result;
 } search_t;
 
+void enginehandler_init(app_t *app) {
+    app->engine.all = NULL;
+    app->engine.all = linkedlist_appendElement(app->engine.all, freeroms_getEngine());
+    app->engine.all = linkedlist_appendElement(app->engine.all, romhustler_getEngine());
+    app->engine.all = linkedlist_appendElement(app->engine.all, romsdownload_getEngine());
+    app->engine.all = linkedlist_appendElement(app->engine.all, romsemulator_getEngine());
+    app->engine.all = linkedlist_appendElement(app->engine.all, romsmania_getEngine());
+    app->engine.all = linkedlist_appendElement(app->engine.all, romsmode_getEngine());
+    app->engine.all = linkedlist_appendElement(app->engine.all, wowroms_getEngine());
+
+    databaselinkedlist_loadActivities(app->database.db, DATABASE_TABLE_ENGINES, (linkedlist_t *) app->engine.all);
+}
+
 searchresult_t *enginehandler_search(app_t *app, system_t *system, char *searchString) {
     searchresult_t *result = NULL;
-    engine_t *ptr = app->engine.enabled;
+    engine_t *ptr = app->engine.all;
 
     uint32_t count = linkedlist_getElementCount(ptr);
     search_t *searches = (search_t *) calloc(count, sizeof(search_t));
 
-    for (int i = 0; ptr != NULL; i++, ptr = ptr->next) {
-        searches[i].app = app;
-        searches[i].engine = ptr;
-        searches[i].system = system;
-        searches[i].searchString = searchString;
-        searches[i].result = NULL;
-        pthread_create(&searches[i].thread, NULL, executeThread, &searches[i]);
+    int activeNumber = 0;
+    while (ptr != NULL) {
+        if (ptr->active) {
+            searches[activeNumber].app = app;
+            searches[activeNumber].engine = ptr;
+            searches[activeNumber].system = system;
+            searches[activeNumber].searchString = searchString;
+            searches[activeNumber].result = NULL;
+            pthread_create(&searches[activeNumber].thread, NULL, executeThread, &searches[activeNumber]);
+            activeNumber++;
+        }
+        ptr = ptr->next;
     }
 
-    for (int i = 0; i < count; i++) {
+    for (int i = 0; i < activeNumber; i++) {
         pthread_join(searches[i].thread, NULL);
         result = linkedlist_appendElement(result, searches[i].result);
     }
@@ -63,53 +83,8 @@ void enginehandler_download(app_t *app, searchresult_t *item, void (*callback)(v
     ((engine_t *) item->engine)->download(app, item, callback);
 }
 
-void enginehandler_doMapping(engine_t *ptr) {
-    while (ptr != NULL) {
-        if (!strcmp(ptr->name, romsmania_shortname())) {
-            ptr->search = &romsmania_search;
-            ptr->download = &romsmania_download;
-            ptr->shortname = &romsmania_shortname;
-        } else if (!strcmp(ptr->name, romsmode_shortname())) {
-            ptr->search = &romsmode_search;
-            ptr->download = &romsmode_download;
-            ptr->shortname = &romsmode_shortname;
-        } else if (!strcmp(ptr->name, wowroms_shortname())) {
-            ptr->search = &wowroms_search;
-            ptr->download = &wowroms_download;
-            ptr->shortname = &wowroms_shortname;
-        } else if (!strcmp(ptr->name, romsdownload_shortname())) {
-            ptr->search = &romsdownload_search;
-            ptr->download = &romsdownload_download;
-            ptr->shortname = &romsdownload_shortname;
-        } else if (!strcmp(ptr->name, romsemulator_shortname())) {
-            ptr->search = &romsemulator_search;
-            ptr->download = &romsemulator_download;
-            ptr->shortname = &romsemulator_shortname;
-        } else if (!strcmp(ptr->name, romhustler_shortname())) {
-            ptr->search = &romhustler_search;
-            ptr->download = &romhustler_download;
-            ptr->shortname = &romhustler_shortname;
-        } else if (!strcmp(ptr->name, freeroms_shortname())) {
-            ptr->search = &freeroms_search;
-            ptr->download = &freeroms_download;
-            ptr->shortname = &freeroms_shortname;
-        } else {
-            SDL_Log("Mapping was not found for %s(%s)\n", ptr->fullname, ptr->name);
-        }
-
-        ptr = ptr->next;
-    }
-}
-
-engine_t *enginehandler_findEngine(app_t *app, char *name) {
-    engine_t *ptr = app->engine.all;
-    while (ptr != NULL) {
-        if (!strcmp(name, ptr->shortname())) {
-            return ptr;
-        }
-        ptr = ptr->next;
-    }
-    return NULL;
+void enginehandler_destroy(app_t *app) {
+    linkedlist_freeList(app->engine.all, NULL);
 }
 
 static void *executeThread(void *searchPtr) {

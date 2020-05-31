@@ -75,9 +75,6 @@ void database_configLoad(app_t *app) {
         configadvanced_setConfig(app, advancedConfig_openGL, opengl);
         configadvanced_setConfig(app, advancedConfig_highDPI, highdpi);
     }
-    if (app->engine.active == NULL) {
-        app->engine.active = app->engine.all;
-    }
     if (app->themes.active == NULL) {
         app->themes.active = app->themes.all;
     }

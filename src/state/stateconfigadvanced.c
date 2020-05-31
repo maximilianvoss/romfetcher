@@ -36,5 +36,6 @@ void stateconfigadvanced_init(app_t *app) {
         app->list.all = (linkedlist_t *) app->config.advanced.all;
         app->list.multi = 1;
         app->list.checkbox = 1;
+        app->list.filterActive = 0;
     }
 }

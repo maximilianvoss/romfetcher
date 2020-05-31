@@ -15,7 +15,8 @@
  */
 
 #include "stateconfigengine.h"
-#include "../database/engines.h"
+#include "../database/linkedlist.h"
+#include "../config.h"
 
 static void persistEngines(app_t *app);
 
@@ -38,18 +39,10 @@ void stateconfigengine_init(app_t *app) {
         app->list.all = (linkedlist_t *) app->engine.all;
         app->list.multi = 1;
         app->list.checkbox = 1;
+        app->list.filterActive = 0;
     }
 }
 
 static void persistEngines(app_t *app) {
-    database_enginesStore(app->database.db, app->engine.all);
-
-    database_enginesDestroy(app->engine.all);
-    database_enginesDestroy(app->engine.enabled);
-
-    app->engine.all = database_engineList(app, 0);
-    app->engine.enabled = database_engineList(app, 1);
-
-    app->engine.active = app->engine.enabled;
-    app->engine.cursor = app->engine.enabled;
+    databaselinkedlist_persist(app->database.db, DATABASE_TABLE_ENGINES, (linkedlist_t *) app->engine.all);
 }

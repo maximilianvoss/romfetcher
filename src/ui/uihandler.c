@@ -59,7 +59,7 @@ void uihandler_render(app_t *app) {
     switch (app->win) {
         case window_search:
             if (app->systems.active == NULL) {
-                app->systems.active = app->systems.enabled;
+                app->systems.active = linkedlist_getFirstActive(app->systems.all);
             }
             renderEngine = &uisearch_render;
             break;
@@ -75,7 +75,7 @@ void uihandler_render(app_t *app) {
         case window_config_systems:
         case window_config_themes:
         case window_system:
-            renderEngine = &uilist_render;
+            renderEngine = &uilist_renderDefault;
             break;
     }
 

@@ -21,13 +21,17 @@
 #include "../curlling.h"
 #include "../../helper/regex.h"
 #include "../results.h"
-#include "../enginehandler.h"
 #include "../../helper/utils.h"
 #include "../../helper/path.h"
 
+#define SHORTNAME "HSL"
 #define URL_TEMPLATE "https://romhustler.org/roms/search/page:%page%?q=%query%&console_id%5B9%5D=%system%"
 #define URL_PREFIX "https://romhustler.org"
 #define URL_DOWNLOAD_LINK "https://romhustler.org/link/"
+
+static searchresult_t *search(void *app, system_t *system, char *searchString);
+
+static void download(void *app, searchresult_t *item, void (*callback)(void *app));
 
 static searchresult_t *fetchingResultItems(app_t *app, system_t *system, searchresult_t *resultList, char *response);
 
@@ -35,7 +39,21 @@ static char *fetchId(char *response);
 
 static char *fetchDownloadLink(char *response);
 
-searchresult_t *romhustler_search(void *app, system_t *system, char *searchString) {
+static engine_t *engine = NULL;
+
+engine_t *romhustler_getEngine() {
+    if (engine == NULL) {
+        engine = calloc(1, sizeof(engine_t));
+        engine->search = search;
+        engine->download = download;
+        engine->name = SHORTNAME;
+        engine->active = 1;
+        engine->fullname = "https://romhustler.org";
+    }
+    return engine;
+}
+
+static searchresult_t *search(void *app, system_t *system, char *searchString) {
     uint32_t resultCount = 0;
     uint32_t page = 1;
     char *urlTemplate = URL_TEMPLATE;
@@ -59,7 +77,7 @@ searchresult_t *romhustler_search(void *app, system_t *system, char *searchStrin
     return resultList;
 }
 
-void romhustler_download(void *app, searchresult_t *item, void (*callback)(void *app)) {
+static void download(void *app, searchresult_t *item, void (*callback)(void *app)) {
     if (item == NULL) {
         return;
     }
@@ -90,10 +108,6 @@ void romhustler_download(void *app, searchresult_t *item, void (*callback)(void 
     callback(app);
 }
 
-char *romhustler_shortname() {
-    return "HSL";
-}
-
 static searchresult_t *fetchingResultItems(app_t *app, system_t *system, searchresult_t *resultList, char *response) {
     char *regexString = "<div class=\"title\"><a href=\"([^\"]+)\">([^<]+)</a>";
 
@@ -101,7 +115,7 @@ static searchresult_t *fetchingResultItems(app_t *app, system_t *system, searchr
     regexMatches_t *ptr = matches;
 
     while (ptr != NULL) {
-        searchresult_t *item = result_newItem(system, enginehandler_findEngine(app, romhustler_shortname()));
+        searchresult_t *item = result_newItem(system, romhustler_getEngine());
 
         char *url = str_concat(URL_PREFIX, ptr->groups[0]);
         result_setUrl(item, url);

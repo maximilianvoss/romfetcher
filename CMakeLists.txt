@@ -38,12 +38,10 @@ set(SOURCES
         src/database/config.h
         src/database/enginecache.c
         src/database/enginecache.h
-        src/database/engines.c
-        src/database/engines.h
         src/database/init.c
         src/database/init.h
-        src/database/sytems.c
-        src/database/sytems.h
+        src/database/linkedlist.c
+        src/database/linkedlist.h
         src/engine/freeroms/freeroms.c
         src/engine/freeroms/freeroms.h
         src/engine/freeroms/mapping.c
@@ -126,6 +124,8 @@ set(SOURCES
         src/state/statesystem.c
         src/state/statesystem.h
         src/structs.h
+        src/systems/systemhandler.c
+        src/systems/systemhandler.h
         src/themes/loading.c
         src/themes/loading.h
         src/themes/rendering.c
@@ -157,6 +157,8 @@ set(TEST_SOURCES
         test/engine_romhustler.h
         test/engines.c
         test/engines.h
+        test/linkedlist.c
+        test/linkedlist.h
         test/systems.c
         test/systems.h
         test/test.c
@@ -201,6 +203,19 @@ include(CPack)
 enable_testing()
 add_executable(romfetcher_testcases ${SOURCES} ${TEST_SOURCES})
 target_link_libraries(romfetcher_testcases csafestring json2map ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2TTF_LIBRARY} ${CURL_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} ${SQLite3_LIBRARIES} ${OPENSSL_LIBRARIES})
+
+add_test(NAME test_linkedList_deleteElement0 COMMAND romfetcher_testcases test_linkedList_deleteElement0)
+add_test(NAME test_linkedList_deleteElement1 COMMAND romfetcher_testcases test_linkedList_deleteElement1)
+add_test(NAME test_linkedList_deleteElement2 COMMAND romfetcher_testcases test_linkedList_deleteElement2)
+add_test(NAME test_linkedList_deleteElement3 COMMAND romfetcher_testcases test_linkedList_deleteElement3)
+add_test(NAME test_linkedList_deleteElement4 COMMAND romfetcher_testcases test_linkedList_deleteElement4)
+add_test(NAME test_linkedList_sortElements COMMAND romfetcher_testcases test_linkedList_sortElements)
+add_test(NAME test_linkedList_findElementFound COMMAND romfetcher_testcases test_linkedList_findElementFound)
+add_test(NAME test_linkedList_findElementNotFound COMMAND romfetcher_testcases test_linkedList_findElementNotFound)
+add_test(NAME test_linkedList_getElementCountNull COMMAND romfetcher_testcases test_linkedList_getElementCountNull)
+add_test(NAME test_linkedList_getElementCountNotNull COMMAND romfetcher_testcases test_linkedList_getElementCountNotNull)
+add_test(NAME test_linkedList_cloneListNull COMMAND romfetcher_testcases test_linkedList_cloneListNull)
+add_test(NAME test_linkedList_cloneListNotNull COMMAND romfetcher_testcases test_linkedList_cloneListNotNull)
 
 add_test(NAME test_engine_freeroms_3do COMMAND romfetcher_testcases test_engine_freeroms_3do)
 add_test(NAME test_engine_freeroms_amiga COMMAND romfetcher_testcases test_engine_freeroms_amiga)

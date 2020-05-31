@@ -35,6 +35,16 @@ uint32_t linkedlist_getElementCount(void *list);
 
 void *linkedlist_findElementByName(void *ptr, char *name);
 
+void *linkedList_removeElement(void *list, void *element, void (*callback)(void *));
+
 void *linkedlist_sort(void *ptr);
+
+void *linkedlist_clone(void *ptr, size_t size, void (*callback)(void *));
+
+void *linkedlist_getFirstActive(void *ptr);
+
+void *linkedlist_getPrevActive(void *ptr);
+
+void *linkedlist_getNextActive(void *ptr);
 
 #endif

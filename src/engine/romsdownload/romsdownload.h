@@ -19,10 +19,6 @@
 
 #include "../../structs.h"
 
-searchresult_t *romsdownload_search(void *app, system_t *system, char *searchString);
-
-void romsdownload_download(void *app, searchresult_t *item, void (*callback)(void *app));
-
-char *romsdownload_shortname();
+engine_t *romsdownload_getEngine();
 
 #endif

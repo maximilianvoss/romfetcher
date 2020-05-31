@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-#ifndef DATABASE_SYTEMS_H
-#define DATABASE_SYTEMS_H
+#ifndef DATABASE_LINKEDLIST_H
+#define DATABASE_LINKEDLIST_H
 
 #include <sqlite3.h>
 #include "../structs.h"
 
-void database_systemsInitTable(sqlite3 *db);
+void databaselinkedlist_init(sqlite3 *db, char *tableName);
 
-system_t *database_systemList(app_t *app, uint8_t active);
+void databaselinkedlist_persist(sqlite3 *db, char *tableName, linkedlist_t *list);
 
-void database_systemStore(sqlite3 *db, system_t *systems);
-
-void database_systemsDestroy(system_t *systems);
+void databaselinkedlist_loadActivities(sqlite3 *db, char *tableName, linkedlist_t *list);
 
 #endif

@@ -77,6 +77,7 @@ typedef struct searchresult_s {
     struct searchresult_s *prev;
     struct searchresult_s *next;
     char *title;
+    int active;
     char *url;
     system_t *system;
     void *engine;
@@ -92,8 +93,6 @@ typedef struct engine_s {
     searchresult_t *(*search)(void *app, system_t *system, char *searchString);
 
     void (*download)(void *app, searchresult_t *item, void (*callback)(void *app));
-
-    char *(*shortname)(void);
 } engine_t;
 
 typedef struct {
@@ -110,6 +109,7 @@ typedef struct {
         linkedlist_t *all;
         linkedlist_t *cursor;
         uint8_t multi;
+        uint8_t filterActive;
         uint8_t checkbox;
     } list;
 
@@ -144,14 +144,11 @@ typedef struct {
         system_t *active;
         system_t *all;
         system_t *cursor;
-        system_t *enabled;
     } systems;
 
     struct {
-        engine_t *active;
         engine_t *all;
         engine_t *cursor;
-        engine_t *enabled;
     } engine;
 
     struct {

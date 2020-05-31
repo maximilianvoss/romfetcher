@@ -34,4 +34,5 @@ void stateconfig_init(app_t *app) {
     app->list.cursor = (linkedlist_t *) app->config.active;
     app->list.multi = 0;
     app->list.checkbox = 0;
+    app->list.filterActive = 0;
 }

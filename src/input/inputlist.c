@@ -17,28 +17,25 @@
 #include "inputlist.h"
 #include "../state/statehandler.h"
 
+
+static void up(app_t *app);
+
+static void down(app_t *app);
+
 void inputlist_processUp(app_t *app) {
-    if (app->list.cursor->prev != NULL) {
-        app->list.cursor = app->list.cursor->prev;
-    }
+    up(app);
 }
 
 void inputlist_processDown(app_t *app) {
-    if (app->list.cursor->next != NULL) {
-        app->list.cursor = app->list.cursor->next;
-    }
+    down(app);
 }
 
 void inputlist_processLeft(app_t *app) {
-    if (app->list.cursor->prev != NULL) {
-        app->list.cursor = app->list.cursor->prev;
-    }
+    up(app);
 }
 
 void inputlist_processRight(app_t *app) {
-    if (app->list.cursor->next != NULL) {
-        app->list.cursor = app->list.cursor->next;
-    }
+    down(app);
 }
 
 void inputlist_processSelect(app_t *app) {
@@ -59,4 +56,31 @@ void inputlist_processBack(app_t *app) {
 }
 
 void inputlist_processOtherButton(app_t *app, GameControllerState_t *state) {
+}
+
+static void up(app_t *app) {
+    if (app->list.filterActive) {
+        linkedlist_t *prev = linkedlist_getPrevActive(app->list.cursor);
+        if (prev != NULL) {
+            app->list.cursor = prev;
+        }
+    } else {
+        if (app->list.cursor->prev != NULL) {
+            app->list.cursor = app->list.cursor->prev;
+        }
+    }
+}
+
+static void down(app_t *app) {
+    if (app->list.filterActive) {
+        linkedlist_t *next = linkedlist_getNextActive(app->list.cursor);
+        if (next != NULL) {
+            app->list.cursor = next;
+        }
+    } else {
+        if (app->list.cursor->next != NULL) {
+            app->list.cursor = app->list.cursor->next;
+        }
+
+    }
 }

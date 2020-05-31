@@ -19,10 +19,6 @@
 
 #include "../../structs.h"
 
-searchresult_t *romhustler_search(void *app, system_t *system, char *searchString);
-
-void romhustler_download(void *app, searchresult_t *item, void (*callback)(void *app));
-
-char *romhustler_shortname();
+engine_t *romhustler_getEngine();
 
 #endif

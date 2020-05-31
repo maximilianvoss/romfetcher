@@ -32,4 +32,5 @@ void statesystem_init(app_t *app) {
     app->list.cursor = (linkedlist_t *) app->systems.active;
     app->list.multi = 0;
     app->list.checkbox = 0;
+    app->list.filterActive = 1;
 }
