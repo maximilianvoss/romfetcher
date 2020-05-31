@@ -24,7 +24,7 @@ typedef struct {
     void *prev;
     void *next;
     char *name;
-    int active;
+    uint8_t active;
 } linkedlist_t;
 
 void *linkedlist_appendElement(void *list, void *element);

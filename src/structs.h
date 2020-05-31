@@ -60,7 +60,7 @@ typedef struct system_s {
     struct system_s *prev;
     struct system_s *next;
     char *fullname;
-    int active;
+    uint8_t active;
     char *name;
     char *path;
 } system_t;
@@ -69,7 +69,7 @@ typedef struct advancedconfig_s {
     struct advancedconfig_s *prev;
     struct advancedconfig_s *next;
     char *name;
-    int active;
+    uint8_t active;
     advancedConfigSetting_t setting;
 } advancedconfig_t;
 
@@ -77,7 +77,7 @@ typedef struct searchresult_s {
     struct searchresult_s *prev;
     struct searchresult_s *next;
     char *title;
-    int active;
+    uint8_t active;
     char *url;
     system_t *system;
     void *engine;
@@ -87,7 +87,7 @@ typedef struct engine_s {
     struct engine_s *prev;
     struct engine_s *next;
     char *fullname;
-    int active;
+    uint8_t active;
     char *name;
 
     searchresult_t *(*search)(void *app, system_t *system, char *searchString);
