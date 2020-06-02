@@ -51,7 +51,7 @@ void rendering_loadText(app_t *app, texture_t *texture, char *str, TTF_Font *fon
         SDL_Surface *textSurface = TTF_RenderText_Blended(font, token, *color);
 
         if (blindSurface == NULL) {
-            blindSurface = SDL_DuplicateSurface(textSurface);
+            blindSurface = textSurface;
         } else {
             SDL_Surface *tmpSurface = SDL_CreateRGBSurface(
                     0,
@@ -73,8 +73,8 @@ void rendering_loadText(app_t *app, texture_t *texture, char *str, TTF_Font *fon
 
             SDL_FreeSurface(blindSurface);
             blindSurface = tmpSurface;
+            SDL_FreeSurface(textSurface);
         }
-        SDL_FreeSurface(textSurface);
         token = strtok(NULL, "\n");
     }
 
