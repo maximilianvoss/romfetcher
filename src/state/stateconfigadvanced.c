@@ -16,12 +16,15 @@
 
 #include "stateconfigadvanced.h"
 #include "../database/config.h"
+#include "../ui/core.h"
 
 window_t stateconfigadvanced_target(app_t *app, uint8_t isSelectButton) {
     if (isSelectButton) {
         return window_config_advanced;
     }
     database_configPersist(app);
+    ui_destroy(app);
+    ui_init(app);
     return window_config;
 }
 

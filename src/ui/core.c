@@ -16,9 +16,7 @@
 
 #include "core.h"
 #include "../config.h"
-#include "../input/inputhandler.h"
 #include "textures.h"
-#include "fonts.h"
 
 void ui_init(app_t *app) {
 
@@ -40,6 +38,8 @@ void ui_init(app_t *app) {
         windowFlags |= SDL_WINDOW_ALLOW_HIGHDPI;
     }
 
+    screenWidth = INIT_SCREEN_WIDTH;
+    screenHeight = INIT_SCREEN_HEIGHT;
     if (app->config.advanced.fullscreen) {
         windowFlags |= SDL_WINDOW_FULLSCREEN;
 
@@ -47,8 +47,6 @@ void ui_init(app_t *app) {
         int retVal = SDL_GetCurrentDisplayMode(0, &current);
         if (retVal != 0) {
             SDL_Log("Could not get display mode for video display #%d: %s", 0, SDL_GetError());
-            screenWidth = INIT_SCREEN_WIDTH;
-            screenHeight = INIT_SCREEN_HEIGHT;
         } else {
             SDL_Log("Display #%d: current display mode is %dx%dpx @ %dhz.", 0, current.w, current.h,
                     current.refresh_rate);
@@ -57,8 +55,6 @@ void ui_init(app_t *app) {
         }
     } else {
         windowFlags |= SDL_WINDOW_RESIZABLE;
-        screenWidth = INIT_SCREEN_WIDTH;
-        screenHeight = INIT_SCREEN_HEIGHT;
     }
 
     app->sdlWindow = SDL_CreateWindow("ROM Fetcher", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, screenWidth,
@@ -77,15 +73,10 @@ void ui_init(app_t *app) {
     SDL_SetRenderDrawBlendMode(app->sdlRenderer, SDL_BLENDMODE_BLEND);
 
     textures_init(app);
-    fonts_init(app);
-    inputhandler_init();
 }
 
 void ui_destroy(app_t *app) {
-    inputhandler_destroy();
     textures_destroy(app);
-    fonts_destroy(app);
     SDL_DestroyRenderer(app->sdlRenderer);
     SDL_DestroyWindow(app->sdlWindow);
-    SDL_Quit();
 }

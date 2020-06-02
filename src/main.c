@@ -26,6 +26,7 @@
 #include "config/init.h"
 #include "engine/enginehandler.h"
 #include "systems/systemhandler.h"
+#include "ui/fonts.h"
 
 int main() {
     app_t app;
@@ -37,9 +38,9 @@ int main() {
     systemhandler_init(&app);
     themes_init(&app);
     config_init(&app);
-
+    fonts_init(&app);
+    inputhandler_init();
     database_configLoad(&app);
-
     ui_init(&app);
 
     uint8_t quit = 0;
@@ -56,7 +57,10 @@ int main() {
     systemhandler_destroy(&app);
     database_destroy(&app);
     config_destroy(&app);
+    inputhandler_destroy();
+    fonts_destroy(&app);
 
+    SDL_Quit();
     return 0;
 }
 
