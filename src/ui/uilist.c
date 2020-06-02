@@ -44,18 +44,15 @@ void uilist_renderList(app_t *app, int offsetX) {
     int i = 0;
     while (i < deviceCountToDisplay / 2 - 1) {
         if (app->list.filterActive) {
-            linkedlist_t *tmp = linkedlist_getPrevActive(element);
-            if (linkedlist_getPrevActive(tmp) == NULL) {
+            if (linkedlist_getPrevActive(element) == NULL) {
                 break;
             }
-            element = tmp;
+            element = linkedlist_getPrevActive(element);
         } else {
-            if (element->prev != NULL) {
-                element = element->prev;
-            }
             if (element->prev == NULL) {
                 break;
             }
+            element = element->prev;
         }
         i++;
     }
