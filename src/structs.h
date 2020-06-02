@@ -114,6 +114,20 @@ typedef struct {
     } list;
 
     struct {
+        uint8_t displayed;
+        char *headline;
+        char *text;
+        char *actionButton;
+        char *cancelButton;
+        uint8_t cursorPos;
+        void *callbackData;
+
+        void (*callbackAction)(void *data);
+
+        void (*callbackCancel)(void *data);
+    } modal;
+
+    struct {
         SDL_Texture *backgroundImage;
         SDL_Texture *searchChevron;
         SDL_Texture *settingsIcon;

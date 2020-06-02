@@ -20,6 +20,7 @@
 #include "inputdownload.h"
 #include "inputkeyboard.h"
 #include "inputlist.h"
+#include "inputmodal.h"
 
 static uint8_t processGameController(app_t *app);
 
@@ -112,6 +113,17 @@ uint8_t inputhandler_processInputs(app_t *app) {
             processOtherButton = &inputlist_processOtherButton;
             break;
     }
+
+    if (app->modal.displayed) {
+        processUp = &inputmodal_processUp;
+        processDown = &inputmodal_processDown;
+        processLeft = &inputmodal_processLeft;
+        processRight = &inputmodal_processRight;
+        processSelect = &inputmodal_processSelect;
+        processBack = &inputmodal_processBack;
+        processOtherButton = &inputmodal_processOtherButton;
+    }
+
     return processEvents(app);
 }
 

@@ -22,6 +22,7 @@
 #include "../config.h"
 #include "uilist.h"
 #include "../themes/rendering.h"
+#include "uimodal.h"
 
 static void renderDefaults(app_t *app);
 
@@ -82,5 +83,6 @@ void uihandler_render(app_t *app) {
     if (renderEngine != NULL) {
         renderEngine(app);
     }
+    uimodel_render(app);
     SDL_RenderPresent(app->sdlRenderer);
 }

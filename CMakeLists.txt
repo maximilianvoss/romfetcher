@@ -101,6 +101,8 @@ set(SOURCES
         src/input/inputkeyboard.h
         src/input/inputlist.c
         src/input/inputlist.h
+        src/input/inputmodal.c
+        src/input/inputmodal.h
         src/input/inputsearch.c
         src/input/inputsearch.h
         src/state/stateconfig.c
@@ -142,6 +144,8 @@ set(SOURCES
         src/ui/uidownload.h
         src/ui/uihandler.c
         src/ui/uihandler.h
+        src/ui/uimodal.c
+        src/ui/uimodal.h
         src/ui/uikeyboard.c
         src/ui/uikeyboard.h
         src/ui/uilist.c

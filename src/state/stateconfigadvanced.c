@@ -17,15 +17,43 @@
 #include "stateconfigadvanced.h"
 #include "../database/config.h"
 #include "../ui/core.h"
+#include "stateconfig.h"
+#include "../config/advanced.h"
+
+static void modalApprove(void *data) {
+    app_t *app = data;
+    database_configPersist(app);
+    stateconfig_init(app);
+}
+
+static void modalCancel(void *data) {
+    app_t *app = data;
+    database_configLoad(app);
+    ui_destroy(app);
+    ui_init(app);
+    stateconfigadvanced_init(app);
+}
 
 window_t stateconfigadvanced_target(app_t *app, uint8_t isSelectButton) {
     if (isSelectButton) {
         return window_config_advanced;
     }
-    database_configPersist(app);
+
+    configadvanced_listToSettings(app);
     ui_destroy(app);
     ui_init(app);
-    return window_config;
+
+    app->modal.displayed = 1;
+    app->modal.headline = "Save Config Settings";
+    app->modal.text = "As this configurations impact the rendering,\ndo you want to save these new settings?";
+    app->modal.actionButton = "Yes";
+    app->modal.cancelButton = "No";
+    app->modal.cursorPos = 1;
+    app->modal.callbackData = app;
+    app->modal.callbackAction = &modalApprove;
+    app->modal.callbackCancel = &modalCancel;
+
+    return window_config_advanced;
 }
 
 void stateconfigadvanced_persist(app_t *app) {
