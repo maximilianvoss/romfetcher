@@ -14,30 +14,12 @@
  * limitations under the License.
  */
 
-#ifndef HELPER_UTILS_H
-#define HELPER_UTILS_H
+#ifndef ENGINE_DOWNLOADER_H
+#define ENGINE_DOWNLOADER_H
 
-#include <stdlib.h>
-#include <stdint.h>
+#include "../structs.h"
 
-#define FREENOTNULL(x) if (x != NULL) free (x)
-
-char *str_replace(char *orig, char *rep, char *with);
-
-char *file_name(char *path);
-
-char *file_suffix(char *path);
-
-uint8_t file_exists(char *path);
-
-char *str_urlDecode(const char *string);
-
-char *str_htmlDecode(const char *string);
-
-char *str_concat(char *str1, char *str2);
-
-char *str_quoteDecode(char *strIn);
-
-char *str_clone(char *str);
+void downloader_download(app_t *app, system_t *system, char *url, char *data, char *filename, httpmethod_t method,
+                         void (*callback)(void *app));
 
 #endif

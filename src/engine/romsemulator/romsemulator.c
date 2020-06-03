@@ -22,7 +22,7 @@
 #include "../../helper/utils.h"
 #include "../urlhandling.h"
 #include "../../helper/regex.h"
-#include "../../helper/path.h"
+#include "../downloader.h"
 
 #define SHORTNAME "REN"
 #define URL_TEMPLATE "https://romsemulator.net/roms/%system%/page/%page%/?s=%query%"
@@ -31,7 +31,7 @@ static searchresult_t *search(void *app, system_t *system, char *searchString);
 
 static void download(void *app, searchresult_t *item, void (*callback)(void *app));
 
-static searchresult_t *fetchingResultItems(app_t *app, system_t *system, searchresult_t *resultList, char *response);
+static searchresult_t *fetchingResultItems(system_t *system, searchresult_t *resultList, char *response);
 
 static char *fetchDownloadPageLink(char *response);
 
@@ -64,8 +64,8 @@ static searchresult_t *search(void *app, system_t *system, char *searchString) {
             break;
         }
 
-        char *response = curlling_fetchURL(url);
-        resultList = fetchingResultItems(app, system, resultList, response);
+        char *response = curlling_fetch(url, NULL, GET);
+        resultList = fetchingResultItems(system, resultList, response);
         free(response);
         free(url);
 
@@ -80,10 +80,10 @@ static void download(void *app, searchresult_t *item, void (*callback)(void *app
     if (item == NULL) {
         return;
     }
-    char *detailPageResponse = curlling_fetchURL(item->url);
+    char *detailPageResponse = curlling_fetch(item->url, NULL, GET);
     char *linkDownloadPage = fetchDownloadPageLink(detailPageResponse);
 
-    char *downloadPageResponse = curlling_fetchURL(linkDownloadPage);
+    char *downloadPageResponse = curlling_fetch(linkDownloadPage, NULL, GET);
 
     char *pid = fetchHiddenField(downloadPageResponse, "pid", 0);
     char *roms = fetchHiddenField(downloadPageResponse, "roms_download_file_nonce_field", 1);
@@ -96,13 +96,9 @@ static void download(void *app, searchresult_t *item, void (*callback)(void *app
     safe_strcat(payload, "&_wp_http_referer=");
     safe_strcat(payload, referer);
 
-    csafestring_t *filename = safe_create(item->url);
-    safe_strcat(filename, ".zip");
-
-    char *decodeFilename = file_name(filename->data);
-    csafestring_t *downloadPath = path_downloadTarget(item->system, decodeFilename);
-
-    curlling_downloadURLPost(app, linkDownloadPage, payload->data, downloadPath->data);
+    char *filename = str_concat(item->title, ".zip");
+    downloader_download(app, item->system, linkDownloadPage, payload->data, filename, POST, callback);
+    free(filename);
 
     free(pid);
     free(roms);
@@ -110,11 +106,7 @@ static void download(void *app, searchresult_t *item, void (*callback)(void *app
     free(downloadPageResponse);
     free(linkDownloadPage);
     free(detailPageResponse);
-    safe_destroy(filename);
     safe_destroy(payload);
-    safe_destroy(downloadPath);
-
-    callback(app);
 }
 
 static char *fetchHiddenField(char *response, char *fieldname, int variant) {
@@ -148,7 +140,7 @@ static char *fetchDownloadPageLink(char *response) {
     return link;
 }
 
-static searchresult_t *fetchingResultItems(app_t *app, system_t *system, searchresult_t *resultList, char *response) {
+static searchresult_t *fetchingResultItems(system_t *system, searchresult_t *resultList, char *response) {
     char *regexString = "<td><a href=\"([^\"]+)\">([^<]+)</a>";
 
     regexMatches_t *matches = regex_getMatches(response, regexString, 2);

@@ -80,6 +80,21 @@ char *file_name(char *path) {
     return result;
 }
 
+char *file_suffix(char *path) {
+    char *ptr = path;
+    char *result = path;
+    if (ptr == NULL || *ptr == '\0') {
+        return result;
+    }
+    while (*ptr != '\0') {
+        if (*ptr == '.') {
+            result = ptr;
+        }
+        ptr++;
+    }
+    return result;
+}
+
 char *str_urlDecode(const char *string) {
     char *o;
     int length = strlen(string);
@@ -145,6 +160,15 @@ char *str_quoteDecode(char *string) {
 
 uint8_t file_exists(char *path) {
     return (access(path, F_OK) != -1) ? 1 : 0;
+}
+
+char *str_clone(char *str) {
+    if (str == NULL) {
+        return NULL;
+    }
+    char *clone = calloc(strlen(str) + 1, sizeof(char));
+    strcpy(clone, str);
+    return clone;
 }
 
 static int ishex(int x) {

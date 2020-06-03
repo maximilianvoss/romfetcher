@@ -22,7 +22,7 @@
 #include "../../helper/utils.h"
 #include "../urlhandling.h"
 #include "../../helper/regex.h"
-#include "../../helper/path.h"
+#include "../downloader.h"
 
 #define SHORTNAME "RDC"
 #define URL_TEMPLATE "https://roms-download.com/ajax.php?m=roms_j"
@@ -33,7 +33,7 @@ static searchresult_t *search(void *app, system_t *system, char *searchString);
 
 static void download(void *app, searchresult_t *item, void (*callback)(void *app));
 
-static searchresult_t *fetchingResultItems(app_t *app, system_t *system, searchresult_t *resultList, char *response);
+static searchresult_t *fetchingResultItems(system_t *system, searchresult_t *resultList, char *response);
 
 static char *fetchDownloadLink(char *response);
 
@@ -63,8 +63,8 @@ static searchresult_t *search(void *app, system_t *system, char *searchString) {
             break;
         }
 
-        char *response = curlling_fetchURLPost(URL_TEMPLATE, data);
-        resultList = fetchingResultItems(app, system, resultList, response);
+        char *response = curlling_fetch(URL_TEMPLATE, data, POST);
+        resultList = fetchingResultItems(system, resultList, response);
         free(response);
         free(data);
 
@@ -79,21 +79,15 @@ static void download(void *app, searchresult_t *item, void (*callback)(void *app
     if (item == NULL) {
         return;
     }
-    char *detailPageResponse = curlling_fetchURL(item->url);
+    char *detailPageResponse = curlling_fetch(item->url, NULL, GET);
     char *linkDownload = fetchDownloadLink(detailPageResponse);
 
-    char *filename = file_name(linkDownload);
-    char *decodedFilename = str_urlDecode(filename);
-    csafestring_t *downloadPath = path_downloadTarget(item->system, decodedFilename);
-
-    curlling_downloadURL(app, linkDownload, downloadPath->data);
+    char *filename = str_concat(item->title, file_suffix(linkDownload));
+    downloader_download(app, item->system, linkDownload, NULL, filename, GET, callback);
+    free(filename);
 
     free(detailPageResponse);
     free(linkDownload);
-    free(decodedFilename);
-    safe_destroy(downloadPath);
-
-    callback(app);
 }
 
 static char *fetchDownloadLink(char *response) {
@@ -108,7 +102,7 @@ static char *fetchDownloadLink(char *response) {
     return link;
 }
 
-static searchresult_t *fetchingResultItems(app_t *app, system_t *system, searchresult_t *resultList, char *response) {
+static searchresult_t *fetchingResultItems(system_t *system, searchresult_t *resultList, char *response) {
     char *regexString = "<a href=\"([^\"]+)\">([^<]+)</a>";
 
     regexMatches_t *matches = regex_getMatches(response, regexString, 2);

@@ -23,7 +23,7 @@
 #include "../curlling.h"
 #include "../../helper/regex.h"
 #include "../../helper/utils.h"
-#include "../../helper/path.h"
+#include "../downloader.h"
 
 #define THREADCOUNT 5
 #define SHORTNAME "FRE"
@@ -79,12 +79,8 @@ static void download(void *app, searchresult_t *item, void (*callback)(void *app
     }
 
     char *filename = str_concat(item->title, ".zip");
-    csafestring_t *downloadPath = path_downloadTarget(item->system, filename);
-
-    curlling_downloadURL(app, item->url, downloadPath->data);
+    downloader_download(app, item->system, item->url, NULL, filename, GET, callback);
     free(filename);
-    safe_destroy(downloadPath);
-    callback(app);
 }
 
 static void fillCache(app_t *app, system_t *system) {
@@ -120,7 +116,7 @@ static void *executeThread(void *ptr) {
             if (url == NULL) {
                 break;
             }
-            response = curlling_fetchURL(url);
+            response = curlling_fetch(url, NULL, GET);
             extractLink(filter->app, filter->system, response);
         } else {
             char str[2] = {0, 0};
@@ -130,7 +126,7 @@ static void *executeThread(void *ptr) {
             if (url == NULL) {
                 break;
             }
-            response = curlling_fetchURL(url);
+            response = curlling_fetch(url, NULL, GET);
             extractLink(filter->app, filter->system, response);
         }
         free(response);

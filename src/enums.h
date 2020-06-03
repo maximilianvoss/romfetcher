@@ -50,4 +50,9 @@ typedef enum {
     advancedConfig_highDPI
 } advancedConfigSetting_t;
 
+typedef enum {
+    GET,
+    POST
+} httpmethod_t;
+
 #endif

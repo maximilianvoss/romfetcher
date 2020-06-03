@@ -43,6 +43,8 @@ int main() {
     database_configLoad(&app);
     ui_init(&app);
 
+    strcpy(app.search.searchText, "mario");
+
     uint8_t quit = 0;
     while (!quit) {
         quit = inputhandler_processInputs(&app);
