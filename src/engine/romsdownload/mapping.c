@@ -45,14 +45,13 @@ char *romsdownload_deviceMapping(system_t *system) {
         deviceString = "49";
     } else if (!strcmp(system->name, "gc")) {
         deviceString = "50";
-    } else if (!strcmp(system->name, "genesis")) {
+    } else if (!strcmp(system->name, "genesis") || !strcmp(system->name, "megadrive") ||
+               !strcmp(system->name, "segacd")) {
         deviceString = "98";
     } else if (!strcmp(system->name, "mame")) {
         deviceString = "61";
     } else if (!strcmp(system->name, "mastersystem")) {
         deviceString = "99";
-    } else if (!strcmp(system->name, "megadrive")) {
-        deviceString = "98";
     } else if (!strcmp(system->name, "msx")) {
         deviceString = "67";
     } else if (!strcmp(system->name, "n64")) {
@@ -77,8 +76,6 @@ char *romsdownload_deviceMapping(system_t *system) {
         deviceString = "88";
     } else if (!strcmp(system->name, "sega32x")) {
         deviceString = "95";
-    } else if (!strcmp(system->name, "segacd")) {
-        deviceString = "98";
     } else if (!strcmp(system->name, "sg-1000")) {
         deviceString = "102";
     } else if (!strcmp(system->name, "snes")) {

@@ -47,7 +47,7 @@ char *romsemulator_deviceMapping(system_t *system) {
         deviceString = "gameboy-color";
     } else if (!strcmp(system->name, "gc")) {
         deviceString = "gamecube";
-    } else if (!strcmp(system->name, "genesis")) {
+    } else if (!strcmp(system->name, "genesis") || !strcmp(system->name, "segacd")) {
         deviceString = "sega-genesis";
     } else if (!strcmp(system->name, "mame")) {
         deviceString = "mame-037b11";
@@ -63,7 +63,7 @@ char *romsemulator_deviceMapping(system_t *system) {
         deviceString = "nintendo-ds";
     } else if (!strcmp(system->name, "neogeo")) {
         deviceString = "neo-geo";
-    } else if (!strcmp(system->name, "nes")) {
+    } else if (!strcmp(system->name, "nes") || !strcmp(system->name, "fds")) {
         deviceString = "nintendo";
     } else if (!strcmp(system->name, "ngp")) {
         deviceString = "neo-geo-pocket";
@@ -79,8 +79,6 @@ char *romsemulator_deviceMapping(system_t *system) {
         deviceString = "playstation";
     } else if (!strcmp(system->name, "sega32x")) {
         deviceString = "sega-32x";
-    } else if (!strcmp(system->name, "segacd")) {
-        deviceString = "sega-genesis";
     } else if (!strcmp(system->name, "sg-1000")) {
         deviceString = "sega-sg1000";
     } else if (!strcmp(system->name, "snes")) {

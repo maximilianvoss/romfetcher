@@ -43,7 +43,8 @@ char *wowroms_deviceMapping(system_t *system) {
         deviceString = "nintendo%2Bgameboy%2Badvanced";
     } else if (!strcmp(system->name, "gbc")) {
         deviceString = "nintendo%2Bgameboy%2Bcolor";
-    } else if (!strcmp(system->name, "genesis")) {
+    } else if (!strcmp(system->name, "genesis") || !strcmp(system->name, "megadrive") ||
+               !strcmp(system->name, "segacd")) {
         deviceString = "sega%2Bgenesis%252Fmegadrive";
     } else if (!strcmp(system->name, "mame")) {
         deviceString = "mame%2B0.37b5";
@@ -73,8 +74,6 @@ char *wowroms_deviceMapping(system_t *system) {
         deviceString = "playstation";
     } else if (!strcmp(system->name, "sega32x")) {
         deviceString = "sega%2B32x";
-    } else if (!strcmp(system->name, "segacd")) {
-        deviceString = "sega%2Bgenesis%252Fmegadrive";
     } else if (!strcmp(system->name, "sg-1000")) {
         deviceString = "sega%2Bsg1000";
     } else if (!strcmp(system->name, "snes")) {

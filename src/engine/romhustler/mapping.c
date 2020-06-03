@@ -31,8 +31,6 @@ char *romhustler_deviceMapping(system_t *system) {
         deviceString = "15";
     } else if (!strcmp(system->name, "dreamcast")) {
         deviceString = "6";
-    } else if (!strcmp(system->name, "fds")) {
-        deviceString = "36";
     } else if (!strcmp(system->name, "gamegear")) {
         deviceString = "12";
     } else if (!strcmp(system->name, "gb")) {
@@ -43,14 +41,12 @@ char *romhustler_deviceMapping(system_t *system) {
         deviceString = "8";
     } else if (!strcmp(system->name, "gc")) {
         deviceString = "39";
-    } else if (!strcmp(system->name, "genesis")) {
+    } else if (!strcmp(system->name, "genesis") || !strcmp(system->name, "megadrive")) {
         deviceString = "7";
     } else if (!strcmp(system->name, "mame")) {
         deviceString = "34";
     } else if (!strcmp(system->name, "mastersystem")) {
         deviceString = "29";
-    } else if (!strcmp(system->name, "megadrive")) {
-        deviceString = "7";
     } else if (!strcmp(system->name, "msx")) {
         deviceString = "16";
     } else if (!strcmp(system->name, "n64")) {
@@ -59,7 +55,7 @@ char *romhustler_deviceMapping(system_t *system) {
         deviceString = "21";
     } else if (!strcmp(system->name, "neogeo")) {
         deviceString = "31";
-    } else if (!strcmp(system->name, "nes")) {
+    } else if (!strcmp(system->name, "nes") || !strcmp(system->name, "fds")) {
         deviceString = "36";
     } else if (!strcmp(system->name, "ngp")) {
         deviceString = "30";

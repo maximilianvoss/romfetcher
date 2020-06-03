@@ -40,21 +40,20 @@ char *freeroms_deviceMapping(system_t *system) {
         deviceString = "gameboy_color";
     } else if (!strcmp(system->name, "gc")) {
         deviceString = "nintendo_gamecube";
-    } else if (!strcmp(system->name, "genesis")) {
+    } else if (!strcmp(system->name, "genesis") || !strcmp(system->name, "megadrive") ||
+               !strcmp(system->name, "segacd")) {
         deviceString = "sega_genesis_32x";
     } else if (!strcmp(system->name, "mame")) {
         deviceString = "mame";
     } else if (!strcmp(system->name, "mastersystem")) {
         deviceString = "sega_master_system";
-    } else if (!strcmp(system->name, "megadrive")) {
-        deviceString = "sega_genesis_32x";
     } else if (!strcmp(system->name, "n64")) {
         deviceString = "n64";
     } else if (!strcmp(system->name, "nds")) {
         deviceString = "nds";
     } else if (!strcmp(system->name, "neogeo")) {
         deviceString = "neogeo";
-    } else if (!strcmp(system->name, "nes")) {
+    } else if (!strcmp(system->name, "nes") || !strcmp(system->name, "fds")) {
         deviceString = "nes";
     } else if (!strcmp(system->name, "ngp")) {
         deviceString = "neogeo_pocket";
