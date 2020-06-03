@@ -56,6 +56,36 @@ void themes_setDrawColor(app_t *app, enum theme_color color) {
             b = app->themes.active->colors.fieldHighlight.b;
             a = app->themes.active->colors.fieldHighlight.a;
             break;
+        case modalBackground:
+            r = app->themes.active->colors.modalBackground.r;
+            g = app->themes.active->colors.modalBackground.g;
+            b = app->themes.active->colors.modalBackground.b;
+            a = app->themes.active->colors.modalBackground.a;
+            break;
+        case modalBackgroundInactive:
+            r = app->themes.active->colors.modalBackgroundInactive.r;
+            g = app->themes.active->colors.modalBackgroundInactive.g;
+            b = app->themes.active->colors.modalBackgroundInactive.b;
+            a = app->themes.active->colors.modalBackgroundInactive.a;
+            break;
+        case modalFrame:
+            r = app->themes.active->colors.modalFrame.r;
+            g = app->themes.active->colors.modalFrame.g;
+            b = app->themes.active->colors.modalFrame.b;
+            a = app->themes.active->colors.modalFrame.a;
+            break;
+        case modalButtonFrame:
+            r = app->themes.active->colors.modalButtonFrame.r;
+            g = app->themes.active->colors.modalButtonFrame.g;
+            b = app->themes.active->colors.modalButtonFrame.b;
+            a = app->themes.active->colors.modalButtonFrame.a;
+            break;
+        case modalButtonFrameActive:
+            r = app->themes.active->colors.modalButtonFrameActive.r;
+            g = app->themes.active->colors.modalButtonFrameActive.g;
+            b = app->themes.active->colors.modalButtonFrameActive.b;
+            a = app->themes.active->colors.modalButtonFrameActive.a;
+            break;
         default:
             r = 255;
             g = 255;

@@ -37,6 +37,12 @@ typedef struct theme_s {
         SDL_Color text;
         SDL_Color textHighlight;
         SDL_Color textInverted;
+        SDL_Color modalBackground;
+        SDL_Color modalBackgroundInactive;
+        SDL_Color modalFrame;
+        SDL_Color modalText;
+        SDL_Color modalButtonFrame;
+        SDL_Color modalButtonFrameActive;
     } colors;
     char *fileReference;
     char *font;

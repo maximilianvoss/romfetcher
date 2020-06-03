@@ -23,7 +23,12 @@ enum theme_color {
     background,
     field,
     fieldBackground,
-    fieldActive
+    fieldActive,
+    modalBackground,
+    modalBackgroundInactive,
+    modalFrame,
+    modalButtonFrame,
+    modalButtonFrameActive
 };
 
 void themes_setDrawColorField(app_t *app);

@@ -167,6 +167,13 @@ static theme_t *createThemeByMap(char *path, void *map) {
     loadColor(&theme->colors.textHighlight, map, "colors.textHighlight");
     loadColor(&theme->colors.textInverted, map, "colors.textInverted");
 
+    loadColor(&theme->colors.modalBackground, map, "colors.modalBackground");
+    loadColor(&theme->colors.modalBackgroundInactive, map, "colors.modalBackgroundInactive");
+    loadColor(&theme->colors.modalFrame, map, "colors.modalFrame");
+    loadColor(&theme->colors.modalText, map, "colors.modalText");
+    loadColor(&theme->colors.modalButtonFrame, map, "colors.modalButtonFrame");
+    loadColor(&theme->colors.modalButtonFrameActive, map, "colors.modalButtonFrameActive");
+
     theme->fileReference = cloneString(path);
     theme->name = cloneString(hash_get(map, "name"));
 

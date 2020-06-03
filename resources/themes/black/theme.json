@@ -43,6 +43,42 @@
       255,
       255,
       255
+    ],
+    "modalBackground": [
+      0,
+      0,
+      0,
+      200
+    ],
+    "modalBackgroundInactive": [
+      255,
+      255,
+      255,
+      50
+    ],
+    "modalFrame": [
+      255,
+      255,
+      255,
+      30
+    ],
+    "modalText": [
+      255,
+      255,
+      255,
+      255
+    ],
+    "modalButtonFrame": [
+      80,
+      80,
+      80,
+      255
+    ],
+    "modalButtonFrameActive": [
+      0,
+      0,
+      0,
+      150
     ]
   },
   "images": {
