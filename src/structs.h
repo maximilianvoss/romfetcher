@@ -95,6 +95,15 @@ typedef struct engine_s {
     void (*download)(void *app, searchresult_t *item, void (*callback)(void *app));
 } engine_t;
 
+typedef struct resolution_s {
+    struct resolution_s *prev;
+    struct resolution_s *next;
+    char *name;
+    uint8_t active;
+    int height;
+    int width;
+} resolution_t;
+
 typedef struct {
     SDL_Renderer *sdlRenderer;
     SDL_Window *sdlWindow;
@@ -178,6 +187,12 @@ typedef struct {
             uint8_t opengl;
             uint8_t highdpi;
         } advanced;
+
+        struct {
+            resolution_t *active;
+            resolution_t *all;
+            resolution_t *cursor;
+        } resolution;
     } config;
 
     struct {

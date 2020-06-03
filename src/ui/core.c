@@ -15,13 +15,10 @@
  */
 
 #include "core.h"
-#include "../config.h"
 #include "textures.h"
 
 void ui_init(app_t *app) {
 
-    int screenWidth;
-    int screenHeight;
     Uint32 windowFlags = 0;
     Uint32 rendererFlags = SDL_RENDERER_ACCELERATED;
 
@@ -38,8 +35,8 @@ void ui_init(app_t *app) {
         windowFlags |= SDL_WINDOW_ALLOW_HIGHDPI;
     }
 
-    screenWidth = INIT_SCREEN_WIDTH;
-    screenHeight = INIT_SCREEN_HEIGHT;
+    int screenWidth = app->config.resolution.active->width;
+    int screenHeight = app->config.resolution.active->height;
     if (app->config.advanced.fullscreen) {
         windowFlags |= SDL_WINDOW_FULLSCREEN;
 

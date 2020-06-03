@@ -73,6 +73,7 @@ void uihandler_render(app_t *app) {
         case window_config:
         case window_config_advanced:
         case window_config_engine:
+        case window_config_resolution:
         case window_config_systems:
         case window_config_themes:
         case window_system:

@@ -111,6 +111,8 @@ set(SOURCES
         src/state/stateconfigadvanced.h
         src/state/stateconfigengine.c
         src/state/stateconfigengine.h
+        src/state/stateconfigresolution.c
+        src/state/stateconfigresolution.h
         src/state/stateconfigsystems.c
         src/state/stateconfigsystems.h
         src/state/stateconfigthemes.c

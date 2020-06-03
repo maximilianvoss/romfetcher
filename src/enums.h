@@ -25,6 +25,7 @@ typedef enum {
     window_config,
     window_config_advanced,
     window_config_engine,
+    window_config_resolution,
     window_config_systems,
     window_config_themes
 } window_t;

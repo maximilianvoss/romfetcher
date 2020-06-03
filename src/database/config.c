@@ -23,7 +23,7 @@ static void fillStandardValues(sqlite3 *db);
 
 void database_configInitTable(sqlite3 *db) {
     char *err_msg = 0;
-    char *query = "CREATE TABLE config (version INT, theme TEXT, fullscreen INT, opengl INT, highdpi INT);";
+    char *query = "CREATE TABLE config (version INT, theme TEXT, fullscreen INT, opengl INT, highdpi INT, resolution TEXT);";
 
     int rc = sqlite3_exec(db, query, 0, 0, &err_msg);
     if (rc != SQLITE_OK) {
@@ -55,7 +55,7 @@ uint8_t database_configCheckVersion(sqlite3 *db) {
 }
 
 void database_configLoad(app_t *app) {
-    char *query = "SELECT theme, fullscreen, opengl, highdpi FROM config";
+    char *query = "SELECT theme, fullscreen, opengl, highdpi, resolution FROM config";
 
     sqlite3_stmt *stmt;
     int rc = sqlite3_prepare_v2(app->database.db, query, -1, &stmt, 0);
@@ -70,6 +70,8 @@ void database_configLoad(app_t *app) {
         int fullscreen = sqlite3_column_int(stmt, 1);
         int opengl = sqlite3_column_int(stmt, 2);
         int highdpi = sqlite3_column_int(stmt, 3);
+        char *resolution = (char *) sqlite3_column_text(stmt, 4);
+        app->config.resolution.active = linkedlist_findElementByName(app->config.resolution.all, resolution);
 
         configadvanced_setConfig(app, advancedConfig_fullscreen, fullscreen);
         configadvanced_setConfig(app, advancedConfig_openGL, opengl);
@@ -78,11 +80,14 @@ void database_configLoad(app_t *app) {
     if (app->themes.active == NULL) {
         app->themes.active = app->themes.all;
     }
+    if (app->config.resolution.active == NULL) {
+        app->config.resolution.active = app->config.resolution.all;
+    }
     sqlite3_finalize(stmt);
 }
 
 void database_configPersist(app_t *app) {
-    char *query = "UPDATE config SET theme=@theme, fullscreen=@fullscreen, opengl=@opengl, highdpi=@highdpi";
+    char *query = "UPDATE config SET theme=@theme, fullscreen=@fullscreen, opengl=@opengl, highdpi=@highdpi, resolution=@resolution";
 
     sqlite3_stmt *stmt;
     configadvanced_listToSettings(app);
@@ -98,6 +103,9 @@ void database_configPersist(app_t *app) {
         sqlite3_bind_int(stmt, idx, app->config.advanced.opengl);
         idx = sqlite3_bind_parameter_index(stmt, "@highdpi");
         sqlite3_bind_int(stmt, idx, app->config.advanced.highdpi);
+        idx = sqlite3_bind_parameter_index(stmt, "@resolution");
+        sqlite3_bind_text(stmt, idx, app->config.resolution.active->name, strlen(app->config.resolution.active->name),
+                          NULL);
     } else {
         fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(app->database.db));
     }

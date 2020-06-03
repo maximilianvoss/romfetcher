@@ -24,6 +24,7 @@
 #include "stateconfigsystems.h"
 #include "stateconfigthemes.h"
 #include "stateconfigadvanced.h"
+#include "stateconfigresolution.h"
 
 static void *getInitFunction(window_t target);
 
@@ -63,6 +64,10 @@ void statehandler_switch(app_t *app, uint8_t isSelectButton) {
             state_target = &stateconfigengine_target;
             state_persist = &stateconfigengine_persist;
             break;
+        case window_config_resolution:
+            state_target = &stateconfigresolution_target;
+            state_persist = &stateconfigresolution_persist;
+            break;
         case window_config_systems:
             state_target = &stateconfigsystems_target;
             state_persist = &stateconfigsystems_persist;
@@ -96,6 +101,8 @@ static void *getInitFunction(window_t target) {
             return &stateconfigadvanced_init;
         case window_config_engine:
             return &stateconfigengine_init;
+        case window_config_resolution:
+            return &stateconfigresolution_init;
         case window_config_systems:
             return &stateconfigsystems_init;
         case window_config_themes:
