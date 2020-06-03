@@ -101,8 +101,11 @@ int test_engine_freeroms_fba(app_t *app) {
 }
 
 int test_engine_freeroms_fds(app_t *app) {
-    searchresult_t *list = freeroms->search(app, fds, "");
-    ASSERTNULL(list);
+    searchresult_t *list = freeroms->search(app, fds, "Z-Gunda");
+    ASSERTNOTNULL(list);
+    list = linkedlist_sort(list);
+    ASSERTSTR("Z-Gundam", list->title);
+    result_freeList(list);
     return 0;
 }
 
@@ -320,8 +323,11 @@ int test_engine_freeroms_sega32x(app_t *app) {
 }
 
 int test_engine_freeroms_segacd(app_t *app) {
-    searchresult_t *list = freeroms->search(app, segacd, "");
-    ASSERTNULL(list);
+    searchresult_t *list = freeroms->search(app, segacd, "NBA Jam");
+    ASSERTNOTNULL(list);
+    list = linkedlist_sort(list);
+    ASSERTSTR("NBA Jam Tournament Edition (32X)", list->title);
+    result_freeList(list);
     return 0;
 }
 
