@@ -19,9 +19,7 @@
 char *romsemulator_deviceMapping(system_t *system) {
     char *deviceString = NULL;
 
-    if (!strcmp(system->name, "3do")) {
-//         deviceString = "3do";
-    } else if (!strcmp(system->name, "amiga")) {
+    if (!strcmp(system->name, "amiga")) {
         deviceString = "amiga-500";
     } else if (!strcmp(system->name, "atari2600")) {
         deviceString = "atari-2600";
@@ -37,8 +35,6 @@ char *romsemulator_deviceMapping(system_t *system) {
         deviceString = "commodore-64";
     } else if (!strcmp(system->name, "dreamcast")) {
         deviceString = "dreamcast";
-    } else if (!strcmp(system->name, "fba")) {
-//        deviceString = "Final Burn Alpha";
     } else if (!strcmp(system->name, "fds")) {
         deviceString = "nintendo";
     } else if (!strcmp(system->name, "gamegear")) {
@@ -53,10 +49,6 @@ char *romsemulator_deviceMapping(system_t *system) {
         deviceString = "gamecube";
     } else if (!strcmp(system->name, "genesis")) {
         deviceString = "sega-genesis";
-    } else if (!strcmp(system->name, "gw")) {
-//        deviceString = "Game and Watch";
-    } else if (!strcmp(system->name, "love")) {
-//        deviceString = "LÖVE";
     } else if (!strcmp(system->name, "mame")) {
         deviceString = "mame-037b11";
     } else if (!strcmp(system->name, "mastersystem")) {
@@ -77,22 +69,14 @@ char *romsemulator_deviceMapping(system_t *system) {
         deviceString = "neo-geo-pocket";
     } else if (!strcmp(system->name, "ngpc")) {
         deviceString = "neo-geo-pocket-color";
-    } else if (!strcmp(system->name, "pc")) {
-//        deviceString = "PC (x86)";
     } else if (!strcmp(system->name, "pcengine")) {
         deviceString = "turbografx-16";
-    } else if (!strcmp(system->name, "pcfx")) {
-//        deviceString = "PC-FX";
     } else if (!strcmp(system->name, "ps2")) {
         deviceString = "playstation-2";
     } else if (!strcmp(system->name, "psp")) {
         deviceString = "playstation-portable";
     } else if (!strcmp(system->name, "psx")) {
         deviceString = "playstation";
-    } else if (!strcmp(system->name, "saturn")) {
-//        deviceString = "Sega Saturn";
-    } else if (!strcmp(system->name, "scummvm")) {
-//        deviceString = "ScummVM";
     } else if (!strcmp(system->name, "sega32x")) {
         deviceString = "sega-32x";
     } else if (!strcmp(system->name, "segacd")) {
@@ -109,12 +93,8 @@ char *romsemulator_deviceMapping(system_t *system) {
         deviceString = "nintendo-virtual-boy";
     } else if (!strcmp(system->name, "wii")) {
         deviceString = "nintendo-wii";
-    } else if (!strcmp(system->name, "wiiu")) {
-//        deviceString = "Nintendo Wii U";
     } else if (!strcmp(system->name, "wonderswan")) {
         deviceString = "wonderswan";
-    } else if (!strcmp(system->name, "wonderswancolor")) {
-//        deviceString = "Wonderswan Color";
     } else if (!strcmp(system->name, "zxspectrum")) {
         deviceString = "zx-spectrum";
     }

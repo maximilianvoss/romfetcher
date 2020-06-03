@@ -19,9 +19,7 @@
 char *romsdownload_deviceMapping(system_t *system) {
     char *deviceString = NULL;
 
-    if (!strcmp(system->name, "3do")) {
-//         deviceString = "3do";
-    } else if (!strcmp(system->name, "amiga")) {
+    if (!strcmp(system->name, "amiga")) {
         deviceString = "6";
     } else if (!strcmp(system->name, "atari2600")) {
         deviceString = "13";
@@ -35,10 +33,6 @@ char *romsdownload_deviceMapping(system_t *system) {
         deviceString = "19";
     } else if (!strcmp(system->name, "c64")) {
         deviceString = "31";
-    } else if (!strcmp(system->name, "dreamcast")) {
-//        deviceString = "dreamcast";
-    } else if (!strcmp(system->name, "fba")) {
-//        deviceString = "Final Burn Alpha";
     } else if (!strcmp(system->name, "fds")) {
         deviceString = "77";
     } else if (!strcmp(system->name, "gamegear")) {
@@ -53,10 +47,6 @@ char *romsdownload_deviceMapping(system_t *system) {
         deviceString = "50";
     } else if (!strcmp(system->name, "genesis")) {
         deviceString = "98";
-    } else if (!strcmp(system->name, "gw")) {
-//        deviceString = "Game and Watch";
-    } else if (!strcmp(system->name, "love")) {
-//        deviceString = "LÖVE";
     } else if (!strcmp(system->name, "mame")) {
         deviceString = "61";
     } else if (!strcmp(system->name, "mastersystem")) {
@@ -77,22 +67,14 @@ char *romsdownload_deviceMapping(system_t *system) {
         deviceString = "71";
     } else if (!strcmp(system->name, "ngpc")) {
         deviceString = "72";
-    } else if (!strcmp(system->name, "pc")) {
-//        deviceString = "PC (x86)";
     } else if (!strcmp(system->name, "pcengine")) {
         deviceString = "115";
-    } else if (!strcmp(system->name, "pcfx")) {
-//        deviceString = "PC-FX";
     } else if (!strcmp(system->name, "ps2")) {
         deviceString = "89";
     } else if (!strcmp(system->name, "psp")) {
         deviceString = "91";
     } else if (!strcmp(system->name, "psx")) {
         deviceString = "88";
-    } else if (!strcmp(system->name, "saturn")) {
-//        deviceString = "Sega Saturn";
-    } else if (!strcmp(system->name, "scummvm")) {
-//        deviceString = "ScummVM";
     } else if (!strcmp(system->name, "sega32x")) {
         deviceString = "95";
     } else if (!strcmp(system->name, "segacd")) {
@@ -109,12 +91,8 @@ char *romsdownload_deviceMapping(system_t *system) {
         deviceString = "79";
     } else if (!strcmp(system->name, "wii")) {
         deviceString = "80";
-    } else if (!strcmp(system->name, "wiiu")) {
-//        deviceString = "Nintendo Wii U";
     } else if (!strcmp(system->name, "wonderswan")) {
         deviceString = "121";
-    } else if (!strcmp(system->name, "wonderswancolor")) {
-//        deviceString = "Wonderswan Color";
     } else if (!strcmp(system->name, "zxspectrum")) {
         deviceString = "124";
     }

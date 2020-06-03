@@ -21,8 +21,6 @@ char *romhustler_deviceMapping(system_t *system) {
 
     if (!strcmp(system->name, "3do")) {
         deviceString = "10";
-    } else if (!strcmp(system->name, "amiga")) {
-//        deviceString = "agmia-500";
     } else if (!strcmp(system->name, "atari2600")) {
         deviceString = "2";
     } else if (!strcmp(system->name, "atari7800")) {
@@ -31,14 +29,8 @@ char *romhustler_deviceMapping(system_t *system) {
         deviceString = "13";
     } else if (!strcmp(system->name, "atarilynx")) {
         deviceString = "15";
-    } else if (!strcmp(system->name, "atarist")) {
-//        deviceString = "atari-st";
-    } else if (!strcmp(system->name, "c64")) {
-//        deviceString = "commodore-64";
     } else if (!strcmp(system->name, "dreamcast")) {
         deviceString = "6";
-    } else if (!strcmp(system->name, "fba")) {
-//        deviceString = "Final Burn Alpha";
     } else if (!strcmp(system->name, "fds")) {
         deviceString = "36";
     } else if (!strcmp(system->name, "gamegear")) {
@@ -53,10 +45,6 @@ char *romhustler_deviceMapping(system_t *system) {
         deviceString = "39";
     } else if (!strcmp(system->name, "genesis")) {
         deviceString = "7";
-    } else if (!strcmp(system->name, "gw")) {
-//        deviceString = "Game and Watch";
-    } else if (!strcmp(system->name, "love")) {
-//        deviceString = "LÖVE";
     } else if (!strcmp(system->name, "mame")) {
         deviceString = "34";
     } else if (!strcmp(system->name, "mastersystem")) {
@@ -77,12 +65,8 @@ char *romhustler_deviceMapping(system_t *system) {
         deviceString = "30";
     } else if (!strcmp(system->name, "ngpc")) {
         deviceString = "30";
-    } else if (!strcmp(system->name, "pc")) {
-//        deviceString = "PC (x86)";
     } else if (!strcmp(system->name, "pcengine")) {
         deviceString = "35";
-    } else if (!strcmp(system->name, "pcfx")) {
-//        deviceString = "PC-FX";
     } else if (!strcmp(system->name, "ps2")) {
         deviceString = "38";
     } else if (!strcmp(system->name, "psp")) {
@@ -91,32 +75,16 @@ char *romhustler_deviceMapping(system_t *system) {
         deviceString = "22";
     } else if (!strcmp(system->name, "saturn")) {
         deviceString = "23";
-    } else if (!strcmp(system->name, "scummvm")) {
-//        deviceString = "ScummVM";
-    } else if (!strcmp(system->name, "sega32x")) {
-//        deviceString = "sega-32x";
     } else if (!strcmp(system->name, "segacd")) {
         deviceString = "27";
-    } else if (!strcmp(system->name, "sg-1000")) {
-//        deviceString = "sega-sg1000";
     } else if (!strcmp(system->name, "snes")) {
         deviceString = "1";
     } else if (!strcmp(system->name, "vectrex")) {
         deviceString = "25";
-    } else if (!strcmp(system->name, "videopac")) {
-//        deviceString = "philips-videopac";
-    } else if (!strcmp(system->name, "virtualboy")) {
-//        deviceString = "nintendo-virtual-boy";
-    } else if (!strcmp(system->name, "wii")) {
-//        deviceString = "nintendo-wii";
-    } else if (!strcmp(system->name, "wiiu")) {
-//        deviceString = "Nintendo Wii U";
     } else if (!strcmp(system->name, "wonderswan")) {
         deviceString = "24";
     } else if (!strcmp(system->name, "wonderswancolor")) {
         deviceString = "24";
-    } else if (!strcmp(system->name, "zxspectrum")) {
-//        deviceString = "zx-spectrum";
     }
 
     return deviceString;
