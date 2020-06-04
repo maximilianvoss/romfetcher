@@ -201,7 +201,7 @@ set(THEME_BLACK
         resources/themes/black/checkbox_unchecked.png
         resources/themes/black/selector.png
         resources/themes/black/settings.png
-        resources/themes/peach/theme.json
+        resources/themes/black/theme.json
         )
 
 
@@ -222,8 +222,8 @@ set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "ROM Fetcher for Emulationstation")
 set(CPACK_PACKAGE_VENDOR "Maximilian Voss (maximlian@voss.rocks)")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
 
-set(CPACK_PACKAGE_VERSION_MAJOR "1")
-set(CPACK_PACKAGE_VERSION_MINOR "2")
+set(CPACK_PACKAGE_VERSION_MAJOR "2")
+set(CPACK_PACKAGE_VERSION_MINOR "0")
 set(CPACK_PACKAGE_VERSION_PATCH "0")
 
 set(CPACK_GENERATOR "DEB")

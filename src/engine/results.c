@@ -37,10 +37,7 @@ void result_setTitle(searchresult_t *resultList, char *title) {
     if (resultList == NULL || title == NULL) {
         return;
     }
-
-    int length = strlen(title) + 1;
-    resultList->title = (char *) calloc(length, sizeof(char));
-    memcpy(resultList->title, title, length);
+    resultList->title = str_clone(title);
 }
 
 void result_setUrl(searchresult_t *resultList, char *url) {
@@ -48,9 +45,7 @@ void result_setUrl(searchresult_t *resultList, char *url) {
     if (resultList == NULL || url == NULL) {
         return;
     }
-    int length = strlen(url) + 1;
-    resultList->url = (char *) calloc(length, sizeof(char));
-    memcpy(resultList->url, url, length);
+    resultList->url = str_clone(url);
 }
 
 void result_freeList(searchresult_t *resultList) {
