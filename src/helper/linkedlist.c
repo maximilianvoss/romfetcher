@@ -34,7 +34,6 @@ void *linkedlist_appendElement(void *list, void *elementVoid) {
     }
     ptr->next = element;
     element->prev = ptr;
-    element->next = NULL;
     return list;
 }
 
