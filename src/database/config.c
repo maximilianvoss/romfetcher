@@ -119,7 +119,7 @@ void database_configPersist(app_t *app) {
 }
 
 static void fillStandardValues(sqlite3 *db) {
-    char *query = "INSERT INTO config (version) VALUES (@version)";
+    char *query = "INSERT INTO config (version, fullscreen) VALUES (@version, 1)";
 
     sqlite3_stmt *stmt;
     int rc = sqlite3_prepare_v2(db, query, -1, &stmt, 0);
