@@ -96,10 +96,12 @@ static void addElement(sqlite3 *db, char *tableName, char *name, int active) {
 
 static int loadActivitiesCallback(void *p_data, int num_fields, char **p_fields, char **p_col_names) {
     linkedlist_t *element = linkedlist_findElementByName(p_data, p_fields[0]);
-    if (!strcmp(p_fields[1], "1")) {
-        element->active = 1;
-    } else {
-        element->active = 0;
+    if (element != NULL) {
+        if (!strcmp(p_fields[1], "1")) {
+            element->active = 1;
+        } else {
+            element->active = 0;
+        }
     }
     return 0;
 }
