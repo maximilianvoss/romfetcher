@@ -39,9 +39,9 @@ int main() {
     themes_init(&app);
     config_init(&app);
     fonts_init(&app);
-    inputhandler_init();
     database_configLoad(&app);
     ui_init(&app);
+    inputhandler_init();
 
     uint8_t quit = 0;
     while (!quit) {
