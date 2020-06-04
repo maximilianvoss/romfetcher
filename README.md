@@ -42,6 +42,7 @@ sudo apt-get -y install libsdl2-ttf-dev libsdl2-image-dev libsdl2-dev libcurl4-o
 ### Compiling the latest code
 ```bash
 git clone --recurse-submodules https://github.com/maximilianvoss/romfetcher.git
+cd romfetcher
 cmake -G "Unix Makefiles"
 make
 sudo make install
