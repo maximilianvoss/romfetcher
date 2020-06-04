@@ -59,8 +59,8 @@ static void fillDefaultValus(sqlite3 *db) {
 
     char *query = "INSERT INTO postprocessors (filesuffix, command, active) VALUES\
                         ('.zip', 'unzip -o \"%file%\" -d \"%target%\"', 0),\
-                        ('.rar', 'unrar x y \"%file%\ \"%target%\"', 1),\
-                        ('.7z', '7z -y x \"%file%\" -w \"%target%\"', 1)";
+                        ('.rar', 'unrar -x -f \"%file%\ \"%target%\"', 1),\
+                        ('.7z', '7zr -y x \"%file%\" -w \"%target%\"', 1)";
     int rc = sqlite3_exec(db, query, 0, 0, &err_msg);
     if (rc != SQLITE_OK) {
         fprintf(stderr, "Failed to execute query\n");

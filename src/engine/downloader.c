@@ -74,6 +74,7 @@ void downloader_download(app_t *app, system_t *system, char *url, char *data, ch
 
 static void modalDownload(void *data) {
     data_t *input = (data_t *) data;
+    input->app->modal.displayed = 0;
     performDownload(input->app, input->system, input->url, input->data, input->filename, input->method,
                     input->callback);
     FREENOTNULL(input->filename);

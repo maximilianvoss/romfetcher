@@ -47,6 +47,22 @@ make
 sudo make install
 ```
 
+## Post Processing of downloads
+It seems some of the pages offer the downloads as 7z or RAR files. To automatically extract them, please install the fitting toolset:
+```bash 
+sudo apt-get -y install p7zip unrar-free
+```
+Decompression of ZIP files is disabled by default as Emulationstation is capable of handling them.  
+If you prefer to enable ZIP decompression please do following:
+```bash
+sqlite3 ~/.romfetcher/romfetcher.db
+```
+Execute following SQL command in sqlite3:
+```sql
+UPDATE postprocessors SET active=1 WHERE filesuffix=".zip";
+```
+**REMARK:** The downloaded original files won't be deleted after decompression.
+
 ### Troubleshooting
 #### Missing dependencies: mesa-common-dev & libegl1-mesa-dev
 I experienced on the latest RetrOrangePie 4.3 that these dependencies can't be installed 
