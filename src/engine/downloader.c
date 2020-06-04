@@ -21,6 +21,7 @@
 #include "../helper/utils.h"
 #include "../state/statesearch.h"
 #include "../state/statedownload.h"
+#include "../database/postprocess.h"
 
 typedef struct {
     app_t *app;
@@ -39,6 +40,8 @@ static void performDownload(app_t *app, system_t *system, char *url, char *data,
 static void modalDownload(void *data);
 
 static void modalCancel(void *data);
+
+static void postProcess(app_t *app, char *file);
 
 void downloader_download(app_t *app, system_t *system, char *url, char *data, char *filename, httpmethod_t method,
                          void (*callback)(void *app)) {
@@ -94,6 +97,28 @@ static void performDownload(app_t *app, system_t *system, char *url, char *data,
                             void (*callback)(void *app)) {
     csafestring_t *downloadPath = path_downloadTarget(system, filename);
     curlling_download(app, url, data, method, downloadPath->data);
+
+    postProcess(app, downloadPath->data);
+
     safe_destroy(downloadPath);
     callback(app);
+}
+
+static void postProcess(app_t *app, char *file) {
+    char *suffix = file_suffix(file);
+
+    char *commandTemplate = databasepostprocess_getCommand(app, suffix);
+    if (commandTemplate != NULL) {
+        char *directory = file_parentDirectory(file);
+        char *tmp = str_replace(commandTemplate, "%file%", file);
+        char *command = str_replace(tmp, "%target%", directory);
+
+        int status = system(command);
+        SDL_Log("%s exited with: %d\n", command, status);
+
+        free(directory);
+        free(commandTemplate);
+        free(command);
+        free(tmp);
+    }
 }

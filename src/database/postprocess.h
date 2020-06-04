@@ -14,32 +14,15 @@
  * limitations under the License.
  */
 
-#ifndef HELPER_UTILS_H
-#define HELPER_UTILS_H
+#ifndef DATABASE_POSTPROCESS_H
+#define DATABASE_POSTPROCESS_H
 
-#include <stdlib.h>
-#include <stdint.h>
+#include <sqlite3.h>
+#include "../structs.h"
 
-#define FREENOTNULL(x) if (x != NULL) free (x)
 
-char *str_replace(char *orig, char *rep, char *with);
+void databasepostprocess_init(sqlite3 *db);
 
-char *file_name(char *path);
-
-char *file_suffix(char *path);
-
-uint8_t file_exists(char *path);
-
-char *str_urlDecode(const char *string);
-
-char *str_htmlDecode(const char *string);
-
-char *str_concat(char *str1, char *str2);
-
-char *str_quoteDecode(char *strIn);
-
-char *str_clone(char *str);
-
-char *file_parentDirectory(char *path);
+char *databasepostprocess_getCommand(app_t *app, char *fileSuffix);
 
 #endif

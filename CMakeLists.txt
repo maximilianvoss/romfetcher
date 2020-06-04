@@ -42,6 +42,8 @@ set(SOURCES
         src/database/init.h
         src/database/linkedlist.c
         src/database/linkedlist.h
+        src/database/postprocess.c
+        src/database/postprocess.h
         src/engine/downloader.c
         src/engine/downloader.h
         src/engine/freeroms/freeroms.c

@@ -95,6 +95,23 @@ char *file_suffix(char *path) {
     return result;
 }
 
+char *file_parentDirectory(char *path) {
+    char *ptr = str_clone(path);
+    char *result = ptr;
+    char *lastSlash = NULL;
+
+    while (ptr != NULL && *ptr != '\0') {
+        if (*ptr == '/') {
+            lastSlash = ptr;
+        }
+        ptr++;
+    }
+    if (lastSlash != NULL) {
+        *lastSlash = '\0';
+    }
+    return result;
+}
+
 char *str_urlDecode(const char *string) {
     char *o;
     int length = strlen(string);

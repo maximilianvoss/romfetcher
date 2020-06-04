@@ -21,6 +21,7 @@
 #include "../helper/path.h"
 #include "enginecache.h"
 #include "linkedlist.h"
+#include "postprocess.h"
 
 static uint8_t doesTableExist(sqlite3 *db, char *tableName);
 
@@ -77,11 +78,15 @@ void database_initTables(sqlite3 *db) {
     if (!doesTableExist(db, "enginecachestate")) {
         enginecache_initstate(db);
     }
+
+    if (!doesTableExist(db, "postprocessors")) {
+        databasepostprocess_init(db);
+    }
 }
 
 static void dropAllTables(sqlite3 *db) {
     char *err_msg = 0;
-    char *query = "DROP TABLE IF EXISTS systems; DROP TABLE IF EXISTS config; DROP TABLE IF EXISTS enginecache; DROP TABLE IF EXISTS enginecachestate; DROP TABLE IF EXISTS engines";
+    char *query = "DROP TABLE IF EXISTS systems; DROP TABLE IF EXISTS config; DROP TABLE IF EXISTS enginecache; DROP TABLE IF EXISTS enginecachestate; DROP TABLE IF EXISTS engines; DROP TABLE IF EXISTS postprocessors";
 
     int rc = sqlite3_exec(db, query, 0, 0, &err_msg);
     if (rc != SQLITE_OK) {
