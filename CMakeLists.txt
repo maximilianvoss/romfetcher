@@ -158,6 +158,8 @@ set(SOURCES
         src/ui/uilist.h
         src/ui/uisearch.c
         src/ui/uisearch.h
+        src/ui/uisearchresult.c
+        src/ui/uisearchresult.h
         )
 
 set(TEST_SOURCES

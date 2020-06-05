@@ -17,7 +17,7 @@
 #include "uisearch.h"
 #include "rendering.h"
 #include "../themes/rendering.h"
-#include "uilist.h"
+#include "uisearchresult.h"
 
 static void renderSearchField(app_t *app);
 
@@ -25,7 +25,6 @@ static void renderSearchButton(app_t *app);
 
 static void renderSystemSelector(app_t *app);
 
-static void renderSearchResults(app_t *app);
 
 static void renderSettingsIcon(app_t *app);
 
@@ -34,7 +33,7 @@ void uisearch_render(app_t *app) {
     renderSystemSelector(app);
     renderSearchField(app);
     renderSearchButton(app);
-    renderSearchResults(app);
+    uisearchresult_render(app, 190);
 }
 
 static void renderSettingsIcon(app_t *app) {
@@ -116,15 +115,5 @@ static void renderSearchButton(app_t *app) {
     SDL_Rect renderQuad = {width - 180, 125, texture.w, texture.h};
     SDL_RenderCopy(app->sdlRenderer, texture.texture, NULL, &renderQuad);
     SDL_DestroyTexture(texture.texture);
-}
-
-static void renderSearchResults(app_t *app) {
-    app->list.all = (linkedlist_t *) app->search.all;
-    app->list.active = (linkedlist_t *) app->search.active;
-    app->list.cursor = (linkedlist_t *) app->search.cursor;
-    app->list.multi = 0;
-    app->list.checkbox = 0;
-
-    uilist_renderList(app, 190);
 }
 
