@@ -43,6 +43,7 @@ static void (*processOtherButton)(app_t *app, GameControllerState_t *state);
 static SDL_GameController **gameControllers;
 static GameControllerState_t gameControllerState;
 static int gameControllerCount;
+static Uint32 lastKeyPressed = 0;
 
 
 void inputhandler_init() {
@@ -159,6 +160,12 @@ static uint8_t processGameController(app_t *app) {
 
 static uint8_t processEvents(app_t *app) {
     SDL_Event event;
+
+    if (SDL_TICKS_PASSED(SDL_GetTicks(), lastKeyPressed + 200L)) {
+        processGameController(app);
+        lastKeyPressed = SDL_GetTicks();
+    }
+
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
             case SDL_QUIT:
@@ -212,6 +219,7 @@ static uint8_t processEvents(app_t *app) {
                         SDL_Log("Unused Button: %d\n", event.cbutton.button);
                         break;
                 }
+                lastKeyPressed = SDL_GetTicks();
                 return processGameController(app);
             case SDL_JOYBUTTONUP:
                 break;
