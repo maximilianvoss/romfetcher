@@ -17,12 +17,12 @@
 #include <csafestring.h>
 #include "romsmania.h"
 #include "mapping.h"
-#include "../curlling.h"
+#include "../../download/curlling.h"
 #include "../results.h"
 #include "../../helper/utils.h"
 #include "../urlhandling.h"
 #include "../../helper/regex.h"
-#include "../downloader.h"
+#include "../../download/downloader.h"
 
 #define SHORTNAME "RCC"
 #define URL_TEMPLATE "https://romsmania.cc/roms/%system%/search?name=%query%&genre=&region=&orderBy=name&orderAsc=1&page=%page%"

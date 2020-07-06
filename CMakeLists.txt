@@ -44,14 +44,14 @@ set(SOURCES
         src/database/linkedlist.h
         src/database/postprocess.c
         src/database/postprocess.h
-        src/engine/downloader.c
-        src/engine/downloader.h
+        src/download/curlling.c
+        src/download/curlling.h
+        src/download/downloader.c
+        src/download/downloader.h
         src/engine/freeroms/freeroms.c
         src/engine/freeroms/freeroms.h
         src/engine/freeroms/mapping.c
         src/engine/freeroms/mapping.h
-        src/engine/curlling.c
-        src/engine/curlling.h
         src/engine/enginehandler.c
         src/engine/enginehandler.h
         src/engine/results.c

@@ -17,12 +17,12 @@
 #include <csafestring.h>
 #include "romsdownload.h"
 #include "mapping.h"
-#include "../curlling.h"
+#include "../../download/curlling.h"
 #include "../results.h"
 #include "../../helper/utils.h"
 #include "../urlhandling.h"
 #include "../../helper/regex.h"
-#include "../downloader.h"
+#include "../../download/downloader.h"
 
 #define SHORTNAME "RDC"
 #define URL_TEMPLATE "https://roms-download.com/ajax.php?m=roms_j"

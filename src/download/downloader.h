@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-#ifndef ENGINE_CURLLING_H
-#define ENGINE_CURLLING_H
+#ifndef DOWNLOAD_DOWNLOADER_H
+#define DOWNLOAD_DOWNLOADER_H
 
 #include "../structs.h"
 
-int curlling_download(app_t *app, char *url, char *data, httpmethod_t method, char *filename);
-
-char *curlling_fetch(char *url, char *postData, httpmethod_t method);
+void downloader_download(app_t *app, system_t *system, char *url, char *data, char *filename, httpmethod_t method,
+                         void (*callback)(void *app));
 
 #endif

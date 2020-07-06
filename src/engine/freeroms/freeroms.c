@@ -20,10 +20,10 @@
 #include "../../database/enginecache.h"
 #include "../urlhandling.h"
 #include "mapping.h"
-#include "../curlling.h"
+#include "../../download/curlling.h"
 #include "../../helper/regex.h"
 #include "../../helper/utils.h"
-#include "../downloader.h"
+#include "../../download/downloader.h"
 
 #define THREADCOUNT 5
 #define SHORTNAME "FRE"

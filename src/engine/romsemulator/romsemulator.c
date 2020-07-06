@@ -17,12 +17,12 @@
 #include <csafestring.h>
 #include "romsemulator.h"
 #include "mapping.h"
-#include "../curlling.h"
+#include "../../download/curlling.h"
 #include "../results.h"
 #include "../../helper/utils.h"
 #include "../urlhandling.h"
 #include "../../helper/regex.h"
-#include "../downloader.h"
+#include "../../download/downloader.h"
 
 #define SHORTNAME "REN"
 #define URL_TEMPLATE "https://romsemulator.net/roms/%system%/page/%page%/?s=%query%"

@@ -17,12 +17,12 @@
 #include <csafestring.h>
 #include "romsmode.h"
 #include "mapping.h"
-#include "../curlling.h"
+#include "../../download/curlling.h"
 #include "../results.h"
 #include "../../helper/utils.h"
 #include "../../helper/regex.h"
 #include "../urlhandling.h"
-#include "../downloader.h"
+#include "../../download/downloader.h"
 
 #define SHORTNAME "MOD"
 #define URL_TEMPLATE "https://romsmode.com/roms/%system%/%page%?name=%query%"

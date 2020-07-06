@@ -18,11 +18,11 @@
 #include "romhustler.h"
 #include "../urlhandling.h"
 #include "mapping.h"
-#include "../curlling.h"
+#include "../../download/curlling.h"
 #include "../../helper/regex.h"
 #include "../results.h"
 #include "../../helper/utils.h"
-#include "../downloader.h"
+#include "../../download/downloader.h"
 
 #define SHORTNAME "HSL"
 #define URL_TEMPLATE "https://romhustler.org/roms/search/page:%page%?q=%query%&console_id%5B9%5D=%system%"
