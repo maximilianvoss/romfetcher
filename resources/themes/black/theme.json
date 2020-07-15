@@ -85,6 +85,7 @@
     "checkboxChecked": "checkbox_checked.png",
     "checkboxUnchecked": "checkbox_unchecked.png",
     "selectorIcon": "selector.png",
-    "settingsIcon": "settings.png"
+    "settingsIcon": "settings.png",
+    "downloadManagerIcon": "download.png"
   }
 }

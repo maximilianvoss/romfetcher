@@ -42,10 +42,10 @@ void inputmodal_processRight(app_t *app) {
 
 void inputmodal_processSelect(app_t *app) {
     if (!app->modal.cursorPos && app->modal.callbackAction != NULL) {
-        app->modal.callbackAction(app->modal.callbackData);
+        app->modal.callbackAction(app, app->modal.callbackData);
     }
     if (app->modal.cursorPos && app->modal.callbackCancel != NULL) {
-        app->modal.callbackCancel(app->modal.callbackData);
+        app->modal.callbackCancel(app, app->modal.callbackData);
     }
     app->modal.cursorPos = 0;
     app->modal.displayed = 0;
@@ -53,7 +53,7 @@ void inputmodal_processSelect(app_t *app) {
 
 void inputmodal_processBack(app_t *app) {
     if (app->modal.callbackCancel != NULL) {
-        app->modal.callbackCancel(app->modal.callbackData);
+        app->modal.callbackCancel(app, app->modal.callbackData);
     }
     app->modal.cursorPos = 0;
     app->modal.displayed = 0;

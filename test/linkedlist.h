@@ -41,14 +41,16 @@ int test_linkedList_cloneListNull(void *data);
 
 int test_linkedList_cloneListNotNull(void *data);
 
-int test_linkedList_filterNull(void *data);
+int test_linkedList_pop(void *data);
 
-int test_linkedList_filterNotNull1(void *data);
+int test_linkedList_removeElement0(void *data);
 
-int test_linkedList_filterNotNull2(void *data);
+int test_linkedList_removeElement1(void *data);
 
-int test_linkedList_filterNotNull3(void *data);
+int test_linkedList_removeElement2(void *data);
 
-int test_linkedList_filterNotNull4(void *data);
+int test_linkedList_removeElement3(void *data);
+
+int test_linkedList_removeElement4(void *data);
 
 #endif

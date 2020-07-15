@@ -79,8 +79,8 @@ searchresult_t *enginehandler_search(app_t *app, system_t *system, char *searchS
     return linkedlist_sort(result);
 }
 
-void enginehandler_download(app_t *app, searchresult_t *item, void (*callback)(void *app)) {
-    ((engine_t *) item->engine)->download(app, item, callback);
+void enginehandler_download(app_t *app, searchresult_t *item) {
+    ((engine_t *) item->engine)->download(app, item);
 }
 
 void enginehandler_destroy(app_t *app) {

@@ -22,6 +22,7 @@ typedef enum {
     window_system,
     window_keyboard,
     window_download,
+    window_downloadMgr,
     window_config,
     window_config_advanced,
     window_config_engine,
@@ -35,13 +36,13 @@ typedef enum {
     searchactivity_field,
     searchactivity_button,
     searchactivity_results,
-    searchactivity_config
+    searchactivity_config,
+    searchactivity_downloadMgr
 } searchactivity_t;
 
 typedef enum {
     downloadActivity_cancel,
-    downloadActivity_start,
-    downloadActivity_done
+    downloadActivity_start
 } downloadactivity_t;
 
 typedef enum {

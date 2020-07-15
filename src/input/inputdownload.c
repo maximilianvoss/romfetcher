@@ -19,12 +19,6 @@
 #include "../engine/enginehandler.h"
 #include "../state/statehandler.h"
 
-static void downloadCallback(void *ptr);
-
-static void startThread(app_t *app);
-
-static void *executeThread(void *app_ptr);
-
 static void moveToNext(app_t *app);
 
 void inputdownload_processUp(app_t *app) {
@@ -46,56 +40,24 @@ void inputdownload_processRight(app_t *app) {
 void inputdownload_processSelect(app_t *app) {
     switch (app->download.cursorPos) {
         case downloadActivity_start:
-            app->download.started = 1;
-            startThread(app);
+            enginehandler_download(app, app->search.active);
             break;
-        case downloadActivity_done:
-        case downloadActivity_cancel:
-            statehandler_switch(app, 1);
+        default:
             break;
     }
+    statehandler_switch(app, 1);
 }
 
 void inputdownload_processBack(app_t *app) {
-    if (!app->download.started) {
-        statehandler_switch(app, 0);
-    }
+    statehandler_switch(app, 0);
 }
 
 void inputdownload_processOtherButton(app_t *app, GameControllerState_t *state) {
 }
 
 static void moveToNext(app_t *app) {
-    if (app->download.cursorPos == downloadActivity_done) {
-        return;
-    }
     app->download.cursorPos++;
     if (app->download.cursorPos > 1) {
         app->download.cursorPos = downloadActivity_cancel;
     }
-}
-
-static void *executeThread(void *app_ptr) {
-    app_t *app = (app_t *) app_ptr;
-    enginehandler_download(app, app->search.active, &downloadCallback);
-    return NULL;
-}
-
-static void startThread(app_t *app) {
-    pthread_t downloadThread;
-    if (pthread_create(&downloadThread, NULL, executeThread, app)) {
-        SDL_Log("Error creating thread\n");
-        app->download.started = 0;
-        return;
-    }
-    pthread_detach(downloadThread);
-}
-
-static void downloadCallback(void *ptr) {
-    app_t *app = (app_t *) ptr;
-    app->download.started = 0;
-    app->download.complete = 1;
-    app->download.current = 0;
-    app->download.total = 0;
-    app->download.cursorPos = downloadActivity_done;
 }

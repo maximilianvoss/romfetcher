@@ -23,6 +23,7 @@
 #include "uilist.h"
 #include "../themes/rendering.h"
 #include "uimodal.h"
+#include "uidownloadmanager.h"
 
 static void renderDefaults(app_t *app);
 
@@ -69,6 +70,9 @@ void uihandler_render(app_t *app) {
             break;
         case window_download:
             renderEngine = &uidownload_render;
+            break;
+        case window_downloadMgr:
+            renderEngine = &uidownloadmanager_render;
             break;
         case window_config:
         case window_config_advanced:

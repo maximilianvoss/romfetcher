@@ -66,7 +66,7 @@ void database_configLoad(app_t *app) {
     int step = sqlite3_step(stmt);
     if (step == SQLITE_ROW) {
         char *themePath = (char *) sqlite3_column_text(stmt, 0);
-        app->themes.active = themes_getByFileRefrence(app, themePath);
+        app->themes.active = themes_getByFileReference(app, themePath);
         int fullscreen = sqlite3_column_int(stmt, 1);
         int opengl = sqlite3_column_int(stmt, 2);
         int highdpi = sqlite3_column_int(stmt, 3);

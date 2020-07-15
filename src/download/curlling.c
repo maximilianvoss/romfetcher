@@ -21,6 +21,11 @@ struct url_data {
     char *data;
 };
 
+struct state_s {
+    curl_off_t *current;
+    curl_off_t *total;
+};
+
 static size_t writeDataToString(void *ptr, size_t size, size_t nmemb, struct url_data *data);
 
 static size_t writeDataToFile(void *ptr, size_t size, size_t nmemb, void *stream);
@@ -66,7 +71,8 @@ char *curlling_fetch(char *url, char *postData, httpmethod_t method) {
     return data.data;
 }
 
-int curlling_download(app_t *app, char *url, char *data, httpmethod_t method, char *filename) {
+int
+curlling_download(char *url, char *data, httpmethod_t method, char *filename, curl_off_t *current, curl_off_t *total) {
     CURL *curl;
     FILE *pagefile;
     CURLcode res = CURLE_OK;
@@ -91,12 +97,16 @@ int curlling_download(app_t *app, char *url, char *data, httpmethod_t method, ch
             curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data);
         }
 
+        struct state_s state;
+        state.current = current;
+        state.total = total;
+
 #if LIBCURL_VERSION_NUM >= 0x072000
         curl_easy_setopt(curl, CURLOPT_XFERINFOFUNCTION, xferinfo);
-        curl_easy_setopt(curl, CURLOPT_XFERINFODATA, app);
+        curl_easy_setopt(curl, CURLOPT_XFERINFODATA, &state);
 #else
         curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, older_progress);
-        curl_easy_setopt(curl, CURLOPT_PROGRESSDATA, app);
+        curl_easy_setopt(curl, CURLOPT_PROGRESSDATA, &state);
 #endif
     }
 
@@ -108,13 +118,14 @@ int curlling_download(app_t *app, char *url, char *data, httpmethod_t method, ch
     }
     curl_easy_cleanup(curl);
     curl_global_cleanup();
+    SDL_Log("Download of %s to %s completed", url, filename);
     return res;
 }
 
 static int xferinfo(void *p, curl_off_t dltotal, curl_off_t dlnow, curl_off_t ultotal, curl_off_t ulnow) {
-    app_t *app = (app_t *) p;
-    app->download.current = dlnow;
-    app->download.total = dltotal;
+    struct state_s *state = (struct state_s *) p;
+    *state->current = dlnow;
+    *state->total = dltotal;
     return 0;
 }
 

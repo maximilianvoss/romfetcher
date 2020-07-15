@@ -33,6 +33,14 @@
 #define CONTROLLER_MAPPING "00000000526574726f53746f6e653200,RetroStone2,a:b0,b:b1,x:b2,y:b3,dpdown:b11,dpleft:b12,dpright:b13,dpup:b10,leftshoulder:b4,lefttrigger:b6,rightshoulder:b5,righttrigger:b7,start:b9,back:b8,leftx:a0,lefty:a1,platform:Linux"
 #endif
 
+#ifndef DOWNLOADER_THREADS
+#define DOWNLOADER_THREADS 0
+#endif
+
+#ifndef ENGINE_FETCH_THREADS
+#define ENGINE_FETCH_THREADS 5
+#endif
+
 #define COPYRIGHT "C Copyright 2020 by Maximilian Voss (maximilian@voss.rocks)"
 
 #endif

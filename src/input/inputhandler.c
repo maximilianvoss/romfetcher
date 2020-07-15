@@ -21,6 +21,7 @@
 #include "inputkeyboard.h"
 #include "inputlist.h"
 #include "inputmodal.h"
+#include "inputdownloadmanager.h"
 
 static uint8_t processGameController(app_t *app);
 
@@ -98,6 +99,15 @@ uint8_t inputhandler_processInputs(app_t *app) {
             processSelect = &inputdownload_processSelect;
             processBack = &inputdownload_processBack;
             processOtherButton = &inputdownload_processOtherButton;
+            break;
+        case window_downloadMgr:
+            processUp = &inputdownloadmanager_processUp;
+            processDown = &inputdownloadmanager_processDown;
+            processLeft = &inputdownloadmanager_processLeft;
+            processRight = &inputdownloadmanager_processRight;
+            processSelect = &inputdownloadmanager_processSelect;
+            processBack = &inputdownloadmanager_processBack;
+            processOtherButton = &inputdownloadmanager_processOtherButton;
             break;
         case window_config:
         case window_config_advanced:
@@ -216,7 +226,7 @@ static uint8_t processEvents(app_t *app) {
                         gameControllerState.right = event.type == SDL_CONTROLLERBUTTONDOWN ? 1 : 0;
                         break;
                     default:
-                        SDL_Log("Unused Button: %d\n", event.cbutton.button);
+                        SDL_Log("Unassigned Button: %d\n", event.cbutton.button);
                         break;
                 }
                 lastKeyPressed = SDL_GetTicks();

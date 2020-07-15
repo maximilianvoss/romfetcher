@@ -23,10 +23,6 @@
 #include "../src/helper/path.h"
 #include "../src/database/init.h"
 
-void test_downloadCallback(void *app) {
-
-}
-
 int main(int argc, char **argv) {
     testsystems_init();
     testengines_init();
@@ -55,6 +51,12 @@ int main(int argc, char **argv) {
     TESTCALL("test_linkedList_getElementCountNotNull", test_linkedList_getElementCountNotNull, NULL);
     TESTCALL("test_linkedList_cloneListNull", test_linkedList_cloneListNull, NULL);
     TESTCALL("test_linkedList_cloneListNotNull", test_linkedList_cloneListNotNull, NULL);
+    TESTCALL("test_linkedList_pop", test_linkedList_pop, NULL);
+    TESTCALL("test_linkedList_removeElement0", test_linkedList_removeElement0, NULL);
+    TESTCALL("test_linkedList_removeElement1", test_linkedList_removeElement1, NULL);
+    TESTCALL("test_linkedList_removeElement2", test_linkedList_removeElement2, NULL);
+    TESTCALL("test_linkedList_removeElement3", test_linkedList_removeElement3, NULL);
+    TESTCALL("test_linkedList_removeElement4", test_linkedList_removeElement4, NULL);
 
     app.engine.all = freeroms;
     TESTCALL("test_engine_freeroms_3do", test_engine_freeroms_3do, &app);

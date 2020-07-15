@@ -27,6 +27,7 @@
 #include "engine/enginehandler.h"
 #include "systems/systemhandler.h"
 #include "ui/fonts.h"
+#include "download/downloader.h"
 
 int main() {
     app_t app;
@@ -42,10 +43,10 @@ int main() {
     database_configLoad(&app);
     ui_init(&app);
     inputhandler_init();
+    downloader_init(&app);
 
-    uint8_t quit = 0;
-    while (!quit) {
-        quit = inputhandler_processInputs(&app);
+    while (!app.quit) {
+        app.quit = inputhandler_processInputs(&app);
         uihandler_render(&app);
         SDL_Delay(75);
     }
@@ -59,6 +60,7 @@ int main() {
     config_destroy(&app);
     inputhandler_destroy();
     fonts_destroy(&app);
+    downloader_destroy(&app);
 
     SDL_Quit();
     return 0;

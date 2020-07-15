@@ -14,17 +14,13 @@
  * limitations under the License.
  */
 
-#ifndef ENGINE_ENGINEHANDLER_H
-#define ENGINE_ENGINEHANDLER_H
+#ifndef DOWNLOAD_DOWNLOADPIPELINE_H
+#define DOWNLOAD_DOWNLOADPIPELINE_H
 
 #include "../structs.h"
 
-void enginehandler_init(app_t *app);
+download_t *downloadpipeline_getNext(app_t *app, download_t *element);
 
-searchresult_t *enginehandler_search(app_t *app, system_t *system, char *searchString);
-
-void enginehandler_download(app_t *app, searchresult_t *item);
-
-void enginehandler_destroy(app_t *app);
+download_t *downloadpipeline_getPrev(app_t *app, download_t *element);
 
 #endif

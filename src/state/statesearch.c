@@ -28,6 +28,8 @@ window_t statesearch_target(app_t *app, uint8_t isSelectButton) {
             return window_keyboard;
         case searchactivity_results:
             return window_download;
+        case searchactivity_downloadMgr:
+            return window_downloadMgr;
         default:
             return window_search;
     }

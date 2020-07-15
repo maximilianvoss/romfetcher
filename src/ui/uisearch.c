@@ -28,8 +28,11 @@ static void renderSystemSelector(app_t *app);
 
 static void renderSettingsIcon(app_t *app);
 
+static void renderDownloadManagerIcon(app_t *app);
+
 void uisearch_render(app_t *app) {
     renderSettingsIcon(app);
+    renderDownloadManagerIcon(app);
     renderSystemSelector(app);
     renderSearchField(app);
     renderSearchButton(app);
@@ -48,6 +51,37 @@ static void renderSettingsIcon(app_t *app) {
 
     SDL_Rect texture_rect = {width - 35, 10, 25, 25};
     SDL_RenderCopy(app->sdlRenderer, app->textures.settingsIcon, NULL, &texture_rect);
+}
+
+static void renderDownloadManagerIcon(app_t *app) {
+    int width, height;
+    SDL_GL_GetDrawableSize(app->sdlWindow, &width, &height);
+
+    if (app->search.position == searchactivity_downloadMgr) {
+        SDL_Rect r2 = {width - 87, 8, 27, 27};
+        themes_setDrawColor(app, fieldActive);
+        SDL_RenderFillRect(app->sdlRenderer, &r2);
+    }
+
+    SDL_Rect texture_rect = {width - 85, 10, 25, 25};
+    SDL_RenderCopy(app->sdlRenderer, app->textures.downloadManagerIcon, NULL, &texture_rect);
+
+    int downloadCount =
+            linkedlist_getElementCount(app->download.active) + linkedlist_getElementCount(app->download.queue);
+    if (downloadCount > 0) {
+        themes_setDrawColor(app, fieldActive);
+        rendering_circle(app, width - 65, 32, 10);
+
+        char buffer[4];
+        sprintf(buffer, "%d", downloadCount);
+
+        texture_t texture;
+        rendering_loadText(app, &texture, buffer, app->fonts.small, &app->themes.active->colors.textInverted);
+        SDL_Rect srcQuad = {0, 0, width - 100 - 60, texture.h};
+        SDL_Rect renderQuad = {width - 65 - texture.w / 2, 32 - texture.h / 2, texture.w, texture.h};
+        SDL_RenderCopy(app->sdlRenderer, texture.texture, &srcQuad, &renderQuad);
+        SDL_DestroyTexture(texture.texture);
+    }
 }
 
 static void renderSystemSelector(app_t *app) {

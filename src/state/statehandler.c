@@ -25,6 +25,7 @@
 #include "stateconfigthemes.h"
 #include "stateconfigadvanced.h"
 #include "stateconfigresolution.h"
+#include "statedownloadmanager.h"
 
 static void *getInitFunction(window_t target);
 
@@ -51,6 +52,10 @@ void statehandler_switch(app_t *app, uint8_t isSelectButton) {
         case window_download:
             state_target = &statedownload_target;
             state_persist = &statedownload_persist;
+            break;
+        case window_downloadMgr:
+            state_target = &statedownloadmanager_target;
+            state_persist = &statedownloadmanager_persist;
             break;
         case window_config:
             state_target = &stateconfig_target;
@@ -95,6 +100,8 @@ static void *getInitFunction(window_t target) {
             return &statekeyboard_init;
         case window_download:
             return &statedownload_init;
+        case window_downloadMgr:
+            return &statedownloadmanager_init;
         case window_config:
             return &stateconfig_init;
         case window_config_advanced:

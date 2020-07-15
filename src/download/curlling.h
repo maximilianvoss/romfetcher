@@ -19,7 +19,8 @@
 
 #include "../structs.h"
 
-int curlling_download(app_t *app, char *url, char *data, httpmethod_t method, char *filename);
+int
+curlling_download(char *url, char *data, httpmethod_t method, char *filename, curl_off_t *current, curl_off_t *total);
 
 char *curlling_fetch(char *url, char *postData, httpmethod_t method);
 

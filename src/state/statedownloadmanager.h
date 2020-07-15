@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-#ifndef ENGINE_ENGINEHANDLER_H
-#define ENGINE_ENGINEHANDLER_H
+#ifndef STATE_STATEDOWNLOADMANAGER_H
+#define STATE_STATEDOWNLOADMANAGER_H
 
 #include "../structs.h"
 
-void enginehandler_init(app_t *app);
+window_t statedownloadmanager_target(app_t *app, uint8_t isSelectButton);
 
-searchresult_t *enginehandler_search(app_t *app, system_t *system, char *searchString);
+void statedownloadmanager_persist(app_t *app);
 
-void enginehandler_download(app_t *app, searchresult_t *item);
-
-void enginehandler_destroy(app_t *app);
+void statedownloadmanager_init(app_t *app);
 
 #endif

@@ -48,6 +48,8 @@ set(SOURCES
         src/download/curlling.h
         src/download/downloader.c
         src/download/downloader.h
+        src/download/downloadpipeline.c
+        src/download/downloadpipeline.h
         src/engine/freeroms/freeroms.c
         src/engine/freeroms/freeroms.h
         src/engine/freeroms/mapping.c
@@ -99,6 +101,8 @@ set(SOURCES
         src/helper/utils.h
         src/input/inputdownload.c
         src/input/inputdownload.h
+        src/input/inputdownloadmanager.c
+        src/input/inputdownloadmanager.h
         src/input/inputhandler.c
         src/input/inputhandler.h
         src/input/inputkeyboard.c
@@ -123,6 +127,8 @@ set(SOURCES
         src/state/stateconfigthemes.h
         src/state/statedownload.c
         src/state/statedownload.h
+        src/state/statedownloadmanager.c
+        src/state/statedownloadmanager.h
         src/state/statehandler.c
         src/state/statehandler.h
         src/state/statekeyboard.c
@@ -148,6 +154,8 @@ set(SOURCES
         src/ui/textures.h
         src/ui/uidownload.c
         src/ui/uidownload.h
+        src/ui/uidownloadmanager.c
+        src/ui/uidownloadmanager.h
         src/ui/uihandler.c
         src/ui/uihandler.h
         src/ui/uimodal.c
@@ -250,6 +258,12 @@ add_test(NAME test_linkedList_getElementCountNull COMMAND romfetcher_testcases t
 add_test(NAME test_linkedList_getElementCountNotNull COMMAND romfetcher_testcases test_linkedList_getElementCountNotNull)
 add_test(NAME test_linkedList_cloneListNull COMMAND romfetcher_testcases test_linkedList_cloneListNull)
 add_test(NAME test_linkedList_cloneListNotNull COMMAND romfetcher_testcases test_linkedList_cloneListNotNull)
+add_test(NAME test_linkedList_pop COMMAND romfetcher_testcases test_linkedList_pop)
+add_test(NAME test_linkedList_removeElement0 COMMAND romfetcher_testcases test_linkedList_removeElement0)
+add_test(NAME test_linkedList_removeElement1 COMMAND romfetcher_testcases test_linkedList_removeElement1)
+add_test(NAME test_linkedList_removeElement2 COMMAND romfetcher_testcases test_linkedList_removeElement2)
+add_test(NAME test_linkedList_removeElement3 COMMAND romfetcher_testcases test_linkedList_removeElement3)
+add_test(NAME test_linkedList_removeElement4 COMMAND romfetcher_testcases test_linkedList_removeElement4)
 
 add_test(NAME test_engine_freeroms_3do COMMAND romfetcher_testcases test_engine_freeroms_3do)
 add_test(NAME test_engine_freeroms_amiga COMMAND romfetcher_testcases test_engine_freeroms_amiga)

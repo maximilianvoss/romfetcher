@@ -52,6 +52,7 @@ typedef struct theme_s {
         char *checkboxUnchecked;
         char *selectorIcon;
         char *settingsIcon;
+        char *downloadManagerIcon;
     } images;
 } theme_t;
 
@@ -98,7 +99,7 @@ typedef struct engine_s {
 
     searchresult_t *(*search)(void *app, system_t *system, char *searchString);
 
-    void (*download)(void *app, searchresult_t *item, void (*callback)(void *app));
+    void (*download)(void *app, searchresult_t *item);
 } engine_t;
 
 typedef struct resolution_s {
@@ -110,10 +111,25 @@ typedef struct resolution_s {
     int width;
 } resolution_t;
 
+typedef struct download_s {
+    struct download_s *prev;
+    struct download_s *next;
+    char *title;
+    uint8_t active;
+    system_t *system;
+    char *url;
+    char *data;
+    char *filename;
+    httpmethod_t method;
+    curl_off_t current;
+    curl_off_t total;
+} download_t;
+
 typedef struct {
     SDL_Renderer *sdlRenderer;
     SDL_Window *sdlWindow;
     window_t win;
+    volatile uint8_t quit;
 
     struct {
         sqlite3 *db;
@@ -135,17 +151,19 @@ typedef struct {
         char *actionButton;
         char *cancelButton;
         uint8_t cursorPos;
+        void *app;
         void *callbackData;
 
-        void (*callbackAction)(void *data);
+        void (*callbackAction)(void *app, void *data);
 
-        void (*callbackCancel)(void *data);
+        void (*callbackCancel)(void *app, void *data);
     } modal;
 
     struct {
         SDL_Texture *backgroundImage;
         SDL_Texture *searchChevron;
         SDL_Texture *settingsIcon;
+        SDL_Texture *downloadManagerIcon;
         SDL_Texture *checkboxChecked;
         SDL_Texture *checkboxUnchecked;
     } textures;
@@ -210,10 +228,10 @@ typedef struct {
     } search;
 
     struct {
-        volatile uint8_t started;
-        volatile uint8_t complete;
-        volatile curl_off_t current;
-        volatile curl_off_t total;
+        download_t *active;
+        download_t *done;
+        download_t *queue;
+        download_t *cursor;
         downloadactivity_t cursorPos;
     } download;
 } app_t;

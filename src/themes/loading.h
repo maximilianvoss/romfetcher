@@ -23,6 +23,6 @@ void themes_init(app_t *app);
 
 void themes_destroy(app_t *app);
 
-theme_t *themes_getByFileRefrence(app_t *app, char *fileReference);
+theme_t *themes_getByFileReference(app_t *app, char *fileReference);
 
 #endif

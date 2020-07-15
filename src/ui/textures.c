@@ -25,6 +25,7 @@ void textures_init(app_t *app) {
     app->textures.settingsIcon = rendering_loadImage(app, app->themes.active->images.settingsIcon);
     app->textures.checkboxChecked = rendering_loadImage(app, app->themes.active->images.checkboxChecked);
     app->textures.checkboxUnchecked = rendering_loadImage(app, app->themes.active->images.checkboxUnchecked);
+    app->textures.downloadManagerIcon = rendering_loadImage(app, app->themes.active->images.downloadManagerIcon);
 }
 
 void textures_destroy(app_t *app) {
@@ -33,4 +34,5 @@ void textures_destroy(app_t *app) {
     SDL_DestroyTexture(app->textures.settingsIcon);
     SDL_DestroyTexture(app->textures.checkboxChecked);
     SDL_DestroyTexture(app->textures.checkboxUnchecked);
+    SDL_DestroyTexture(app->textures.downloadManagerIcon);
 }

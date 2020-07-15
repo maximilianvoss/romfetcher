@@ -45,6 +45,6 @@ static searchresult_t *search(void *app, system_t *system, char *searchString) {
     return NULL;
 }
 
-static void download(void *app, searchresult_t *item, void (*callback)(void *app)) {
+static void download(void *app, searchresult_t *item) {
     callback(app);
 }

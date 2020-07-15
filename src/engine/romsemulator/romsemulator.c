@@ -29,7 +29,7 @@
 
 static searchresult_t *search(void *app, system_t *system, char *searchString);
 
-static void download(void *app, searchresult_t *item, void (*callback)(void *app));
+static void download(void *app, searchresult_t *item);
 
 static searchresult_t *fetchingResultItems(system_t *system, searchresult_t *resultList, char *response);
 
@@ -76,7 +76,7 @@ static searchresult_t *search(void *app, system_t *system, char *searchString) {
     return resultList;
 }
 
-static void download(void *app, searchresult_t *item, void (*callback)(void *app)) {
+static void download(void *app, searchresult_t *item) {
     if (item == NULL) {
         return;
     }
@@ -97,7 +97,7 @@ static void download(void *app, searchresult_t *item, void (*callback)(void *app
     safe_strcat(payload, referer);
 
     char *filename = str_concat(item->title, ".zip");
-    downloader_download(app, item->system, linkDownloadPage, payload->data, filename, POST, callback);
+    downloader_addToQueue(app, item->system, item->title, linkDownloadPage, payload->data, filename, POST);
     free(filename);
 
     free(pid);

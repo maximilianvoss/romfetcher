@@ -14,17 +14,23 @@
  * limitations under the License.
  */
 
-#ifndef ENGINE_ENGINEHANDLER_H
-#define ENGINE_ENGINEHANDLER_H
+#ifndef UI_INPUTDOWNLOADMANAGER_H
+#define UI_INPUTDOWNLOADMANAGER_H
 
 #include "../structs.h"
 
-void enginehandler_init(app_t *app);
+void inputdownloadmanager_processUp(app_t *app);
 
-searchresult_t *enginehandler_search(app_t *app, system_t *system, char *searchString);
+void inputdownloadmanager_processDown(app_t *app);
 
-void enginehandler_download(app_t *app, searchresult_t *item);
+void inputdownloadmanager_processLeft(app_t *app);
 
-void enginehandler_destroy(app_t *app);
+void inputdownloadmanager_processRight(app_t *app);
+
+void inputdownloadmanager_processSelect(app_t *app);
+
+void inputdownloadmanager_processBack(app_t *app);
+
+void inputdownloadmanager_processOtherButton(app_t *app, GameControllerState_t *state);
 
 #endif

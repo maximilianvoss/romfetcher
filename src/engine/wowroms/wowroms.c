@@ -32,7 +32,7 @@
 
 static searchresult_t *search(void *app, system_t *system, char *searchString);
 
-static void download(void *app, searchresult_t *item, void (*callback)(void *app));
+static void download(void *app, searchresult_t *item);
 
 static searchresult_t *fetchingResultItems(system_t *system, searchresult_t *resultList, char *response);
 
@@ -82,7 +82,7 @@ static searchresult_t *search(void *app, system_t *system, char *searchString) {
     return resultList;
 }
 
-static void download(void *app, searchresult_t *item, void (*callback)(void *app)) {
+static void download(void *app, searchresult_t *item) {
     if (item == NULL) {
         return;
     }
@@ -110,7 +110,6 @@ static void download(void *app, searchresult_t *item, void (*callback)(void *app
     char *downloadLink = fetchDownloadLink(downloadServletResponse);
     char *decodedDownloadLink = str_quoteDecode(downloadLink);
 
-
     csafestring_t *payload = safe_create("emuid=");
     safe_strcat(payload, emuid);
     safe_strcat(payload, "&id=");
@@ -123,7 +122,7 @@ static void download(void *app, searchresult_t *item, void (*callback)(void *app
 
 
     char *downloadFilename = str_concat(item->title, file_suffix(fetchHiddenField(downloadPageResponse, "file")));
-    downloader_download(app, item->system, decodedDownloadLink, payload->data, downloadFilename, POST, callback);
+    downloader_addToQueue(app, item->system, item->title, decodedDownloadLink, payload->data, downloadFilename, POST);
     free(downloadFilename);
 
     free(decodedFilename);

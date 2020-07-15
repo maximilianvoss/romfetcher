@@ -22,8 +22,6 @@ window_t statedownload_target(app_t *app, uint8_t isSelectButton) {
 
 void statedownload_persist(app_t *app) {
     app->download.cursorPos = downloadActivity_cancel;
-    app->download.started = 0;
-    app->download.complete = 0;
 }
 
 void statedownload_init(app_t *app) {

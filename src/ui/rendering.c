@@ -40,7 +40,6 @@ SDL_Texture *rendering_loadImage(app_t *app, char *filename) {
 }
 
 void rendering_loadText(app_t *app, texture_t *texture, char *str, TTF_Font *font, SDL_Color *color) {
-
     char cpy[strlen(str) + 1];
     strcpy(cpy, str);
 
@@ -83,5 +82,20 @@ void rendering_loadText(app_t *app, texture_t *texture, char *str, TTF_Font *fon
         texture->w = blindSurface->w;
         texture->h = blindSurface->h;
         SDL_FreeSurface(blindSurface);
+    }
+}
+
+
+void rendering_circle(app_t *app, int x, int y, int radius) {
+    int point_x;
+    int point_y;
+    while (radius > 0) {
+        for (int t = 0; t < 360; t++) {
+            point_x = x + radius * cos(t);
+            point_y = y + radius * sin(t);
+            SDL_RenderDrawPoint(app->sdlRenderer, point_x, point_y);
+        }
+
+        radius--;
     }
 }

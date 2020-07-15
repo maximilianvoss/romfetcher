@@ -29,13 +29,21 @@ typedef struct {
 
 void *linkedlist_appendElement(void *list, void *element);
 
+void *linkedlist_pop(void *list, void **element);
+
+void *linkedlist_push(void *list, void *element);
+
 void linkedlist_freeList(void *list, void (*callback)(void *));
 
 uint32_t linkedlist_getElementCount(void *list);
 
 void *linkedlist_findElementByName(void *ptr, char *name);
 
-void *linkedList_removeElement(void *list, void *element, void (*callback)(void *));
+uint8_t linkedlist_isElementInList(void *list, void *element);
+
+void *linkedlist_deleteElement(void *list, void *element, void (*callback)(void *));
+
+void *linkedlist_removeElement(void *list, void *element);
 
 void *linkedlist_sort(void *ptr);
 
@@ -46,5 +54,7 @@ void *linkedlist_getFirstActive(void *ptr);
 void *linkedlist_getPrevActive(void *ptr);
 
 void *linkedlist_getNextActive(void *ptr);
+
+void *linkedlist_getLastElement(void *list);
 
 #endif

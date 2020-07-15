@@ -20,18 +20,16 @@
 #include "stateconfig.h"
 #include "../config/advanced.h"
 
-static void modalApprove(void *data) {
-    app_t *app = data;
-    database_configPersist(app);
-    stateconfig_init(app);
+static void modalApprove(void *app, void *data) {
+    database_configPersist((app_t *) app);
+    stateconfig_init((app_t *) app);
 }
 
-static void modalCancel(void *data) {
-    app_t *app = data;
-    database_configLoad(app);
-    ui_destroy(app);
-    ui_init(app);
-    stateconfigadvanced_init(app);
+static void modalCancel(void *app, void *data) {
+    database_configLoad((app_t *) app);
+    ui_destroy((app_t *) app);
+    ui_init((app_t *) app);
+    stateconfigadvanced_init((app_t *) app);
 }
 
 window_t stateconfigadvanced_target(app_t *app, uint8_t isSelectButton) {
@@ -49,7 +47,8 @@ window_t stateconfigadvanced_target(app_t *app, uint8_t isSelectButton) {
     app->modal.actionButton = "Yes";
     app->modal.cancelButton = "No";
     app->modal.cursorPos = 1;
-    app->modal.callbackData = app;
+    app->modal.app = app;
+    app->modal.callbackData = NULL;
     app->modal.callbackAction = &modalApprove;
     app->modal.callbackCancel = &modalCancel;
 

@@ -425,7 +425,7 @@ int test_engine_romhustler_download(app_t *app) {
     if (file_exists(downloadPath->data)) {
         remove(downloadPath->data);
     }
-    romhustler->download(app, list, &test_downloadCallback);
+    romhustler->download(app, list);
     ASSERTFILEEXISTS(downloadPath->data);
     safe_destroy(downloadPath);
 

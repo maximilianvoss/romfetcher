@@ -407,7 +407,7 @@ int test_engine_freeroms_download(app_t *app) {
     if (file_exists(downloadPath->data)) {
         remove(downloadPath->data);
     }
-    freeroms->download(app, list, &test_downloadCallback);
+    freeroms->download(app, list);
     ASSERTFILEEXISTS(downloadPath->data);
     safe_destroy(downloadPath);
 

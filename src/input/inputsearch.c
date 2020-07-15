@@ -19,6 +19,7 @@
 
 void inputsearch_processUp(app_t *app) {
     switch (app->search.position) {
+        case searchactivity_downloadMgr:
         case searchactivity_config:
             break;
         case searchactivity_system:
@@ -41,6 +42,7 @@ void inputsearch_processUp(app_t *app) {
 
 void inputsearch_processDown(app_t *app) {
     switch (app->search.position) {
+        case searchactivity_downloadMgr:
         case searchactivity_config:
             app->search.position = searchactivity_system;
             break;
@@ -64,8 +66,10 @@ void inputsearch_processDown(app_t *app) {
 
 void inputsearch_processLeft(app_t *app) {
     switch (app->search.position) {
+        case searchactivity_downloadMgr:
+            break;
         case searchactivity_config:
-            app->search.position = searchactivity_system;
+            app->search.position = searchactivity_downloadMgr;
             break;
         case searchactivity_system:
             break;
@@ -87,6 +91,9 @@ void inputsearch_processLeft(app_t *app) {
 
 void inputsearch_processRight(app_t *app) {
     switch (app->search.position) {
+        case searchactivity_downloadMgr:
+            app->search.position = searchactivity_config;
+            break;
         case searchactivity_config:
             break;
         case searchactivity_system:

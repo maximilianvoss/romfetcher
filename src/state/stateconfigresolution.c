@@ -20,14 +20,12 @@
 #include "../database/config.h"
 
 
-static void modalApprove(void *data) {
-    app_t *app = data;
+static void modalApprove(void *app, void *data) {
     database_configPersist(app);
     stateconfig_init(app);
 }
 
-static void modalCancel(void *data) {
-    app_t *app = data;
+static void modalCancel(void *app, void *data) {
     database_configLoad(app);
     ui_destroy(app);
     ui_init(app);

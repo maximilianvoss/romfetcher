@@ -19,7 +19,11 @@
 
 #include "../structs.h"
 
-void downloader_download(app_t *app, system_t *system, char *url, char *data, char *filename, httpmethod_t method,
-                         void (*callback)(void *app));
+void downloader_init(app_t *app);
+
+void downloader_destroy(app_t *app);
+
+void downloader_addToQueue(app_t *app, system_t *system, char *title, char *url, char *data, char *filename,
+                           httpmethod_t method);
 
 #endif

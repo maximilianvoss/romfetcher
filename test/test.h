@@ -70,6 +70,4 @@
         return 1;\
     }
 
-void test_downloadCallback(void *app);
-
 #endif

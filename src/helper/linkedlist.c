@@ -37,7 +37,36 @@ void *linkedlist_appendElement(void *list, void *elementVoid) {
     return list;
 }
 
-void *linkedList_removeElement(void *list, void *element, void (*callback)(void *)) {
+void *linkedlist_removeElement(void *list, void *element) {
+    linkedlist_t *ptr = element;
+    linkedlist_t *tmp;
+
+    if (ptr == NULL) {
+        return NULL;
+    }
+
+    if (ptr->prev == NULL) {
+        tmp = ptr->next;
+        ptr->next = NULL;
+        return tmp;
+    }
+
+    if (ptr->next == NULL) {
+        tmp = ptr->prev;
+        tmp->next = NULL;
+        ptr->prev = NULL;
+        return list;
+    }
+
+    tmp = ptr;
+    ((linkedlist_t *) ptr->prev)->next = tmp->next;
+    ((linkedlist_t *) ptr->next)->prev = tmp->prev;
+    ptr->prev = NULL;
+    ptr->next = NULL;
+    return list;
+}
+
+void *linkedlist_deleteElement(void *list, void *element, void (*callback)(void *)) {
     linkedlist_t *ptr = element;
     linkedlist_t *tmp;
 
@@ -77,14 +106,29 @@ void *linkedList_removeElement(void *list, void *element, void (*callback)(void 
     return list;
 }
 
+void *linkedlist_pop(void *list, void **element) {
+    if (list == NULL) {
+        *element = NULL;
+        return NULL;
+    }
+    linkedlist_t *listPtr = (linkedlist_t *) list;
+    linkedlist_t *tmp = listPtr->next;
+    if (tmp != NULL) {
+        tmp->prev = NULL;
+    }
+    listPtr->prev = NULL;
+    listPtr->next = NULL;
+    *element = listPtr;
+    return tmp;
+}
+
 void linkedlist_freeList(void *list, void (*callback)(void *)) {
     if (list == NULL) {
         return;
     }
     linkedlist_t *next = ((linkedlist_t *) list)->next;
-    if (next != NULL) {
-        linkedlist_freeList(next, callback);
-    }
+    linkedlist_freeList(next, callback);
+    
     if (callback != NULL) {
         callback(list);
     }
@@ -249,4 +293,48 @@ void *linkedlist_getFirstActive(void *ptr) {
         list = list->next;
     }
     return NULL;
+}
+
+void *linkedlist_push(void *list, void *element) {
+    if (element == NULL) {
+        return list;
+    }
+    if (list == NULL) {
+        return element;
+    }
+    ((linkedlist_t *) element)->next = list;
+    return element;
+}
+
+uint8_t linkedlist_isElementInList(void *list, void *element) {
+    if (element == NULL) {
+        return 0;
+    }
+    if (list == NULL) {
+        return 0;
+    }
+
+    linkedlist_t *ptr = list;
+    while (ptr != NULL) {
+        if (ptr == element) {
+            return 1;
+        }
+        ptr = ptr->next;
+    }
+    return 0;
+}
+
+void *linkedlist_getLastElement(void *list) {
+    linkedlist_t *ptr = list;
+    if (ptr == NULL) {
+        return NULL;
+    }
+    if (ptr->next == NULL) {
+        return ptr;
+    }
+
+    while (ptr->next != NULL) {
+        ptr = ptr->next;
+    }
+    return ptr;
 }

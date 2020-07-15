@@ -20,7 +20,7 @@
 
 int test_linkedList_deleteElement0(void *data) {
     linkedlist_t *list = NULL;
-    list = linkedList_removeElement(list, list, NULL);
+    list = linkedlist_deleteElement(list, list, NULL);
     ASSERTNULL(list);
     return 0;
 }
@@ -41,7 +41,7 @@ int test_linkedList_deleteElement1(void *data) {
     ASSERTSTR("Element2", ((linkedlist_t *) list->next)->name);
     ASSERTSTR("Element3", ((linkedlist_t *) ((linkedlist_t *) list->next)->next)->name);
 
-    list = linkedList_removeElement(list, list, NULL);
+    list = linkedlist_deleteElement(list, list, NULL);
 
     ASSERTSTR("Element2", list->name);
     ASSERTSTR("Element3", ((linkedlist_t *) list->next)->name);
@@ -65,7 +65,7 @@ int test_linkedList_deleteElement2(void *data) {
     ASSERTSTR("Element2", ((linkedlist_t *) list->next)->name);
     ASSERTSTR("Element3", ((linkedlist_t *) ((linkedlist_t *) list->next)->next)->name);
 
-    list = linkedList_removeElement(list, list->next, NULL);
+    list = linkedlist_deleteElement(list, list->next, NULL);
 
     ASSERTSTR("Element1", list->name);
     ASSERTSTR("Element3", ((linkedlist_t *) list->next)->name);
@@ -89,7 +89,7 @@ int test_linkedList_deleteElement3(void *data) {
     ASSERTSTR("Element2", ((linkedlist_t *) list->next)->name);
     ASSERTSTR("Element3", ((linkedlist_t *) ((linkedlist_t *) list->next)->next)->name);
 
-    list = linkedList_removeElement(list, (linkedlist_t *) ((linkedlist_t *) list->next)->next, NULL);
+    list = linkedlist_deleteElement(list, (linkedlist_t *) ((linkedlist_t *) list->next)->next, NULL);
 
     ASSERTSTR("Element1", list->name);
     ASSERTSTR("Element2", ((linkedlist_t *) list->next)->name);
@@ -103,7 +103,7 @@ int test_linkedList_deleteElement4(void *data) {
     list->name = "Element1";
     list->next = NULL;
     list->prev = NULL;
-    list = linkedList_removeElement(list, list, NULL);
+    list = linkedlist_deleteElement(list, list, NULL);
     ASSERTNULL(list);
     return 0;
 }
@@ -241,6 +241,157 @@ int test_linkedList_cloneListNotNull(void *data) {
     ASSERTPTRNOTEQUAL(list, clonedList);
     ASSERTPTRNOTEQUAL(list->prev, clonedList->prev);
     ASSERTPTRNOTEQUAL(list->next, clonedList->next);
+
+    return 0;
+}
+
+int test_linkedList_pop(void *data) {
+    linkedlist_t *list = NULL;
+    linkedlist_t *element1 = calloc(1, sizeof(linkedlist_t));
+    element1->name = "Element1";
+    list = linkedlist_appendElement(list, element1);
+    linkedlist_t *element2 = calloc(1, sizeof(linkedlist_t));
+    element2->name = "Element2";
+    list = linkedlist_appendElement(list, element2);
+    linkedlist_t *element3 = calloc(1, sizeof(linkedlist_t));
+    list = linkedlist_appendElement(list, element3);
+    element3->name = "Element3";
+
+    linkedlist_t *resultElement;
+
+    list = linkedlist_pop(list, (void **) &resultElement);
+    ASSERTNOTNULL(resultElement);
+    ASSERTNOTNULL(list);
+    ASSERTSTR("Element1", resultElement->name);
+    ASSERTSTR("Element2", list->name);
+
+    list = linkedlist_pop(list, (void **) &resultElement);
+    ASSERTNOTNULL(resultElement);
+    ASSERTNOTNULL(list);
+    ASSERTSTR("Element2", resultElement->name);
+    ASSERTSTR("Element3", list->name);
+
+    list = linkedlist_pop(list, (void **) &resultElement);
+    ASSERTNOTNULL(resultElement);
+    ASSERTNULL(list);
+    ASSERTSTR("Element3", resultElement->name);
+
+    list = linkedlist_pop(list, (void **) &resultElement);
+    ASSERTNULL(resultElement);
+    ASSERTNULL(list);
+
+    return 0;
+}
+
+int test_linkedList_removeElement0(void *data) {
+    linkedlist_t *list = NULL;
+    list = linkedlist_removeElement(list, list);
+    ASSERTNULL(list);
+    return 0;
+}
+
+int test_linkedList_removeElement1(void *data) {
+    linkedlist_t *list = NULL;
+    linkedlist_t *element1 = calloc(1, sizeof(linkedlist_t));
+    element1->name = "Element1";
+    list = linkedlist_appendElement(list, element1);
+    linkedlist_t *element2 = calloc(1, sizeof(linkedlist_t));
+    element2->name = "Element2";
+    list = linkedlist_appendElement(list, element2);
+    linkedlist_t *element3 = calloc(1, sizeof(linkedlist_t));
+    list = linkedlist_appendElement(list, element3);
+    element3->name = "Element3";
+
+    ASSERTSTR("Element1", list->name);
+    ASSERTSTR("Element2", ((linkedlist_t *) list->next)->name);
+    ASSERTSTR("Element3", ((linkedlist_t *) ((linkedlist_t *) list->next)->next)->name);
+
+    linkedlist_t *tmp = list;
+    list = linkedlist_removeElement(list, tmp);
+
+    ASSERTSTR("Element2", list->name);
+    ASSERTSTR("Element3", ((linkedlist_t *) list->next)->name);
+
+    ASSERTNULL(tmp->prev);
+    ASSERTNULL(tmp->next);
+    ASSERTSTR("Element1", tmp->name);
+
+    return 0;
+}
+
+int test_linkedList_removeElement2(void *data) {
+    linkedlist_t *list = NULL;
+    linkedlist_t *element1 = calloc(1, sizeof(linkedlist_t));
+    element1->name = "Element1";
+    list = linkedlist_appendElement(list, element1);
+    linkedlist_t *element2 = calloc(1, sizeof(linkedlist_t));
+    element2->name = "Element2";
+    list = linkedlist_appendElement(list, element2);
+    linkedlist_t *element3 = calloc(1, sizeof(linkedlist_t));
+    list = linkedlist_appendElement(list, element3);
+    element3->name = "Element3";
+
+    ASSERTSTR("Element1", list->name);
+    ASSERTSTR("Element2", ((linkedlist_t *) list->next)->name);
+    ASSERTSTR("Element3", ((linkedlist_t *) ((linkedlist_t *) list->next)->next)->name);
+
+    linkedlist_t *tmp = list->next;
+    list = linkedlist_removeElement(list, tmp);
+
+    ASSERTSTR("Element1", list->name);
+    ASSERTSTR("Element3", ((linkedlist_t *) list->next)->name);
+
+    ASSERTNULL(tmp->prev);
+    ASSERTNULL(tmp->next);
+    ASSERTSTR("Element2", tmp->name);
+
+    return 0;
+}
+
+int test_linkedList_removeElement3(void *data) {
+    linkedlist_t *list = NULL;
+    linkedlist_t *element1 = calloc(1, sizeof(linkedlist_t));
+    element1->name = "Element1";
+    list = linkedlist_appendElement(list, element1);
+    linkedlist_t *element2 = calloc(1, sizeof(linkedlist_t));
+    element2->name = "Element2";
+    list = linkedlist_appendElement(list, element2);
+    linkedlist_t *element3 = calloc(1, sizeof(linkedlist_t));
+    list = linkedlist_appendElement(list, element3);
+    element3->name = "Element3";
+
+    ASSERTSTR("Element1", list->name);
+    ASSERTSTR("Element2", ((linkedlist_t *) list->next)->name);
+    ASSERTSTR("Element3", ((linkedlist_t *) ((linkedlist_t *) list->next)->next)->name);
+
+    linkedlist_t *tmp = (linkedlist_t *) ((linkedlist_t *) list->next)->next;
+    list = linkedlist_removeElement(list, tmp);
+
+    ASSERTSTR("Element1", list->name);
+    ASSERTSTR("Element2", ((linkedlist_t *) list->next)->name);
+    ASSERTNULL((linkedlist_t *) ((linkedlist_t *) list->next)->next);
+
+    ASSERTNULL(tmp->prev);
+    ASSERTNULL(tmp->next);
+    ASSERTSTR("Element3", tmp->name);
+
+    return 0;
+}
+
+int test_linkedList_removeElement4(void *data) {
+    linkedlist_t *list = calloc(1, sizeof(linkedlist_t));
+    list->name = "Element1";
+    list->next = NULL;
+    list->prev = NULL;
+
+    linkedlist_t *tmp = list;
+    list = linkedlist_removeElement(list, tmp);
+    ASSERTNULL(list);
+    ASSERTNOTNULL(tmp);
+
+    ASSERTNULL(tmp->prev);
+    ASSERTNULL(tmp->next);
+    ASSERTSTR("Element1", tmp->name);
 
     return 0;
 }

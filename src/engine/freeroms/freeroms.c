@@ -24,8 +24,8 @@
 #include "../../helper/regex.h"
 #include "../../helper/utils.h"
 #include "../../download/downloader.h"
+#include "../../config.h"
 
-#define THREADCOUNT 5
 #define SHORTNAME "FRE"
 #define URL_TEMPLATE_NUM "https://www.freeroms.com/%system%_roms_NUM.htm"
 #define URL_TEMPLATE_CHAR "https://www.freeroms.com/%system%_roms_%query%.htm"
@@ -33,7 +33,7 @@
 
 static searchresult_t *search(void *app, system_t *system, char *searchString);
 
-static void download(void *app, searchresult_t *item, void (*callback)(void *app));
+static void download(void *app, searchresult_t *item);
 
 static void fillCache(app_t *app, system_t *system);
 
@@ -73,33 +73,33 @@ static searchresult_t *search(void *app, system_t *system, char *searchString) {
     return enginecache_getSearchResults(app, freeroms_getEngine(), system, searchString);
 }
 
-static void download(void *app, searchresult_t *item, void (*callback)(void *app)) {
+static void download(void *app, searchresult_t *item) {
     if (item == NULL) {
         return;
     }
 
     char *filename = str_concat(item->title, ".zip");
-    downloader_download(app, item->system, item->url, NULL, filename, GET, callback);
+    downloader_addToQueue(app, item->system, item->title, item->url, NULL, filename, GET);
     free(filename);
 }
 
 static void fillCache(app_t *app, system_t *system) {
-    pthread_t thread[THREADCOUNT];
-    struct s_download_filter filter[THREADCOUNT];
+    pthread_t thread[ENGINE_FETCH_THREADS];
+    struct s_download_filter filter[ENGINE_FETCH_THREADS];
 
-    char chunks = ('Z' - '@') / THREADCOUNT;
-    for (int i = 0; i < THREADCOUNT; i++) {
+    char chunks = ('Z' - '@') / ENGINE_FETCH_THREADS;
+    for (int i = 0; i < ENGINE_FETCH_THREADS; i++) {
         filter[i].start = (char) '@' + i * chunks;
         filter[i].end = (char) '@' + (i + 1) * chunks - 1;
         filter[i].app = app;
         filter[i].system = system;
     }
-    filter[THREADCOUNT - 1].end = 'Z';
+    filter[ENGINE_FETCH_THREADS - 1].end = 'Z';
 
-    for (int i = 0; i < THREADCOUNT; i++) {
+    for (int i = 0; i < ENGINE_FETCH_THREADS; i++) {
         pthread_create(&thread[i], NULL, executeThread, &filter[i]);
     }
-    for (int i = THREADCOUNT - 1; i >= 0; i--) {
+    for (int i = ENGINE_FETCH_THREADS - 1; i >= 0; i--) {
         pthread_join(thread[i], NULL);
     }
 }

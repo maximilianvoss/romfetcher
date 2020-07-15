@@ -68,7 +68,7 @@ void themes_destroy(app_t *app) {
     linkedlist_freeList(app->themes.all, &freetheme);
 }
 
-theme_t *themes_getByFileRefrence(app_t *app, char *fileReference) {
+theme_t *themes_getByFileReference(app_t *app, char *fileReference) {
     if (fileReference == NULL) {
         return app->themes.all;
     }
@@ -92,6 +92,7 @@ static void freetheme(void *ptr) {
     FREENOTNULL(theme->images.checkboxUnchecked);
     FREENOTNULL(theme->images.selectorIcon);
     FREENOTNULL(theme->images.settingsIcon);
+    FREENOTNULL(theme->images.downloadManagerIcon);
     FREENOTNULL(theme->name);
 }
 
@@ -183,6 +184,7 @@ static theme_t *createThemeByMap(char *path, void *map) {
     theme->images.checkboxUnchecked = createFullQualifiedPath(path, hash_get(map, "images.checkboxUnchecked"));
     theme->images.selectorIcon = createFullQualifiedPath(path, hash_get(map, "images.selectorIcon"));
     theme->images.settingsIcon = createFullQualifiedPath(path, hash_get(map, "images.settingsIcon"));
+    theme->images.downloadManagerIcon = createFullQualifiedPath(path, hash_get(map, "images.downloadManagerIcon"));
 
     return theme;
 }
