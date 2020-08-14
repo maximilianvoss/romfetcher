@@ -192,6 +192,7 @@ set(THEME_SUPERMARIO
         resources/themes/supermario/selector.png
         resources/themes/supermario/settings.png
         resources/themes/supermario/wallpaper.jpg
+        resources/themes/supermario/download.png
         resources/themes/supermario/theme.json
         )
 
@@ -202,6 +203,7 @@ set(THEME_PEACH
         resources/themes/peach/selector.png
         resources/themes/peach/settings.png
         resources/themes/peach/wallpaper.png
+        resources/themes/peach/download.png
         resources/themes/peach/theme.json
         )
 
@@ -211,6 +213,7 @@ set(THEME_BLACK
         resources/themes/black/checkbox_unchecked.png
         resources/themes/black/selector.png
         resources/themes/black/settings.png
+        resources/themes/black/download.png
         resources/themes/black/theme.json
         )
 
