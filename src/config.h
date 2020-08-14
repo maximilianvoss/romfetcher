@@ -34,7 +34,7 @@
 #endif
 
 #ifndef DOWNLOADER_THREADS
-#define DOWNLOADER_THREADS 0
+#define DOWNLOADER_THREADS 2
 #endif
 
 #ifndef ENGINE_FETCH_THREADS

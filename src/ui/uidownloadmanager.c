@@ -85,7 +85,7 @@ static void renderProgressBar(app_t *app, download_t *element, int position) {
     SDL_RenderFillRect(app->sdlRenderer, &rect2);
 
     double percentage;
-    char percentText[7];
+    char percentText[10];
     if (linkedlist_isElementInList(app->download.active, element)) {
         percentage = element->total != 0 ? (double) element->current / (double) element->total : 0.0;
         snprintf(percentText, 5, "%.0f%c", percentage * 100, '%');
@@ -93,8 +93,13 @@ static void renderProgressBar(app_t *app, download_t *element, int position) {
         percentage = 0.0f;
         strcpy (percentText, "QUEUED");
     } else {
-        percentage = 1.0f;
-        strcpy (percentText, "DONE");
+        if (element->cancelled) {
+            percentage = 0.0f;
+            strcpy (percentText, "CANCELLED");
+        } else {
+            percentage = 1.0f;
+            strcpy (percentText, "DONE");
+        }
     }
 
     SDL_Rect rect3 = {100 + 2, position + 35 + 2, (width - 200 - 4) * percentage, 20 - 4};

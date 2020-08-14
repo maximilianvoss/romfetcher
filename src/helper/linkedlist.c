@@ -47,6 +47,9 @@ void *linkedlist_removeElement(void *list, void *element) {
 
     if (ptr->prev == NULL) {
         tmp = ptr->next;
+        if (tmp != NULL) {
+            tmp->prev = NULL;
+        }
         ptr->next = NULL;
         return tmp;
     }
@@ -128,7 +131,7 @@ void linkedlist_freeList(void *list, void (*callback)(void *)) {
     }
     linkedlist_t *next = ((linkedlist_t *) list)->next;
     linkedlist_freeList(next, callback);
-    
+
     if (callback != NULL) {
         callback(list);
     }
@@ -303,6 +306,7 @@ void *linkedlist_push(void *list, void *element) {
         return element;
     }
     ((linkedlist_t *) element)->next = list;
+    ((linkedlist_t *) list)->prev = element;
     return element;
 }
 

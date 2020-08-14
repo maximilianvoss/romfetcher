@@ -14,9 +14,16 @@
  * limitations under the License.
  */
 
+#include <csafestring.h>
 #include "inputdownloadmanager.h"
 #include "../state/statehandler.h"
 #include "../download/downloadpipeline.h"
+#include "../helper/utils.h"
+#include "../download/downloader.h"
+
+static void modalCancelDownload(void *appPtr, void *data);
+
+static void modalNoCancelDownload(void *appPtr, void *data);
 
 void inputdownloadmanager_processUp(app_t *app) {
     download_t *prev = downloadpipeline_getPrev(app, app->download.cursor);
@@ -36,10 +43,41 @@ void inputdownloadmanager_processLeft(app_t *app) {}
 
 void inputdownloadmanager_processRight(app_t *app) {}
 
-void inputdownloadmanager_processSelect(app_t *app) {}
+void inputdownloadmanager_processSelect(app_t *app) {
+    if (!linkedlist_isElementInList(app->download.done, app->download.cursor)) {
+        app->modal.displayed = 1;
+        app->modal.headline = "Cancel Download?";
+        app->modal.actionButton = "Yes";
+        app->modal.cancelButton = "No";
+        app->modal.cursorPos = 0;
+        app->modal.app = app;
+        app->modal.callbackData = app->download.cursor;
+        app->modal.callbackAction = &modalCancelDownload;
+        app->modal.callbackCancel = &modalNoCancelDownload;
+
+        csafestring_t *tmp = safe_create("Sure you want to cancel this download?\n\n");
+        safe_strcat(tmp, app->download.cursor->title);
+        app->modal.text = str_clone(tmp->data);
+        safe_destroy(tmp);
+    }
+}
 
 void inputdownloadmanager_processBack(app_t *app) {
     statehandler_switch(app, 0);
 }
 
 void inputdownloadmanager_processOtherButton(app_t *app, GameControllerState_t *state) {}
+
+static void modalNoCancelDownload(void *appPtr, void *data) {
+    app_t *app = appPtr;
+    app->modal.displayed = 0;
+    free(app->modal.text);
+}
+
+static void modalCancelDownload(void *appPtr, void *data) {
+    app_t *app = appPtr;
+    app->modal.displayed = 0;
+    free(app->modal.text);
+
+    downloader_cancel(app, data);
+}

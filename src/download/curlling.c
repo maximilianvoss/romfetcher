@@ -24,6 +24,7 @@ struct url_data {
 struct state_s {
     curl_off_t *current;
     curl_off_t *total;
+    uint8_t *cancellation;
 };
 
 static size_t writeDataToString(void *ptr, size_t size, size_t nmemb, struct url_data *data);
@@ -72,7 +73,8 @@ char *curlling_fetch(char *url, char *postData, httpmethod_t method) {
 }
 
 int
-curlling_download(char *url, char *data, httpmethod_t method, char *filename, curl_off_t *current, curl_off_t *total) {
+curlling_download(char *url, char *data, httpmethod_t method, char *filename, curl_off_t *current, curl_off_t *total,
+                  uint8_t *cancellation) {
     CURL *curl;
     FILE *pagefile;
     CURLcode res = CURLE_OK;
@@ -100,6 +102,7 @@ curlling_download(char *url, char *data, httpmethod_t method, char *filename, cu
         struct state_s state;
         state.current = current;
         state.total = total;
+        state.cancellation = cancellation;
 
 #if LIBCURL_VERSION_NUM >= 0x072000
         curl_easy_setopt(curl, CURLOPT_XFERINFOFUNCTION, xferinfo);
@@ -126,7 +129,7 @@ static int xferinfo(void *p, curl_off_t dltotal, curl_off_t dlnow, curl_off_t ul
     struct state_s *state = (struct state_s *) p;
     *state->current = dlnow;
     *state->total = dltotal;
-    return 0;
+    return *state->cancellation;
 }
 
 #if LIBCURL_VERSION_NUM < 0x072000

@@ -112,6 +112,28 @@ void downloader_addToQueue(app_t *app, system_t *system, char *title, char *url,
     safe_destroy(downloadPath);
 }
 
+void downloader_cancel(app_t *app, download_t *download) {
+    pthread_mutex_lock(&lockActive);
+    pthread_mutex_lock(&lockQueue);
+    pthread_mutex_lock(&lockDone);
+    if (linkedlist_isElementInList(app->download.active, download)) {
+        app->download.active = linkedlist_removeElement(app->download.active, download);
+        download->next = NULL;
+        download->prev = NULL;
+        download->cancelled = 1;
+        app->download.done = linkedlist_push(app->download.done, download);
+    } else if (linkedlist_isElementInList(app->download.queue, download)) {
+        app->download.queue = linkedlist_removeElement(app->download.queue, download);
+        download->next = NULL;
+        download->prev = NULL;
+        download->cancelled = 1;
+        app->download.done = linkedlist_push(app->download.done, download);
+    }
+    pthread_mutex_unlock(&lockActive);
+    pthread_mutex_unlock(&lockQueue);
+    pthread_mutex_unlock(&lockDone);
+}
+
 static void destroyDownload(void *ptr) {
     download_t *download = (download_t *) ptr;
     FREENOTNULL(download->title);
@@ -167,7 +189,13 @@ static void *downloadThreadExecution(void *appPtr) {
 
             csafestring_t *downloadPath = path_downloadTarget(download->system, download->filename);
             curlling_download(download->url, download->data, download->method, downloadPath->data, &download->current,
-                              &download->total);
+                              &download->total, &download->cancelled);
+
+            if (download->cancelled) {
+                unlink(downloadPath->data);
+                continue;
+            }
+
             postProcess(app, downloadPath->data);
 
             safe_destroy(downloadPath);
