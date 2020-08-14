@@ -171,9 +171,12 @@ static uint8_t processGameController(app_t *app) {
 static uint8_t processEvents(app_t *app) {
     SDL_Event event;
 
-    if (SDL_TICKS_PASSED(SDL_GetTicks(), lastKeyPressed + 200L)) {
-        processGameController(app);
-        lastKeyPressed = SDL_GetTicks();
+    if (SDL_TICKS_PASSED(SDL_GetTicks(), lastKeyPressed + 300L)) {
+        if (gameControllerState.up || gameControllerState.down || gameControllerState.left ||
+            gameControllerState.right) {
+            processGameController(app);
+            lastKeyPressed = SDL_GetTicks();
+        }
     }
 
     while (SDL_PollEvent(&event)) {
