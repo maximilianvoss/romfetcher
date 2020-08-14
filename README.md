@@ -29,7 +29,7 @@ After installation you will find a menu entry in Retropie > Rom Fetcher.
 
 ## Installing the latest version on Retrostone 2
 ```bash
-dpkg -i romfetcher-2.2.0-armhf.deb
+dpkg -i romfetcher-2.3.0-armhf.deb
 ```
 
 ## Installing the latest version from source
