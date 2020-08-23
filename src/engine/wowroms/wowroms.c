@@ -183,7 +183,7 @@ static char *fetchDownloadLink(char *response) {
 }
 
 static char *fetchDownloadPageLink(char *response) {
-    char *regexString = "<a class=\"[^\"]+\" style=\"[^\"]+\" href=\"([^\"]+)\">Download rom</a>";
+    char *regexString = "<a class=\"[^\"]+\" style=\"[^\"]+\" href=\"([^\"]+)\">Download [^<]+</a>";
 
     regexMatches_t *matches = regex_getMatches(response, regexString, 1);
     if (matches == NULL) {
