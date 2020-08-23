@@ -15,7 +15,6 @@
  */
 
 #include <zconf.h>
-#include <pthread.h>
 #include "structs.h"
 #include "ui/uihandler.h"
 #include "input/inputhandler.h"
@@ -30,8 +29,6 @@
 #include "systems/systemhandler.h"
 #include "ui/fonts.h"
 #include "download/downloader.h"
-
-static void *tidyUpThread(void *appPtr);
 
 int main() {
     app_t app;
@@ -64,25 +61,15 @@ int main() {
     inputhandler_destroy();
     fonts_destroy(&app);
 
-    pthread_t tidyUpTread;
-    if (pthread_create(&tidyUpTread, NULL, tidyUpThread, &app)) {
-        SDL_Log("Error creating thread\n");
+    if (fork() == 0) {
+        while (downloader_isActive(&app)) {
+            sleep(1);
+        }
+        downloader_destroy(&app);
+        database_destroy(&app);
     }
-    pthread_detach(tidyUpTread);
-
     SDL_Quit();
 
     return 0;
 }
 
-
-static void *tidyUpThread(void *appPtr) {
-    app_t *app = (app_t *) appPtr;
-    while (downloader_isActive(app)) {
-        sleep(1);
-    }
-    downloader_destroy(app);
-    database_destroy(app);
-
-    return NULL;
-}
