@@ -271,10 +271,6 @@ static uint8_t processEvents(app_t *app) {
                         break;
                     default:
                         processOtherKey(app, scancode);
-                        SDL_Log("Keycode %d Physical %s key acting as %s key",
-                                event.key.keysym.scancode,
-                                SDL_GetScancodeName(event.key.keysym.scancode),
-                                SDL_GetKeyName(event.key.keysym.sym));
                         break;
                 }
             default:
