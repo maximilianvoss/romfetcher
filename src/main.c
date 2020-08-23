@@ -78,11 +78,11 @@ int main() {
 
 static void *tidyUpThread(void *appPtr) {
     app_t *app = (app_t *) appPtr;
-    while (downloader_isActive(&app)) {
+    while (downloader_isActive(app)) {
         sleep(1);
     }
-    downloader_destroy(&app);
-    database_destroy(&app);
+    downloader_destroy(app);
+    database_destroy(app);
 
     return NULL;
 }
