@@ -186,7 +186,7 @@ void inputkeyboard_processOtherButton(app_t *app, GameControllerState_t *state) 
 }
 
 void inputkeyboard_processOtherKey(app_t *app, SDL_Scancode scancode) {
-    if (scancode > 3 && scancode < 40) {
+    if (scancode >= SDL_SCANCODE_A && scancode <= SDL_SCANCODE_0) {
         char *key = SDL_GetScancodeName(scancode);
         app->keyboard.activeChar = *key;
         addActiveCharToText(app);
