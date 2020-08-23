@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#include <zconf.h>
 #include "structs.h"
 #include "ui/uihandler.h"
 #include "input/inputhandler.h"
@@ -56,13 +57,18 @@ int main() {
     result_freeList(app.search.all);
     enginehandler_destroy(&app);
     systemhandler_destroy(&app);
-    database_destroy(&app);
     config_destroy(&app);
     inputhandler_destroy();
     fonts_destroy(&app);
+
+    while (downloader_isActive(&app)) {
+        sleep(1);
+    }
     downloader_destroy(&app);
+    database_destroy(&app);
 
     SDL_Quit();
+
     return 0;
 }
 
