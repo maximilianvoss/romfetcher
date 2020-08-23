@@ -33,4 +33,6 @@ void inputlist_processBack(app_t *app);
 
 void inputlist_processOtherButton(app_t *app, GameControllerState_t *state);
 
+void inputlist_processOtherKey(app_t *app, SDL_Scancode scancode);
+
 #endif

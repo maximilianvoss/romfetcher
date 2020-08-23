@@ -172,7 +172,7 @@ void inputkeyboard_processSelect(app_t *app) {
 }
 
 void inputkeyboard_processBack(app_t *app) {
-    statehandler_switch(app, 0);
+    removeLastCharFromText(app);
 }
 
 void inputkeyboard_processOtherButton(app_t *app, GameControllerState_t *state) {
@@ -182,6 +182,18 @@ void inputkeyboard_processOtherButton(app_t *app, GameControllerState_t *state) 
     if (state->buttonX) {
         addActiveCharToText(app);
         statehandler_switch(app, 1);
+    }
+}
+
+void inputkeyboard_processOtherKey(app_t *app, SDL_Scancode scancode) {
+    if (scancode > 3 && scancode < 40) {
+        char *key = SDL_GetScancodeName(scancode);
+        app->keyboard.activeChar = *key;
+        addActiveCharToText(app);
+    }
+    if (scancode == SDL_SCANCODE_SPACE) {
+        app->keyboard.activeChar = ' ';
+        addActiveCharToText(app);
     }
 }
 

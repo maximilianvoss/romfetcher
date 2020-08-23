@@ -60,3 +60,5 @@ void inputmodal_processBack(app_t *app) {
 }
 
 void inputmodal_processOtherButton(app_t *app, GameControllerState_t *state) {}
+
+void inputmodal_processOtherKey(app_t *app, SDL_Scancode scancode) {}

@@ -41,6 +41,8 @@ static void (*processBack)(app_t *app);
 
 static void (*processOtherButton)(app_t *app, GameControllerState_t *state);
 
+static void (*processOtherKey)(app_t *app, SDL_Scancode scancode);
+
 static SDL_GameController **gameControllers;
 static GameControllerState_t gameControllerState;
 static int gameControllerCount;
@@ -81,6 +83,7 @@ uint8_t inputhandler_processInputs(app_t *app) {
             processSelect = &inputsearch_processSelect;
             processBack = &inputsearch_processBack;
             processOtherButton = &inputsearch_processOtherButton;
+            processOtherKey = &inputsearch_processOtherKey;
             break;
         case window_keyboard:
             processUp = &inputkeyboard_processUp;
@@ -90,6 +93,7 @@ uint8_t inputhandler_processInputs(app_t *app) {
             processSelect = &inputkeyboard_processSelect;
             processBack = &inputkeyboard_processBack;
             processOtherButton = &inputkeyboard_processOtherButton;
+            processOtherKey = &inputkeyboard_processOtherKey;
             break;
         case window_download:
             processUp = &inputdownload_processUp;
@@ -99,6 +103,7 @@ uint8_t inputhandler_processInputs(app_t *app) {
             processSelect = &inputdownload_processSelect;
             processBack = &inputdownload_processBack;
             processOtherButton = &inputdownload_processOtherButton;
+            processOtherKey = &inputdownload_processOtherKey;
             break;
         case window_downloadMgr:
             processUp = &inputdownloadmanager_processUp;
@@ -108,6 +113,7 @@ uint8_t inputhandler_processInputs(app_t *app) {
             processSelect = &inputdownloadmanager_processSelect;
             processBack = &inputdownloadmanager_processBack;
             processOtherButton = &inputdownloadmanager_processOtherButton;
+            processOtherKey = &inputdownloadmanager_processOtherKey;
             break;
         case window_config:
         case window_config_advanced:
@@ -123,6 +129,7 @@ uint8_t inputhandler_processInputs(app_t *app) {
             processSelect = &inputlist_processSelect;
             processBack = &inputlist_processBack;
             processOtherButton = &inputlist_processOtherButton;
+            processOtherKey = &inputlist_processOtherKey;
             break;
     }
 
@@ -134,6 +141,7 @@ uint8_t inputhandler_processInputs(app_t *app) {
         processSelect = &inputmodal_processSelect;
         processBack = &inputmodal_processBack;
         processOtherButton = &inputmodal_processOtherButton;
+        processOtherKey = &inputmodal_processOtherKey;
     }
 
     return processEvents(app);
@@ -170,6 +178,7 @@ static uint8_t processGameController(app_t *app) {
 
 static uint8_t processEvents(app_t *app) {
     SDL_Event event;
+    SDL_Scancode scancode;
 
     if (SDL_TICKS_PASSED(SDL_GetTicks(), lastKeyPressed + 300L)) {
         if (gameControllerState.up || gameControllerState.down || gameControllerState.left ||
@@ -237,30 +246,31 @@ static uint8_t processEvents(app_t *app) {
             case SDL_JOYBUTTONUP:
                 break;
             case SDL_KEYDOWN:
-                switch (event.key.keysym.scancode) {
-                    case 20:
+                scancode = event.key.keysym.scancode;
+
+                switch (scancode) {
+                    case SDL_SCANCODE_ESCAPE:
                         return 1;
-                    case 82: //up
+                    case SDL_SCANCODE_UP:
                         processUp(app);
                         break;
-                    case 81: //down
+                    case SDL_SCANCODE_DOWN:
                         processDown(app);
                         break;
-                    case 80: // left
+                    case SDL_SCANCODE_LEFT:
                         processLeft(app);
                         break;
-                    case 79: // right
+                    case SDL_SCANCODE_RIGHT:
                         processRight(app);
                         break;
-                    case 40: // enter
-                    case 44: // space
+                    case SDL_SCANCODE_RETURN:
                         processSelect(app);
                         break;
-                    case 42: // backspace
-                    case 41: // escape
+                    case SDL_SCANCODE_BACKSPACE:
                         processBack(app);
                         break;
                     default:
+                        processOtherKey(app, scancode);
                         SDL_Log("Keycode %d Physical %s key acting as %s key",
                                 event.key.keysym.scancode,
                                 SDL_GetScancodeName(event.key.keysym.scancode),

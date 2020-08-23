@@ -58,6 +58,8 @@ void inputlist_processBack(app_t *app) {
 void inputlist_processOtherButton(app_t *app, GameControllerState_t *state) {
 }
 
+void inputlist_processOtherKey(app_t *app, SDL_Scancode scancode) {}
+
 static void up(app_t *app) {
     if (app->list.filterActive) {
         linkedlist_t *prev = linkedlist_getPrevActive(app->list.cursor);

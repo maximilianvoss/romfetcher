@@ -33,4 +33,6 @@ void inputkeyboard_processBack(app_t *app);
 
 void inputkeyboard_processOtherButton(app_t *app, GameControllerState_t *state);
 
+void inputkeyboard_processOtherKey(app_t *app, SDL_Scancode scancode);
+
 #endif

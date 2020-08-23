@@ -33,4 +33,6 @@ void inputdownloadmanager_processBack(app_t *app);
 
 void inputdownloadmanager_processOtherButton(app_t *app, GameControllerState_t *state);
 
+void inputdownloadmanager_processOtherKey(app_t *app, SDL_Scancode scancode);
+
 #endif
