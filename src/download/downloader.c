@@ -217,7 +217,7 @@ static void *downloadThreadExecution(void *appPtr) {
         } else {
             pthread_mutex_unlock(&lockQueue);
         }
-        sleep(5);
+        sleep(3);
     }
     return NULL;
 }
