@@ -15,6 +15,7 @@
  */
 
 #include <zconf.h>
+#include <pthread.h>
 #include "structs.h"
 #include "ui/uihandler.h"
 #include "input/inputhandler.h"
@@ -61,13 +62,11 @@ int main() {
     inputhandler_destroy();
     fonts_destroy(&app);
 
-    if (fork() == 0) {
-        while (downloader_isActive(&app)) {
-            sleep(1);
-        }
-        downloader_destroy(&app);
-        database_destroy(&app);
+    while (downloader_isActive(&app)) {
+        sleep(1);
     }
+    downloader_destroy(&app);
+    database_destroy(&app);
     SDL_Quit();
 
     return 0;

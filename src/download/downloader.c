@@ -135,10 +135,7 @@ void downloader_cancel(app_t *app, download_t *download) {
 }
 
 uint8_t downloader_isActive(app_t *app) {
-    pthread_mutex_lock(&lockActive);
-    uint32_t count = linkedlist_getElementCount(app->download.active);
-    pthread_mutex_unlock(&lockActive);
-    return count > 0;
+    return app->download.active != NULL;
 }
 
 static void destroyDownload(void *ptr) {
