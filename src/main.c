@@ -62,12 +62,14 @@ int main() {
     inputhandler_destroy();
     fonts_destroy(&app);
 
+    SDL_Quit();
+
     while (downloader_isActive(&app)) {
         sleep(1);
     }
     downloader_destroy(&app);
     database_destroy(&app);
-    SDL_Quit();
+
 
     return 0;
 }
