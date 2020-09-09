@@ -23,7 +23,7 @@ void inputhandler_init();
 
 void inputhandler_destroy();
 
-uint8_t inputhandler_processInputs(app_t *app);
+void inputhandler_processInputs(app_t *app);
 
 
 #endif

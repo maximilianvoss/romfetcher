@@ -22,10 +22,15 @@
 #include "inputlist.h"
 #include "inputmodal.h"
 #include "inputdownloadmanager.h"
+#include "../download/downloader.h"
 
-static uint8_t processGameController(app_t *app);
+static void processGameController(app_t *app);
 
-static uint8_t processEvents(app_t *app);
+static void processEvents(app_t *app);
+
+static void questionAppQuitting(app_t *app);
+
+static void modalQuit(void *app, void *data);
 
 static void (*processUp)(app_t *app);
 
@@ -73,7 +78,7 @@ void inputhandler_init() {
     }
 }
 
-uint8_t inputhandler_processInputs(app_t *app) {
+void inputhandler_processInputs(app_t *app) {
     switch (app->win) {
         case window_search:
             processUp = &inputsearch_processUp;
@@ -144,7 +149,7 @@ uint8_t inputhandler_processInputs(app_t *app) {
         processOtherKey = &inputmodal_processOtherKey;
     }
 
-    return processEvents(app);
+    processEvents(app);
 }
 
 void inputhandler_destroy() {
@@ -155,9 +160,9 @@ void inputhandler_destroy() {
 }
 
 
-static uint8_t processGameController(app_t *app) {
+static void processGameController(app_t *app) {
     if (gameControllerState.start && gameControllerState.back) {
-        return 1;
+        questionAppQuitting(app);
     } else if (gameControllerState.up) {
         processUp(app);
     } else if (gameControllerState.down) {
@@ -173,10 +178,9 @@ static uint8_t processGameController(app_t *app) {
     } else {
         processOtherButton(app, &gameControllerState);
     }
-    return 0;
 }
 
-static uint8_t processEvents(app_t *app) {
+static void processEvents(app_t *app) {
     SDL_Event event;
     SDL_Scancode scancode;
 
@@ -191,7 +195,8 @@ static uint8_t processEvents(app_t *app) {
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
             case SDL_QUIT:
-                return 1;
+                questionAppQuitting(app);
+                break;
             case SDL_CONTROLLERBUTTONUP:
             case SDL_CONTROLLERBUTTONDOWN:
                 switch (event.cbutton.button) {
@@ -242,7 +247,8 @@ static uint8_t processEvents(app_t *app) {
                         break;
                 }
                 lastKeyPressed = SDL_GetTicks();
-                return processGameController(app);
+                processGameController(app);
+                break;
             case SDL_JOYBUTTONUP:
                 break;
             case SDL_KEYDOWN:
@@ -250,7 +256,8 @@ static uint8_t processEvents(app_t *app) {
 
                 switch (scancode) {
                     case SDL_SCANCODE_ESCAPE:
-                        return 1;
+                        questionAppQuitting(app);
+                        break;
                     case SDL_SCANCODE_UP:
                         processUp(app);
                         break;
@@ -277,5 +284,26 @@ static uint8_t processEvents(app_t *app) {
                 break;
         }
     }
-    return 0;
+}
+
+static void questionAppQuitting(app_t *app) {
+    app->modal.displayed = 1;
+    app->modal.headline = "Quit Rom Fetcher";
+    if (downloader_isActive(app)) {
+        app->modal.text = "Are you sure you want to quit Rom Fetcher?\nThere are still some downloads running\nwhich will be cancelled";
+    } else {
+        app->modal.text = "Are you sure you want to quit Rom Fetcher?";
+    }
+    app->modal.actionButton = "Yes";
+    app->modal.cancelButton = "No";
+    app->modal.cursorPos = 0;
+    app->modal.app = app;
+    app->modal.callbackData = NULL;
+    app->modal.callbackAction = &modalQuit;
+    app->modal.callbackCancel = NULL;
+}
+
+static void modalQuit(void *app, void *data) {
+    ((app_t *) app)->modal.displayed = 0;
+    ((app_t *) app)->quit = 1;
 }

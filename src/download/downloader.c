@@ -138,6 +138,30 @@ uint8_t downloader_isActive(app_t *app) {
     return app->download.active != NULL;
 }
 
+void downloader_cancelAllDownloads(app_t *app) {
+    download_t *download;
+
+    pthread_mutex_lock(&lockQueue);
+    pthread_mutex_lock(&lockDone);
+
+    while (app->download.active != NULL) {
+        app->download.active = linkedlist_pop(app->download.active, (void **) &download);
+        download->cancelled = 1;
+        app->download.done = linkedlist_push(app->download.done, download);
+    }
+
+    pthread_mutex_unlock(&lockQueue);
+    pthread_mutex_unlock(&lockDone);
+
+    pthread_mutex_lock(&lockActive);
+    download = app->download.active;
+    while (download != NULL) {
+        download->cancelled = 1;
+        download = download->next;
+    }
+    pthread_mutex_unlock(&lockActive);
+}
+
 static void destroyDownload(void *ptr) {
     download_t *download = (download_t *) ptr;
     FREENOTNULL(download->title);
