@@ -37,35 +37,34 @@ void *linkedlist_appendElement(void *list, void *elementVoid) {
     return list;
 }
 
-void *linkedlist_removeElement(void *list, void *element) {
-    linkedlist_t *ptr = element;
-    linkedlist_t *tmp;
+void *linkedlist_removeElement(void *listPtr, void *elementPtr) {
+    linkedlist_t *list = listPtr;
+    linkedlist_t *element = elementPtr;
+    linkedlist_t *ptr = list;
 
-    if (ptr == NULL) {
-        return NULL;
-    }
+    while (ptr != NULL && element != NULL) {
+        if (ptr == element) {
+            linkedlist_t *tmpNext = element->next;
+            linkedlist_t *tmpPrev = element->prev;
 
-    if (ptr->prev == NULL) {
-        tmp = ptr->next;
-        if (tmp != NULL) {
-            tmp->prev = NULL;
+            element->prev = NULL;
+            element->next = NULL;
+
+            if (tmpPrev != NULL) {
+                tmpPrev->next = tmpNext;
+            }
+            if (tmpNext != NULL) {
+                tmpNext->prev = tmpPrev;
+            }
+
+            if (tmpPrev == NULL) {
+                return tmpNext;
+            }
+
+            return list;
         }
-        ptr->next = NULL;
-        return tmp;
+        ptr = ptr->next;
     }
-
-    if (ptr->next == NULL) {
-        tmp = ptr->prev;
-        tmp->next = NULL;
-        ptr->prev = NULL;
-        return list;
-    }
-
-    tmp = ptr;
-    ((linkedlist_t *) ptr->prev)->next = tmp->next;
-    ((linkedlist_t *) ptr->next)->prev = tmp->prev;
-    ptr->prev = NULL;
-    ptr->next = NULL;
     return list;
 }
 

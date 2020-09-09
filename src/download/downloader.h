@@ -28,4 +28,8 @@ void downloader_addToQueue(app_t *app, system_t *system, char *title, char *url,
 
 void downloader_cancel(app_t *app, download_t *download);
 
+uint8_t downloader_isActive(app_t *app);
+
+void downloader_cancelAllDownloads(app_t *app);
+
 #endif

@@ -1,4 +1,5 @@
-#
+#!/bin/bash
+
 if [ ! -e ~/logs ]; then
     mkdir ~/logs
 fi

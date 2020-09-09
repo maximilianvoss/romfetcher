@@ -24,7 +24,7 @@ struct url_data {
 struct state_s {
     curl_off_t *current;
     curl_off_t *total;
-    uint8_t *cancellation;
+    volatile uint8_t *cancellation;
 };
 
 static size_t writeDataToString(void *ptr, size_t size, size_t nmemb, struct url_data *data);
@@ -74,7 +74,7 @@ char *curlling_fetch(char *url, char *postData, httpmethod_t method) {
 
 int
 curlling_download(char *url, char *data, httpmethod_t method, char *filename, curl_off_t *current, curl_off_t *total,
-                  uint8_t *cancellation) {
+                  volatile uint8_t *cancellation) {
     CURL *curl;
     FILE *pagefile;
     CURLcode res = CURLE_OK;

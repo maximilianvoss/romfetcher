@@ -48,7 +48,8 @@ typedef enum {
 typedef enum {
     advancedConfig_fullscreen,
     advancedConfig_openGL,
-    advancedConfig_highDPI
+    advancedConfig_highDPI,
+    advancedConfig_downloadQueue
 } advancedConfigSetting_t;
 
 typedef enum {

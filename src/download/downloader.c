@@ -26,6 +26,7 @@
 #include "../state/statedownload.h"
 #include "../database/postprocess.h"
 #include "../config.h"
+#include "../database/download.h"
 
 static void destroyDownload(void *ptr);
 
@@ -134,6 +135,40 @@ void downloader_cancel(app_t *app, download_t *download) {
     pthread_mutex_unlock(&lockDone);
 }
 
+uint8_t downloader_isActive(app_t *app) {
+    if (app->download.active != NULL) {
+        return 0;
+    }
+    download_t *ptr = app->download.active;
+    while (ptr != NULL) {
+        if (!ptr->cancelled) {
+            return 1;
+        }
+        ptr = ptr->next;
+    }
+    return 0;
+}
+
+void downloader_cancelAllDownloads(app_t *app) {
+    download_t *download;
+
+    download = app->download.queue;
+    while (download != NULL) {
+        download_t *tmp = download;
+        download = download->next;
+        downloader_cancel(app, tmp);
+        download_persistDownload(app, tmp);
+    }
+
+    download = app->download.active;
+    while (download != NULL) {
+        download_t *tmp = download;
+        download = download->next;
+        downloader_cancel(app, tmp);
+        download_persistDownload(app, tmp);
+    }
+}
+
 static void destroyDownload(void *ptr) {
     download_t *download = (download_t *) ptr;
     FREENOTNULL(download->title);
@@ -192,10 +227,11 @@ static void *downloadThreadExecution(void *appPtr) {
                               &download->total, &download->cancelled);
 
             if (download->cancelled) {
+                SDL_Log("Deleting cancelled file: %s", downloadPath->data);
                 unlink(downloadPath->data);
+                safe_destroy(downloadPath);
                 continue;
             }
-
             postProcess(app, downloadPath->data);
 
             safe_destroy(downloadPath);
@@ -210,7 +246,7 @@ static void *downloadThreadExecution(void *appPtr) {
         } else {
             pthread_mutex_unlock(&lockQueue);
         }
-        sleep(5);
+        sleep(3);
     }
     return NULL;
 }

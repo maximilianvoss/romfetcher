@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-#ifndef DOWNLOAD_CURLLING_H
-#define DOWNLOAD_CURLLING_H
+#ifndef DATABASE_DOWNLOAD_H
+#define DATABASE_DOWNLOAD_H
 
 #include "../structs.h"
 
-int
-curlling_download(char *url, char *data, httpmethod_t method, char *filename, curl_off_t *current, curl_off_t *total,
-                  volatile uint8_t *cancellation);
+void download_init(sqlite3 *db);
 
-char *curlling_fetch(char *url, char *postData, httpmethod_t method);
+void download_load(app_t *app);
+
+void download_persistDownload(app_t *app, download_t *download);
 
 #endif

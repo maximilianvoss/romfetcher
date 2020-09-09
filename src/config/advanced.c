@@ -28,6 +28,9 @@ void configadvanced_init(app_t *app) {
     app->config.advanced.all = linkedlist_appendElement(app->config.advanced.all,
                                                         createAdvancedConfig("High DPI rendering enabled", 0,
                                                                              advancedConfig_highDPI));
+    app->config.advanced.all = linkedlist_appendElement(app->config.advanced.all,
+                                                        createAdvancedConfig("Save download queue on exit", 1,
+                                                                             advancedConfig_downloadQueue));
 
     app->config.advanced.active = app->config.advanced.all;
     app->config.advanced.cursor = app->config.advanced.all;
@@ -45,6 +48,9 @@ void configadvanced_setConfig(app_t *app, advancedConfigSetting_t setting, uint8
             app->config.advanced.opengl = value;
         case advancedConfig_highDPI:
             app->config.advanced.highdpi = value;
+            break;
+        case advancedConfig_downloadQueue:
+            app->config.advanced.downloadQueue = value;
             break;
     }
     advancedconfig_t *ptr = app->config.advanced.all;
@@ -68,6 +74,9 @@ void configadvanced_listToSettings(app_t *app) {
                 app->config.advanced.opengl = value;
             case advancedConfig_highDPI:
                 app->config.advanced.highdpi = value;
+                break;
+            case advancedConfig_downloadQueue:
+                app->config.advanced.downloadQueue = value;
                 break;
         }
         ptr = ptr->next;

@@ -22,6 +22,7 @@
 #include "enginecache.h"
 #include "linkedlist.h"
 #include "postprocess.h"
+#include "download.h"
 
 static uint8_t doesTableExist(sqlite3 *db, char *tableName);
 
@@ -81,6 +82,10 @@ void database_initTables(sqlite3 *db) {
 
     if (!doesTableExist(db, "postprocessors")) {
         databasepostprocess_init(db);
+    }
+
+    if (!doesTableExist(db, "downloads")) {
+        download_init(db);
     }
 }
 

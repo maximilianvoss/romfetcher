@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#include <zconf.h>
+#include <pthread.h>
 #include "structs.h"
 #include "ui/uihandler.h"
 #include "input/inputhandler.h"
@@ -28,42 +30,53 @@
 #include "systems/systemhandler.h"
 #include "ui/fonts.h"
 #include "download/downloader.h"
+#include "database/download.h"
+
+void static initApp(app_t *app);
+
+void static destroyApp(app_t *app);
 
 int main() {
     app_t app;
-    memset(&app, 0, sizeof(app_t));
-
-    path_initRomfetchersHome();
-    database_init(&app);
-    enginehandler_init(&app);
-    systemhandler_init(&app);
-    themes_init(&app);
-    config_init(&app);
-    fonts_init(&app);
-    database_configLoad(&app);
-    ui_init(&app);
-    inputhandler_init();
-    downloader_init(&app);
+    initApp(&app);
 
     while (!app.quit) {
-        app.quit = inputhandler_processInputs(&app);
+        inputhandler_processInputs(&app);
         uihandler_render(&app);
         SDL_Delay(75);
     }
 
-    ui_destroy(&app);
-    themes_destroy(&app);
-    result_freeList(app.search.all);
-    enginehandler_destroy(&app);
-    systemhandler_destroy(&app);
-    database_destroy(&app);
-    config_destroy(&app);
-    inputhandler_destroy();
-    fonts_destroy(&app);
-    downloader_destroy(&app);
-
-    SDL_Quit();
+    destroyApp(&app);
     return 0;
 }
 
+void static initApp(app_t *app) {
+    memset(app, 0, sizeof(app_t));
+    path_initRomfetchersHome();
+    database_init(app);
+    enginehandler_init(app);
+    systemhandler_init(app);
+    themes_init(app);
+    config_init(app);
+    fonts_init(app);
+    database_configLoad(app);
+    ui_init(app);
+    inputhandler_init();
+    downloader_init(app);
+    download_load(app);
+}
 
+void static destroyApp(app_t *app) {
+    downloader_cancelAllDownloads(app);
+    ui_destroy(app);
+    themes_destroy(app);
+    result_freeList(app->search.all);
+    enginehandler_destroy(app);
+    systemhandler_destroy(app);
+    config_destroy(app);
+    inputhandler_destroy();
+    fonts_destroy(app);
+    downloader_destroy(app);
+    database_destroy(app);
+    SDL_Quit();
+}
