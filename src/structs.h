@@ -211,6 +211,7 @@ typedef struct {
             uint8_t fullscreen;
             uint8_t opengl;
             uint8_t highdpi;
+            uint8_t downloadQueue;
         } advanced;
 
         struct {
