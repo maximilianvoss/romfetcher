@@ -80,7 +80,7 @@ static void download(void *app, searchresult_t *item) {
 
     char *filename = str_concat(item->title, ".zip");
     downloader_addToQueue(app, item->system, item->title, item->url, NULL, filename, GET);
-    free(filename);
+    FREENOTNULL(filename);
 }
 
 static void fillCache(app_t *app, system_t *system) {
@@ -129,8 +129,8 @@ static void *executeThread(void *ptr) {
             response = curlling_fetch(url, NULL, GET);
             extractLink(filter->app, filter->system, response);
         }
-        free(response);
-        free(url);
+        FREENOTNULL(response);
+        FREENOTNULL(url);
     }
 
     return NULL;
@@ -164,7 +164,7 @@ static char *generateDownloadLink(system_t *system, char *id) {
 
     tmp = result;
     result = str_replace(tmp, "%system%", systemStr);
-    free(tmp);
+    FREENOTNULL(tmp);
 
     return result;
 }

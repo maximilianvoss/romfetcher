@@ -26,6 +26,7 @@
 #include "../state/statedownload.h"
 #include "../database/postprocess.h"
 #include "../config.h"
+#include "../database/download.h"
 
 static void destroyDownload(void *ptr);
 
@@ -135,31 +136,37 @@ void downloader_cancel(app_t *app, download_t *download) {
 }
 
 uint8_t downloader_isActive(app_t *app) {
-    return app->download.active != NULL;
+    if (app->download.active != NULL) {
+        return 0;
+    }
+    download_t *ptr = app->download.active;
+    while (ptr != NULL) {
+        if (!ptr->cancelled) {
+            return 1;
+        }
+        ptr = ptr->next;
+    }
+    return 0;
 }
 
 void downloader_cancelAllDownloads(app_t *app) {
     download_t *download;
 
-    pthread_mutex_lock(&lockQueue);
-    pthread_mutex_lock(&lockDone);
-
-    while (app->download.active != NULL) {
-        app->download.active = linkedlist_pop(app->download.active, (void **) &download);
-        download->cancelled = 1;
-        app->download.done = linkedlist_push(app->download.done, download);
+    download = app->download.queue;
+    while (download != NULL) {
+        download_t *tmp = download;
+        download = download->next;
+        downloader_cancel(app, tmp);
+        download_persistDownload(app, tmp);
     }
 
-    pthread_mutex_unlock(&lockQueue);
-    pthread_mutex_unlock(&lockDone);
-
-    pthread_mutex_lock(&lockActive);
     download = app->download.active;
     while (download != NULL) {
-        download->cancelled = 1;
+        download_t *tmp = download;
         download = download->next;
+        downloader_cancel(app, tmp);
+        download_persistDownload(app, tmp);
     }
-    pthread_mutex_unlock(&lockActive);
 }
 
 static void destroyDownload(void *ptr) {
@@ -220,10 +227,11 @@ static void *downloadThreadExecution(void *appPtr) {
                               &download->total, &download->cancelled);
 
             if (download->cancelled) {
+                SDL_Log("Deleting cancelled file: %s", downloadPath->data);
                 unlink(downloadPath->data);
+                safe_destroy(downloadPath);
                 continue;
             }
-
             postProcess(app, downloadPath->data);
 
             safe_destroy(downloadPath);

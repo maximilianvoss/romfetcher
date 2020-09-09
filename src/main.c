@@ -30,6 +30,7 @@
 #include "systems/systemhandler.h"
 #include "ui/fonts.h"
 #include "download/downloader.h"
+#include "database/download.h"
 
 void static initApp(app_t *app);
 
@@ -62,6 +63,7 @@ void static initApp(app_t *app) {
     ui_init(app);
     inputhandler_init();
     downloader_init(app);
+    download_load(app);
 }
 
 void static destroyApp(app_t *app) {

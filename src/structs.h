@@ -123,7 +123,7 @@ typedef struct download_s {
     httpmethod_t method;
     curl_off_t current;
     curl_off_t total;
-    uint8_t cancelled;
+    volatile uint8_t cancelled;
 } download_t;
 
 typedef struct {
