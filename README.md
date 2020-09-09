@@ -28,6 +28,8 @@ After installation you will find a menu entry in Retropie > Rom Fetcher.
 `Start` + `Select`: Quit Rom Fetcher from any position  
 
 ## Installing the latest version on Retrostone 2
+Download the latest version: from https://github.com/maximilianvoss/romfetcher/releases/latest  
+Copy it onto your Retrostone 2 and run following command: 
 ```bash
 dpkg -i romfetcher-2.4.0-armhf.deb
 ```
