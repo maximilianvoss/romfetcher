@@ -23,7 +23,7 @@ static void fillStandardValues(sqlite3 *db);
 
 void database_configInitTable(sqlite3 *db) {
     char *err_msg = 0;
-    char *query = "CREATE TABLE config (version INT, theme TEXT, fullscreen INT, opengl INT, highdpi INT, downloadqueue INT, resolution TEXT);";
+    char *query = "CREATE TABLE config (version INT, theme TEXT, fullscreen INT, opengl INT, highdpi INT, downloadqueue INT, externalcurl INT, resolution TEXT);";
 
     int rc = sqlite3_exec(db, query, 0, 0, &err_msg);
     if (rc != SQLITE_OK) {
@@ -55,7 +55,7 @@ uint8_t database_configCheckVersion(sqlite3 *db) {
 }
 
 void database_configLoad(app_t *app) {
-    char *query = "SELECT theme, fullscreen, opengl, highdpi, downloadqueue, resolution FROM config";
+    char *query = "SELECT theme, fullscreen, opengl, highdpi, downloadqueue, externalcurl, resolution FROM config";
 
     sqlite3_stmt *stmt;
     int rc = sqlite3_prepare_v2(app->database.db, query, -1, &stmt, 0);
@@ -71,13 +71,15 @@ void database_configLoad(app_t *app) {
         int opengl = sqlite3_column_int(stmt, 2);
         int highdpi = sqlite3_column_int(stmt, 3);
         int downloadQueue = sqlite3_column_int(stmt, 4);
-        char *resolution = (char *) sqlite3_column_text(stmt, 5);
+        int externalCurl = sqlite3_column_int(stmt, 5);
+        char *resolution = (char *) sqlite3_column_text(stmt, 6);
         app->config.resolution.active = linkedlist_findElementByName(app->config.resolution.all, resolution);
 
         configadvanced_setConfig(app, advancedConfig_fullscreen, fullscreen);
         configadvanced_setConfig(app, advancedConfig_openGL, opengl);
         configadvanced_setConfig(app, advancedConfig_highDPI, highdpi);
         configadvanced_setConfig(app, advancedConfig_downloadQueue, downloadQueue);
+        configadvanced_setConfig(app, advancedConfig_externalCurl, externalCurl);
     }
     if (app->themes.active == NULL) {
         app->themes.active = app->themes.all;
@@ -89,7 +91,7 @@ void database_configLoad(app_t *app) {
 }
 
 void database_configPersist(app_t *app) {
-    char *query = "UPDATE config SET theme=@theme, fullscreen=@fullscreen, opengl=@opengl, highdpi=@highdpi, resolution=@resolution, downloadqueue=@downloadqueue";
+    char *query = "UPDATE config SET theme=@theme, fullscreen=@fullscreen, opengl=@opengl, highdpi=@highdpi, resolution=@resolution, downloadqueue=@downloadqueue, externalcurl=@externalcurl";
 
     sqlite3_stmt *stmt;
     configadvanced_listToSettings(app);
@@ -107,6 +109,8 @@ void database_configPersist(app_t *app) {
         sqlite3_bind_int(stmt, idx, app->config.advanced.highdpi);
         idx = sqlite3_bind_parameter_index(stmt, "@downloadqueue");
         sqlite3_bind_int(stmt, idx, app->config.advanced.downloadQueue);
+        idx = sqlite3_bind_parameter_index(stmt, "@externalcurl");
+        sqlite3_bind_int(stmt, idx, app->config.advanced.externalCurl);
         idx = sqlite3_bind_parameter_index(stmt, "@resolution");
         sqlite3_bind_text(stmt, idx, app->config.resolution.active->name, strlen(app->config.resolution.active->name),
                           NULL);

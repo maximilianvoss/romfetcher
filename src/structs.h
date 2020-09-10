@@ -212,6 +212,7 @@ typedef struct {
             uint8_t opengl;
             uint8_t highdpi;
             uint8_t downloadQueue;
+            uint8_t externalCurl;
         } advanced;
 
         struct {

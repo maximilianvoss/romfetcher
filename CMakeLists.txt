@@ -50,6 +50,10 @@ set(SOURCES
         src/download/curlling.h
         src/download/downloader.c
         src/download/downloader.h
+        src/download/downloadercurl.c
+        src/download/downloadercurl.h
+        src/download/downloaderinternal.c
+        src/download/downloaderinternal.h
         src/download/downloadpipeline.c
         src/download/downloadpipeline.h
         src/engine/freeroms/freeroms.c

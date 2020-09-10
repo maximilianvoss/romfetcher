@@ -31,6 +31,9 @@ void configadvanced_init(app_t *app) {
     app->config.advanced.all = linkedlist_appendElement(app->config.advanced.all,
                                                         createAdvancedConfig("Save download queue on exit", 1,
                                                                              advancedConfig_downloadQueue));
+    app->config.advanced.all = linkedlist_appendElement(app->config.advanced.all,
+                                                        createAdvancedConfig("Download with external CURL", 0,
+                                                                             advancedConfig_externalCurl));
 
     app->config.advanced.active = app->config.advanced.all;
     app->config.advanced.cursor = app->config.advanced.all;
@@ -52,6 +55,9 @@ void configadvanced_setConfig(app_t *app, advancedConfigSetting_t setting, uint8
         case advancedConfig_downloadQueue:
             app->config.advanced.downloadQueue = value;
             break;
+        case advancedConfig_externalCurl:
+            app->config.advanced.externalCurl = value;
+            break;
     }
     advancedconfig_t *ptr = app->config.advanced.all;
     while (ptr != NULL) {
@@ -70,13 +76,18 @@ void configadvanced_listToSettings(app_t *app) {
         switch (ptr->setting) {
             case advancedConfig_fullscreen:
                 app->config.advanced.fullscreen = value;
+                break;
             case advancedConfig_openGL:
                 app->config.advanced.opengl = value;
+                break;
             case advancedConfig_highDPI:
                 app->config.advanced.highdpi = value;
                 break;
             case advancedConfig_downloadQueue:
                 app->config.advanced.downloadQueue = value;
+                break;
+            case advancedConfig_externalCurl:
+                app->config.advanced.externalCurl = value;
                 break;
         }
         ptr = ptr->next;
