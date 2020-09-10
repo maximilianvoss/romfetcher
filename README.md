@@ -31,7 +31,7 @@ After installation you will find a menu entry in Retropie > Rom Fetcher.
 Download the latest version: from https://github.com/maximilianvoss/romfetcher/releases/latest  
 Copy it onto your Retrostone 2 and run following command: 
 ```bash
-dpkg -i romfetcher-2.4.0-armhf.deb
+dpkg -i romfetcher-*-armhf.deb
 ```
 
 ## Installing the latest version from source
