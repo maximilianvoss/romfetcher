@@ -9,7 +9,6 @@ ROM Fetcher is implemented in proper C using SDL2, it may run also on other plat
 
 Following ROM databases are supported:  
 * https://romsmania.cc/
-* https://romsmode.com/
 * https://wowroms.com/
 * https://roms-download.com/
 * https://romsemulator.net/

@@ -80,10 +80,6 @@ set(SOURCES
         src/engine/romsmania/mapping.h
         src/engine/romsmania/romsmania.c
         src/engine/romsmania/romsmania.h
-        src/engine/romsmode/mapping.c
-        src/engine/romsmode/mapping.h
-        src/engine/romsmode/romsmode.c
-        src/engine/romsmode/romsmode.h
         src/engine/urlhandling.c
         src/engine/urlhandling.h
         src/engine/wowroms/mapping.c

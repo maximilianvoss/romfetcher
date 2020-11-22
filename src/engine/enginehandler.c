@@ -17,7 +17,6 @@
 #include <pthread.h>
 #include "enginehandler.h"
 #include "romsmania/romsmania.h"
-#include "romsmode/romsmode.h"
 #include "wowroms/wowroms.h"
 #include "romsdownload/romsdownload.h"
 #include "romsemulator/romsemulator.h"
@@ -44,7 +43,6 @@ void enginehandler_init(app_t *app) {
     app->engine.all = linkedlist_appendElement(app->engine.all, romsdownload_getEngine());
     app->engine.all = linkedlist_appendElement(app->engine.all, romsemulator_getEngine());
     app->engine.all = linkedlist_appendElement(app->engine.all, romsmania_getEngine());
-    app->engine.all = linkedlist_appendElement(app->engine.all, romsmode_getEngine());
     app->engine.all = linkedlist_appendElement(app->engine.all, wowroms_getEngine());
 
     databaselinkedlist_loadActivities(app->database.db, DATABASE_TABLE_ENGINES, (linkedlist_t *) app->engine.all);
