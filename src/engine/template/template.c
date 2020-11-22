@@ -32,6 +32,7 @@ static engine_t *engine = NULL;
 engine_t *_template_getEngine() {
     if (engine == NULL) {
         engine = calloc(1, sizeof(engine_t));
+        engine->loadIcon = loadIcon;
         engine->search = search;
         engine->download = download;
         engine->name = SHORTNAME;
@@ -47,4 +48,8 @@ static searchresult_t *search(void *app, system_t *system, char *searchString) {
 
 static void download(void *app, searchresult_t *item) {
     callback(app);
+}
+
+static SDL_Texture *loadIcon(void *app) {
+    return NULL;
 }
