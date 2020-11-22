@@ -23,6 +23,7 @@
 #include "../results.h"
 #include "../../helper/utils.h"
 #include "../../download/downloader.h"
+#include "../../ui/rendering.h"
 
 #define SHORTNAME "HSL"
 #define URL_TEMPLATE "https://romhustler.org/roms/search/page:%page%?q=%query%&console_id%5B9%5D=%system%"
@@ -39,13 +40,18 @@ static char *fetchId(char *response);
 
 static char *fetchDownloadLink(char *response);
 
+static SDL_Texture *loadIcon(void *app);
+
 static engine_t *engine = NULL;
+
+static SDL_Texture *icon = NULL;
 
 engine_t *romhustler_getEngine() {
     if (engine == NULL) {
         engine = calloc(1, sizeof(engine_t));
         engine->search = search;
         engine->download = download;
+        engine->loadIcon = loadIcon;
         engine->name = SHORTNAME;
         engine->active = 1;
         engine->fullname = "https://romhustler.org";
@@ -65,9 +71,9 @@ static searchresult_t *search(void *app, system_t *system, char *searchString) {
             break;
         }
 
-        char *response = curlling_fetch(url, NULL, GET);
-        resultList = fetchingResultItems(system, resultList, response);
-        free(response);
+        curl_response_t *response = curlling_fetch(url, NULL, GET, 1L);
+        resultList = fetchingResultItems(system, resultList, response->data);
+        curl_freeResponse(response);
         free(url);
 
         resultCount = linkedlist_getElementCount(resultList);
@@ -81,25 +87,25 @@ static void download(void *app, searchresult_t *item) {
     if (item == NULL) {
         return;
     }
-    char *detailPageResponse = curlling_fetch(item->url, NULL, GET);
-    char *id = fetchId(detailPageResponse);
+    curl_response_t *detailPageResponse = curlling_fetch(item->url, NULL, GET, 1L);
+    char *id = fetchId(detailPageResponse->data);
 
     csafestring_t *linkUrl = safe_create(URL_DOWNLOAD_LINK);
     safe_strcat(linkUrl, id);
-    char *linkJsonResponse = curlling_fetch(linkUrl->data, NULL, GET);
+    curl_response_t *linkJsonResponse = curlling_fetch(linkUrl->data, NULL, GET, 1L);
 
-    char *downloadLink = fetchDownloadLink(linkJsonResponse);
+    char *downloadLink = fetchDownloadLink(linkJsonResponse->data);
     char *decodedDownloadLink = str_quoteDecode(downloadLink);
 
     char *filename = str_concat(item->title, file_suffix(decodedDownloadLink));
     downloader_addToQueue(app, item->system, item->title, decodedDownloadLink, NULL, filename, GET);
 
     free(filename);
-    free(linkJsonResponse);
+    curl_freeResponse(linkJsonResponse);
     free(id);
     free(downloadLink);
     free(decodedDownloadLink);
-    free(detailPageResponse);
+    curl_freeResponse(detailPageResponse);
     safe_destroy(linkUrl);
 }
 
@@ -149,4 +155,13 @@ static char *fetchDownloadLink(char *response) {
     char *link = regex_cpyGroupText(matches, 0);
     regex_destroyMatches(matches);
     return link;
+}
+
+
+static SDL_Texture *loadIcon(void *app) {
+    if (icon == NULL) {
+        curl_response_t *data = curlling_fetch("https://romhustler.org/favicon.ico", NULL, GET, 0L);
+        icon = rendering_memImage(app, data->data, data->size);
+    }
+    return icon;
 }

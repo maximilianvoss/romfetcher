@@ -64,9 +64,9 @@ static searchresult_t *search(void *app, system_t *system, char *searchString) {
             break;
         }
 
-        char *response = curlling_fetch(url, NULL, GET);
-        resultList = fetchingResultItems(system, resultList, response);
-        free(response);
+        curl_response_t *response = curlling_fetch(url, NULL, GET, 1L);
+        resultList = fetchingResultItems(system, resultList, response->data);
+        curl_freeResponse(response);
         free(url);
 
         resultCount = linkedlist_getElementCount(resultList);
@@ -80,14 +80,14 @@ static void download(void *app, searchresult_t *item) {
     if (item == NULL) {
         return;
     }
-    char *detailPageResponse = curlling_fetch(item->url, NULL, GET);
-    char *linkDownloadPage = fetchDownloadPageLink(detailPageResponse);
+    curl_response_t *detailPageResponse = curlling_fetch(item->url, NULL, GET, 1L);
+    char *linkDownloadPage = fetchDownloadPageLink(detailPageResponse->data);
 
-    char *downloadPageResponse = curlling_fetch(linkDownloadPage, NULL, GET);
+    curl_response_t *downloadPageResponse = curlling_fetch(linkDownloadPage, NULL, GET, 1L);
 
-    char *pid = fetchHiddenField(downloadPageResponse, "pid", 0);
-    char *roms = fetchHiddenField(downloadPageResponse, "roms_download_file_nonce_field", 1);
-    char *referer = fetchHiddenField(downloadPageResponse, "_wp_http_referer", 0);
+    char *pid = fetchHiddenField(downloadPageResponse->data, "pid", 0);
+    char *roms = fetchHiddenField(downloadPageResponse->data, "roms_download_file_nonce_field", 1);
+    char *referer = fetchHiddenField(downloadPageResponse->data, "_wp_http_referer", 0);
 
     csafestring_t *payload = safe_create("action=roms_download_file&pid=");
     safe_strcat(payload, pid);
@@ -103,9 +103,9 @@ static void download(void *app, searchresult_t *item) {
     free(pid);
     free(roms);
     free(referer);
-    free(downloadPageResponse);
+    curl_freeResponse(downloadPageResponse);
     free(linkDownloadPage);
-    free(detailPageResponse);
+    curl_freeResponse(detailPageResponse);
     safe_destroy(payload);
 }
 

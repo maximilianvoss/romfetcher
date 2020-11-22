@@ -16,7 +16,6 @@
 
 #include "engines.h"
 #include "../src/engine/romsmania/romsmania.h"
-#include "../src/engine/romsmode/romsmode.h"
 #include "../src/engine/wowroms/wowroms.h"
 #include "../src/engine/romsdownload/romsdownload.h"
 #include "../src/engine/romsemulator/romsemulator.h"
@@ -25,7 +24,6 @@
 
 void testengines_init() {
     romsmania = romsmania_getEngine();
-    romsmode = romsmode_getEngine();
     wowroms = wowroms_getEngine();
     romsdownload = romsdownload_getEngine();
     romsemulator = romsemulator_getEngine();

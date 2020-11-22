@@ -68,6 +68,7 @@ set(SOURCES
         src/engine/romhustler/mapping.h
         src/engine/romhustler/romhustler.c
         src/engine/romhustler/romhustler.h
+        src/engine/romsdownload/icon.h
         src/engine/romsdownload/mapping.c
         src/engine/romsdownload/mapping.h
         src/engine/romsdownload/romsdownload.c

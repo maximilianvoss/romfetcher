@@ -45,15 +45,9 @@ void uisearchresult_render(app_t *app, int offset) {
         i++;
     }
 
-    csafestring_t *itemName = safe_create(NULL);
     int position = offset;
     while (element != NULL && position <= height - 80) {
-        safe_strcpy(itemName, "[");
-        safe_strcat(itemName, ((engine_t *) element->engine)->name);
-        safe_strcat(itemName, "] ");
-        safe_strcat(itemName, element->title);
-
-        rendering_loadText(app, &texture, itemName->data, app->fonts.medium, &app->themes.active->colors.text);
+        rendering_loadText(app, &texture, element->title, app->fonts.medium, &app->themes.active->colors.text);
 
         SDL_Rect r2 = {48, position - 2, width - 96, 40};
         themes_setDrawColorBackground(app, (element == app->search.cursor));
@@ -64,13 +58,22 @@ void uisearchresult_render(app_t *app, int offset) {
         SDL_RenderFillRect(app->sdlRenderer, &r);
 
         SDL_Rect srcQuad = {0, 0, width - 120, texture.h};
-        SDL_Rect renderQuad = {60, position + 3, (texture.w > width - 120) ? width - 120 : texture.w, texture.h};
+        SDL_Rect renderQuad = {100, position + 3, (texture.w > width - 160) ? width - 160 : texture.w, texture.h};
 
         SDL_RenderCopy(app->sdlRenderer, texture.texture, &srcQuad, &renderQuad);
         SDL_DestroyTexture(texture.texture);
 
+        SDL_Texture *icon = NULL;
+        if (((engine_t *) element->engine)->loadIcon != NULL) {
+            icon = ((engine_t *) element->engine)->loadIcon(app);
+
+        }
+        if (icon != NULL) {
+            SDL_Rect destIconQuad = {60, position + 3, 30, 30};
+            SDL_RenderCopy(app->sdlRenderer, icon, NULL, &destIconQuad);
+        }
+
         element = element->next;
         position += 35;
     }
-    safe_destroy(itemName);
 }

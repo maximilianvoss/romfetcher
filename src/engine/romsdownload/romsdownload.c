@@ -23,6 +23,8 @@
 #include "../urlhandling.h"
 #include "../../helper/regex.h"
 #include "../../download/downloader.h"
+#include "../../ui/rendering.h"
+#include "icon.h"
 
 #define SHORTNAME "RDC"
 #define URL_TEMPLATE "https://roms-download.com/ajax.php?m=roms_j"
@@ -37,13 +39,18 @@ static searchresult_t *fetchingResultItems(system_t *system, searchresult_t *res
 
 static char *fetchDownloadLink(char *response);
 
+static SDL_Texture *loadIcon(void *app);
+
 static engine_t *engine = NULL;
+
+static SDL_Texture *icon = NULL;
 
 engine_t *romsdownload_getEngine() {
     if (engine == NULL) {
         engine = calloc(1, sizeof(engine_t));
         engine->search = search;
         engine->download = download;
+        engine->loadIcon = loadIcon;
         engine->name = SHORTNAME;
         engine->active = 0;
         engine->fullname = "https://www.roms-download.com";
@@ -63,9 +70,9 @@ static searchresult_t *search(void *app, system_t *system, char *searchString) {
             break;
         }
 
-        char *response = curlling_fetch(URL_TEMPLATE, data, POST);
-        resultList = fetchingResultItems(system, resultList, response);
-        free(response);
+        curl_response_t *response = curlling_fetch(URL_TEMPLATE, data, POST, 1L);
+        resultList = fetchingResultItems(system, resultList, response->data);
+        curl_freeResponse(response);
         free(data);
 
         resultCount = linkedlist_getElementCount(resultList);
@@ -79,14 +86,14 @@ static void download(void *app, searchresult_t *item) {
     if (item == NULL) {
         return;
     }
-    char *detailPageResponse = curlling_fetch(item->url, NULL, GET);
-    char *linkDownload = fetchDownloadLink(detailPageResponse);
+    curl_response_t *detailPageResponse = curlling_fetch(item->url, NULL, GET, 1L);
+    char *linkDownload = fetchDownloadLink(detailPageResponse->data);
 
     char *filename = str_concat(item->title, file_suffix(linkDownload));
     downloader_addToQueue(app, item->system, item->title, linkDownload, NULL, filename, GET);
     free(filename);
 
-    free(detailPageResponse);
+    curl_freeResponse(detailPageResponse);
     free(linkDownload);
 }
 
@@ -124,4 +131,11 @@ static searchresult_t *fetchingResultItems(system_t *system, searchresult_t *res
     }
     regex_destroyMatches(matches);
     return resultList;
+}
+
+static SDL_Texture *loadIcon(void *app) {
+    if (icon == NULL) {
+        icon = rendering_memImage(app, romdownload_icon_data, romdownload_icon_size);
+    }
+    return icon;
 }

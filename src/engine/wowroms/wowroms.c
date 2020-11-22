@@ -25,6 +25,7 @@
 #include "../urlhandling.h"
 #include "../../helper/path.h"
 #include "../../download/downloader.h"
+#include "../../ui/rendering.h"
 
 #define SHORTNAME "WOW"
 #define URL_TEMPLATE "https://wowroms.com/en/roms/list/%system%?search=%query%&page=%page%"
@@ -44,13 +45,18 @@ static char *fetchHiddenField(char *text, char *fieldname);
 
 static char *fetchDownloadLink(char *response);
 
+static SDL_Texture *loadIcon(void *app);
+
 static engine_t *engine = NULL;
+
+static SDL_Texture *icon = NULL;
 
 engine_t *wowroms_getEngine() {
     if (engine == NULL) {
         engine = calloc(1, sizeof(engine_t));
         engine->search = search;
         engine->download = download;
+        engine->loadIcon = loadIcon;
         engine->name = SHORTNAME;
         engine->active = 1;
         engine->fullname = "https://www.wowroms.com";
@@ -70,9 +76,9 @@ static searchresult_t *search(void *app, system_t *system, char *searchString) {
             break;
         }
 
-        char *response = curlling_fetch(url, NULL, GET);
-        resultList = fetchingResultItems(system, resultList, response);
-        free(response);
+        curl_response_t *response = curlling_fetch(url, NULL, GET, 1L);
+        resultList = fetchingResultItems(system, resultList, response->data);
+        curl_freeResponse(response);
         free(url);
 
         resultCount = linkedlist_getElementCount(resultList);
@@ -93,21 +99,21 @@ static void download(void *app, searchresult_t *item) {
     char timeToken[255];
     snprintf(timeToken, 255, "?k=%s&t=%s", timestamp, timestampMD5);
 
-    char *detailPageResponse = curlling_fetch(item->url, NULL, GET);
-    char *linkDownloadPageRelative = fetchDownloadPageLink(detailPageResponse);
+    curl_response_t *detailPageResponse = curlling_fetch(item->url, NULL, GET, 1L);
+    char *linkDownloadPageRelative = fetchDownloadPageLink(detailPageResponse->data);
     char *linkDownloadPage = str_concat(URL_PREFIX, linkDownloadPageRelative);
 
-    char *downloadPageResponse = curlling_fetch(linkDownloadPage, NULL, GET);
-    char *downloadServletRel = fetchDownloadServlet(downloadPageResponse);
+    curl_response_t *downloadPageResponse = curlling_fetch(linkDownloadPage, NULL, GET, 1L);
+    char *downloadServletRel = fetchDownloadServlet(downloadPageResponse->data);
     char *downloadServlet = str_concat(URL_PREFIX, downloadServletRel);
 
-    char *filename = fetchHiddenField(downloadPageResponse, "file");
-    char *id = fetchHiddenField(downloadPageResponse, "id");
-    char *emuid = fetchHiddenField(downloadPageResponse, "emuid");
+    char *filename = fetchHiddenField(downloadPageResponse->data, "file");
+    char *id = fetchHiddenField(downloadPageResponse->data, "id");
+    char *emuid = fetchHiddenField(downloadPageResponse->data, "emuid");
     char *downloadServletUrl = str_concat(downloadServlet, timeToken);
 
-    char *downloadServletResponse = curlling_fetch(downloadServletUrl, "", POST);
-    char *downloadLink = fetchDownloadLink(downloadServletResponse);
+    curl_response_t *downloadServletResponse = curlling_fetch(downloadServletUrl, "", POST, 1L);
+    char *downloadLink = fetchDownloadLink(downloadServletResponse->data);
     char *decodedDownloadLink = str_quoteDecode(downloadLink);
 
     csafestring_t *payload = safe_create("emuid=");
@@ -121,23 +127,23 @@ static void download(void *app, searchresult_t *item) {
     csafestring_t *downloadPath = path_downloadTarget(item->system, decodedFilename);
 
 
-    char *downloadFilename = str_concat(item->title, file_suffix(fetchHiddenField(downloadPageResponse, "file")));
+    char *downloadFilename = str_concat(item->title, file_suffix(fetchHiddenField(downloadPageResponse->data, "file")));
     downloader_addToQueue(app, item->system, item->title, decodedDownloadLink, payload->data, downloadFilename, POST);
     free(downloadFilename);
 
     free(decodedFilename);
     free(decodedDownloadLink);
     free(downloadServletUrl);
-    free(downloadServletResponse);
+    curl_freeResponse(downloadServletResponse);
     free(filename);
     free(emuid);
     free(id);
     free(timestampMD5);
     free(downloadServletRel);
-    free(detailPageResponse);
+    curl_freeResponse(detailPageResponse);
     free(linkDownloadPageRelative);
     free(linkDownloadPage);
-    free(downloadPageResponse);
+    curl_freeResponse(downloadPageResponse);
     free(downloadServlet);
     free(downloadLink);
     safe_destroy(payload);
@@ -216,4 +222,12 @@ static searchresult_t *fetchingResultItems(system_t *system, searchresult_t *res
     }
     regex_destroyMatches(matches);
     return resultList;
+}
+
+static SDL_Texture *loadIcon(void *app) {
+    if (icon == NULL) {
+        curl_response_t *data = curlling_fetch("https://www.wowroms.com/assets/images/favicon.jpg", NULL, GET, 0L);
+        icon = rendering_memImage(app, data->data, data->size);
+    }
+    return icon;
 }

@@ -23,6 +23,7 @@
 #include "../urlhandling.h"
 #include "../../helper/regex.h"
 #include "../../download/downloader.h"
+#include "../../ui/rendering.h"
 
 #define SHORTNAME "RCC"
 #define URL_TEMPLATE "https://romsmania.cc/roms/%system%/search?name=%query%&genre=&region=&orderBy=name&orderAsc=1&page=%page%"
@@ -37,13 +38,18 @@ static char *fetchDownloadPageLink(char *response);
 
 static char *fetchDownloadLink(char *response);
 
+static SDL_Texture *loadIcon(void *app);
+
 static engine_t *engine = NULL;
+
+static SDL_Texture *icon = NULL;
 
 engine_t *romsmania_getEngine() {
     if (engine == NULL) {
         engine = calloc(1, sizeof(engine_t));
         engine->search = search;
         engine->download = download;
+        engine->loadIcon = loadIcon;
         engine->name = SHORTNAME;
         engine->active = 0;
         engine->fullname = "https://www.romsmania.cc";
@@ -63,9 +69,9 @@ static searchresult_t *search(void *app, system_t *system, char *searchString) {
             break;
         }
 
-        char *response = curlling_fetch(url, NULL, GET);
-        resultList = fetchingResultItems(system, resultList, response);
-        free(response);
+        curl_response_t *response = curlling_fetch(url, NULL, GET, 1L);
+        resultList = fetchingResultItems(system, resultList, response->data);
+        curl_freeResponse(response);
         free(url);
 
         resultCount = linkedlist_getElementCount(resultList);
@@ -79,19 +85,19 @@ static void download(void *app, searchresult_t *item) {
     if (item == NULL) {
         return;
     }
-    char *detailPageResponse = curlling_fetch(item->url, NULL, GET);
-    char *linkDownloadPage = fetchDownloadPageLink(detailPageResponse);
+    curl_response_t *detailPageResponse = curlling_fetch(item->url, NULL, GET, 1L);
+    char *linkDownloadPage = fetchDownloadPageLink(detailPageResponse->data);
 
-    char *downloadPageResponse = curlling_fetch(linkDownloadPage, NULL, GET);
-    char *linkDownload = fetchDownloadLink(downloadPageResponse);
+    curl_response_t *downloadPageResponse = curlling_fetch(linkDownloadPage, NULL, GET, 1L);
+    char *linkDownload = fetchDownloadLink(downloadPageResponse->data);
 
     char *filename = str_concat(item->title, file_suffix(linkDownload));
     downloader_addToQueue(app, item->system, item->title, linkDownload, NULL, filename, GET);
     free(filename);
 
-    free(downloadPageResponse);
+    curl_freeResponse(downloadPageResponse);
     free(linkDownloadPage);
-    free(detailPageResponse);
+    curl_freeResponse(detailPageResponse);
     free(linkDownload);
 }
 
@@ -138,4 +144,12 @@ static searchresult_t *fetchingResultItems(system_t *system, searchresult_t *res
     }
     regex_destroyMatches(matches);
     return resultList;
+}
+
+static SDL_Texture *loadIcon(void *app) {
+    if (icon == NULL) {
+        curl_response_t *data = curlling_fetch("https://romsmania.cc/favicon.ico", NULL, GET, 0L);
+        icon = rendering_memImage(app, data->data, data->size);
+    }
+    return icon;
 }

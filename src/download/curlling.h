@@ -19,10 +19,17 @@
 
 #include "../structs.h"
 
+typedef struct {
+    size_t size;
+    char *data;
+} curl_response_t;
+
 int
 curlling_download(char *url, char *data, httpmethod_t method, char *filename, curl_off_t *current, curl_off_t *total,
                   volatile uint8_t *cancellation);
 
-char *curlling_fetch(char *url, char *postData, httpmethod_t method);
+curl_response_t *curlling_fetch(char *url, char *postData, httpmethod_t method, long throwHeaderOut);
+
+void curl_freeResponse(curl_response_t *response);
 
 #endif

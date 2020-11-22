@@ -39,6 +39,25 @@ SDL_Texture *rendering_loadImage(app_t *app, char *filename) {
     return texture;
 }
 
+SDL_Texture *rendering_memImage(app_t *app, void *data, int size) {
+    if (data == NULL || size < 1) {
+        SDL_Log("Data is empty\n");
+        return NULL;
+    }
+    SDL_RWops *rw = SDL_RWFromMem(data, size);
+    SDL_Surface *image = IMG_Load_RW(rw, 1);
+    if (image == NULL) {
+        SDL_Log("%s\n", SDL_GetError());
+    }
+
+    SDL_Texture *texture = SDL_CreateTextureFromSurface(app->sdlRenderer, image);
+    if (texture == NULL) {
+        SDL_Log("%s\n", SDL_GetError());
+    }
+    SDL_FreeSurface(image);
+    return texture;
+}
+
 void rendering_loadText(app_t *app, texture_t *texture, char *str, TTF_Font *font, SDL_Color *color) {
     char cpy[strlen(str) + 1];
     strcpy(cpy, str);

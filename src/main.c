@@ -31,6 +31,7 @@
 #include "ui/fonts.h"
 #include "download/downloader.h"
 #include "database/download.h"
+#include "download/curlling.h"
 
 void static initApp(app_t *app);
 

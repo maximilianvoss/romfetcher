@@ -97,9 +97,12 @@ typedef struct engine_s {
     uint8_t active;
     char *name;
 
+    SDL_Texture *(*loadIcon)(void *app);
+
     searchresult_t *(*search)(void *app, system_t *system, char *searchString);
 
     void (*download)(void *app, searchresult_t *item);
+
 } engine_t;
 
 typedef struct resolution_s {

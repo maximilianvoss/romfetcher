@@ -25,6 +25,7 @@
 #include "../../helper/utils.h"
 #include "../../download/downloader.h"
 #include "../../config.h"
+#include "../../ui/rendering.h"
 
 #define SHORTNAME "FRE"
 #define URL_TEMPLATE_NUM "https://www.freeroms.com/%system%_roms_NUM.htm"
@@ -43,6 +44,8 @@ static void extractLink(app_t *app, system_t *system, char *response);
 
 static char *generateDownloadLink(system_t *system, char *id);
 
+static SDL_Texture *loadIcon(void *app);
+
 struct s_download_filter {
     char start;
     char end;
@@ -52,11 +55,14 @@ struct s_download_filter {
 
 static engine_t *engine = NULL;
 
+static SDL_Texture *icon = NULL;
+
 engine_t *freeroms_getEngine() {
     if (engine == NULL) {
         engine = calloc(1, sizeof(engine_t));
         engine->search = search;
         engine->download = download;
+        engine->loadIcon = loadIcon;
         engine->name = SHORTNAME;
         engine->active = 1;
         engine->fullname = "https://freeroms.com";
@@ -110,14 +116,14 @@ static void *executeThread(void *ptr) {
 
     for (char chr = filter->start; chr <= filter->end; chr++) {
         char *url;
-        char *response;
+        curl_response_t *response;
         if (chr == '@') {
             url = urlhandling_substitudeVariables(URL_TEMPLATE_NUM, filter->system, &freeroms_deviceMapping, "", 0);
             if (url == NULL) {
                 break;
             }
-            response = curlling_fetch(url, NULL, GET);
-            extractLink(filter->app, filter->system, response);
+            response = curlling_fetch(url, NULL, GET, 1L);
+            extractLink(filter->app, filter->system, response->data);
         } else {
             char str[2] = {0, 0};
             str[0] = chr;
@@ -126,10 +132,10 @@ static void *executeThread(void *ptr) {
             if (url == NULL) {
                 break;
             }
-            response = curlling_fetch(url, NULL, GET);
-            extractLink(filter->app, filter->system, response);
+            response = curlling_fetch(url, NULL, GET, 1L);
+            extractLink(filter->app, filter->system, response->data);
         }
-        FREENOTNULL(response);
+        curl_freeResponse(response);
         FREENOTNULL(url);
     }
 
@@ -167,4 +173,12 @@ static char *generateDownloadLink(system_t *system, char *id) {
     FREENOTNULL(tmp);
 
     return result;
+}
+
+static SDL_Texture *loadIcon(void *app) {
+    if (icon == NULL) {
+        curl_response_t *data = curlling_fetch("https://www.freeroms.com/favicon.ico", NULL, GET, 0L);
+        icon = rendering_memImage(app, data->data, data->size);
+    }
+    return icon;
 }

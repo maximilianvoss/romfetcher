@@ -15,11 +15,7 @@
  */
 
 #include "curlling.h"
-
-struct url_data {
-    size_t size;
-    char *data;
-};
+#include "../../test/test.h"
 
 struct state_s {
     curl_off_t *current;
@@ -27,7 +23,7 @@ struct state_s {
     volatile uint8_t *cancellation;
 };
 
-static size_t writeDataToString(void *ptr, size_t size, size_t nmemb, struct url_data *data);
+static size_t writeDataToString(void *ptr, size_t size, size_t nmemb, curl_response_t *data);
 
 static size_t writeDataToFile(void *ptr, size_t size, size_t nmemb, void *stream);
 
@@ -37,15 +33,15 @@ static int xferinfo(void *p, curl_off_t dltotal, curl_off_t dlnow, curl_off_t ul
 static int older_progress(void *p, double dltotal, double dlnow, double ultotal, double ulnow);
 #endif
 
-char *curlling_fetch(char *url, char *postData, httpmethod_t method) {
+curl_response_t *curlling_fetch(char *url, char *postData, httpmethod_t method, long throwHeaderOut) {
     CURL *curl;
     CURLcode res;
 
     SDL_Log("Fetching: %s", url);
 
-    struct url_data data;
-    data.size = 0;
-    data.data = calloc(16386, sizeof(char));
+    curl_response_t *curlResponse = calloc(1, sizeof(curl_response_t));
+    curlResponse->size = 0;
+    curlResponse->data = calloc(16386, sizeof(char));
 
     curl = curl_easy_init();
     if (curl) {
@@ -58,8 +54,8 @@ char *curlling_fetch(char *url, char *postData, httpmethod_t method) {
         curl_easy_setopt(curl, CURLOPT_URL, url);
         curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeDataToString);
-        curl_easy_setopt(curl, CURLOPT_HEADER, 1L);
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &data);
+        curl_easy_setopt(curl, CURLOPT_HEADER, throwHeaderOut);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, curlResponse);
         if (method == POST) {
             curl_easy_setopt(curl, CURLOPT_POSTFIELDS, postData);
         }
@@ -69,7 +65,7 @@ char *curlling_fetch(char *url, char *postData, httpmethod_t method) {
             fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
         curl_easy_cleanup(curl);
     }
-    return data.data;
+    return curlResponse;
 }
 
 int
@@ -125,6 +121,14 @@ curlling_download(char *url, char *data, httpmethod_t method, char *filename, cu
     return res;
 }
 
+void curl_freeResponse(curl_response_t *response) {
+    if (response == NULL) {
+        return;
+    }
+    FREENOTNULL(response->data);
+    FREENOTNULL(response);
+}
+
 static int xferinfo(void *p, curl_off_t dltotal, curl_off_t dlnow, curl_off_t ultotal, curl_off_t ulnow) {
     struct state_s *state = (struct state_s *) p;
     *state->current = dlnow;
@@ -143,7 +147,7 @@ static size_t writeDataToFile(void *ptr, size_t size, size_t nmemb, void *stream
     return written;
 }
 
-static size_t writeDataToString(void *ptr, size_t size, size_t nmemb, struct url_data *data) {
+static size_t writeDataToString(void *ptr, size_t size, size_t nmemb, curl_response_t *data) {
     size_t index = data->size;
     size_t n = (size * nmemb);
     char *tmp;
