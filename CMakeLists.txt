@@ -73,6 +73,7 @@ set(SOURCES
         src/engine/romsdownload/mapping.h
         src/engine/romsdownload/romsdownload.c
         src/engine/romsdownload/romsdownload.h
+        src/engine/romsemulator/icon.h
         src/engine/romsemulator/mapping.c
         src/engine/romsemulator/mapping.h
         src/engine/romsemulator/romsemulator.c

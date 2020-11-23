@@ -23,6 +23,8 @@
 #include "../urlhandling.h"
 #include "../../helper/regex.h"
 #include "../../download/downloader.h"
+#include "../../ui/rendering.h"
+#include "icon.h"
 
 #define SHORTNAME "REN"
 #define URL_TEMPLATE "https://romsemulator.net/roms/%system%/page/%page%/?s=%query%"
@@ -37,13 +39,18 @@ static char *fetchDownloadPageLink(char *response);
 
 static char *fetchHiddenField(char *response, char *fieldname, int variant);
 
+static SDL_Texture *loadIcon(void *app);
+
 static engine_t *engine = NULL;
+
+static SDL_Texture *icon = NULL;
 
 engine_t *romsemulator_getEngine() {
     if (engine == NULL) {
         engine = calloc(1, sizeof(engine_t));
         engine->search = search;
         engine->download = download;
+        engine->loadIcon = loadIcon;
         engine->name = SHORTNAME;
         engine->active = 0;
         engine->fullname = "https://www.romsemulator.net";
@@ -159,4 +166,11 @@ static searchresult_t *fetchingResultItems(system_t *system, searchresult_t *res
     }
     regex_destroyMatches(matches);
     return resultList;
+}
+
+static SDL_Texture *loadIcon(void *app) {
+    if (icon == NULL) {
+        icon = rendering_memImage(app, romemulator_icon_data, romemulator_icon_size);
+    }
+    return icon;
 }
