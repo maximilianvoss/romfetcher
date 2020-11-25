@@ -164,7 +164,7 @@ static void extractLink(system_t *system, char *response) {
 static char *generateDownloadLink(system_t *system, char *id) {
     char *systemStr = freeroms_deviceMapping(system);
     if (systemStr == NULL) {
-        fprintf(stderr, "Found no mapping for system: %s\n", system->fullname);
+        LOG_ERROR("Found no mapping for system: %s\n", system->fullname);
         return NULL;
     }
 

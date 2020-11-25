@@ -34,13 +34,14 @@ void downloader_destroy(app_t *app) {
     }
 }
 
-void downloader_addToQueue(void *app, system_t *system, char *title, char *url, char *data, char *filename,
-                           httpmethod_t method) {
+uint8_t downloader_addToQueue(void *app, system_t *system, char *title, char *url, char *data, char *filename,
+                              httpmethod_t method) {
     if (((app_t *) app)->config.advanced.externalCurl) {
         downloadercurl_addToQueue(app, system, title, url, data, filename, method);
     } else {
         downloaderinternal_addToQueue(app, system, title, url, data, filename, method);
     }
+    return 0;
 }
 
 void downloader_cancel(app_t *app, download_t *download) {

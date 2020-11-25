@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef TEST_ENGINE_ROMHUSTLER_H
-#define TEST_ENGINE_ROMHUSTLER_H
+#ifndef TEST_HOSTER_ROMHUSTLER_H
+#define TEST_HOSTER_ROMHUSTLER_H
 
 #include "../src/application/application.h"
 

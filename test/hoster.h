@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-#ifndef TEST_ENGINES_H
-#define TEST_ENGINES_H
+#ifndef TEST_HOSTER_H
+#define TEST_HOSTER_H
 
 #include "../src/application/application.h"
 
-engine_t *romsmania;
-engine_t *romsmode;
-engine_t *wowroms;
-engine_t *romsdownload;
-engine_t *romsemulator;
-engine_t *romhustler;
-engine_t *freeroms;
+hoster_t *romsmania;
+hoster_t *romsmode;
+hoster_t *wowroms;
+hoster_t *romsdownload;
+hoster_t *romsemulator;
+hoster_t *romhustler;
+hoster_t *freeroms;
 
-void testengines_init();
+void testengines_init(app_t *app);
 
 #endif

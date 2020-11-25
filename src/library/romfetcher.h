@@ -22,9 +22,9 @@ typedef struct system_s {
 } system_t;
 
 // Callback to run downloads
-typedef void (*downloadCallback_t)(void *appData, struct system_s *system, char *title, char *url, char *data,
-                                   char *filename,
-                                   httpmethod_t method);
+typedef uint8_t (*downloadCallback_t)(void *appData, struct system_s *system, char *title, char *url, char *data,
+                                      char *filename,
+                                      httpmethod_t method);
 
 // Memory Image or any other data object where data & size is needed
 typedef struct memimage_s {

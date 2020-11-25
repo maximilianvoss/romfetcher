@@ -23,8 +23,8 @@ void downloader_init(app_t *app);
 
 void downloader_destroy(app_t *app);
 
-void downloader_addToQueue(void *app, system_t *system, char *title, char *url, char *data, char *filename,
-                           httpmethod_t method);
+uint8_t downloader_addToQueue(void *app, system_t *system, char *title, char *url, char *data, char *filename,
+                              httpmethod_t method);
 
 void downloader_cancel(app_t *app, download_t *download);
 

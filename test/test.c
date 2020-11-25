@@ -15,18 +15,15 @@
  */
 
 #include "test.h"
-#include "engine_freeroms.h"
-#include "engine_romhustler.h"
+#include "hoster_freeroms.h"
+#include "hoster_romhustler.h"
 #include "systems.h"
-#include "engines.h"
+#include "hoster.h"
 #include "linkedlist.h"
-#include "../src/helper/path.h"
-#include "../src/database/init.h"
+#include "../src/application/path.h"
+#include "../src/application/database/init.h"
 
 int main(int argc, char **argv) {
-    testsystems_init();
-    testengines_init();
-
     app_t app;
     memset(&app, 0, sizeof(app_t));
 
@@ -38,6 +35,9 @@ int main(int argc, char **argv) {
         exit(1);
     }
     database_initTables(app.database.db);
+
+    testsystems_init();
+    testengines_init(&app);
 
     TESTCALL("test_linkedList_deleteElement0", test_linkedList_deleteElement0, NULL);
     TESTCALL("test_linkedList_deleteElement1", test_linkedList_deleteElement1, NULL);

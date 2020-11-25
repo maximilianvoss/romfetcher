@@ -14,19 +14,21 @@
  * limitations under the License.
  */
 
-#include "engines.h"
-#include "../src/engine/romsmania/romsmania.h"
-#include "../src/engine/wowroms/wowroms.h"
-#include "../src/engine/romsdownload/romsdownload.h"
-#include "../src/engine/romsemulator/romsemulator.h"
-#include "../src/engine/romhustler/romhustler.h"
-#include "../src/engine/freeroms/freeroms.h"
+#ifndef TEST_DOWNLOAD_H
+#define TEST_DOWNLOAD_H
 
-void testengines_init() {
-    romsmania = romsmania_getEngine();
-    wowroms = wowroms_getEngine();
-    romsdownload = romsdownload_getEngine();
-    romsemulator = romsemulator_getEngine();
-    romhustler = romhustler_getEngine();
-    freeroms = freeroms_getEngine();
-}
+#include <romfetcher.h>
+
+typedef struct test_downloaddata_s {
+    system_t *system;
+    char *title;
+    char *url;
+    char *data;
+    char *filename;
+    httpmethod_t method;
+} test_downloaddata_t;
+
+uint8_t testDownloadCallback(void *appData, system_t *system, char *title, char *url, char *data, char *filename,
+                             httpmethod_t method);
+
+#endif

@@ -20,7 +20,6 @@
 
 #include <string.h>
 #include <stdio.h>
-#include "../src/helper/utils.h"
 
 #define TESTCALL(TESTNAME, TESTMETHOD, DATA)\
     printf("\nTest case:\t%s\n", TESTNAME);\

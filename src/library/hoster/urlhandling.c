@@ -22,7 +22,7 @@ char *urlhandling_substitudeVariables(char *templateString, system_t *system, ch
 
     char *systemStr = mapping(system);
     if (systemStr == NULL) {
-        fprintf(stderr, "Found no mapping for system: %s\n", system->fullname);
+        LOG_ERROR("Found no mapping for system: %s\n", system->fullname);
         return NULL;
     }
 

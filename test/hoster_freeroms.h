@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef TEST_ENGINE_FREEROMS_H
-#define TEST_ENGINE_FREEROMS_H
+#ifndef TEST_HOSTER_FREEROMS_H
+#define TEST_HOSTER_FREEROMS_H
 
 #include "../src/application/application.h"
 

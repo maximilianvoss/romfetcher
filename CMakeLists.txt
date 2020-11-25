@@ -44,7 +44,6 @@ set(SOURCES_LIBRARY
         src/library/helper/md5.h
         src/library/helper/regex.c
         src/library/helper/regex.h
-
         src/library/hoster/freeroms/freeroms.c
         src/library/hoster/freeroms/freeroms.h
         src/library/hoster/freeroms/mapping.c
@@ -83,6 +82,7 @@ set(SOURCES_LIBRARY
         )
 
 set(SOURCES
+        src/application/application.h
         src/application/config.h
         src/application/config/advanced.c
         src/application/config/advanced.h
@@ -100,7 +100,6 @@ set(SOURCES
         src/application/database/linkedlist.h
         src/application/database/postprocess.c
         src/application/database/postprocess.h
-
         src/application/download/downloader.c
         src/application/download/downloader.h
         src/application/download/downloadercurl.c
@@ -109,13 +108,9 @@ set(SOURCES
         src/application/download/downloaderinternal.h
         src/application/download/downloadpipeline.c
         src/application/download/downloadpipeline.h
+        src/application/enums.h
         src/application/helper/map.c
         src/application/helper/map.h
-        src/application/enums.h
-
-        src/application/path.c
-        src/application/path.h
-
         src/application/input/inputdownload.c
         src/application/input/inputdownload.h
         src/application/input/inputdownloadmanager.c
@@ -130,6 +125,8 @@ set(SOURCES
         src/application/input/inputmodal.h
         src/application/input/inputsearch.c
         src/application/input/inputsearch.h
+        src/application/path.c
+        src/application/path.h
         src/application/state/stateconfig.c
         src/application/state/stateconfig.h
         src/application/state/stateconfigadvanced.c
@@ -154,7 +151,6 @@ set(SOURCES
         src/application/state/statesearch.h
         src/application/state/statesystem.c
         src/application/state/statesystem.h
-        src/application/application.h
         src/application/themes/loading.c
         src/application/themes/loading.h
         src/application/themes/rendering.c
@@ -173,12 +169,12 @@ set(SOURCES
         src/application/ui/uidownloadmanager.h
         src/application/ui/uihandler.c
         src/application/ui/uihandler.h
-        src/application/ui/uimodal.c
-        src/application/ui/uimodal.h
         src/application/ui/uikeyboard.c
         src/application/ui/uikeyboard.h
         src/application/ui/uilist.c
         src/application/ui/uilist.h
+        src/application/ui/uimodal.c
+        src/application/ui/uimodal.h
         src/application/ui/uisearch.c
         src/application/ui/uisearch.h
         src/application/ui/uisearchresult.c
@@ -186,12 +182,14 @@ set(SOURCES
         )
 
 set(TEST_SOURCES
-        test/engine_freeroms.c
-        test/engine_freeroms.h
-        test/engine_romhustler.c
-        test/engine_romhustler.h
-        test/engines.c
-        test/engines.h
+        test/download.c
+        test/download.h
+        test/hoster.c
+        test/hoster.h
+        test/hoster_freeroms.c
+        test/hoster_freeroms.h
+        test/hoster_romhustler.c
+        test/hoster_romhustler.h
         test/linkedlist.c
         test/linkedlist.h
         test/systems.c
@@ -264,7 +262,7 @@ include(CPack)
 
 enable_testing()
 add_executable(romfetcher_testcases ${SOURCES} ${TEST_SOURCES})
-target_link_libraries(romfetcher_testcases m csafestring json2map ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2TTF_LIBRARY} ${CURL_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} ${SQLite3_LIBRARIES} ${OPENSSL_LIBRARIES})
+target_link_libraries(romfetcher_testcases common library m csafestring json2map ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2TTF_LIBRARY} ${CURL_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} ${SQLite3_LIBRARIES} ${OPENSSL_LIBRARIES})
 
 add_test(NAME test_linkedList_deleteElement0 COMMAND romfetcher_testcases test_linkedList_deleteElement0)
 add_test(NAME test_linkedList_deleteElement1 COMMAND romfetcher_testcases test_linkedList_deleteElement1)
@@ -334,7 +332,7 @@ add_test(NAME test_engine_freeroms_wiiu COMMAND romfetcher_testcases test_engine
 add_test(NAME test_engine_freeroms_wonderswan COMMAND romfetcher_testcases test_engine_freeroms_wonderswan)
 add_test(NAME test_engine_freeroms_wonderswancolor COMMAND romfetcher_testcases test_engine_freeroms_wonderswancolor)
 add_test(NAME test_engine_freeroms_zxspectrum COMMAND romfetcher_testcases test_engine_freeroms_zxspectrum)
-#add_test(NAME test_engine_freeroms_download COMMAND romfetcher_testcases test_engine_freeroms_download)
+add_test(NAME test_engine_freeroms_download COMMAND romfetcher_testcases test_engine_freeroms_download)
 
 add_test(NAME test_engine_romhustler_3do COMMAND romfetcher_testcases test_engine_romhustler_3do)
 add_test(NAME test_engine_romhustler_amiga COMMAND romfetcher_testcases test_engine_romhustler_amiga)
@@ -385,4 +383,4 @@ add_test(NAME test_engine_romhustler_wiiu COMMAND romfetcher_testcases test_engi
 add_test(NAME test_engine_romhustler_wonderswan COMMAND romfetcher_testcases test_engine_romhustler_wonderswan)
 add_test(NAME test_engine_romhustler_wonderswancolor COMMAND romfetcher_testcases test_engine_romhustler_wonderswancolor)
 add_test(NAME test_engine_romhustler_zxspectrum COMMAND romfetcher_testcases test_engine_romhustler_zxspectrum)
-#add_test(NAME test_engine_romhustler_download COMMAND romfetcher_testcases test_engine_romhustler_download)
+add_test(NAME test_engine_romhustler_download COMMAND romfetcher_testcases test_engine_romhustler_download)
