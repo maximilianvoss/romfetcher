@@ -14,19 +14,11 @@
  * limitations under the License.
  */
 
-#ifndef TEST_ENGINES_H
-#define TEST_ENGINES_H
+#ifndef HOSTER_ROMSEMULATOR_ROMSEMULATOR_H
+#define HOSTER_ROMSEMULATOR_ROMSEMULATOR_H
 
-#include "../src/application/structs.h"
+#include "../../romfetcher.h"
 
-engine_t *romsmania;
-engine_t *romsmode;
-engine_t *wowroms;
-engine_t *romsdownload;
-engine_t *romsemulator;
-engine_t *romhustler;
-engine_t *freeroms;
-
-void testengines_init();
+hoster_t *romsemulator_getHoster(cache_t *cacheHandler);
 
 #endif

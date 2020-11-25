@@ -17,7 +17,7 @@
 #ifndef TEST_SYSTEMS_H
 #define TEST_SYSTEMS_H
 
-#include "../src/structs.h"
+#include "../src/application/structs.h"
 
 system_t *gb;
 system_t *gbc;

@@ -15,7 +15,7 @@
  */
 
 #include "linkedlist.h"
-#include "../src/helper/linkedlist.h"
+#include "../src/library/helper/linkedlist.h"
 #include "test.h"
 
 int test_linkedList_deleteElement0(void *data) {

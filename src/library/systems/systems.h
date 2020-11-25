@@ -14,19 +14,14 @@
  * limitations under the License.
  */
 
-#ifndef TEST_ENGINES_H
-#define TEST_ENGINES_H
+#ifndef SYSTEMS_SYSTEMS_H
+#define SYSTEMS_SYSTEMS_H
 
-#include "../src/application/structs.h"
 
-engine_t *romsmania;
-engine_t *romsmode;
-engine_t *wowroms;
-engine_t *romsdownload;
-engine_t *romsemulator;
-engine_t *romhustler;
-engine_t *freeroms;
+#include "../romfetcher.h"
 
-void testengines_init();
+system_t *systems_init();
+
+void systems_destroy(system_t *systems);
 
 #endif

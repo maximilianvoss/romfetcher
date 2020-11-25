@@ -14,19 +14,16 @@
  * limitations under the License.
  */
 
-#ifndef TEST_ENGINES_H
-#define TEST_ENGINES_H
+#ifndef HELPER_PATH_H
+#define HELPER_PATH_H
 
-#include "../src/application/structs.h"
+#include <csafestring.h>
+#include "structs.h"
 
-engine_t *romsmania;
-engine_t *romsmode;
-engine_t *wowroms;
-engine_t *romsdownload;
-engine_t *romsemulator;
-engine_t *romhustler;
-engine_t *freeroms;
+void path_initRomfetchersHome();
 
-void testengines_init();
+csafestring_t *path_romfetchersHome();
+
+csafestring_t *path_downloadTarget(system_t *system, char *filename);
 
 #endif

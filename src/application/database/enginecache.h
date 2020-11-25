@@ -14,19 +14,23 @@
  * limitations under the License.
  */
 
-#ifndef TEST_ENGINES_H
-#define TEST_ENGINES_H
+#ifndef DATABASE_ENGINECACHE_H
+#define DATABASE_ENGINECACHE_H
 
-#include "../src/application/structs.h"
+#include "../structs.h"
 
-engine_t *romsmania;
-engine_t *romsmode;
-engine_t *wowroms;
-engine_t *romsdownload;
-engine_t *romsemulator;
-engine_t *romhustler;
-engine_t *freeroms;
+void enginecache_init(sqlite3 *db);
 
-void testengines_init();
+void enginecache_initstate(sqlite3 *db);
+
+uint8_t enginecache_isCacheValid(hoster_t *hoster, system_t *system, void *appPtr);
+
+void enginecache_clear(hoster_t *hoster, system_t *system, void *app);
+
+void enginecache_addEntry(hoster_t *hoster, system_t *system, char *title, char *link, void *app);
+
+void enginecache_updateTimestamp(hoster_t *hoster, system_t *system, void *app);
+
+result_t *enginecache_getSearchResults(hoster_t *hoster, system_t *system, char *searchString, void *app);
 
 #endif

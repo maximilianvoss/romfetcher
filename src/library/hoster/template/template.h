@@ -14,19 +14,11 @@
  * limitations under the License.
  */
 
-#ifndef TEST_ENGINES_H
-#define TEST_ENGINES_H
+#ifndef ENGINE_ROMSMANIA_ROMSMANIA_H
+#define ENGINE_ROMSMANIA_ROMSMANIA_H
 
-#include "../src/application/structs.h"
+#include "../../../application/structs.h"
 
-engine_t *romsmania;
-engine_t *romsmode;
-engine_t *wowroms;
-engine_t *romsdownload;
-engine_t *romsemulator;
-engine_t *romhustler;
-engine_t *freeroms;
-
-void testengines_init();
+engine_t *_template_getEngine();
 
 #endif

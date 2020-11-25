@@ -14,19 +14,17 @@
  * limitations under the License.
  */
 
-#ifndef TEST_ENGINES_H
-#define TEST_ENGINES_H
+#ifndef ENGINE_RESULTS_H
+#define ENGINE_RESULTS_H
 
-#include "../src/application/structs.h"
+#include <romfetcher.h>
 
-engine_t *romsmania;
-engine_t *romsmode;
-engine_t *wowroms;
-engine_t *romsdownload;
-engine_t *romsemulator;
-engine_t *romhustler;
-engine_t *freeroms;
+result_t *result_newItem(system_t *system, hoster_t *hoster);
 
-void testengines_init();
+void result_setTitle(result_t *resultList, char *title);
+
+void result_setUrl(result_t *resultList, char *url);
+
+void result_freeList(result_t *resultList);
 
 #endif

@@ -15,7 +15,7 @@
  */
 
 #include <csafestring.h>
-#include "../src/structs.h"
+#include "../src/application/structs.h"
 #include "../src/engine/results.h"
 #include "engines.h"
 #include "systems.h"

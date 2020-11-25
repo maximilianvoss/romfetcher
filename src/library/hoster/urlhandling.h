@@ -14,19 +14,13 @@
  * limitations under the License.
  */
 
-#ifndef TEST_ENGINES_H
-#define TEST_ENGINES_H
+#ifndef ENGINE_URLHANDLING_H
+#define ENGINE_URLHANDLING_H
 
-#include "../src/application/structs.h"
+#include <stdlib.h>
+#include "../romfetcher.h"
 
-engine_t *romsmania;
-engine_t *romsmode;
-engine_t *wowroms;
-engine_t *romsdownload;
-engine_t *romsemulator;
-engine_t *romhustler;
-engine_t *freeroms;
-
-void testengines_init();
+char *urlhandling_substitudeVariables(char *templateString, system_t *system, char *(*mapping)(system_t *system),
+                                      char *query, uint32_t page);
 
 #endif

@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-#ifndef TEST_ENGINES_H
-#define TEST_ENGINES_H
+#ifndef DOWNLOAD_CURLLING_H
+#define DOWNLOAD_CURLLING_H
 
-#include "../src/application/structs.h"
+#include <curl/system.h>
+#include <stdlib.h>
+#include "../romfetcher.h"
 
-engine_t *romsmania;
-engine_t *romsmode;
-engine_t *wowroms;
-engine_t *romsdownload;
-engine_t *romsemulator;
-engine_t *romhustler;
-engine_t *freeroms;
+int
+curlling_download(char *url, char *data, httpmethod_t method, char *filename, curl_off_t *current, curl_off_t *total,
+                  volatile uint8_t *cancellation);
 
-void testengines_init();
+curl_response_t *curlling_fetch(char *url, char *postData, httpmethod_t method, long throwHeaderOut);
+
+void curl_freeResponse(curl_response_t *response);
 
 #endif
