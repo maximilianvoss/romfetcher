@@ -17,7 +17,7 @@
 #ifndef STATE_STATEDOWNLOADMANAGER_H
 #define STATE_STATEDOWNLOADMANAGER_H
 
-#include "../structs.h"
+#include "../application.h"
 
 window_t statedownloadmanager_target(app_t *app, uint8_t isSelectButton);
 

@@ -21,8 +21,8 @@
 #include "loading.h"
 #include "../config.h"
 #include "../path.h"
-#include "../../library/helper/utils.h"
-#include "../../library/helper/map.h"
+#include "../../common/utils.h"
+#include "../helper/map.h"
 
 static void colorSetter(SDL_Color *color, int r, int g, int b, int a);
 

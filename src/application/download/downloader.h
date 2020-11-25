@@ -17,13 +17,13 @@
 #ifndef DOWNLOAD_DOWNLOADER_H
 #define DOWNLOAD_DOWNLOADER_H
 
-#include "../structs.h"
+#include "../application.h"
 
 void downloader_init(app_t *app);
 
 void downloader_destroy(app_t *app);
 
-void downloader_addToQueue(app_t *app, system_t *system, char *title, char *url, char *data, char *filename,
+void downloader_addToQueue(void *app, system_t *system, char *title, char *url, char *data, char *filename,
                            httpmethod_t method);
 
 void downloader_cancel(app_t *app, download_t *download);

@@ -17,7 +17,7 @@
 #ifndef TEST_ENGINE_ROMHUSTLER_H
 #define TEST_ENGINE_ROMHUSTLER_H
 
-#include "../src/application/structs.h"
+#include "../src/application/application.h"
 
 int test_engine_romhustler_3do(app_t *app);
 

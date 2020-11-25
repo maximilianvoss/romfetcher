@@ -16,7 +16,7 @@
 
 #include <csafestring.h>
 #include "../romfetcher.h"
-#include "../helper/utils.h"
+#include "../../common/utils.h"
 
 static void freeFields(void *ptr);
 

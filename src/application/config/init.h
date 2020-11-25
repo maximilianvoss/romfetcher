@@ -17,7 +17,7 @@
 #ifndef CONFIG_INIT_H
 #define CONFIG_INIT_H
 
-#include "../structs.h"
+#include "../application.h"
 
 void config_init(app_t *app);
 

@@ -17,7 +17,7 @@
 #ifndef ENGINE_TEMPALTE_MAPPING_H
 #define ENGINE_TEMPLATE_MAPPING_H
 
-#include "../../../application/structs.h"
+#include "../../../application/application.h"
 
 char *_template_deviceMapping(system_t *system);
 

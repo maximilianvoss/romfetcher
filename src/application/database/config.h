@@ -18,7 +18,7 @@
 #define DATBASE_CONFIG_H
 
 #include <sqlite3.h>
-#include "../structs.h"
+#include "../application.h"
 
 void database_configInitTable(sqlite3 *db);
 

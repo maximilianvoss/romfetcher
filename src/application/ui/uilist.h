@@ -17,7 +17,7 @@
 #ifndef UI_UILIST_H
 #define UI_UILIST_H
 
-#include "../structs.h"
+#include "../application.h"
 
 void uilist_renderDefault(app_t *app);
 

@@ -17,7 +17,7 @@
 #ifndef THEMES_RENDERING_H
 #define THEMES_RENDERING_H
 
-#include "../structs.h"
+#include "../application.h"
 
 enum theme_color {
     background,

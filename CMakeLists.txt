@@ -28,6 +28,11 @@ else ()
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -O3")
 endif ()
 
+set(SOURCES_COMMON
+        src/common/utils.c
+        src/common/utils.h
+        )
+
 set(SOURCES_LIBRARY
         src/library/helper/curlling.c
         src/library/helper/curlling.h
@@ -35,14 +40,11 @@ set(SOURCES_LIBRARY
         src/library/helper/entities.h
         src/library/helper/linkedlist.c
         src/library/helper/linkedlist.h
-        src/library/helper/map.c
-        src/library/helper/map.h
         src/library/helper/md5.c
         src/library/helper/md5.h
         src/library/helper/regex.c
         src/library/helper/regex.h
-        src/library/helper/utils.c
-        src/library/helper/utils.h
+
         src/library/hoster/freeroms/freeroms.c
         src/library/hoster/freeroms/freeroms.h
         src/library/hoster/freeroms/mapping.c
@@ -107,12 +109,12 @@ set(SOURCES
         src/application/download/downloaderinternal.h
         src/application/download/downloadpipeline.c
         src/application/download/downloadpipeline.h
-
+        src/application/helper/map.c
+        src/application/helper/map.h
         src/application/enums.h
 
         src/application/path.c
         src/application/path.h
-
 
         src/application/input/inputdownload.c
         src/application/input/inputdownload.h
@@ -152,7 +154,7 @@ set(SOURCES
         src/application/state/statesearch.h
         src/application/state/statesystem.c
         src/application/state/statesystem.h
-        src/application/structs.h
+        src/application/application.h
         src/application/themes/loading.c
         src/application/themes/loading.h
         src/application/themes/rendering.c
@@ -236,9 +238,10 @@ set(SCRIPT_FILES
         )
 
 include_directories(src/library ${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${SDL2TTF_INCLUDE_DIRS} ${CURL_INCLUDE_DIRS} ${SQLite3_INCLUDE_DIRS} ${OPENSSL_INCLUDE_DIR})
+add_library(common ${SOURCES_COMMON})
 add_library(library ${SOURCES_LIBRARY})
-add_executable(romfetcher src/application/main.c ${SOURCES})
-target_link_libraries(romfetcher m library csafestring json2map ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2TTF_LIBRARY} ${CURL_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} ${SQLite3_LIBRARIES} ${OPENSSL_LIBRARIES})
+add_executable(romfetcher src/application/application.c ${SOURCES})
+target_link_libraries(romfetcher m library common csafestring json2map ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2TTF_LIBRARY} ${CURL_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} ${SQLite3_LIBRARIES} ${OPENSSL_LIBRARIES})
 install(TARGETS romfetcher DESTINATION bin)
 install(FILES ${THEME_SUPERMARIO} DESTINATION share/romfetcher/themes/supermario)
 install(FILES ${THEME_PEACH} DESTINATION share/romfetcher/themes/peach)

@@ -17,7 +17,7 @@
 #ifndef UI_UISEARCH_H
 #define UI_UISEARCH_H
 
-#include "../structs.h"
+#include "../application.h"
 
 void uisearch_render(app_t *app);
 

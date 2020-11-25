@@ -17,7 +17,7 @@
 #ifndef UI_UIMODAL_H
 #define UI_UIMODAL_H
 
-#include "../structs.h"
+#include "../application.h"
 
 void uimodel_render(app_t *app);
 

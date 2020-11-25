@@ -17,7 +17,7 @@
 #include <csafestring.h>
 #include "inputdownloadmanager.h"
 #include "../download/downloadpipeline.h"
-#include "../../library/helper/utils.h"
+#include "../../common/utils.h"
 #include "../state/statehandler.h"
 #include "../download/downloader.h"
 

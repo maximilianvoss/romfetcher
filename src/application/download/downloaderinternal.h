@@ -17,7 +17,7 @@
 #ifndef DOWNLOAD_DOWNLOADERINTERNAL_H
 #define DOWNLOAD_DOWNLOADERINTERNAL_H
 
-#include "../structs.h"
+#include "../application.h"
 
 void downloaderinternal_init(app_t *app);
 

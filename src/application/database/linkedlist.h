@@ -18,7 +18,7 @@
 #define DATABASE_LINKEDLIST_H
 
 #include <sqlite3.h>
-#include "../structs.h"
+#include "../application.h"
 
 void databaselinkedlist_init(sqlite3 *db, char *tableName);
 

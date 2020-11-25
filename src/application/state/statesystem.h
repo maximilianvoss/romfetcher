@@ -17,7 +17,7 @@
 #ifndef STATE_STATESYSTEM_H
 #define STATE_STATESYSTEM_H
 
-#include "../structs.h"
+#include "../application.h"
 
 window_t statesystem_target(app_t *app, uint8_t isSelectButton);
 

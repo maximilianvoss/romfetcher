@@ -17,7 +17,7 @@
 #ifndef STATE_STATEHANDLER_H
 #define STATE_STATEHANDLER_H
 
-#include "../structs.h"
+#include "../application.h"
 
 void statehandler_switch(app_t *app, uint8_t isSelectButton);
 

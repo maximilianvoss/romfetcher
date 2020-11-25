@@ -15,7 +15,7 @@
  */
 
 #include "postprocess.h"
-#include "../../library/helper/utils.h"
+#include "../../common/utils.h"
 
 static void fillDefaultValus(sqlite3 *db);
 

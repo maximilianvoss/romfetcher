@@ -100,6 +100,8 @@ void hosterhandler_download(result_t *item, downloadCallback_t downloadCallbackF
 
 void hosterhandler_destroy(hoster_t *hoster);
 
+void result_freeList(result_t *resultList);
+
 void *linkedlist_appendElement(void *list, void *element);
 
 void *linkedlist_pop(void *list, void **element);
@@ -145,6 +147,8 @@ void curl_freeResponse(curl_response_t *response);
 #define destroyHosters(hosters) hosterhandler_destroy(hosters)
 #define searchHosters(hosters, system, searchString) hosterhandler_search(hosters, system, searchString)
 #define downloadItem(item, downloadCallbackFunction, appData) hosterhandler_download(item, downloadCallbackFunction, appData)
+#define destroyResults(results) result_freeList(results)
+
 #define ll_append(list, element) linkedlist_appendElement(list, element)
 #define ll_pop(list, element) linkedlist_pop(list, element)
 #define ll_push(list, element) linkedlist_push(list, element)

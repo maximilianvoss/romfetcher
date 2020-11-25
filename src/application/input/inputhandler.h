@@ -17,7 +17,7 @@
 #ifndef UI_INPUTHANDLER_H
 #define UI_INPUTHANDLER_H
 
-#include "../structs.h"
+#include "../application.h"
 
 void inputhandler_init();
 

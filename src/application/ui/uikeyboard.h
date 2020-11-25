@@ -17,7 +17,7 @@
 #ifndef UI_UIKEYBOARD_H
 #define UI_UIKEYBOARD_H
 
-#include "../structs.h"
+#include "../application.h"
 
 void uikeyboard_render(app_t *app);
 

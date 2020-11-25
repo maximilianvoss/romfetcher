@@ -18,7 +18,7 @@
 #include <csafestring.h>
 #include "freeroms.h"
 #include "mapping.h"
-#include "../../helper/utils.h"
+#include "../../../common/utils.h"
 #include "../urlhandling.h"
 #include "../../helper/regex.h"
 

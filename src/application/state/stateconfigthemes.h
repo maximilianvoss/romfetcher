@@ -17,7 +17,7 @@
 #ifndef STATE_STATECONFIGTHEMES_H
 #define STATE_STATECONFIGTHEMES_H
 
-#include "../structs.h"
+#include "../application.h"
 
 window_t stateconfigthemes_target(app_t *app, uint8_t isSelectButton);
 

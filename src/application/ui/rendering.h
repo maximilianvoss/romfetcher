@@ -17,7 +17,7 @@
 #ifndef UI_RENDERING_H
 #define UI_RENDERING_H
 
-#include "../structs.h"
+#include "../application.h"
 
 SDL_Texture *rendering_loadImage(app_t *app, char *filename);
 

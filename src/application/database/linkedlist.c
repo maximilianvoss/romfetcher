@@ -15,7 +15,7 @@
  */
 
 #include "linkedlist.h"
-#include "../../library/helper/utils.h"
+#include "../../common/utils.h"
 
 static void addElement(sqlite3 *db, char *tableName, char *name, int active);
 

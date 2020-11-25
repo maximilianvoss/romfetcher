@@ -17,7 +17,7 @@
 #ifndef ENGINE_ROMSMANIA_ROMSMANIA_H
 #define ENGINE_ROMSMANIA_ROMSMANIA_H
 
-#include "../../../application/structs.h"
+#include "../../../application/application.h"
 
 engine_t *_template_getEngine();
 

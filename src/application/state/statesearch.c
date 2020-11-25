@@ -15,7 +15,6 @@
  */
 
 #include "statesearch.h"
-#include "../../library/hoster/results.h"
 
 window_t statesearch_target(app_t *app, uint8_t isSelectButton) {
     switch (app->search.position) {

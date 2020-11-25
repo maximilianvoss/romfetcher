@@ -20,7 +20,7 @@
 #include "../urlhandling.h"
 #include "../../helper/regex.h"
 #include "../results.h"
-#include "../../helper/utils.h"
+#include "../../../common/utils.h"
 #include "icon.h"
 
 #define SHORTNAME "RDC"

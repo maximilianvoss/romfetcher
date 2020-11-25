@@ -22,7 +22,6 @@
 #include <curl/curl.h>
 #include <sqlite3.h>
 #include <stdint.h>
-#include "../library/helper/linkedlist.h"
 #include "enums.h"
 #include <romfetcher.h>
 

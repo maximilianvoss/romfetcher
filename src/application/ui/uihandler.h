@@ -17,7 +17,7 @@
 #ifndef UI_UIHANDLER_H
 #define UI_UIHANDLER_H
 
-#include "../structs.h"
+#include "../application.h"
 
 void uihandler_render(app_t *app);
 

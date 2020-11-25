@@ -17,7 +17,7 @@
 #ifndef UI_FONTS_H
 #define UI_FONTS_H
 
-#include "../structs.h"
+#include "../application.h"
 
 void fonts_init(app_t *app);
 

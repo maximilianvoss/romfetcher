@@ -18,7 +18,7 @@
 #define HELPER_PATH_H
 
 #include <csafestring.h>
-#include "structs.h"
+#include "application.h"
 
 void path_initRomfetchersHome();
 

@@ -19,7 +19,7 @@
 #include "mapping.h"
 #include "icon.h"
 #include "../urlhandling.h"
-#include "../../helper/utils.h"
+#include "../../../common/utils.h"
 #include "../../helper/regex.h"
 #include "../results.h"
 

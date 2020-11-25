@@ -17,7 +17,7 @@
 #ifndef UI_UISEARCHRESULT_H
 #define UI_UISEARCHRESULT_H
 
-#include "../structs.h"
+#include "../application.h"
 
 void uisearchresult_render(app_t *app, int offset);
 

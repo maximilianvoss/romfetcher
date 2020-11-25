@@ -17,7 +17,7 @@
 #ifndef DATABASE_ENGINECACHE_H
 #define DATABASE_ENGINECACHE_H
 
-#include "../structs.h"
+#include "../application.h"
 
 void enginecache_init(sqlite3 *db);
 

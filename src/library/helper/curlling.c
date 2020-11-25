@@ -17,7 +17,7 @@
 #include <curl/curl.h>
 #include <string.h>
 #include "curlling.h"
-#include "utils.h"
+#include "../../common/utils.h"
 
 struct state_s {
     curl_off_t *current;

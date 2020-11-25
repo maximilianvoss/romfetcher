@@ -19,7 +19,7 @@
 #include "../urlhandling.h"
 #include "mapping.h"
 #include "../results.h"
-#include "../../helper/utils.h"
+#include "../../../common/utils.h"
 #include "../../helper/regex.h"
 
 #define SHORTNAME "HSL"

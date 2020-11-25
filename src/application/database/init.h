@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "../structs.h"
+#include "../application.h"
 
 #ifndef DATABASE_INIT_H
 #define DATABASE_INIT_H

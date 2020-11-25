@@ -24,7 +24,7 @@
 #include "../database/postprocess.h"
 #include "../config.h"
 #include "../database/download.h"
-#include "../../library/helper/utils.h"
+#include "../../common/utils.h"
 #include "../path.h"
 
 static void destroyDownload(void *ptr);

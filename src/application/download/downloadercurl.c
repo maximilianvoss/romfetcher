@@ -17,7 +17,7 @@
 #include <csafestring.h>
 #include "downloadercurl.h"
 #include "../path.h"
-#include "../../library/helper/utils.h"
+#include "../../common/utils.h"
 #include "../database/postprocess.h"
 
 static char *postProcess(app_t *app, char *file);

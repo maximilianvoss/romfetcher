@@ -17,7 +17,7 @@
 #ifndef UI_UIDOWNLOAD_H
 #define UI_UIDOWNLOAD_H
 
-#include "../structs.h"
+#include "../application.h"
 
 void uidownload_render(app_t *app);
 

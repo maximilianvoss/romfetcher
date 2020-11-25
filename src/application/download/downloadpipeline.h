@@ -17,7 +17,7 @@
 #ifndef DOWNLOAD_DOWNLOADPIPELINE_H
 #define DOWNLOAD_DOWNLOADPIPELINE_H
 
-#include "../structs.h"
+#include "../application.h"
 
 download_t *downloadpipeline_getNext(app_t *app, download_t *element);
 

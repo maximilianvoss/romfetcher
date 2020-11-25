@@ -17,7 +17,7 @@
 #ifndef UI_CORE_H
 #define UI_CORE_H
 
-#include "../structs.h"
+#include "../application.h"
 
 void ui_init(app_t *app);
 

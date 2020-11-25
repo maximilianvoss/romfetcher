@@ -18,7 +18,7 @@
 #define DATABASE_POSTPROCESS_H
 
 #include <sqlite3.h>
-#include "../structs.h"
+#include "../application.h"
 
 
 void databasepostprocess_init(sqlite3 *db);

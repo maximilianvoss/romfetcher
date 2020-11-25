@@ -17,7 +17,7 @@
 #ifndef TEST_ENGINES_H
 #define TEST_ENGINES_H
 
-#include "../src/application/structs.h"
+#include "../src/application/application.h"
 
 engine_t *romsmania;
 engine_t *romsmode;

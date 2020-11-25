@@ -17,7 +17,7 @@
 #ifndef TEST_ENGINE_FREEROMS_H
 #define TEST_ENGINE_FREEROMS_H
 
-#include "../src/application/structs.h"
+#include "../src/application/application.h"
 
 int test_engine_freeroms_3do(app_t *app);
 

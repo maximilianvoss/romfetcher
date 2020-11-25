@@ -17,7 +17,7 @@
 #ifndef CONFIG_ADVANCED_H
 #define CONFIG_ADVANCED_H
 
-#include "../structs.h"
+#include "../application.h"
 
 void configadvanced_init(app_t *app);
 

@@ -17,7 +17,7 @@
 #ifndef DATABASE_DOWNLOAD_H
 #define DATABASE_DOWNLOAD_H
 
-#include "../structs.h"
+#include "../application.h"
 
 void download_init(sqlite3 *db);
 

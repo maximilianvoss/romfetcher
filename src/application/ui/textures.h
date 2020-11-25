@@ -17,7 +17,7 @@
 #ifndef UI_TEXTURES_H
 #define UI_TEXTURES_H
 
-#include "../structs.h"
+#include "../application.h"
 
 void textures_init(app_t *app);
 

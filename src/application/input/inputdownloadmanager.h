@@ -17,7 +17,7 @@
 #ifndef UI_INPUTDOWNLOADMANAGER_H
 #define UI_INPUTDOWNLOADMANAGER_H
 
-#include "../structs.h"
+#include "../application.h"
 
 void inputdownloadmanager_processUp(app_t *app);
 

@@ -15,8 +15,7 @@
  */
 
 #include <zconf.h>
-#include <pthread.h>
-#include "structs.h"
+#include "application.h"
 #include "ui/uihandler.h"
 #include "input/inputhandler.h"
 #include "ui/core.h"
@@ -28,7 +27,6 @@
 #include "download/downloader.h"
 #include "database/download.h"
 #include "path.h"
-#include "../library/hoster/results.h"
 #include "database/linkedlist.h"
 #include "config.h"
 #include "database/enginecache.h"
@@ -91,8 +89,8 @@ void static destroyApp(app_t *app) {
     downloader_cancelAllDownloads(app);
     ui_destroy(app);
     themes_destroy(app);
-    result_freeList(app->search.all);
 
+    destroyResults(app->search.all);
     destroyHosters(app->engine.all);
     destroySystems(app->systems.all);
 

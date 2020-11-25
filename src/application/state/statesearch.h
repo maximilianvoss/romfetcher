@@ -17,7 +17,7 @@
 #ifndef STATE_STATESEARCH_H
 #define STATE_STATESEARCH_H
 
-#include "../structs.h"
+#include "../application.h"
 
 window_t statesearch_target(app_t *app, uint8_t isSelectButton);
 

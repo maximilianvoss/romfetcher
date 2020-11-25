@@ -17,7 +17,7 @@
 #ifndef STATE_STATECONFIGRESOLUTION_H
 #define STATE_STATECONFIGRESOLUTION_H
 
-#include "../structs.h"
+#include "../application.h"
 
 window_t stateconfigresolution_target(app_t *app, uint8_t isSelectButton);
 

@@ -17,7 +17,7 @@
 #ifndef UI_INPUTSEARCH_H
 #define UI_INPUTSEARCH_H
 
-#include "../structs.h"
+#include "../application.h"
 
 void inputsearch_processUp(app_t *app);
 

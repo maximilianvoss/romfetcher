@@ -17,7 +17,7 @@
 #include <csafestring.h>
 #include <hoster/results.h>
 #include "enginecache.h"
-#include "../../library/helper/utils.h"
+#include "../../common/utils.h"
 
 static void deleteTimestamp(app_t *app, hoster_t *hoster, system_t *system);
 

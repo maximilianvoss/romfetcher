@@ -17,7 +17,7 @@
 #ifndef THEMES_LOADING_H
 #define THEMES_LOADING_H
 
-#include "../structs.h"
+#include "../application.h"
 
 void themes_init(app_t *app);
 

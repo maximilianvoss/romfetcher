@@ -17,7 +17,7 @@
 #ifndef UI_INPUTMODAL_H
 #define UI_INPUTMODAL_H
 
-#include "../structs.h"
+#include "../application.h"
 
 void inputmodal_processUp(app_t *app);
 
