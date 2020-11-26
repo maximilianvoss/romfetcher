@@ -29,6 +29,8 @@ else ()
 endif ()
 
 set(SOURCES_COMMON
+        src/common/entities.c
+        src/common/entities.h
         src/common/utils.c
         src/common/utils.h
         )
@@ -36,8 +38,6 @@ set(SOURCES_COMMON
 set(SOURCES_LIBRARY
         src/library/helper/curlling.c
         src/library/helper/curlling.h
-        src/library/helper/entities.c
-        src/library/helper/entities.h
         src/library/helper/linkedlist.c
         src/library/helper/linkedlist.h
         src/library/helper/md5.c

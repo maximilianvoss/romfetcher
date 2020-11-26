@@ -15,7 +15,7 @@
  */
 
 #include "utils.h"
-#include "helper/entities.h"
+#include "entities.h"
 #include <string.h>
 #include <stdio.h>
 #include <unistd.h>
