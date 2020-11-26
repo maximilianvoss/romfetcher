@@ -17,7 +17,7 @@
 #ifndef DOWNLOAD_CURLLING_H
 #define DOWNLOAD_CURLLING_H
 
-#include <curl/system.h>
+#include <curl/curl.h>
 #include <stdlib.h>
 #include "../romfetcher.h"
 
