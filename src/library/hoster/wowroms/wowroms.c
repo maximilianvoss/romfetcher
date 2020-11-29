@@ -46,6 +46,8 @@ static char *fetchHiddenField(char *text, char *fieldname);
 
 static char *fetchDownloadLink(char *response);
 
+static uint32_t recalcPageCount(char *response);
+
 static hoster_t *hoster = NULL;
 
 hoster_t *wowroms_getHoster(cache_t *cacheHandler) {
@@ -69,14 +71,13 @@ hoster_t *wowroms_getHoster(cache_t *cacheHandler) {
 }
 
 
-// FIXME: fix the page count as it won't search on all pages
 static result_t *search(system_t *system, char *searchString) {
-    uint32_t resultCount = 0;
+    uint32_t pageCount = 1;
     uint32_t page = 1;
     char *urlTemplate = URL_TEMPLATE;
 
     result_t *resultList = NULL;
-    do {
+    while (page <= pageCount) {
         char *url = urlhandling_substitudeVariables(urlTemplate, system, &wowroms_deviceMapping, searchString, page);
         if (url == NULL) {
             break;
@@ -84,12 +85,16 @@ static result_t *search(system_t *system, char *searchString) {
 
         curl_response_t *response = curlling_fetch(url, NULL, GET, 1L);
         resultList = fetchingResultItems(system, resultList, response->data);
+
+        if (pageCount == 1) {
+            pageCount = recalcPageCount(response->data);
+        }
+
         curl_freeResponse(response);
         free(url);
 
-        resultCount = ll_count(resultList);
         page++;
-    } while (resultCount != ll_count(resultList) && resultCount % 30 != 0);
+    }
 
     return resultList;
 }
@@ -247,4 +252,44 @@ static result_t *fetchingResultItems(system_t *system, result_t *resultList, cha
     lxb_html_document_destroy(document);
 
     return resultList;
+}
+
+
+static uint32_t recalcPageCount(char *response) {
+    lxb_html_document_t *document;
+    lxb_dom_collection_t *navContainer = domparsing_getElementsCollectionByClassName(response, &document,
+                                                                                     "top-paginate");
+    lxb_dom_collection_t *navItem = domparsing_createCollection(document);
+
+    if (!lxb_dom_collection_length(navContainer)) {
+        return 0;
+    }
+
+    lxb_dom_element_t *navContainerElement = lxb_dom_collection_element(navContainer, 0);
+    domparsing_findChildElementsByTagName(navItem, navContainerElement, "LI", 1);
+
+    lxb_dom_element_t *navItemElement = lxb_dom_collection_element(navItem,
+                                                                   lxb_dom_collection_length(navItem) - 1);
+
+    lxb_dom_element_t *anchorElement = domparser_findFirstChildElementByTagName(navItemElement, "A", 0);
+    char *href = domparsing_getAttributeValue(anchorElement, "href");
+
+    char *regexString = "page=([0-9]+)";
+    regexMatches_t *matches = regex_getMatches(href, regexString, 1);
+    if (matches == NULL) {
+        lxb_dom_collection_destroy(navContainer, true);
+        lxb_dom_collection_destroy(navItem, true);
+        lxb_html_document_destroy(document);
+        return 1;
+    }
+    char *pages = regex_cpyGroupText(matches, 0);
+    int retVal = atoi(pages);
+
+    regex_destroyMatches(matches);
+    lxb_dom_collection_destroy(navContainer, true);
+    lxb_dom_collection_destroy(navItem, true);
+    lxb_html_document_destroy(document);
+    free(pages);
+
+    return retVal;
 }

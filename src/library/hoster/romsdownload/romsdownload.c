@@ -38,6 +38,8 @@ static result_t *fetchingResultItems(system_t *system, result_t *resultList, cha
 
 static char *fetchDownloadLink(char *response);
 
+static uint32_t recalcPageCount(char *response);
+
 static hoster_t *hoster = NULL;
 
 hoster_t *romsdownload_getHoster(cache_t *cacheHandler) {
@@ -56,11 +58,11 @@ hoster_t *romsdownload_getHoster(cache_t *cacheHandler) {
 }
 
 static result_t *search(system_t *system, char *searchString) {
-    uint32_t resultCount = 0;
     uint32_t page = 1;
+    uint32_t pageCount = 1;
 
     result_t *resultList = NULL;
-    do {
+    while (page <= pageCount) {
         char *data = urlhandling_substitudeVariables(DATA_TEMPLATE, system, &romsdownload_deviceMapping, searchString,
                                                      page);
         if (data == NULL) {
@@ -69,13 +71,16 @@ static result_t *search(system_t *system, char *searchString) {
 
         curl_response_t *response = curlling_fetch(URL_TEMPLATE, data, POST, 1L);
         resultList = fetchingResultItems(system, resultList, response->data);
+
+        if (pageCount == 1) {
+            pageCount = recalcPageCount(response->data);
+        }
+
         curl_freeResponse(response);
         free(data);
 
-        resultCount = ll_count(resultList);
         page++;
-    } while (resultCount != ll_count(resultList) && resultCount % 20 == 0);
-
+    }
     return resultList;
 }
 
@@ -153,4 +158,27 @@ static result_t *fetchingResultItems(system_t *system, result_t *resultList, cha
     lxb_html_document_destroy(document);
 
     return resultList;
+}
+
+static uint32_t recalcPageCount(char *response) {
+    lxb_html_document_t *document;
+    lxb_dom_collection_t *navContainer = domparsing_getElementsCollectionByClassName(response, &document, "pagination");
+    lxb_dom_collection_t *navItems = domparsing_createCollection(document);
+
+    if (!lxb_dom_collection_length(navContainer)) {
+        return 0;
+    }
+
+    lxb_dom_element_t *navContainerElement = lxb_dom_collection_element(navContainer, 0);
+    domparsing_findChildElementsByTagName(navItems, navContainerElement, "LI", 1);
+
+    lxb_dom_element_t *navItemElement = lxb_dom_collection_element(navItems, lxb_dom_collection_length(navItems) - 2);
+    char *pages = domparsing_getText(navItemElement);
+    int retVal = atoi(pages);
+
+    lxb_dom_collection_destroy(navContainer, true);
+    lxb_dom_collection_destroy(navItems, true);
+    lxb_html_document_destroy(document);
+
+    return retVal;
 }
