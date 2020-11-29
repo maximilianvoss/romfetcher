@@ -16,11 +16,12 @@
 
 #include <pthread.h>
 #include <csafestring.h>
+#include <helper/domparsing.h>
+#include <hoster/results.h>
 #include "freeroms.h"
 #include "mapping.h"
 #include "../../../common/utils.h"
 #include "../urlhandling.h"
-#include "../../helper/regex.h"
 
 #define SHORTNAME "FRE"
 #define FULLNAME "https://freeroms.com"
@@ -147,17 +148,41 @@ static void *executeThread(void *ptr) {
 }
 
 static void extractLink(system_t *system, char *response) {
-    char *regexString = "<span itemprop=\"name\">([^<]+)[^\']+\'\\/vote.php\\?game_id=([^\']+)";
+    lxb_html_document_t *document;
+    lxb_dom_collection_t *gamesCollection = domparsing_getElementsCollectionByClassName(response, &document,
+                                                                                        "system-rom-tr-wrap");
+    lxb_dom_collection_t *gameElementCollection = domparsing_createCollection(document);
 
-    regexMatches_t *matches = regex_getMatches(response, regexString, 2);
-    regexMatches_t *ptr = matches;
+    for (size_t i = 0; i < lxb_dom_collection_length(gamesCollection); i++) {
+        lxb_dom_element_t *gameParent = lxb_dom_collection_element(gamesCollection, i);
+        result_t *item = result_newItem(system, hoster);
 
-    while (ptr != NULL) {
-        hoster->cacheHandler->add(hoster, system, ptr->groups[0], generateDownloadLink(system, ptr->groups[1]),
-                                  hoster->cacheHandler->appData);
-        ptr = ptr->next;
+        domparsing_findChildElementsByTagName(gameElementCollection, gameParent, "DIV", 1);
+
+        lxb_dom_element_t *element;
+        element = lxb_dom_collection_element(gameElementCollection, 0);
+        result_setTitle(item, domparsing_getText(element));
+
+        element = lxb_dom_collection_element(gameElementCollection, 1);
+        element = domparser_findFirstChildElementByTagName(element, "A", 1);
+        char *gameId = (char *) domparsing_getAttributeValue(element, "onclick");
+        gameId = str_replace(gameId, "window.open('/vote.php?game_id=", "");
+        gameId = str_replace(gameId, "', 'votewindow', 'width=450, height=400'); return false;", "");
+        result_setUrl(item, generateDownloadLink(system, gameId));
+
+        element = lxb_dom_collection_element(gameElementCollection, 3);
+        char *rating = domparsing_getText(element);
+        rating = str_replace(rating, "/10", "");
+        result_setRating(item, rating, 10);
+
+        hoster->cacheHandler->add(hoster, system, item, hoster->cacheHandler->appData);
+        result_freeList(item);
+
+        lxb_dom_collection_clean(gameElementCollection);
     }
-    regex_destroyMatches(matches);
+    lxb_dom_collection_destroy(gameElementCollection, true);
+    lxb_dom_collection_destroy(gamesCollection, true);
+    lxb_html_document_destroy(document);
 }
 
 

@@ -188,6 +188,51 @@ char *str_clone(char *str) {
     return clone;
 }
 
+uint8_t str_contains(char *str, char *searchStr) {
+    if (strstr(str, searchStr) != NULL) {
+        return 1;
+    }
+    return 0;
+}
+
+char *str_trim(char *str) {
+    if (str == NULL) {
+        return NULL;
+    }
+
+    char *tmp = str;
+    while ((*tmp == ' ' || *tmp == '\t' || *tmp == '\v' || *tmp == '\f' || *tmp == '\n' || *tmp == '\r' ||
+            *tmp == -62 || *tmp == -96) &&
+           *tmp != '\0') {
+        tmp++;
+    }
+
+    if (*tmp == '\0') {
+        return "";
+    }
+
+    char *start = tmp;
+    while (*tmp != '\0') {
+        tmp++;
+    }
+    tmp--;
+
+    while (*tmp == ' ' || *tmp == '\t' || *tmp == '\v' || *tmp == '\f' || *tmp == '\n' || *tmp == '\r' || *tmp == -62 ||
+           *tmp == -96) {
+        tmp--;
+    }
+    char *end = tmp;
+
+
+    size_t length = end - start + 1;
+    memmove(str, start, length);
+
+    tmp = str + length;
+    *tmp = '\0';
+
+    return str;
+}
+
 static int ishex(int x) {
     return (x >= '0' && x <= '9') ||
            (x >= 'a' && x <= 'f') ||

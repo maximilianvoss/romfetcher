@@ -26,7 +26,7 @@ static void insertTimestamp(app_t *app, hoster_t *hoster, system_t *system);
 void enginecache_init(sqlite3 *db) {
     char *err_msg = 0;
 
-    char *query = "CREATE TABLE enginecache (hosters TEXT, system TEXT, title TEXT, link TEXT)";
+    char *query = "CREATE TABLE enginecache (hosters TEXT, system TEXT, title TEXT, url TEXT, downloads INT, fileSize TEXT, rating REAL)";
     int rc = sqlite3_exec(db, query, 0, 0, &err_msg);
     if (rc != SQLITE_OK) {
         fprintf(stderr, "Failed to create table\n");
@@ -112,9 +112,9 @@ uint8_t enginecache_isCacheValid(hoster_t *hoster, system_t *system, void *appPt
     return 0;
 }
 
-void enginecache_addEntry(hoster_t *hoster, system_t *system, char *title, char *link, void *appPtr) {
+void enginecache_addEntry(hoster_t *hoster, system_t *system, result_t *entry, void *appPtr) {
     app_t *app = appPtr;
-    char *query = "INSERT INTO enginecache (hosters, system, title, link) VALUES (@hosters, @system, @title, @link)";
+    char *query = "INSERT INTO enginecache (hosters, system, title, url, downloads, fileSize, rating) VALUES (@hosters, @system, @title, @url, @downloads, @fileSize, @rating)";
 
     sqlite3_stmt *stmt;
     int rc = sqlite3_prepare_v2(app->database.db, query, -1, &stmt, 0);
@@ -127,11 +127,22 @@ void enginecache_addEntry(hoster_t *hoster, system_t *system, char *title, char 
         sqlite3_bind_text(stmt, idx, system->name, strlen(system->name), NULL);
 
         idx = sqlite3_bind_parameter_index(stmt, "@title");
-        sqlite3_bind_text(stmt, idx, title, strlen(title), NULL);
+        sqlite3_bind_text(stmt, idx, entry->title, strlen(entry->title), NULL);
 
-        idx = sqlite3_bind_parameter_index(stmt, "@link");
-        sqlite3_bind_text(stmt, idx, link, strlen(link), NULL);
+        idx = sqlite3_bind_parameter_index(stmt, "@url");
+        sqlite3_bind_text(stmt, idx, entry->url, strlen(entry->url), NULL);
 
+        idx = sqlite3_bind_parameter_index(stmt, "@downloads");
+        sqlite3_bind_int(stmt, idx, entry->downloads);
+
+        if (entry->fileSize != NULL) {
+            idx = sqlite3_bind_parameter_index(stmt, "@fileSize");
+            sqlite3_bind_text(stmt, idx, entry->fileSize, strlen(entry->fileSize), NULL);
+        }
+
+        idx = sqlite3_bind_parameter_index(stmt, "@rating");
+        sqlite3_bind_int(stmt, idx, entry->downloads);
+        sqlite3_bind_double(stmt, idx, entry->rating);
     } else {
         fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(app->database.db));
     }
@@ -151,7 +162,7 @@ void enginecache_updateTimestamp(hoster_t *hoster, system_t *system, void *app) 
 
 result_t *enginecache_getSearchResults(hoster_t *hoster, system_t *system, char *searchString, void *appPtr) {
     app_t *app = appPtr;
-    char *query = "SELECT title, link FROM enginecache WHERE hosters=@hosters AND system=@system AND UPPER(title) LIKE @searchString";
+    char *query = "SELECT title, url, downloads, fileSize, rating FROM enginecache WHERE hosters=@hosters AND system=@system AND UPPER(title) LIKE @searchString";
 
     sqlite3_stmt *stmt;
     char *tmp = NULL;
@@ -179,13 +190,13 @@ result_t *enginecache_getSearchResults(hoster_t *hoster, system_t *system, char 
     result_t *resultList = NULL;
     int ret = sqlite3_step(stmt);
     while (ret == SQLITE_ROW) {
-        char *title = (char *) sqlite3_column_text(stmt, 0);
-        char *link = (char *) sqlite3_column_text(stmt, 1);
-
         result_t *item = result_newItem(system, hoster);
-        result_setTitle(item, title);
-        result_setUrl(item, link);
-        resultList = linkedlist_appendElement(resultList, item);
+        result_setTitle(item, (char *) sqlite3_column_text(stmt, 0));
+        result_setUrl(item, (char *) sqlite3_column_text(stmt, 1));
+        result_setFileSize(item, (char *) sqlite3_column_text(stmt, 3));
+        item->downloads = sqlite3_column_int(stmt, 2);
+        item->rating = sqlite3_column_double(stmt, 4);
+        resultList = ll_append(resultList, item);
         ret = sqlite3_step(stmt);
     }
     if (ret == SQLITE_ERROR) {

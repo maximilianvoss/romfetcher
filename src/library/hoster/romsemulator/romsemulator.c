@@ -15,6 +15,7 @@
  */
 
 #include <csafestring.h>
+#include <helper/domparsing.h>
 #include "romsemulator.h"
 #include "mapping.h"
 #include "icon.h"
@@ -144,22 +145,42 @@ static char *fetchDownloadPageLink(char *response) {
 }
 
 static result_t *fetchingResultItems(system_t *system, result_t *resultList, char *response) {
-    char *regexString = "<td><a href=\"([^\"]+)\">([^<]+)</a>";
+    lxb_html_document_t *document;
+    lxb_dom_collection_t *wrapperCollection = domparsing_getElementsCollectionByTagName(response, &document, "TBODY");
+    lxb_dom_collection_t *gamesCollection = domparsing_createCollection(document);
+    lxb_dom_collection_t *gameElementCollection = domparsing_createCollection(document);
 
-    regexMatches_t *matches = regex_getMatches(response, regexString, 2);
-    regexMatches_t *ptr = matches;
+    domparsing_findChildElementsByTagName(gamesCollection, lxb_dom_collection_element(wrapperCollection, 0), "TR", 1);
 
-    while (ptr != NULL) {
+    for (size_t i = 0; i < lxb_dom_collection_length(gamesCollection); i++) {
+        lxb_dom_element_t *gameParent = lxb_dom_collection_element(gamesCollection, i);
         result_t *item = result_newItem(system, hoster);
-        result_setUrl(item, ptr->groups[0]);
 
-        char *title = str_htmlDecode(ptr->groups[1]);
-        result_setTitle(item, title);
-        free(title);
+        domparsing_findChildElementsByTagName(gameElementCollection, gameParent, "TD", 1);
 
+        lxb_dom_element_t *element;
+        element = lxb_dom_collection_element(gameElementCollection, 0);
+        result_setTitle(item, domparsing_getText(element));
+
+        element = domparser_findFirstChildElementByTagName(element, "A", 1);
+        result_setUrl(item, domparsing_getAttributeValue(element, "href"));
+
+        element = lxb_dom_collection_element(gameElementCollection, 1);
+        char *rating = domparsing_getText(element);
+        rating = str_replace(rating, "/5", "");
+        result_setRating(item, rating, 5);
+
+        element = lxb_dom_collection_element(gameElementCollection, 2);
+        char *downloads = domparsing_getText(element);
+        result_setDownloads(item, downloads);
+
+        lxb_dom_collection_clean(gameElementCollection);
         resultList = ll_append(resultList, item);
-        ptr = ptr->next;
     }
-    regex_destroyMatches(matches);
+    lxb_dom_collection_destroy(gameElementCollection, true);
+    lxb_dom_collection_destroy(gamesCollection, true);
+    lxb_dom_collection_destroy(wrapperCollection, true);
+    lxb_html_document_destroy(document);
+
     return resultList;
 }

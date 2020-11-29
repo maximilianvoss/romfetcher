@@ -25,6 +25,12 @@ void result_setTitle(result_t *resultList, char *title);
 
 void result_setUrl(result_t *resultList, char *url);
 
+void result_setDownloads(result_t *resultList, char *downloads);
+
+void result_setRating(result_t *resultList, char *rating, uint8_t maxRating);
+
+void result_setFileSize(result_t *resultList, char *fileSize);
+
 void result_freeList(result_t *resultList);
 
 #endif

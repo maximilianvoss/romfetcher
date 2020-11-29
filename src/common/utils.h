@@ -42,4 +42,8 @@ char *str_clone(char *str);
 
 char *file_parentDirectory(char *path);
 
+uint8_t str_contains(char *str, char *searchStr);
+
+char *str_trim(char *str);
+
 #endif

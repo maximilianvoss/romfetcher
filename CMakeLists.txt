@@ -19,6 +19,8 @@ add_subdirectory(libs/csafestring)
 include_directories(libs/csafestring)
 add_subdirectory(libs/json2map)
 include_directories(libs/json2map)
+add_subdirectory(libs/lexbor)
+include_directories(libs/lexbor)
 
 if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
     set(CMAKE_VERBOSE_MAKEFILE on)
@@ -38,6 +40,8 @@ set(SOURCES_COMMON
 set(SOURCES_LIBRARY
         src/library/helper/curlling.c
         src/library/helper/curlling.h
+        src/library/helper/domparsing.c
+        src/library/helper/domparsing.h
         src/library/helper/linkedlist.c
         src/library/helper/linkedlist.h
         src/library/helper/md5.c
@@ -50,7 +54,7 @@ set(SOURCES_LIBRARY
         src/library/hoster/freeroms/mapping.h
         src/library/hoster/hosterhandler.c
         src/library/hoster/hosterhandler.h
-        src/library/hoster/result.c
+        src/library/hoster/results.c
         src/library/hoster/results.h
         src/library/hoster/romhustler/mapping.c
         src/library/hoster/romhustler/mapping.h
@@ -235,11 +239,28 @@ set(SCRIPT_FILES
         "resources/ROM Fetcher.sh"
         )
 
-include_directories(src/library ${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${SDL2TTF_INCLUDE_DIRS} ${CURL_INCLUDE_DIRS} ${SQLite3_INCLUDE_DIRS} ${OPENSSL_INCLUDE_DIR})
+
+set(LINK_LIBRARIES
+        library
+        common
+        csafestring
+        json2map
+        lexbor_static
+        m
+        ${SDL2_LIBRARIES}
+        ${SDL2_IMAGE_LIBRARIES}
+        ${SDL2TTF_LIBRARY}
+        ${CURL_LIBRARIES}
+        ${CMAKE_THREAD_LIBS_INIT}
+        ${SQLite3_LIBRARIES}
+        ${OPENSSL_LIBRARIES}
+        )
+
+include_directories(src/library libs/lexbor/source ${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${SDL2TTF_INCLUDE_DIRS} ${CURL_INCLUDE_DIRS} ${SQLite3_INCLUDE_DIRS} ${OPENSSL_INCLUDE_DIR})
 add_library(common ${SOURCES_COMMON})
 add_library(library ${SOURCES_LIBRARY})
 add_executable(romfetcher src/application/application.c ${SOURCES})
-target_link_libraries(romfetcher m library common csafestring json2map ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2TTF_LIBRARY} ${CURL_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} ${SQLite3_LIBRARIES} ${OPENSSL_LIBRARIES})
+target_link_libraries(romfetcher ${LINK_LIBRARIES})
 install(TARGETS romfetcher DESTINATION bin)
 install(FILES ${THEME_SUPERMARIO} DESTINATION share/romfetcher/themes/supermario)
 install(FILES ${THEME_PEACH} DESTINATION share/romfetcher/themes/peach)
@@ -262,7 +283,7 @@ include(CPack)
 
 enable_testing()
 add_executable(romfetcher_testcases ${SOURCES} ${TEST_SOURCES})
-target_link_libraries(romfetcher_testcases common library m csafestring json2map ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2TTF_LIBRARY} ${CURL_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} ${SQLite3_LIBRARIES} ${OPENSSL_LIBRARIES})
+target_link_libraries(romfetcher_testcases ${LINK_LIBRARIES})
 
 add_test(NAME test_linkedList_deleteElement0 COMMAND romfetcher_testcases test_linkedList_deleteElement0)
 add_test(NAME test_linkedList_deleteElement1 COMMAND romfetcher_testcases test_linkedList_deleteElement1)

@@ -55,6 +55,9 @@ typedef struct result_s {
     char *title;
     uint8_t active;
     char *url;
+    float rating;
+    int32_t downloads;
+    char *fileSize;
     struct system_s *system;
     struct hoster_s *hoster;
 } result_t;
@@ -67,7 +70,7 @@ typedef struct cache_s {
 
     void (*clear)(struct hoster_s *hoster, struct system_s *system, void *appData);
 
-    void (*add)(struct hoster_s *hoster, struct system_s *system, char *title, char *link, void *appData);
+    void (*add)(struct hoster_s *hoster, struct system_s *system, result_t *entry, void *appData);
 
     result_t *(*get)(struct hoster_s *hoster, struct system_s *system, char *searchString, void *appData);
 

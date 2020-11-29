@@ -27,12 +27,16 @@ result_t *result_newItem(system_t *system, hoster_t *hoster) {
     resultList->url = NULL;
     resultList->hoster = hoster;
     resultList->system = system;
+    resultList->downloads = 0;
+    resultList->rating = 0;
+    resultList->fileSize = NULL;
     resultList->prev = NULL;
     resultList->next = NULL;
     return resultList;
 }
 
 void result_setTitle(result_t *resultList, char *title) {
+    title = str_trim(title);
     LOG_DEBUG("Title: %s\n", title);
     if (resultList == NULL || title == NULL) {
         return;
@@ -41,6 +45,7 @@ void result_setTitle(result_t *resultList, char *title) {
 }
 
 void result_setUrl(result_t *resultList, char *url) {
+    url = str_trim(url);
     LOG_DEBUG("URL: %s\n", url);
     if (resultList == NULL || url == NULL) {
         return;
@@ -48,12 +53,43 @@ void result_setUrl(result_t *resultList, char *url) {
     resultList->url = str_clone(url);
 }
 
+void result_setDownloads(result_t *resultList, char *downloads) {
+    downloads = str_trim(downloads);
+    LOG_DEBUG("DOWNLOADS: %s\n", downloads);
+    if (downloads == NULL) {
+        return;
+    }
+    resultList->downloads = atoi(downloads);
+    LOG_DEBUG("Calc'd Downloads: %d\n", resultList->downloads);
+}
+
+void result_setRating(result_t *resultList, char *rating, uint8_t maxRating) {
+    rating = str_trim(rating);
+    LOG_DEBUG("RATING: %s\n", rating);
+    if (rating == NULL) {
+        return;
+    }
+    resultList->rating = (maxRating == 10) ? 1.0f * atof(rating) : 2.0f * atof(rating);
+    LOG_DEBUG("Calc'd Rating: %2.1f\n", resultList->rating);
+}
+
+void result_setFileSize(result_t *resultList, char *fileSize) {
+    fileSize = str_trim(fileSize);
+    LOG_DEBUG("FILE SIZE: %s\n", fileSize);
+    if (fileSize == NULL) {
+        return;
+    }
+    resultList->fileSize = str_clone(fileSize);
+}
+
 void result_freeList(result_t *resultList) {
     ll_free(resultList, &freeFields);
 }
+
 
 static void freeFields(void *ptr) {
     result_t *resultList = (result_t *) ptr;
     FREENOTNULL(resultList->title);
     FREENOTNULL(resultList->url);
+    FREENOTNULL(resultList->fileSize);
 }
