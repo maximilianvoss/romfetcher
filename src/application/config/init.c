@@ -27,7 +27,7 @@ static void configresolution_destroy(app_t *app);
 
 void config_init(app_t *app) {
     app->config.all = linkedlist_appendElement(app->config.all,
-                                               createConfig("Enable/Disable Search Engines", window_config_engine));
+                                               createConfig("Enable/Disable Hosters", window_config_hoster));
     app->config.all = linkedlist_appendElement(app->config.all,
                                                createConfig("Enable/Disable Systems", window_config_systems));
     app->config.all = linkedlist_appendElement(app->config.all, createConfig("Select Theme", window_config_themes));

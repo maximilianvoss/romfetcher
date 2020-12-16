@@ -18,6 +18,8 @@
 #include "rendering.h"
 #include "../themes/rendering.h"
 #include "uisearchresult.h"
+#include "../helper/uihelper.h"
+#include "../application.h"
 
 static void renderSearchField(app_t *app);
 
@@ -36,35 +38,32 @@ void uisearch_render(app_t *app) {
     renderSystemSelector(app);
     renderSearchField(app);
     renderSearchButton(app);
-    uisearchresult_render(app, 190);
+    uisearchresult_render(app, 150);
 }
 
 static void renderSettingsIcon(app_t *app) {
     int width, height;
     SDL_GL_GetDrawableSize(app->sdlWindow, &width, &height);
 
+    uiElementRects_t element = uihelper_generateRects(width - 35, 10, 25, 25);
     if (app->search.position == searchactivity_config) {
-        SDL_Rect r2 = {width - 37, 8, 27, 27};
         themes_setDrawColor(app, fieldActive);
-        SDL_RenderFillRect(app->sdlRenderer, &r2);
+        SDL_RenderFillRect(app->sdlRenderer, &element.outter);
     }
+    uihelper_renderSDLTexture(app->sdlRenderer, app->textures.settingsIcon, &element.inner);
 
-    SDL_Rect texture_rect = {width - 35, 10, 25, 25};
-    SDL_RenderCopy(app->sdlRenderer, app->textures.settingsIcon, NULL, &texture_rect);
 }
 
 static void renderDownloadManagerIcon(app_t *app) {
     int width, height;
     SDL_GL_GetDrawableSize(app->sdlWindow, &width, &height);
 
+    uiElementRects_t element = uihelper_generateRects(width - 85, 10, 25, 25);
     if (app->search.position == searchactivity_downloadMgr) {
-        SDL_Rect r2 = {width - 87, 8, 27, 27};
         themes_setDrawColor(app, fieldActive);
-        SDL_RenderFillRect(app->sdlRenderer, &r2);
+        SDL_RenderFillRect(app->sdlRenderer, &element.outter);
     }
-
-    SDL_Rect texture_rect = {width - 85, 10, 25, 25};
-    SDL_RenderCopy(app->sdlRenderer, app->textures.downloadManagerIcon, NULL, &texture_rect);
+    uihelper_renderSDLTexture(app->sdlRenderer, app->textures.downloadManagerIcon, &element.inner);
 
     int downloadCount =
             linkedlist_getElementCount(app->download.active) + linkedlist_getElementCount(app->download.queue);
@@ -76,7 +75,7 @@ static void renderDownloadManagerIcon(app_t *app) {
         sprintf(buffer, "%d", downloadCount);
 
         texture_t texture;
-        rendering_loadText(app, &texture, buffer, app->fonts.small, &app->themes.active->colors.textInverted);
+        rendering_loadText(app, &texture, buffer, app->fonts.font16, &app->themes.active->colors.textInverted);
         SDL_Rect srcQuad = {0, 0, width - 100 - 60, texture.h};
         SDL_Rect renderQuad = {width - 65 - texture.w / 2, 32 - texture.h / 2, texture.w, texture.h};
         SDL_RenderCopy(app->sdlRenderer, texture.texture, &srcQuad, &renderQuad);
@@ -88,23 +87,21 @@ static void renderSystemSelector(app_t *app) {
     int width, height;
     SDL_GL_GetDrawableSize(app->sdlWindow, &width, &height);
 
-    SDL_Rect r2 = {48, 50, width - 96, 54};
+    uiElementRects_t element = uihelper_generateRectsFullScreenWidth(20, 50, width, 40);
     themes_setDrawColorBackground(app, (app->search.position == searchactivity_system));
-    SDL_RenderFillRect(app->sdlRenderer, &r2);
+    SDL_RenderFillRect(app->sdlRenderer, &element.outter);
 
-    SDL_Rect r = {50, 52, width - 100, 50};
     themes_setDrawColorField(app);
-    SDL_RenderFillRect(app->sdlRenderer, &r);
+    SDL_RenderFillRect(app->sdlRenderer, &element.inner);
 
-    SDL_Rect texture_rect = {width - 100, 51, 52, 52};
+    SDL_Rect texture_rect = {width - element.outter.x - element.outter.h, element.outter.y, element.outter.h,
+                             element.outter.h};
     SDL_RenderCopy(app->sdlRenderer, app->textures.searchChevron, NULL, &texture_rect);
 
     texture_t texture;
-    rendering_loadText(app, &texture, app->systems.active->fullname, app->fonts.big,
+    rendering_loadText(app, &texture, app->systems.active->fullname, app->fonts.font26,
                        &app->themes.active->colors.text);
-    SDL_Rect srcQuad = {0, 0, width - 100 - 60, texture.h};
-    SDL_Rect renderQuad = {60, 55, (texture.w > width - 100 - 60) ? width - 100 - 60 : texture.w, texture.h};
-    SDL_RenderCopy(app->sdlRenderer, texture.texture, &srcQuad, &renderQuad);
+    uihelper_renderTexture(app->sdlRenderer, &texture, &element.content);
     SDL_DestroyTexture(texture.texture);
 }
 
@@ -112,22 +109,17 @@ static void renderSearchField(app_t *app) {
     int width, height;
     SDL_GL_GetDrawableSize(app->sdlWindow, &width, &height);
 
-    SDL_Rect r2 = {48, 118, width - 266, 54};
+    uiElementRects_t element = uihelper_generateRects(20, 100, width - width / 3 - 5, 40);
     themes_setDrawColorBackground(app, (app->search.position == searchactivity_field));
-    SDL_RenderFillRect(app->sdlRenderer, &r2);
+    SDL_RenderFillRect(app->sdlRenderer, &element.outter);
 
-    SDL_Rect r = {50, 120, width - 270, 50};
     themes_setDrawColorField(app);
-    SDL_RenderFillRect(app->sdlRenderer, &r);
+    SDL_RenderFillRect(app->sdlRenderer, &element.inner);
 
     if (*(app->search.searchText) != '\0') {
         texture_t texture;
-        rendering_loadText(app, &texture, app->search.searchText, app->fonts.big, &app->themes.active->colors.text);
-
-        SDL_Rect srcQuad = {0, 0, width - 290, texture.h};
-        SDL_Rect renderQuad = {60, 125, (texture.w > width - 290) ? width - 290 : texture.w, texture.h};
-
-        SDL_RenderCopy(app->sdlRenderer, texture.texture, &srcQuad, &renderQuad);
+        rendering_loadText(app, &texture, app->search.searchText, app->fonts.font26, &app->themes.active->colors.text);
+        uihelper_renderTexture(app->sdlRenderer, &texture, &element.content);
         SDL_DestroyTexture(texture.texture);
     }
 }
@@ -136,18 +128,16 @@ static void renderSearchButton(app_t *app) {
     int width, height;
     SDL_GL_GetDrawableSize(app->sdlWindow, &width, &height);
 
-    SDL_Rect r2 = {width - 202, 118, 154, 54};
+    uiElementRects_t element = uihelper_generateRects(width - width / 3 + 30, 100, width / 3 - 50, 40);
     themes_setDrawColorBackground(app, (app->search.position == searchactivity_button));
-    SDL_RenderFillRect(app->sdlRenderer, &r2);
+    SDL_RenderFillRect(app->sdlRenderer, &element.outter);
 
-    SDL_Rect r = {width - 200, 120, 150, 50};
     themes_setDrawColorField(app);
-    SDL_RenderFillRect(app->sdlRenderer, &r);
+    SDL_RenderFillRect(app->sdlRenderer, &element.inner);
 
     texture_t texture;
-    rendering_loadText(app, &texture, "Search", app->fonts.big, &app->themes.active->colors.text);
-    SDL_Rect renderQuad = {width - 180, 125, texture.w, texture.h};
-    SDL_RenderCopy(app->sdlRenderer, texture.texture, NULL, &renderQuad);
+    rendering_loadText(app, &texture, "Search", app->fonts.font26, &app->themes.active->colors.text);
+    uihelper_renderTextureCentered(app->sdlRenderer, &texture, &element.content);
     SDL_DestroyTexture(texture.texture);
 }
 

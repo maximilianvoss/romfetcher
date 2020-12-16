@@ -65,7 +65,7 @@ void statehandler_switch(app_t *app, uint8_t isSelectButton) {
             state_target = &stateconfigadvanced_target;
             state_persist = &stateconfigadvanced_persist;
             break;
-        case window_config_engine:
+        case window_config_hoster:
             state_target = &stateconfigengine_target;
             state_persist = &stateconfigengine_persist;
             break;
@@ -106,7 +106,7 @@ static void *getInitFunction(window_t target) {
             return &stateconfig_init;
         case window_config_advanced:
             return &stateconfigadvanced_init;
-        case window_config_engine:
+        case window_config_hoster:
             return &stateconfigengine_init;
         case window_config_resolution:
             return &stateconfigresolution_init;

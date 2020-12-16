@@ -21,6 +21,6 @@
 
 void uilist_renderDefault(app_t *app);
 
-void uilist_renderList(app_t *app, int position);
+void uilist_renderList(app_t *app, int offset);
 
 #endif

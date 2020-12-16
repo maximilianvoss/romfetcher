@@ -115,6 +115,8 @@ set(SOURCES
         src/application/enums.h
         src/application/helper/map.c
         src/application/helper/map.h
+        src/application/helper/uihelper.c
+        src/application/helper/uihelper.h
         src/application/input/inputdownload.c
         src/application/input/inputdownload.h
         src/application/input/inputdownloadmanager.c

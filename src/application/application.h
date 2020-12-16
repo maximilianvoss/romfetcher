@@ -145,10 +145,10 @@ typedef struct {
     } textures;
 
     struct {
-        TTF_Font *small;
-        TTF_Font *medium;
-        TTF_Font *big;
-        TTF_Font *huge;
+        TTF_Font *font16;
+        TTF_Font *font26;
+        TTF_Font *font34;
+        TTF_Font *font24;
     } fonts;
 
     struct {

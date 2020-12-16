@@ -46,7 +46,7 @@ static void renderDefaults(app_t *app) {
 
     char *text = copyright();
     texture_t texture;
-    rendering_loadText(app, &texture, text, app->fonts.small, &app->themes.active->colors.textInverted);
+    rendering_loadText(app, &texture, text, app->fonts.font16, &app->themes.active->colors.textInverted);
     SDL_Rect renderQuad = {50, height - 30, texture.w, texture.h};
     SDL_RenderCopy(app->sdlRenderer, texture.texture, NULL, &renderQuad);
     free(text);
@@ -76,7 +76,7 @@ void uihandler_render(app_t *app) {
             break;
         case window_config:
         case window_config_advanced:
-        case window_config_engine:
+        case window_config_hoster:
         case window_config_resolution:
         case window_config_systems:
         case window_config_themes:

@@ -47,7 +47,7 @@ void uidownloadmanager_render(app_t *app) {
 
     int position = offsetX;
     while (element != NULL && position <= height - 80) {
-        rendering_loadText(app, &texture, element->title, app->fonts.medium, &app->themes.active->colors.text);
+        rendering_loadText(app, &texture, element->title, app->fonts.font26, &app->themes.active->colors.text);
 
         SDL_Rect r2 = {48, position - 2, width - 96, 70};
         themes_setDrawColorBackground(app, (element == app->download.cursor));
@@ -107,7 +107,7 @@ static void renderProgressBar(app_t *app, download_t *element, int position) {
     SDL_RenderFillRect(app->sdlRenderer, &rect3);
 
     texture_t texture;
-    rendering_loadText(app, &texture, percentText, app->fonts.small, &app->themes.active->colors.text);
+    rendering_loadText(app, &texture, percentText, app->fonts.font16, &app->themes.active->colors.text);
     SDL_Rect renderQuad = {width / 2 - texture.w / 2, position + 35 + 3, texture.w, texture.h};
     SDL_RenderCopy(app->sdlRenderer, texture.texture, NULL, &renderQuad);
 

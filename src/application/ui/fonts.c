@@ -19,35 +19,35 @@
 void fonts_init(app_t *app) {
     TTF_Init();
 
-    app->fonts.huge = TTF_OpenFont(app->themes.active->font, 144);
-    if (app->fonts.huge == NULL) {
+    app->fonts.font24 = TTF_OpenFont(app->themes.active->font, 16);
+    if (app->fonts.font24 == NULL) {
         printf("Failed to load headlineFont! SDL_ttf Error: %s\n", TTF_GetError());
         exit(1);
     }
 
 
-    app->fonts.big = TTF_OpenFont(app->themes.active->font, 34);
-    if (app->fonts.big == NULL) {
+    app->fonts.font34 = TTF_OpenFont(app->themes.active->font, 34);
+    if (app->fonts.font34 == NULL) {
         printf("Failed to load headlineFont! SDL_ttf Error: %s\n", TTF_GetError());
         exit(1);
     }
 
-    app->fonts.medium = TTF_OpenFont(app->themes.active->font, 24);
-    if (app->fonts.medium == NULL) {
+    app->fonts.font26 = TTF_OpenFont(app->themes.active->font, 26);
+    if (app->fonts.font26 == NULL) {
         printf("Failed to load headlineFont! SDL_ttf Error: %s\n", TTF_GetError());
         exit(1);
     }
 
-    app->fonts.small = TTF_OpenFont(app->themes.active->font, 12);
-    if (app->fonts.small == NULL) {
+    app->fonts.font16 = TTF_OpenFont(app->themes.active->font, 12);
+    if (app->fonts.font16 == NULL) {
         printf("Failed to load headlineFont! SDL_ttf Error: %s\n", TTF_GetError());
         exit(1);
     }
 }
 
 void fonts_destroy(app_t *app) {
-    TTF_CloseFont(app->fonts.huge);
-    TTF_CloseFont(app->fonts.big);
-    TTF_CloseFont(app->fonts.medium);
-    TTF_CloseFont(app->fonts.small);
+    TTF_CloseFont(app->fonts.font24);
+    TTF_CloseFont(app->fonts.font34);
+    TTF_CloseFont(app->fonts.font26);
+    TTF_CloseFont(app->fonts.font16);
 }

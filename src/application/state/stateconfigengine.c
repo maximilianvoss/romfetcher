@@ -22,7 +22,7 @@ static void persistEngines(app_t *app);
 
 window_t stateconfigengine_target(app_t *app, uint8_t isSelectButton) {
     if (isSelectButton) {
-        return window_config_engine;
+        return window_config_hoster;
     }
     persistEngines(app);
     return window_config;
@@ -33,8 +33,8 @@ void stateconfigengine_persist(app_t *app) {
 }
 
 void stateconfigengine_init(app_t *app) {
-    if (app->win != window_config_engine) {
-        app->win = window_config_engine;
+    if (app->win != window_config_hoster) {
+        app->win = window_config_hoster;
         app->list.cursor = (linkedlist_t *) app->engine.all;
         app->list.all = (linkedlist_t *) app->engine.all;
         app->list.multi = 1;

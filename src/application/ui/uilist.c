@@ -18,23 +18,20 @@
 #include "uilist.h"
 #include "rendering.h"
 #include "../themes/rendering.h"
-
-
-static void renderWithCheckbox(app_t *app, int position, linkedlist_t *element, texture_t *texture);
-
-static void renderWithOutCheckbox(app_t *app, int position, linkedlist_t *element, texture_t *texture);
+#include "../config.h"
+#include "../helper/uihelper.h"
 
 void uilist_renderDefault(app_t *app) {
     uilist_renderList(app, 50);
 }
 
-void uilist_renderList(app_t *app, int offsetX) {
+void uilist_renderList(app_t *app, int offset) {
     int width, height;
     SDL_GL_GetDrawableSize(app->sdlWindow, &width, &height);
 
     texture_t texture;
 
-    int deviceCountToDisplay = (height - offsetX - 80) / 35 + 1;
+    int deviceCountToDisplay = (height - offset - 80) / LIST_ITEM_HEIGHT + 1;
 
     linkedlist_t *element = (app->list.cursor != NULL) ? app->list.cursor : app->list.all;
     if (element == NULL) {
@@ -57,58 +54,34 @@ void uilist_renderList(app_t *app, int offsetX) {
         i++;
     }
 
-    int position = offsetX;
+    int position = offset;
     while (element != NULL && position <= height - 80) {
-        rendering_loadText(app, &texture, element->name, app->fonts.medium, &app->themes.active->colors.text);
-
-        SDL_Rect r2 = {48, position - 2, width - 96, 40};
+        uiElementRects_t rects = uihelper_generateRectsFullScreenWidth(20, position, width, LIST_ITEM_HEIGHT);
         themes_setDrawColorBackground(app, (element == app->list.cursor));
-        SDL_RenderFillRect(app->sdlRenderer, &r2);
-
-        SDL_Rect r = {50, position, width - 100, 38};
+        SDL_RenderFillRect(app->sdlRenderer, &rects.outter);
         themes_setDrawColorField(app);
-        SDL_RenderFillRect(app->sdlRenderer, &r);
+        SDL_RenderFillRect(app->sdlRenderer, &rects.inner);
 
+        rendering_loadText(app, &texture, element->name, app->fonts.font24, &app->themes.active->colors.text);
         if (app->list.checkbox) {
-            renderWithCheckbox(app, position, element, &texture);
+            uiElementRects_t checkboxRects = uihelper_generateRects(rects.inner.x + 3, rects.content.y, rects.content.h,
+                                                                    rects.content.h);
+            uihelper_renderSDLTexture(app->sdlRenderer,
+                                      element->active ? app->textures.checkboxChecked : app->textures.checkboxUnchecked,
+                                      &checkboxRects.inner);
+            rects.content.x += rects.content.h;
+            rects.content.w -= rects.content.h;
+            uihelper_renderTexture(app->sdlRenderer, &texture, &rects.content);
         } else {
-            renderWithOutCheckbox(app, position, element, &texture);
+            uihelper_renderTexture(app->sdlRenderer, &texture, &rects.content);
         }
+        SDL_DestroyTexture(texture.texture);
 
         if (app->list.filterActive) {
             element = linkedlist_getNextActive(element);
         } else {
             element = element->next;
         }
-        position += 35;
+        position += LIST_ITEM_HEIGHT;
     }
-}
-
-
-static void renderWithCheckbox(app_t *app, int position, linkedlist_t *element, texture_t *texture) {
-    int width, height;
-    SDL_GL_GetDrawableSize(app->sdlWindow, &width, &height);
-
-    SDL_Rect srcQuad = {0, 0, width - 160, texture->h};
-    SDL_Rect renderQuad = {100, position + 3, (texture->w > width - 160) ? width - 160 : texture->w, texture->h};
-
-    SDL_RenderCopy(app->sdlRenderer, texture->texture, &srcQuad, &renderQuad);
-    SDL_DestroyTexture(texture->texture);
-
-    SDL_Rect texture_rect = {60, position + 5, 25, 25};
-
-    SDL_RenderCopy(app->sdlRenderer,
-                   element->active ? app->textures.checkboxChecked : app->textures.checkboxUnchecked, NULL,
-                   &texture_rect);
-}
-
-static void renderWithOutCheckbox(app_t *app, int position, linkedlist_t *element, texture_t *texture) {
-    int width, height;
-    SDL_GL_GetDrawableSize(app->sdlWindow, &width, &height);
-
-    SDL_Rect srcQuad = {0, 0, width - 120, texture->h};
-    SDL_Rect renderQuad = {60, position + 3, (texture->w > width - 120) ? width - 120 : texture->w, texture->h};
-
-    SDL_RenderCopy(app->sdlRenderer, texture->texture, &srcQuad, &renderQuad);
-    SDL_DestroyTexture(texture->texture);
 }

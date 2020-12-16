@@ -17,6 +17,7 @@
 #include "textures.h"
 #include <SDL_image.h>
 #include "rendering.h"
+#include "../application.h"
 
 void textures_init(app_t *app) {
     IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
