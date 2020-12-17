@@ -286,6 +286,15 @@ void *linkedlist_getPrevActive(void *ptr) {
     return NULL;
 }
 
+void *linkedlist_getFirstElement(void *ptr) {
+    linkedlist_t *list = ptr;
+    while (list != NULL) {
+        if (list->prev == NULL) {
+            return list;
+        }
+        list = list->prev;
+    }
+}
 
 void *linkedlist_getFirstActive(void *ptr) {
     linkedlist_t *list = ptr;

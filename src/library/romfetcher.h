@@ -152,6 +152,8 @@ void *linkedlist_getNextActive(void *ptr);
 
 void *linkedlist_getLastElement(void *list);
 
+void *linkedlist_getFirstElement(void *ptr);
+
 int
 curlling_download(char *url, char *data, httpmethod_t method, char *filename, curl_off_t *current, curl_off_t *total,
                   volatile uint8_t *cancellation);
@@ -184,6 +186,7 @@ void curl_freeResponse(curl_response_t *response);
 #define ll_getActivePrev(element) linkedlist_getPrevActive(element)
 #define ll_getActiveNext(element) linkedlist_getNextActive(element)
 #define ll_getLast(list) linkedlist_getLastElement(list)
+#define ll_get1st(list) linkedlist_getFirstElement(list)
 
 // define the number of parallel threads to fetch content from hosters
 #ifndef HOSTER_FETCH_THREADS

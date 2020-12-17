@@ -42,6 +42,8 @@ void *linkedlist_sort(void *ptr);
 
 void *linkedlist_clone(void *ptr, size_t size, void (*callback)(void *));
 
+void *linkedlist_getFirstElement(void *ptr);
+
 void *linkedlist_getFirstActive(void *ptr);
 
 void *linkedlist_getPrevActive(void *ptr);
