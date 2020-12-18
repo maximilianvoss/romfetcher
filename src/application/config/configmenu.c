@@ -69,15 +69,18 @@ resolutionConfig_t *resolutionConfig_init() {
 }
 
 void configMenu_destroy(configMenu_t *configMenu) {
+    configMenu = ll_get1st(configMenu);
     linkedlist_freeList(configMenu, NULL);
 }
 
 
 void advancedConfig_destroy(advancedConfig_t *advancedConfig) {
+    advancedConfig = ll_get1st(advancedConfig);
     linkedlist_freeList(advancedConfig, NULL);
 }
 
 void resolutionConfig_destroy(resolutionConfig_t *resolutionConfig) {
+    resolutionConfig = ll_get1st(resolutionConfig);
     linkedlist_freeList(resolutionConfig, NULL);
 }
 

@@ -98,6 +98,8 @@ void static destroyApp(app_t *app) {
     destroyHosters(app->engine.all);
     destroySystems(app->systems.all);
 
+    config_destroy(app->config.active, app->config.advanced.active, app->config.resolution.active);
+
     inputhandler_destroy();
     downloader_destroy(app);
     database_destroy(app);

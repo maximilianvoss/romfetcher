@@ -132,7 +132,9 @@ config_persist(sqlite3 *db, advancedConfig_t *advancedConfigs, resolutionConfig_
     dbll_persist(db, DATABASE_TABLE_SYSTEMS, (linkedlist_t *) systems);
 }
 
-void config_destroy(advancedConfig_t *advancedConfigs, resolutionConfig_t *resolutionConfigs) {
+void
+config_destroy(configMenu_t *configMenu, advancedConfig_t *advancedConfigs, resolutionConfig_t *resolutionConfigs) {
+    configMenu_destroy(configMenu);
     advancedConfig_destroy(advancedConfigs);
     resolutionConfig_destroy(resolutionConfigs);
 }

@@ -34,7 +34,7 @@ config_persist(sqlite3 *db, advancedConfig_t *advancedConfigs, resolutionConfig_
                theme_t *themes,
                hoster_t *hosters, system_t *systems);
 
-void config_destroy(advancedConfig_t *advancedConfigs, resolutionConfig_t *resolutionConfigs);
+void config_destroy(configMenu_t *configMenu, advancedConfig_t *advancedConfigs, resolutionConfig_t *resolutionConfigs);
 
 void config_set(advancedConfig_t *advancedConfigs, advancedConfigSetting_t setting, uint8_t value);
 
