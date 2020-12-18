@@ -17,6 +17,7 @@
 #include <csafestring.h>
 #include <hoster/results.h>
 #include "enginecache.h"
+#include "../application.h"
 #include "../../common/utils.h"
 
 static void deleteTimestamp(app_t *app, hoster_t *hoster, system_t *system);
@@ -29,16 +30,14 @@ void enginecache_init(sqlite3 *db) {
     char *query = "CREATE TABLE enginecache (hosters TEXT, system TEXT, title TEXT, url TEXT, downloads INT, fileSize TEXT, rating REAL)";
     int rc = sqlite3_exec(db, query, 0, 0, &err_msg);
     if (rc != SQLITE_OK) {
-        fprintf(stderr, "Failed to create table\n");
-        fprintf(stderr, "SQL error: %s\n", err_msg);
+        LOG_ERROR("Failed to create table - SQL error: %s", err_msg);
         sqlite3_free(err_msg);
     }
 
     query = "CREATE INDEX enginecache_idx ON enginecache (hosters, title)";
     rc = sqlite3_exec(db, query, 0, 0, &err_msg);
     if (rc != SQLITE_OK) {
-        fprintf(stderr, "Failed to create table\n");
-        fprintf(stderr, "SQL error: %s\n", err_msg);
+        LOG_ERROR("Failed to create index - SQL error: %s", err_msg);
         sqlite3_free(err_msg);
     }
 }
@@ -49,14 +48,13 @@ void enginecache_initstate(sqlite3 *db) {
     char *query = "CREATE TABLE enginecachestate (hosters TEXT, system TEXT, time INT64)";
     int rc = sqlite3_exec(db, query, 0, 0, &err_msg);
     if (rc != SQLITE_OK) {
-        fprintf(stderr, "Failed to create table\n");
-        fprintf(stderr, "SQL error: %s\n", err_msg);
+        LOG_ERROR("Failed to create table - SQL error: %s", err_msg);
         sqlite3_free(err_msg);
     }
 }
 
-void enginecache_clear(hoster_t *hoster, system_t *system, void *appPtr) {
-    app_t *app = appPtr;
+void enginecache_clear(hoster_t *hoster, system_t *system, void *data) {
+    app_t *app = data;
     char *query = "DELETE FROM enginecache WHERE hosters=@hosters AND system=@system";
 
     sqlite3_stmt *stmt;
@@ -69,19 +67,19 @@ void enginecache_clear(hoster_t *hoster, system_t *system, void *appPtr) {
         idx = sqlite3_bind_parameter_index(stmt, "@system");
         sqlite3_bind_text(stmt, idx, system->name, strlen(system->name), NULL);
     } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(app->database.db));
+        LOG_ERROR("Failed to execute statement: %s", sqlite3_errmsg(app->database.db));
     }
 
     rc = sqlite3_step(stmt);
     if (SQLITE_DONE != rc) {
-        fprintf(stderr, "delete statement didn't return DONE (%i): %s\n", rc, sqlite3_errmsg(app->database.db));
+        LOG_ERROR("delete statement didn't return DONE (%i): %s", rc, sqlite3_errmsg(app->database.db));
     }
     sqlite3_clear_bindings(stmt);
     sqlite3_finalize(stmt);
 }
 
-uint8_t enginecache_isCacheValid(hoster_t *hoster, system_t *system, void *appPtr) {
-    app_t *app = appPtr;
+uint8_t enginecache_isCacheValid(hoster_t *hoster, system_t *system, void *data) {
+    app_t *app = data;
     char *query = "SELECT time FROM enginecachestate WHERE hosters=@hosters AND system=@system";
 
     sqlite3_stmt *stmt;
@@ -94,7 +92,7 @@ uint8_t enginecache_isCacheValid(hoster_t *hoster, system_t *system, void *appPt
         idx = sqlite3_bind_parameter_index(stmt, "@system");
         sqlite3_bind_text(stmt, idx, system->name, strlen(system->name), NULL);
     } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(app->database.db));
+        LOG_ERROR("Failed to execute statement: %s", sqlite3_errmsg(app->database.db));
     }
 
     int step = sqlite3_step(stmt);
@@ -104,7 +102,7 @@ uint8_t enginecache_isCacheValid(hoster_t *hoster, system_t *system, void *appPt
             sqlite3_finalize(stmt);
             return 1;
         }
-        SDL_Log("Search cache for %s / %s invalidated", hoster->name, system->name);
+        LOG_INFO("Search cache for %s / %s invalidated", hoster->name, system->name);
         sqlite3_finalize(stmt);
         return 0;
     }
@@ -112,8 +110,8 @@ uint8_t enginecache_isCacheValid(hoster_t *hoster, system_t *system, void *appPt
     return 0;
 }
 
-void enginecache_addEntry(hoster_t *hoster, system_t *system, result_t *entry, void *appPtr) {
-    app_t *app = appPtr;
+void enginecache_addEntry(hoster_t *hoster, system_t *system, result_t *entry, void *data) {
+    app_t *app = data;
     char *query = "INSERT INTO enginecache (hosters, system, title, url, downloads, fileSize, rating) VALUES (@hosters, @system, @title, @url, @downloads, @fileSize, @rating)";
 
     sqlite3_stmt *stmt;
@@ -144,24 +142,24 @@ void enginecache_addEntry(hoster_t *hoster, system_t *system, result_t *entry, v
         sqlite3_bind_int(stmt, idx, entry->downloads);
         sqlite3_bind_double(stmt, idx, entry->rating);
     } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(app->database.db));
+        LOG_ERROR("Failed to execute statement: %s", sqlite3_errmsg(app->database.db));
     }
 
     rc = sqlite3_step(stmt);
     if (SQLITE_DONE != rc) {
-        fprintf(stderr, "insert statement didn't return DONE (%i): %s\n", rc, sqlite3_errmsg(app->database.db));
+        LOG_ERROR("insert statement didn't return DONE (%i): %s", rc, sqlite3_errmsg(app->database.db));
     }
     sqlite3_clear_bindings(stmt);
     sqlite3_finalize(stmt);
 }
 
-void enginecache_updateTimestamp(hoster_t *hoster, system_t *system, void *app) {
-    deleteTimestamp(app, hoster, system);
-    insertTimestamp(app, hoster, system);
+void enginecache_updateTimestamp(hoster_t *hoster, system_t *system, void *data) {
+    deleteTimestamp(data, hoster, system);
+    insertTimestamp(data, hoster, system);
 }
 
-result_t *enginecache_getSearchResults(hoster_t *hoster, system_t *system, char *searchString, void *appPtr) {
-    app_t *app = appPtr;
+result_t *enginecache_getSearchResults(hoster_t *hoster, system_t *system, char *searchString, void *data) {
+    app_t *app = data;
     char *query = "SELECT title, url, downloads, fileSize, rating FROM enginecache WHERE hosters=@hosters AND system=@system AND UPPER(title) LIKE @searchString";
 
     sqlite3_stmt *stmt;
@@ -184,7 +182,7 @@ result_t *enginecache_getSearchResults(hoster_t *hoster, system_t *system, char 
         sqlite3_bind_text(stmt, idx, tmp, strlen(tmp), NULL);
 
     } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(app->database.db));
+        LOG_ERROR("Failed to execute statement: %s", sqlite3_errmsg(app->database.db));
     }
 
     result_t *resultList = NULL;
@@ -200,7 +198,7 @@ result_t *enginecache_getSearchResults(hoster_t *hoster, system_t *system, char 
         ret = sqlite3_step(stmt);
     }
     if (ret == SQLITE_ERROR) {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(app->database.db));
+        LOG_ERROR("Failed to execute statement: %s", sqlite3_errmsg(app->database.db));
     }
 
     sqlite3_clear_bindings(stmt);
@@ -223,12 +221,12 @@ static void deleteTimestamp(app_t *app, hoster_t *hoster, system_t *system) {
         sqlite3_bind_text(stmt, idx, system->name, strlen(system->name), NULL);
 
     } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(app->database.db));
+        LOG_ERROR("Failed to execute statement: %s", sqlite3_errmsg(app->database.db));
     }
 
     rc = sqlite3_step(stmt);
     if (SQLITE_DONE != rc) {
-        fprintf(stderr, "delete statement didn't return DONE (%i): %s\n", rc, sqlite3_errmsg(app->database.db));
+        LOG_ERROR("delete statement didn't return DONE (%i): %s", rc, sqlite3_errmsg(app->database.db));
     }
     sqlite3_clear_bindings(stmt);
     sqlite3_finalize(stmt);
@@ -250,12 +248,12 @@ static void insertTimestamp(app_t *app, hoster_t *hoster, system_t *system) {
         idx = sqlite3_bind_parameter_index(stmt, "@time");
         sqlite3_bind_int64(stmt, idx, time(NULL));
     } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(app->database.db));
+        LOG_ERROR("Failed to execute statement: %s", sqlite3_errmsg(app->database.db));
     }
 
     rc = sqlite3_step(stmt);
     if (SQLITE_DONE != rc) {
-        fprintf(stderr, "insert statement didn't return DONE (%i): %s\n", rc, sqlite3_errmsg(app->database.db));
+        LOG_ERROR("insert statement didn't return DONE (%i): %s", rc, sqlite3_errmsg(app->database.db));
     }
     sqlite3_clear_bindings(stmt);
     sqlite3_finalize(stmt);

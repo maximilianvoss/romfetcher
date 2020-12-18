@@ -14,15 +14,27 @@
  * limitations under the License.
  */
 
-#ifndef STATE_STATECONFIGADVANCED_H
-#define STATE_STATECONFIGADVANCED_H
+#ifndef UI_INPUT_H
+#define UI_INPUT_H
 
-#include "../application.h"
+typedef struct {
+    uint8_t up;
+    uint8_t down;
+    uint8_t left;
+    uint8_t right;
+    uint8_t start;
+    uint8_t back;
+    uint8_t leftShoulder;
+    uint8_t rightShoulder;
+    uint8_t leftStick;
+    uint8_t rightStick;
+    uint8_t buttonA;
+    uint8_t buttonB;
+    uint8_t buttonX;
+    uint8_t buttonY;
 
-window_t stateconfigadvanced_target(app_t *app, uint8_t isSelectButton);
-
-void stateconfigadvanced_persist(app_t *app);
-
-void stateconfigadvanced_init(app_t *app);
+    int16_t stickX;
+    int16_t stickY;
+} GameControllerState_t;
 
 #endif

@@ -25,8 +25,7 @@ void databasepostprocess_init(sqlite3 *db) {
     char *query = "CREATE TABLE postprocessors (filesuffix TEXT, command TEXT, active INT)";
     int rc = sqlite3_exec(db, query, 0, 0, &err_msg);
     if (rc != SQLITE_OK) {
-        fprintf(stderr, "Failed to create table\n");
-        fprintf(stderr, "SQL error: %s\n", err_msg);
+        LOG_ERROR("Failed to create table - SQL error: %s", err_msg);
         sqlite3_free(err_msg);
     }
     fillDefaultValus(db);
@@ -42,7 +41,7 @@ char *databasepostprocess_getCommand(app_t *app, char *fileSuffix) {
         idx = sqlite3_bind_parameter_index(stmt, "@filesuffix");
         sqlite3_bind_text(stmt, idx, fileSuffix, strlen(fileSuffix), NULL);
     } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(app->database.db));
+        LOG_ERROR("Failed to execute statement: %s", sqlite3_errmsg(app->database.db));
     }
 
     char *command = NULL;
@@ -63,8 +62,7 @@ static void fillDefaultValus(sqlite3 *db) {
                         ('.7z', '7zr -y x \"%file%\" -w \"%target%\"', 1)";
     int rc = sqlite3_exec(db, query, 0, 0, &err_msg);
     if (rc != SQLITE_OK) {
-        fprintf(stderr, "Failed to execute query\n");
-        fprintf(stderr, "SQL error: %s\n", err_msg);
+        LOG_ERROR("Failed to execute query - SQL error: %s", err_msg);
         sqlite3_free(err_msg);
     }
 }

@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-#ifndef STATE_STATECONFIGSYSTEMS_H
-#define STATE_STATECONFIGSYSTEMS_H
+#ifndef UI_TEXTURE_H
+#define UI_TEXTURE_H
 
-#include "../application.h"
+#include <SDL.h>
 
-window_t stateconfigsystems_target(app_t *app, uint8_t isSelectButton);
-
-void stateconfigsystems_persist(app_t *app);
-
-void stateconfigsystems_init(app_t *app);
+typedef struct {
+    SDL_Texture *texture;
+    int w;
+    int h;
+} texture_t;
 
 #endif

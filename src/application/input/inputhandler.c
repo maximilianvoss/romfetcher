@@ -15,7 +15,7 @@
  */
 
 #include "inputhandler.h"
-#include "../config.h"
+#include "../constants.h"
 #include "inputsearch.h"
 #include "inputdownload.h"
 #include "inputkeyboard.h"
@@ -56,11 +56,11 @@ static Uint32 lastKeyPressed = 0;
 
 void inputhandler_init() {
     if (SDL_GameControllerAddMapping(CONTROLLER_MAPPING)) {
-        SDL_Log("Failed to add mapping: %s", SDL_GetError());
+        LOG_ERROR("Failed to add mapping: %s", SDL_GetError());
     }
 
     gameControllerCount = SDL_NumJoysticks();
-    SDL_Log("There are %d gamepads attached\n", gameControllerCount);
+    LOG_INFO("There are %d gamepads attached", gameControllerCount);
 
     if (gameControllerCount > 0) {
         gameControllers = (SDL_GameController **) calloc(gameControllerCount, sizeof(SDL_GameController *));
@@ -68,11 +68,10 @@ void inputhandler_init() {
         for (int i = 0; i < gameControllerCount; ++i) {
             gameControllers[i] = SDL_GameControllerOpen(i);
             if (gameControllers[i] == NULL) {
-                SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "SDL_GameControllerOpen(%d) failed: %s\n", i,
-                             SDL_GetError());
+                LOG_ERROR("SDL_GameControllerOpen(%d) failed: %s", i, SDL_GetError());
             }
             char *mapping = SDL_GameControllerMapping(gameControllers[i]);
-            SDL_Log("Following Mapping is used: %s\n", mapping);
+            LOG_INFO("Following Mapping is used: %s", mapping);
             SDL_free(mapping);
         }
     }
@@ -243,7 +242,7 @@ static void processEvents(app_t *app) {
                         gameControllerState.right = event.type == SDL_CONTROLLERBUTTONDOWN ? 1 : 0;
                         break;
                     default:
-                        SDL_Log("Unassigned Button: %d\n", event.cbutton.button);
+                        LOG_DEBUG("Unassigned Button: %d", event.cbutton.button);
                         break;
                 }
                 lastKeyPressed = SDL_GetTicks();

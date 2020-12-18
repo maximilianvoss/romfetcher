@@ -19,13 +19,8 @@
 #include "statesystem.h"
 #include "statekeyboard.h"
 #include "statedownload.h"
-#include "stateconfig.h"
-#include "stateconfigengine.h"
-#include "stateconfigsystems.h"
-#include "stateconfigthemes.h"
-#include "stateconfigadvanced.h"
-#include "stateconfigresolution.h"
 #include "statedownloadmanager.h"
+#include "../config/configstates.h"
 
 static void *getInitFunction(window_t target);
 
@@ -58,28 +53,28 @@ void statehandler_switch(app_t *app, uint8_t isSelectButton) {
             state_persist = &statedownloadmanager_persist;
             break;
         case window_config:
-            state_target = &stateconfig_target;
-            state_persist = &stateconfig_persist;
+            state_target = &configStateConfig_target;
+            state_persist = &configStateConfig_persist;
             break;
         case window_config_advanced:
-            state_target = &stateconfigadvanced_target;
-            state_persist = &stateconfigadvanced_persist;
+            state_target = &configStateAdvanced_target;
+            state_persist = &configStateAdvanced_persist;
             break;
         case window_config_hoster:
-            state_target = &stateconfigengine_target;
-            state_persist = &stateconfigengine_persist;
+            state_target = &configStateHoster_target;
+            state_persist = &configStateHoster_persist;
             break;
         case window_config_resolution:
-            state_target = &stateconfigresolution_target;
-            state_persist = &stateconfigresolution_persist;
+            state_target = &configStateResolution_target;
+            state_persist = &configStateResolution_persist;
             break;
         case window_config_systems:
-            state_target = &stateconfigsystems_target;
-            state_persist = &stateconfigsystems_persist;
+            state_target = &configStateSystems_target;
+            state_persist = &configStateSystems_persist;
             break;
         case window_config_themes:
-            state_target = &stateconfigthemes_target;
-            state_persist = &stateconfigthemes_persist;
+            state_target = &configStateTheme_target;
+            state_persist = &configStateTheme_persit;
             break;
     }
 
@@ -103,17 +98,17 @@ static void *getInitFunction(window_t target) {
         case window_downloadMgr:
             return &statedownloadmanager_init;
         case window_config:
-            return &stateconfig_init;
+            return &configStateConfig_init;
         case window_config_advanced:
-            return &stateconfigadvanced_init;
+            return &configStateAdvanced_init;
         case window_config_hoster:
-            return &stateconfigengine_init;
+            return &configStateHoster_init;
         case window_config_resolution:
-            return &stateconfigresolution_init;
+            return &configStateResolution_init;
         case window_config_systems:
-            return &stateconfigsystems_init;
+            return &configStateSystems_init;
         case window_config_themes:
-            return &stateconfigthemes_init;
+            return &configStateTheme_init;
     }
     return NULL;
 }

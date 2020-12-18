@@ -14,15 +14,23 @@
  * limitations under the License.
  */
 
-#ifndef STATE_STATECONFIGRESOLUTION_H
-#define STATE_STATECONFIGRESOLUTION_H
+#ifndef ENGINECACHE_ENGINECACHE_H
+#define ENGINECACHE_ENGINECACHE_H
 
-#include "../application.h"
+#include <sqlite3.h>
 
-window_t stateconfigresolution_target(app_t *app, uint8_t isSelectButton);
+void enginecache_init(sqlite3 *db);
 
-void stateconfigresolution_persist(app_t *app);
+void enginecache_initstate(sqlite3 *db);
 
-void stateconfigresolution_init(app_t *app);
+uint8_t enginecache_isCacheValid(hoster_t *hoster, system_t *system, void *data);
+
+void enginecache_clear(hoster_t *hoster, system_t *system, void *data);
+
+void enginecache_addEntry(hoster_t *hoster, system_t *system, result_t *entry, void *data);
+
+void enginecache_updateTimestamp(hoster_t *hoster, system_t *system, void *data);
+
+result_t *enginecache_getSearchResults(hoster_t *hoster, system_t *system, char *searchString, void *data);
 
 #endif

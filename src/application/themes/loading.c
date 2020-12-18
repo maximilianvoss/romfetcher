@@ -19,8 +19,8 @@
 #include <sys/stat.h>
 #include <json2map.h>
 #include "loading.h"
-#include "../config.h"
-#include "../path.h"
+#include "../constants.h"
+#include "../helper/path.h"
 #include "../../common/utils.h"
 #include "../helper/map.h"
 
@@ -58,21 +58,22 @@ void themes_init(app_t *app) {
     safe_destroy(path);
 
     if (app->themes.all == NULL) {
-        printf("Was not able to init themes\n");
+        LOG_ERROR("Was not able to init themes");
         exit(1);
     }
     app->themes.active = app->themes.all;
 }
 
 void themes_destroy(app_t *app) {
+    // FIXME: destroy Textures  & Fonts
     linkedlist_freeList(app->themes.all, &freetheme);
 }
 
-theme_t *themes_getByFileReference(app_t *app, char *fileReference) {
+theme_t *themes_getByFileReference(theme_t *theme, char *fileReference) {
     if (fileReference == NULL) {
-        return app->themes.all;
+        return NULL;
     }
-    theme_t *ptr = app->themes.all;
+    theme_t *ptr = ll_get1st(theme);
     while (ptr != NULL) {
         if (ptr->fileReference != NULL && !strcmp(fileReference, ptr->fileReference)) {
             return ptr;
@@ -86,13 +87,13 @@ static void freetheme(void *ptr) {
     theme_t *theme = (theme_t *) ptr;
 
     FREENOTNULL(theme->fileReference);
-    FREENOTNULL(theme->font);
-    FREENOTNULL(theme->images.background);
-    FREENOTNULL(theme->images.checkboxChecked);
-    FREENOTNULL(theme->images.checkboxUnchecked);
-    FREENOTNULL(theme->images.selectorIcon);
-    FREENOTNULL(theme->images.settingsIcon);
-    FREENOTNULL(theme->images.downloadManagerIcon);
+    FREENOTNULL(theme->fonts.font);
+    FREENOTNULL(theme->images.backgroundPath);
+    FREENOTNULL(theme->images.checkboxCheckedPath);
+    FREENOTNULL(theme->images.checkboxUncheckedPath);
+    FREENOTNULL(theme->images.selectorIconPath);
+    FREENOTNULL(theme->images.settingsIconPath);
+    FREENOTNULL(theme->images.downloadManagerIconPath);
     FREENOTNULL(theme->name);
 }
 
@@ -136,7 +137,7 @@ static void loadTheme(app_t *app, char *path) {
 
     struct stat st = {0};
     if (stat(filepath->data, &st) == -1) {
-        SDL_Log("theme.json not found at: %s", filepath->data);
+        LOG_ERROR("theme.json not found at: %s", filepath->data);
         safe_destroy(filepath);
         return;
     }
@@ -160,7 +161,7 @@ static void loadTheme(app_t *app, char *path) {
 
 static theme_t *createThemeByMap(char *path, void *map) {
     theme_t *theme = (theme_t *) calloc(1, sizeof(theme_t));
-    loadColor(&theme->colors.background, map, "colors.background");
+    loadColor(&theme->colors.background, map, "colors.backgroundPath");
     loadColor(&theme->colors.field, map, "colors.field");
     loadColor(&theme->colors.fieldBackground, map, "colors.fieldBackground");
     loadColor(&theme->colors.fieldHighlight, map, "colors.fieldHighlight");
@@ -178,13 +179,14 @@ static theme_t *createThemeByMap(char *path, void *map) {
     theme->fileReference = cloneString(path);
     theme->name = cloneString(hash_get(map, "name"));
 
-    theme->font = createFullQualifiedPath(path, hash_get(map, "font"));
-    theme->images.background = createFullQualifiedPath(path, hash_get(map, "images.background"));
-    theme->images.checkboxChecked = createFullQualifiedPath(path, hash_get(map, "images.checkboxChecked"));
-    theme->images.checkboxUnchecked = createFullQualifiedPath(path, hash_get(map, "images.checkboxUnchecked"));
-    theme->images.selectorIcon = createFullQualifiedPath(path, hash_get(map, "images.selectorIcon"));
-    theme->images.settingsIcon = createFullQualifiedPath(path, hash_get(map, "images.settingsIcon"));
-    theme->images.downloadManagerIcon = createFullQualifiedPath(path, hash_get(map, "images.downloadManagerIcon"));
+    theme->fonts.font = createFullQualifiedPath(path, hash_get(map, "font"));
+    theme->images.backgroundPath = createFullQualifiedPath(path, hash_get(map, "images.background"));
+    theme->images.checkboxCheckedPath = createFullQualifiedPath(path, hash_get(map, "images.checkboxChecked"));
+    theme->images.checkboxUncheckedPath = createFullQualifiedPath(path, hash_get(map, "images.checkboxUnchecked"));
+    theme->images.selectorIconPath = createFullQualifiedPath(path, hash_get(map, "images.selectorIcon"));
+    theme->images.settingsIconPath = createFullQualifiedPath(path, hash_get(map, "images.settingsIcon"));
+    theme->images.downloadManagerIconPath = createFullQualifiedPath(path,
+                                                                    hash_get(map, "images.downloadManagerIcon"));
 
     return theme;
 }

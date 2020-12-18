@@ -15,7 +15,7 @@
  */
 
 #include "hoster.h"
-#include "../src/application/database/enginecache.h"
+#include "../src/application/enginecache/enginecache.h"
 
 cache_t cacheHandler;
 

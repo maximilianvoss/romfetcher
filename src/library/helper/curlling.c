@@ -39,7 +39,7 @@ curl_response_t *curlling_fetch(char *url, char *postData, httpmethod_t method, 
     CURL *curl;
     CURLcode res;
 
-    LOG_DEBUG("Fetching: %s\n", url);
+    LOG_DEBUG("Fetching: %s", url);
 
     curl_response_t *curlResponse = calloc(1, sizeof(curl_response_t));
     curlResponse->size = 0;
@@ -63,7 +63,7 @@ curl_response_t *curlling_fetch(char *url, char *postData, httpmethod_t method, 
         }
 
         res = curl_easy_perform(curl);
-        if (res != CURLE_OK) LOG_ERROR("curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
+        if (res != CURLE_OK) LOG_ERROR("curl_easy_perform() failed: %s", curl_easy_strerror(res));
 
         curl_easy_cleanup(curl);
     }
@@ -77,7 +77,7 @@ curlling_download(char *url, char *data, httpmethod_t method, char *filename, cu
     FILE *pagefile;
     CURLcode res = CURLE_OK;
 
-    LOG_DEBUG("Downloading: %s to %s\n", url, filename);
+    LOG_DEBUG("Downloading: %s to %s", url, filename);
 
     curl_global_init(CURL_GLOBAL_ALL);
     curl = curl_easy_init();
@@ -119,7 +119,7 @@ curlling_download(char *url, char *data, httpmethod_t method, char *filename, cu
     }
     curl_easy_cleanup(curl);
     curl_global_cleanup();
-    LOG_DEBUG("Download of %s to %s completed\n", url, filename);
+    LOG_DEBUG("Download of %s to %s completed", url, filename);
     return res;
 }
 
@@ -163,7 +163,7 @@ static size_t writeDataToString(void *ptr, size_t size, size_t nmemb, curl_respo
         if (data->data) {
             free(data->data);
         }
-        LOG_ERROR("Failed to allocate memory.\n");
+        LOG_ERROR("Failed to allocate memory.");
         return 0;
     }
 

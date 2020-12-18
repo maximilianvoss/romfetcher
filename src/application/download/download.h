@@ -14,13 +14,23 @@
  * limitations under the License.
  */
 
-#ifndef CONFIG_INIT_H
-#define CONFIG_INIT_H
+#ifndef DOWNLOAD_DOWNLOAD_H
+#define DOWNLOAD_DOWNLOAD_H
 
-#include "../application.h"
+typedef struct download_s {
+    struct download_s *prev;
+    struct download_s *next;
+    char *title;
+    uint8_t active;
+    system_t *system;
+    char *url;
+    char *data;
+    char *filename;
+    httpmethod_t method;
+    curl_off_t current;
+    curl_off_t total;
+    volatile uint8_t cancelled;
+} download_t;
 
-void config_init(app_t *app);
-
-void config_destroy(app_t *app);
 
 #endif

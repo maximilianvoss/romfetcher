@@ -37,4 +37,6 @@ void themes_setDrawColorBackground(app_t *app, uint8_t active);
 
 void themes_setDrawColor(app_t *app, enum theme_color color);
 
+void themes_activate(app_t *app, theme_t *theme);
+
 #endif

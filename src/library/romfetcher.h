@@ -200,15 +200,15 @@ void curl_freeResponse(curl_response_t *response);
 
 // log output
 #ifndef LOG_DEBUG
-#define LOG_DEBUG(fmt, ...) if ( LOG_LEVEL > 1) { printf("DEBUG: "); printf(fmt, ##__VA_ARGS__);}
+#define LOG_DEBUG(fmt, ...) if ( LOG_LEVEL > 1) { printf("\nDEBUG: "); printf(fmt, ##__VA_ARGS__);}
 #endif
 
 #ifndef LOG_INFO
-#define LOG_INFO(fmt, ...) if ( LOG_LEVEL > 0 ) { printf("INFO: "); printf(fmt, ##__VA_ARGS__); }
+#define LOG_INFO(fmt, ...) if ( LOG_LEVEL > 0 ) { printf("\nINFO: "); printf(fmt, ##__VA_ARGS__); }
 #endif
 
 #ifndef LOG_ERROR
-#define LOG_ERROR(fmt, ...) { printf("ERROR: "); printf(fmt, ##__VA_ARGS__);}
+#define LOG_ERROR(fmt, ...) { printf("\nERROR: "); printf(fmt, ##__VA_ARGS__);}
 #endif
 
 #endif

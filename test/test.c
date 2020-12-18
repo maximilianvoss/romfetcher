@@ -20,8 +20,8 @@
 #include "systems.h"
 #include "hoster.h"
 #include "linkedlist.h"
-#include "../src/application/path.h"
-#include "../src/application/database/init.h"
+#include "../src/application/helper/path.h"
+#include "../src/application/database/database.h"
 
 int main(int argc, char **argv) {
     app_t app;

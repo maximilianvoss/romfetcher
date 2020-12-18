@@ -14,92 +14,17 @@
  * limitations under the License.
  */
 
-#ifndef STRUCTS_H
-#define STRUCTS_H
+#ifndef APPLICATION_H
+#define APPLICATION_H
 
-#include <SDL.h>
-#include <SDL_ttf.h>
-#include <curl/curl.h>
-#include <sqlite3.h>
-#include <stdint.h>
-#include "enums.h"
 #include <romfetcher.h>
-
-typedef struct theme_s {
-    struct theme_s *prev;
-    struct theme_s *next;
-    char *name;
-    struct {
-        SDL_Color background;
-        SDL_Color field;
-        SDL_Color fieldBackground;
-        SDL_Color fieldHighlight;
-        SDL_Color text;
-        SDL_Color textHighlight;
-        SDL_Color textInverted;
-        SDL_Color modalBackground;
-        SDL_Color modalBackgroundInactive;
-        SDL_Color modalFrame;
-        SDL_Color modalText;
-        SDL_Color modalButtonFrame;
-        SDL_Color modalButtonFrameActive;
-    } colors;
-    char *fileReference;
-    char *font;
-    struct {
-        char *background;
-        char *checkboxChecked;
-        char *checkboxUnchecked;
-        char *selectorIcon;
-        char *settingsIcon;
-        char *downloadManagerIcon;
-    } images;
-} theme_t;
-
-typedef struct config_s {
-    struct config_s *prev;
-    struct config_s *next;
-    char *name;
-    window_t destiny;
-} config_t;
-
-
-
-typedef struct advancedconfig_s {
-    struct advancedconfig_s *prev;
-    struct advancedconfig_s *next;
-    char *name;
-    uint8_t active;
-    advancedConfigSetting_t setting;
-} advancedconfig_t;
-
-
-
-
-
-typedef struct resolution_s {
-    struct resolution_s *prev;
-    struct resolution_s *next;
-    char *name;
-    uint8_t active;
-    int height;
-    int width;
-} resolution_t;
-
-typedef struct download_s {
-    struct download_s *prev;
-    struct download_s *next;
-    char *title;
-    uint8_t active;
-    system_t *system;
-    char *url;
-    char *data;
-    char *filename;
-    httpmethod_t method;
-    curl_off_t current;
-    curl_off_t total;
-    volatile uint8_t cancelled;
-} download_t;
+#include <sqlite3.h>
+#include "enums.h"
+#include "themes/themes.h"
+#include "download/download.h"
+#include "input/input.h"
+#include "ui/texture.h"
+#include "config/configmenu.h"
 
 typedef struct {
     SDL_Renderer *sdlRenderer;
@@ -136,22 +61,6 @@ typedef struct {
     } modal;
 
     struct {
-        SDL_Texture *backgroundImage;
-        SDL_Texture *searchChevron;
-        SDL_Texture *settingsIcon;
-        SDL_Texture *downloadManagerIcon;
-        SDL_Texture *checkboxChecked;
-        SDL_Texture *checkboxUnchecked;
-    } textures;
-
-    struct {
-        TTF_Font *font16;
-        TTF_Font *font26;
-        TTF_Font *font34;
-        TTF_Font *font24;
-    } fonts;
-
-    struct {
         char activeChar;
         char text[256];
         int8_t pointerPosition;
@@ -175,25 +84,22 @@ typedef struct {
     } engine;
 
     struct {
-        config_t *active;
-        config_t *all;
-        config_t *cursor;
+        configMenu_t *active;
+        configMenu_t *cursor;
 
         struct {
-            advancedconfig_t *active;
-            advancedconfig_t *all;
-            advancedconfig_t *cursor;
-            uint8_t fullscreen;
-            uint8_t opengl;
-            uint8_t highdpi;
-            uint8_t downloadQueue;
-            uint8_t externalCurl;
+            advancedConfig_t *active;
+            advancedConfig_t *cursor;
+//            uint8_t fullscreen;
+//            uint8_t opengl;
+//            uint8_t highdpi;
+//            uint8_t downloadQueue;
+//            uint8_t externalCurl;
         } advanced;
 
         struct {
-            resolution_t *active;
-            resolution_t *all;
-            resolution_t *cursor;
+            resolutionConfig_t *active;
+            resolutionConfig_t *cursor;
         } resolution;
     } config;
 
@@ -213,31 +119,5 @@ typedef struct {
         downloadactivity_t cursorPos;
     } download;
 } app_t;
-
-typedef struct {
-    uint8_t up;
-    uint8_t down;
-    uint8_t left;
-    uint8_t right;
-    uint8_t start;
-    uint8_t back;
-    uint8_t leftShoulder;
-    uint8_t rightShoulder;
-    uint8_t leftStick;
-    uint8_t rightStick;
-    uint8_t buttonA;
-    uint8_t buttonB;
-    uint8_t buttonX;
-    uint8_t buttonY;
-
-    int16_t stickX;
-    int16_t stickY;
-} GameControllerState_t;
-
-typedef struct {
-    SDL_Texture *texture;
-    int w;
-    int h;
-} texture_t;
 
 #endif

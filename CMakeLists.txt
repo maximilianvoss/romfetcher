@@ -87,19 +87,14 @@ set(SOURCES_LIBRARY
 
 set(SOURCES
         src/application/application.h
-        src/application/config.h
-        src/application/config/advanced.c
-        src/application/config/advanced.h
-        src/application/config/init.c
-        src/application/config/init.h
-        src/application/database/config.c
-        src/application/database/config.h
+        src/application/constants.h
+        src/application/config/configmenu.c
         src/application/database/download.c
         src/application/database/download.h
-        src/application/database/enginecache.c
-        src/application/database/enginecache.h
-        src/application/database/init.c
-        src/application/database/init.h
+        src/application/enginecache/enginecache.c
+        src/application/enginecache/enginecache.h
+        src/application/database/database.c
+        src/application/database/database.h
         src/application/database/linkedlist.c
         src/application/database/linkedlist.h
         src/application/database/postprocess.c
@@ -115,6 +110,8 @@ set(SOURCES
         src/application/enums.h
         src/application/helper/map.c
         src/application/helper/map.h
+        src/application/helper/path.c
+        src/application/helper/path.h
         src/application/helper/uihelper.c
         src/application/helper/uihelper.h
         src/application/input/inputdownload.c
@@ -131,20 +128,6 @@ set(SOURCES
         src/application/input/inputmodal.h
         src/application/input/inputsearch.c
         src/application/input/inputsearch.h
-        src/application/path.c
-        src/application/path.h
-        src/application/state/stateconfig.c
-        src/application/state/stateconfig.h
-        src/application/state/stateconfigadvanced.c
-        src/application/state/stateconfigadvanced.h
-        src/application/state/stateconfigengine.c
-        src/application/state/stateconfigengine.h
-        src/application/state/stateconfigresolution.c
-        src/application/state/stateconfigresolution.h
-        src/application/state/stateconfigsystems.c
-        src/application/state/stateconfigsystems.h
-        src/application/state/stateconfigthemes.c
-        src/application/state/stateconfigthemes.h
         src/application/state/statedownload.c
         src/application/state/statedownload.h
         src/application/state/statedownloadmanager.c
@@ -161,14 +144,10 @@ set(SOURCES
         src/application/themes/loading.h
         src/application/themes/rendering.c
         src/application/themes/rendering.h
-        src/application/ui/core.c
-        src/application/ui/core.h
-        src/application/ui/fonts.c
-        src/application/ui/fonts.h
+        src/application/ui/display.c
+        src/application/ui/display.h
         src/application/ui/rendering.c
         src/application/ui/rendering.h
-        src/application/ui/textures.c
-        src/application/ui/textures.h
         src/application/ui/uidownload.c
         src/application/ui/uidownload.h
         src/application/ui/uidownloadmanager.c
@@ -185,7 +164,9 @@ set(SOURCES
         src/application/ui/uisearch.h
         src/application/ui/uisearchresult.c
         src/application/ui/uisearchresult.h
-        )
+        src/application/themes/themes.h
+        src/application/download/download.h src/application/input/input.h src/application/ui/texture.h src/application/config/configmenu.h
+        src/application/config/config.c src/application/config/config.h src/application/config/configstates.c src/application/config/configstates.h)
 
 set(TEST_SOURCES
         test/download.c

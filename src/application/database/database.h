@@ -14,13 +14,19 @@
  * limitations under the License.
  */
 
-#ifndef UI_TEXTURES_H
-#define UI_TEXTURES_H
-
 #include "../application.h"
 
-void textures_init(app_t *app);
+#ifndef DATABASE_DATABASE_H
+#define DATABASE_DATABASE_H
 
-void textures_destroy(app_t *app);
+void database_init(app_t *app);
+
+void database_destroy(app_t *app);
+
+void database_initTables(sqlite3 *db);
+
+uint8_t database_tableExists(sqlite3 *db, char *tableName);
+
+void database_dropAllTables(sqlite3 *db);
 
 #endif

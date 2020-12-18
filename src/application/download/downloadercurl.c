@@ -16,7 +16,7 @@
 
 #include <csafestring.h>
 #include "downloadercurl.h"
-#include "../path.h"
+#include "../helper/path.h"
 #include "../../common/utils.h"
 #include "../database/postprocess.h"
 
@@ -56,13 +56,13 @@ void downloadercurl_addToQueue(app_t *app, system_t *systemt, char *title, char 
     safe_strcat(curlCmd, url);
     safe_strcat(curlCmd, "\" ");
 
-    SDL_Log("CURL Command: %s", curlCmd->data);
+    LOG_DEBUG("CURL Command: %s", curlCmd->data);
     safe_strcat(fullCmd, curlCmd->data);
     safe_destroy(curlCmd);
 
     char *postCmd = postProcess(app, downloadPath->data);
     if (postCmd != NULL) {
-        SDL_Log("Post Process Command: %s", postCmd);
+        LOG_DEBUG("Post Process Command: %s", postCmd);
         safe_strcat(fullCmd, " && ");
         safe_strcat(fullCmd, postCmd);
 
@@ -70,7 +70,7 @@ void downloadercurl_addToQueue(app_t *app, system_t *systemt, char *title, char 
     FREENOTNULL(postCmd);
 
     safe_strcat(fullCmd, ") &");
-    SDL_Log("Full download command: %s", fullCmd->data);
+    LOG_DEBUG("Full download command: %s", fullCmd->data);
 
     system(fullCmd->data);
 

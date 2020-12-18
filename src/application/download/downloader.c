@@ -17,9 +17,10 @@
 #include "downloader.h"
 #include "downloadercurl.h"
 #include "downloaderinternal.h"
+#include "../config/config.h"
 
 void downloader_init(app_t *app) {
-    if (app->config.advanced.externalCurl) {
+    if (config_get(app->config.advanced.active, advancedConfig_externalCurl)) {
         downloadercurl_init(app);
     } else {
         downloaderinternal_init(app);
@@ -27,7 +28,7 @@ void downloader_init(app_t *app) {
 }
 
 void downloader_destroy(app_t *app) {
-    if (app->config.advanced.externalCurl) {
+    if (config_get(app->config.advanced.active, advancedConfig_externalCurl)) {
         downloadercurl_destroy(app);
     } else {
         downloaderinternal_destroy(app);
@@ -36,7 +37,7 @@ void downloader_destroy(app_t *app) {
 
 uint8_t downloader_addToQueue(void *app, system_t *system, char *title, char *url, char *data, char *filename,
                               httpmethod_t method) {
-    if (((app_t *) app)->config.advanced.externalCurl) {
+    if (config_get(((app_t *) app)->config.advanced.active, advancedConfig_externalCurl)) {
         downloadercurl_addToQueue(app, system, title, url, data, filename, method);
     } else {
         downloaderinternal_addToQueue(app, system, title, url, data, filename, method);
@@ -45,7 +46,7 @@ uint8_t downloader_addToQueue(void *app, system_t *system, char *title, char *ur
 }
 
 void downloader_cancel(app_t *app, download_t *download) {
-    if (app->config.advanced.externalCurl) {
+    if (config_get(app->config.advanced.active, advancedConfig_externalCurl)) {
         downloadercurl_cancel(app, download);
     } else {
         downloaderinternal_cancel(app, download);
@@ -53,7 +54,7 @@ void downloader_cancel(app_t *app, download_t *download) {
 }
 
 uint8_t downloader_isActive(app_t *app) {
-    if (app->config.advanced.externalCurl) {
+    if (config_get(app->config.advanced.active, advancedConfig_externalCurl)) {
         return downloadercurl_isActive(app);
     } else {
         return downloaderinternal_isActive(app);
@@ -61,7 +62,7 @@ uint8_t downloader_isActive(app_t *app) {
 }
 
 void downloader_cancelAllDownloads(app_t *app) {
-    if (app->config.advanced.externalCurl) {
+    if (config_get(app->config.advanced.active, advancedConfig_externalCurl)) {
         downloadercurl_cancelAllDownloads(app);
     } else {
         downloaderinternal_cancelAllDownloads(app);

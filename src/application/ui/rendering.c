@@ -34,25 +34,25 @@ SDL_Texture *rendering_loadImage(app_t *app, char *filename) {
         return NULL;
     }
     SDL_Texture *texture;
-    SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "Loading %s", filename);
+    LOG_INFO("Loading %s", filename);
     texture = IMG_LoadTexture(app->sdlRenderer, filename);
     return texture;
 }
 
 SDL_Texture *rendering_memImage(app_t *app, void *data, int size) {
     if (data == NULL || size < 1) {
-        SDL_Log("Data is empty\n");
+        LOG_DEBUG("Data is empty");
         return NULL;
     }
     SDL_RWops *rw = SDL_RWFromMem(data, size);
     SDL_Surface *image = IMG_Load_RW(rw, 1);
     if (image == NULL) {
-        SDL_Log("%s\n", SDL_GetError());
+        LOG_ERROR("%s", SDL_GetError());
     }
 
     SDL_Texture *texture = SDL_CreateTextureFromSurface(app->sdlRenderer, image);
     if (texture == NULL) {
-        SDL_Log("%s\n", SDL_GetError());
+        LOG_ERROR("%s", SDL_GetError());
     }
     SDL_FreeSurface(image);
     return texture;

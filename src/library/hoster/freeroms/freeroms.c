@@ -75,13 +75,13 @@ hoster_t *freeroms_getHoster(cache_t *cacheHandler) {
 
 static result_t *search(system_t *system, char *searchString) {
     if (!hoster->cacheHandler->isValid(hoster, system, hoster->cacheHandler->appData)) {
-        LOG_DEBUG("Cache is invalid and needs to be rebuilt\n");
+        LOG_DEBUG("Cache is invalid and needs to be rebuilt");
         hoster->cacheHandler->clear(hoster, system, hoster->cacheHandler->appData);
         fillCache(system);
         hoster->cacheHandler->touch(hoster, system, hoster->cacheHandler->appData);
-        LOG_DEBUG("Rebuilding complete\n");
+        LOG_DEBUG("Rebuilding complete");
     }
-    LOG_DEBUG("Retrieve search result from Cache\n");
+    LOG_DEBUG("Retrieve search result from Cache");
     return hoster->cacheHandler->get(hoster, system, searchString, hoster->cacheHandler->appData);
 }
 
@@ -189,7 +189,7 @@ static void extractLink(system_t *system, char *response) {
 static char *generateDownloadLink(system_t *system, char *id) {
     char *systemStr = freeroms_deviceMapping(system);
     if (systemStr == NULL) {
-        LOG_ERROR("Found no mapping for system: %s\n", system->fullname);
+        LOG_INFO("Found no mapping for system: %s", system->fullname);
         return NULL;
     }
 

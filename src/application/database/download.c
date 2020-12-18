@@ -23,8 +23,7 @@ void download_init(sqlite3 *db) {
     char *query = "CREATE TABLE downloads (title TEXT, system TEXT, url TEXT, data TEXT, filename TEXT, method INT)";
     int rc = sqlite3_exec(db, query, 0, 0, &err_msg);
     if (rc != SQLITE_OK) {
-        fprintf(stderr, "Failed to create table\n");
-        fprintf(stderr, "SQL error: %s\n", err_msg);
+        LOG_ERROR("Failed to create table - SQL error: %s", err_msg);
         sqlite3_free(err_msg);
     }
 }
@@ -36,7 +35,7 @@ void download_load(app_t *app) {
 
     int rc = sqlite3_prepare_v2(app->database.db, query, -1, &stmt, 0);
     if (rc != SQLITE_OK) {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(app->database.db));
+        LOG_ERROR("Failed to execute statement: %s", sqlite3_errmsg(app->database.db));
     }
 
     int ret = sqlite3_step(stmt);
@@ -56,7 +55,7 @@ void download_load(app_t *app) {
         ret = sqlite3_step(stmt);
     }
     if (ret == SQLITE_ERROR) {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(app->database.db));
+        LOG_ERROR("Failed to execute statement: %s", sqlite3_errmsg(app->database.db));
     }
 
     sqlite3_clear_bindings(stmt);
@@ -67,8 +66,7 @@ void download_load(app_t *app) {
 
     rc = sqlite3_exec(app->database.db, query, 0, 0, &err_msg);
     if (rc != SQLITE_OK) {
-        fprintf(stderr, "Failed to delete table\n");
-        fprintf(stderr, "SQL error: %s\n", err_msg);
+        LOG_ERROR("Failed to create table - SQL error: %s", err_msg);
         sqlite3_free(err_msg);
     }
 }
@@ -100,12 +98,12 @@ void download_persistDownload(app_t *app, download_t *download) {
         idx = sqlite3_bind_parameter_index(stmt, "@method");
         sqlite3_bind_int(stmt, idx, download->method == POST ? 1 : 0);
     } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(app->database.db));
+        LOG_ERROR("Failed to execute statement: %s", sqlite3_errmsg(app->database.db));
     }
 
     rc = sqlite3_step(stmt);
     if (SQLITE_DONE != rc) {
-        fprintf(stderr, "insert statement didn't return DONE (%i): %s\n", rc, sqlite3_errmsg(app->database.db));
+        LOG_ERROR("insert statement didn't return DONE (%i): %s", rc, sqlite3_errmsg(app->database.db));
     }
     sqlite3_clear_bindings(stmt);
     sqlite3_finalize(stmt);

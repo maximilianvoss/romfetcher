@@ -20,10 +20,11 @@
 #include <sqlite3.h>
 #include "../application.h"
 
-void databaselinkedlist_init(sqlite3 *db, char *tableName);
 
-void databaselinkedlist_persist(sqlite3 *db, char *tableName, linkedlist_t *list);
+void dbll_init(sqlite3 *db, char *tableName);
 
-void databaselinkedlist_loadActivities(sqlite3 *db, char *tableName, linkedlist_t *list);
+void dbll_persist(sqlite3 *db, char *tableName, linkedlist_t *list);
+
+void dbll_load(sqlite3 *db, char *tableName, linkedlist_t *list);
 
 #endif

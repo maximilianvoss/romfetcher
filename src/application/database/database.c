@@ -15,18 +15,13 @@
  */
 
 #include <csafestring.h>
-#include "init.h"
-#include "../config.h"
-#include "config.h"
-#include "enginecache.h"
+#include "database.h"
+#include "../constants.h"
+#include "../enginecache/enginecache.h"
 #include "linkedlist.h"
 #include "postprocess.h"
 #include "download.h"
-#include "../path.h"
-
-static uint8_t doesTableExist(sqlite3 *db, char *tableName);
-
-static void dropAllTables(sqlite3 *db);
+#include "../helper/path.h"
 
 static csafestring_t *buildDBPath();
 
@@ -34,7 +29,7 @@ void database_init(app_t *app) {
     csafestring_t *dbPath = buildDBPath();
     if (sqlite3_open_v2(dbPath->data, &app->database.db,
                         SQLITE_OPEN_FULLMUTEX | SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL) != SQLITE_OK) {
-        printf("Could not initialize database %s: %s\n", dbPath->data, sqlite3_errmsg(app->database.db));
+        LOG_ERROR("Could not initialize database %s: %s", dbPath->data, sqlite3_errmsg(app->database.db));
         sqlite3_close(app->database.db);
         safe_destroy(dbPath);
         exit(1);
@@ -46,7 +41,7 @@ void database_init(app_t *app) {
 
 void database_destroy(app_t *app) {
     if (sqlite3_close(app->database.db) != SQLITE_OK) {
-        printf("Could not destruct database: %s\n", sqlite3_errmsg(app->database.db));
+        LOG_ERROR("Could not destruct database: %s", sqlite3_errmsg(app->database.db));
     }
 }
 
@@ -57,51 +52,37 @@ static csafestring_t *buildDBPath() {
 }
 
 void database_initTables(sqlite3 *db) {
-    if (!doesTableExist(db, "config")) {
-        database_configInitTable(db);
-    } else if (database_configCheckVersion(db)) {
-        dropAllTables(db);
-        database_configInitTable(db);
-    }
 
-    if (!doesTableExist(db, DATABASE_TABLE_SYSTEMS)) {
-        databaselinkedlist_init(db, DATABASE_TABLE_SYSTEMS);
-    }
 
-    if (!doesTableExist(db, DATABASE_TABLE_ENGINES)) {
-        databaselinkedlist_init(db, DATABASE_TABLE_ENGINES);
-    }
-
-    if (!doesTableExist(db, "enginecache")) {
+    if (!database_tableExists(db, "enginecache")) {
         enginecache_init(db);
     }
 
-    if (!doesTableExist(db, "enginecachestate")) {
+    if (!database_tableExists(db, "enginecachestate")) {
         enginecache_initstate(db);
     }
 
-    if (!doesTableExist(db, "postprocessors")) {
+    if (!database_tableExists(db, "postprocessors")) {
         databasepostprocess_init(db);
     }
 
-    if (!doesTableExist(db, "downloads")) {
+    if (!database_tableExists(db, "downloads")) {
         download_init(db);
     }
 }
 
-static void dropAllTables(sqlite3 *db) {
+void database_dropAllTables(sqlite3 *db) {
     char *err_msg = 0;
     char *query = "DROP TABLE IF EXISTS systems; DROP TABLE IF EXISTS config; DROP TABLE IF EXISTS enginecache; DROP TABLE IF EXISTS enginecachestate; DROP TABLE IF EXISTS engines; DROP TABLE IF EXISTS postprocessors";
 
     int rc = sqlite3_exec(db, query, 0, 0, &err_msg);
     if (rc != SQLITE_OK) {
-        fprintf(stderr, "Failed to create table\n");
-        fprintf(stderr, "SQL error: %s\n", err_msg);
+        LOG_ERROR("Failed to create table - SQL error: %s", err_msg);
         sqlite3_free(err_msg);
     }
 }
 
-static uint8_t doesTableExist(sqlite3 *db, char *tableName) {
+uint8_t database_tableExists(sqlite3 *db, char *tableName) {
     char *query = "SELECT name FROM sqlite_master WHERE type='table' AND name=@name";
 
     sqlite3_stmt *stmt;
@@ -110,7 +91,7 @@ static uint8_t doesTableExist(sqlite3 *db, char *tableName) {
         int idx = sqlite3_bind_parameter_index(stmt, "@name");
         sqlite3_bind_text(stmt, idx, tableName, strlen(tableName), NULL);
     } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(db));
+        LOG_ERROR("Failed to execute statement: %s", sqlite3_errmsg(db));
     }
 
     int step = sqlite3_step(stmt);

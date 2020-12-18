@@ -70,7 +70,8 @@ static void renderHeadline(app_t *app) {
     SDL_GL_GetDrawableSize(app->sdlWindow, &width, &height);
 
     texture_t texture;
-    rendering_loadText(app, &texture, app->modal.headline, app->fonts.font34, &app->themes.active->colors.modalText);
+    rendering_loadText(app, &texture, app->modal.headline, app->themes.active->fonts.font34,
+                       &app->themes.active->colors.modalText);
     SDL_Rect srcQuad = {0, 0, width - 85 - 85, texture.h};
     SDL_Rect renderQuad = {(texture.w > width - 85 - 85) ? 85 : (width - texture.w) / 2, 85,
                            (texture.w > width - 85 - 85) ? width - 85 - 85 : texture.w, texture.h};
@@ -92,7 +93,8 @@ static void renderText(app_t *app) {
     SDL_GL_GetDrawableSize(app->sdlWindow, &width, &height);
 
     texture_t texture;
-    rendering_loadText(app, &texture, app->modal.text, app->fonts.font26, &app->themes.active->colors.modalText);
+    rendering_loadText(app, &texture, app->modal.text, app->themes.active->fonts.font26,
+                       &app->themes.active->colors.modalText);
     SDL_Rect srcQuad = {0, 0, width - 85 - 85, texture.h};
     SDL_Rect renderQuad = {85, 140, (texture.w > width - 85 - 85) ? width - 85 - 85 : texture.w, texture.h};
     SDL_RenderCopy(app->sdlRenderer, texture.texture, &srcQuad, &renderQuad);
@@ -112,7 +114,7 @@ static void renderActionButton(app_t *app) {
     SDL_RenderFillRect(app->sdlRenderer, &box);
 
     texture_t texture;
-    rendering_loadText(app, &texture, app->modal.actionButton, app->fonts.font26,
+    rendering_loadText(app, &texture, app->modal.actionButton, app->themes.active->fonts.font26,
                        &app->themes.active->colors.modalText);
     SDL_Rect srcQuad = {0, 0, 180, texture.h};
 
@@ -136,7 +138,7 @@ static void renderCancelButton(app_t *app) {
         SDL_RenderFillRect(app->sdlRenderer, &box);
 
         texture_t texture;
-        rendering_loadText(app, &texture, app->modal.cancelButton, app->fonts.font26,
+        rendering_loadText(app, &texture, app->modal.cancelButton, app->themes.active->fonts.font26,
                            &app->themes.active->colors.modalText);
         SDL_Rect srcQuad = {0, 0, 180, texture.h};
 

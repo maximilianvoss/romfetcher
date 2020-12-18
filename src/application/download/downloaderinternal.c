@@ -22,10 +22,10 @@
 #include "../state/statesearch.h"
 #include "../state/statedownload.h"
 #include "../database/postprocess.h"
-#include "../config.h"
+#include "../constants.h"
 #include "../database/download.h"
 #include "../../common/utils.h"
-#include "../path.h"
+#include "../helper/path.h"
 
 static void destroyDownload(void *ptr);
 
@@ -47,15 +47,15 @@ pthread_mutex_t lockDone;
 
 void downloaderinternal_init(app_t *app) {
     if (pthread_mutex_init(&lockActive, NULL) != 0) {
-        fprintf(stderr, "Mutex init failed\n");
+        LOG_ERROR("Mutex init failed");
         exit(1);
     }
     if (pthread_mutex_init(&lockQueue, NULL) != 0) {
-        fprintf(stderr, "Mutex init failed\n");
+        LOG_ERROR("Mutex init failed");
         exit(1);
     }
     if (pthread_mutex_init(&lockDone, NULL) != 0) {
-        fprintf(stderr, "Mutex init failed\n");
+        LOG_ERROR("Mutex init failed");
         exit(1);
     }
     spawnThreads(app);
@@ -200,7 +200,7 @@ static void spawnThreads(app_t *app) {
     pthread_t downloadThreads[DOWNLOADER_THREADS];
     for (int i = 0; i < DOWNLOADER_THREADS; i++) {
         if (pthread_create(&downloadThreads[i], NULL, downloadThreadExecution, app)) {
-            SDL_Log("Error creating thread\n");
+            LOG_ERROR("Error creating thread");
             return;
         }
         pthread_detach(downloadThreads[i]);
@@ -226,7 +226,7 @@ static void *downloadThreadExecution(void *appPtr) {
                               &download->total, &download->cancelled);
 
             if (download->cancelled) {
-                SDL_Log("Deleting cancelled file: %s", downloadPath->data);
+                LOG_DEBUG("Deleting cancelled file: %s", downloadPath->data);
                 unlink(downloadPath->data);
                 safe_destroy(downloadPath);
                 continue;
@@ -260,7 +260,7 @@ static void postProcess(app_t *app, char *file) {
         char *command = str_replace(tmp, "%target%", directory);
 
         int status = system(command);
-        SDL_Log("%s exited with: %d\n", command, status);
+        LOG_INFO("%s exited with: %d", command, status);
 
         free(directory);
         free(commandTemplate);

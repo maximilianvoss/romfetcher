@@ -37,7 +37,7 @@ result_t *result_newItem(system_t *system, hoster_t *hoster) {
 
 void result_setTitle(result_t *resultList, char *title) {
     title = str_trim(title);
-    LOG_DEBUG("Title: %s\n", title);
+    LOG_DEBUG("Title: %s", title);
     if (resultList == NULL || title == NULL) {
         return;
     }
@@ -46,7 +46,7 @@ void result_setTitle(result_t *resultList, char *title) {
 
 void result_setUrl(result_t *resultList, char *url) {
     url = str_trim(url);
-    LOG_DEBUG("URL: %s\n", url);
+    LOG_DEBUG("URL: %s", url);
     if (resultList == NULL || url == NULL) {
         return;
     }
@@ -55,27 +55,27 @@ void result_setUrl(result_t *resultList, char *url) {
 
 void result_setDownloads(result_t *resultList, char *downloads) {
     downloads = str_trim(downloads);
-    LOG_DEBUG("DOWNLOADS: %s\n", downloads);
+    LOG_DEBUG("DOWNLOADS: %s", downloads);
     if (downloads == NULL) {
         return;
     }
     resultList->downloads = atoi(downloads);
-    LOG_DEBUG("Calc'd Downloads: %d\n", resultList->downloads);
+    LOG_DEBUG("Calc'd Downloads: %d", resultList->downloads);
 }
 
 void result_setRating(result_t *resultList, char *rating, uint8_t maxRating) {
     rating = str_trim(rating);
-    LOG_DEBUG("RATING: %s\n", rating);
+    LOG_DEBUG("RATING: %s", rating);
     if (rating == NULL) {
         return;
     }
     resultList->rating = (maxRating == 10) ? 1.0f * atof(rating) : 2.0f * atof(rating);
-    LOG_DEBUG("Calc'd Rating: %2.1f\n", resultList->rating);
+    LOG_DEBUG("Calc'd Rating: %2.1f", resultList->rating);
 }
 
 void result_setFileSize(result_t *resultList, char *fileSize) {
     fileSize = str_trim(fileSize);
-    LOG_DEBUG("FILE SIZE: %s\n", fileSize);
+    LOG_DEBUG("FILE SIZE: %s", fileSize);
     if (fileSize == NULL) {
         return;
     }

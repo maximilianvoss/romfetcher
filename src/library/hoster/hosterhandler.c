@@ -82,8 +82,8 @@ void hosterhandler_destroy(hoster_t *hoster) {
 
 static void *executeThread(void *searchPtr) {
     search_t *search = (search_t *) searchPtr;
-    LOG_DEBUG("Call search on: %s\n", search->hoster->name);
+    LOG_DEBUG("Call search on: %s", search->hoster->name);
     search->result = search->hoster->search(search->system, search->searchString);
-    LOG_DEBUG("Done with search on: %s\n", search->hoster->name);
+    LOG_DEBUG("Done with search on: %s", search->hoster->name);
     return NULL;
 }

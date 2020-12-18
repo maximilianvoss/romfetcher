@@ -14,39 +14,55 @@
  * limitations under the License.
  */
 
-#include "core.h"
-#include "textures.h"
+#include <SDL_image.h>
+#include <SDL_ttf.h>
+#include "display.h"
+#include "../config/config.h"
+#include "../themes/rendering.h"
 
-void ui_init(app_t *app) {
 
-    Uint32 windowFlags = 0;
-    Uint32 rendererFlags = SDL_RENDERER_ACCELERATED;
-
+void sdl_init() {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER) < 0) {
-        printf("Couldn't initialize SDL: %s\n", SDL_GetError());
+        LOG_ERROR("Couldn't initialize SDL: %s", SDL_GetError());
         exit(1);
     }
 
-    if (app->config.advanced.opengl) {
+    if (TTF_Init() < 0) {
+        LOG_ERROR("Couldn't initialize TTF: %s", TTF_GetError());
+        exit(1);
+    }
+
+    if (IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG) < 0) {
+        LOG_ERROR("Couldn't initialize IMG: %s", IMG_GetError());
+        exit(1);
+    }
+}
+
+void display_init(app_t *app) {
+    Uint32 rendererFlags = SDL_RENDERER_ACCELERATED;
+    Uint32 windowFlags = 0;
+
+
+    if (config_get(app->config.advanced.active, advancedConfig_openGL)) {
         windowFlags |= SDL_WINDOW_OPENGL;
     }
 
-    if (app->config.advanced.highdpi) {
+    if (config_get(app->config.advanced.active, advancedConfig_highDPI)) {
         windowFlags |= SDL_WINDOW_ALLOW_HIGHDPI;
     }
 
     int screenWidth = app->config.resolution.active->width;
     int screenHeight = app->config.resolution.active->height;
-    if (app->config.advanced.fullscreen) {
+    if (config_get(app->config.advanced.active, advancedConfig_fullscreen)) {
         windowFlags |= SDL_WINDOW_FULLSCREEN;
 
         SDL_DisplayMode current;
         int retVal = SDL_GetCurrentDisplayMode(0, &current);
         if (retVal != 0) {
-            SDL_Log("Could not get display mode for video display #%d: %s", 0, SDL_GetError());
+            LOG_ERROR("Could not get display mode for video display #%d: %s", 0, SDL_GetError());
         } else {
-            SDL_Log("Display #%d: current display mode is %dx%dpx @ %dhz.", 0, current.w, current.h,
-                    current.refresh_rate);
+            LOG_INFO("Display #%d: current display mode is %dx%dpx @ %dhz.", 0, current.w, current.h,
+                     current.refresh_rate);
             screenWidth = current.w;
             screenHeight = current.h;
         }
@@ -57,23 +73,26 @@ void ui_init(app_t *app) {
     app->sdlWindow = SDL_CreateWindow("ROM Fetcher", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, screenWidth,
                                       screenHeight, windowFlags);
     if (!app->sdlWindow) {
-        printf("Failed to open %d x %d window: %s\n", screenWidth, screenHeight, SDL_GetError());
+        LOG_ERROR("Failed to open %d x %d window: %s", screenWidth, screenHeight, SDL_GetError());
         exit(1);
     }
 
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "best");
     app->sdlRenderer = SDL_CreateRenderer(app->sdlWindow, -1, rendererFlags);
     if (!app->sdlRenderer) {
-        printf("Failed to create renderer: %s\n", SDL_GetError());
+        LOG_ERROR("Failed to create renderer: %s", SDL_GetError());
         exit(1);
     }
     SDL_SetRenderDrawBlendMode(app->sdlRenderer, SDL_BLENDMODE_BLEND);
-
-    textures_init(app);
 }
 
-void ui_destroy(app_t *app) {
-    textures_destroy(app);
+void display_destroy(app_t *app) {
     SDL_DestroyRenderer(app->sdlRenderer);
     SDL_DestroyWindow(app->sdlWindow);
+}
+
+void display_reset(app_t *app) {
+    display_destroy(app);
+    display_init(app);
+    themes_activate(app, app->themes.active);
 }

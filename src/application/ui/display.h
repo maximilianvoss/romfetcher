@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-#ifndef STATE_STATECONFIGTHEMES_H
-#define STATE_STATECONFIGTHEMES_H
+#ifndef UI_DISPLAY_H
+#define UI_DISPLAY_H
 
 #include "../application.h"
 
-window_t stateconfigthemes_target(app_t *app, uint8_t isSelectButton);
+void sdl_init();
 
-void stateconfigthemes_persist(app_t *app);
+void display_init(app_t *app);
 
-void stateconfigthemes_init(app_t *app);
+void display_destroy(app_t *app);
+
+void display_reset(app_t *app);
 
 #endif

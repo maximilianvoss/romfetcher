@@ -16,6 +16,7 @@
 
 #include <SDL_render.h>
 #include "rendering.h"
+#include "../ui/rendering.h"
 
 void themes_setDrawColorField(app_t *app) {
     themes_setDrawColor(app, field);
@@ -93,4 +94,62 @@ void themes_setDrawColor(app_t *app, enum theme_color color) {
             a = 255;
     }
     SDL_SetRenderDrawColor(app->sdlRenderer, r, g, b, a);
+}
+
+static void themes_unloadTheme(app_t *app) {
+    SDL_DestroyTexture(app->themes.active->images.background);
+    SDL_DestroyTexture(app->themes.active->images.searchChevron);
+    SDL_DestroyTexture(app->themes.active->images.settingsIcon);
+    SDL_DestroyTexture(app->themes.active->images.checkboxChecked);
+    SDL_DestroyTexture(app->themes.active->images.checkboxUnchecked);
+    SDL_DestroyTexture(app->themes.active->images.downloadManagerIcon);
+
+    TTF_CloseFont(app->themes.active->fonts.font24);
+    TTF_CloseFont(app->themes.active->fonts.font34);
+    TTF_CloseFont(app->themes.active->fonts.font26);
+    TTF_CloseFont(app->themes.active->fonts.font16);
+}
+
+static void themes_initTheme(app_t *app) {
+    app->themes.active->images.background = rendering_loadImage(app, app->themes.active->images.backgroundPath);
+    app->themes.active->images.searchChevron = rendering_loadImage(app, app->themes.active->images.selectorIconPath);
+    app->themes.active->images.settingsIcon = rendering_loadImage(app, app->themes.active->images.settingsIconPath);
+    app->themes.active->images.checkboxChecked = rendering_loadImage(app,
+                                                                     app->themes.active->images.checkboxCheckedPath);
+    app->themes.active->images.checkboxUnchecked = rendering_loadImage(app,
+                                                                       app->themes.active->images.checkboxUncheckedPath);
+    app->themes.active->images.downloadManagerIcon = rendering_loadImage(app,
+                                                                         app->themes.active->images.downloadManagerIconPath);
+
+    app->themes.active->fonts.font24 = TTF_OpenFont(app->themes.active->fonts.font, 16);
+    if (app->themes.active->fonts.font24 == NULL) {
+        LOG_ERROR("Failed to load font24  SDL_ttf Error: %s", TTF_GetError());
+    }
+
+    app->themes.active->fonts.font34 = TTF_OpenFont(app->themes.active->fonts.font, 34);
+    if (app->themes.active->fonts.font34 == NULL) {
+        LOG_ERROR("Failed to load font34 SDL_ttf Error: %s", TTF_GetError());
+    }
+
+    app->themes.active->fonts.font26 = TTF_OpenFont(app->themes.active->fonts.font, 26);
+    if (app->themes.active->fonts.font26 == NULL) {
+        LOG_ERROR("Failed to load font26 SDL_ttf Error: %s", TTF_GetError());
+    }
+
+    app->themes.active->fonts.font16 = TTF_OpenFont(app->themes.active->fonts.font, 12);
+    if (app->themes.active->fonts.font16 == NULL) {
+        LOG_ERROR("Failed to load font16 SDL_ttf Error: %s", TTF_GetError());
+    }
+}
+
+void themes_activate(app_t *app, theme_t *theme) {
+    if (app->themes.active != NULL) {
+        themes_unloadTheme(app);
+    }
+    if (theme == NULL) {
+        app->themes.active = app->themes.all;
+    } else {
+        app->themes.active = theme;
+    }
+    themes_initTheme(app);
 }

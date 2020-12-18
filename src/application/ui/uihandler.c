@@ -19,7 +19,7 @@
 #include "uikeyboard.h"
 #include "uidownload.h"
 #include "rendering.h"
-#include "../config.h"
+#include "../constants.h"
 #include "uilist.h"
 #include "../themes/rendering.h"
 #include "uimodal.h"
@@ -42,11 +42,11 @@ static void renderDefaults(app_t *app) {
 
     themes_setDrawColor(app, background);
     SDL_RenderClear(app->sdlRenderer);
-    SDL_RenderCopy(app->sdlRenderer, app->textures.backgroundImage, NULL, NULL);
+    SDL_RenderCopy(app->sdlRenderer, app->themes.active->images.background, NULL, NULL);
 
     char *text = copyright();
     texture_t texture;
-    rendering_loadText(app, &texture, text, app->fonts.font16, &app->themes.active->colors.textInverted);
+    rendering_loadText(app, &texture, text, app->themes.active->fonts.font16, &app->themes.active->colors.textInverted);
     SDL_Rect renderQuad = {50, height - 30, texture.w, texture.h};
     SDL_RenderCopy(app->sdlRenderer, texture.texture, NULL, &renderQuad);
     free(text);

@@ -17,7 +17,7 @@
 #include <dirent.h>
 #include <sys/stat.h>
 #include "path.h"
-#include "config.h"
+#include "../constants.h"
 
 
 csafestring_t *path_romfetchersHome() {

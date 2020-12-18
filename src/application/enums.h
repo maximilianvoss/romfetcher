@@ -45,12 +45,4 @@ typedef enum {
     downloadActivity_start
 } downloadactivity_t;
 
-typedef enum {
-    advancedConfig_fullscreen,
-    advancedConfig_openGL,
-    advancedConfig_highDPI,
-    advancedConfig_downloadQueue,
-    advancedConfig_externalCurl
-} advancedConfigSetting_t;
-
 #endif

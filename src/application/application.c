@@ -14,22 +14,21 @@
  * limitations under the License.
  */
 
-#include <zconf.h>
 #include "application.h"
 #include "ui/uihandler.h"
 #include "input/inputhandler.h"
-#include "ui/core.h"
-#include "database/init.h"
-#include "database/config.h"
+#include "ui/display.h"
+#include "database/database.h"
 #include "themes/loading.h"
-#include "config/init.h"
-#include "ui/fonts.h"
+#include "config/configmenu.h"
 #include "download/downloader.h"
 #include "database/download.h"
-#include "path.h"
+#include "helper/path.h"
 #include "database/linkedlist.h"
-#include "config.h"
-#include "database/enginecache.h"
+#include "constants.h"
+#include "enginecache/enginecache.h"
+#include "themes/rendering.h"
+#include "config/config.h"
 
 void static initApp(app_t *app);
 
@@ -39,6 +38,7 @@ cache_t cacheHandler;
 
 int main() {
     app_t app;
+    sdl_init();
     initApp(&app);
 
     while (!app.quit) {
@@ -53,8 +53,10 @@ int main() {
 
 void static initApp(app_t *app) {
     memset(app, 0, sizeof(app_t));
+
     path_initRomfetchersHome();
     database_init(app);
+    themes_init(app);
 
     cacheHandler.appData = app;
     cacheHandler.isValid = enginecache_isCacheValid;
@@ -63,40 +65,40 @@ void static initApp(app_t *app) {
     cacheHandler.touch = enginecache_updateTimestamp;
     cacheHandler.get = enginecache_getSearchResults;
 
-
     hoster_t *hosters = loadHosters(&cacheHandler);
-    app->engine.all = hosters;
-    app->engine.cursor = hosters;
-    databaselinkedlist_loadActivities(app->database.db, DATABASE_TABLE_ENGINES, (linkedlist_t *) app->engine.all);
-
     system_t *systems = loadSystems();
-    app->systems.all = systems;
-    app->systems.cursor = systems;
-    databaselinkedlist_loadActivities(app->database.db, DATABASE_TABLE_SYSTEMS, (linkedlist_t *) systems);
-    app->systems.active = ll_get1stActive(systems);
 
-    themes_init(app);
-    config_init(app);
-    fonts_init(app);
-    database_configLoad(app);
-    ui_init(app);
+    config_load(app->database.db, &app->config.active, &app->config.advanced.active, &app->config.resolution.active,
+                &app->themes.active, hosters, systems);
+
+    app->systems.active = ll_get1stActive(systems);
+    app->systems.all = ll_get1st(systems);
+
+    app->engine.all = hosters;
+
+    app->config.cursor = app->config.active;
+    app->config.resolution.cursor = app->config.resolution.active;
+    app->config.advanced.cursor = app->config.advanced.active;
+
+    display_init(app);
     inputhandler_init();
+
+    themes_activate(app, app->themes.active);
+
     downloader_init(app);
     download_load(app);
 }
 
 void static destroyApp(app_t *app) {
     downloader_cancelAllDownloads(app);
-    ui_destroy(app);
+    display_destroy(app);
     themes_destroy(app);
 
     destroyResults(app->search.all);
     destroyHosters(app->engine.all);
     destroySystems(app->systems.all);
 
-    config_destroy(app);
     inputhandler_destroy();
-    fonts_destroy(app);
     downloader_destroy(app);
     database_destroy(app);
     SDL_Quit();

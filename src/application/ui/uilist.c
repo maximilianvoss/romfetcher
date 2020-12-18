@@ -18,7 +18,7 @@
 #include "uilist.h"
 #include "rendering.h"
 #include "../themes/rendering.h"
-#include "../config.h"
+#include "../constants.h"
 #include "../helper/uihelper.h"
 
 void uilist_renderDefault(app_t *app) {
@@ -62,12 +62,14 @@ void uilist_renderList(app_t *app, int offset) {
         themes_setDrawColorField(app);
         SDL_RenderFillRect(app->sdlRenderer, &rects.inner);
 
-        rendering_loadText(app, &texture, element->name, app->fonts.font24, &app->themes.active->colors.text);
+        rendering_loadText(app, &texture, element->name, app->themes.active->fonts.font24,
+                           &app->themes.active->colors.text);
         if (app->list.checkbox) {
             uiElementRects_t checkboxRects = uihelper_generateRects(rects.inner.x + 3, rects.content.y, rects.content.h,
                                                                     rects.content.h);
             uihelper_renderSDLTexture(app->sdlRenderer,
-                                      element->active ? app->textures.checkboxChecked : app->textures.checkboxUnchecked,
+                                      element->active ? app->themes.active->images.checkboxChecked
+                                                      : app->themes.active->images.checkboxUnchecked,
                                       &checkboxRects.inner);
             rects.content.x += rects.content.h;
             rects.content.w -= rects.content.h;

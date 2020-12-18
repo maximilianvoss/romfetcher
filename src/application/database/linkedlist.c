@@ -21,30 +21,28 @@ static void addElement(sqlite3 *db, char *tableName, char *name, int active);
 
 static int loadActivitiesCallback(void *p_data, int num_fields, char **p_fields, char **p_col_names);
 
-void databaselinkedlist_init(sqlite3 *db, char *tableName) {
+void dbll_init(sqlite3 *db, char *tableName) {
     char *err_msg = 0;
     char *queryTmpl = "CREATE TABLE %tablename% (id INT PRIMARY KEY, name TEXT, active INT)";
     char *query = str_replace(queryTmpl, "%tablename%", tableName);
 
     int rc = sqlite3_exec(db, query, 0, 0, &err_msg);
     if (rc != SQLITE_OK) {
-        fprintf(stderr, "Failed to create table\n");
-        fprintf(stderr, "SQL error: %s\n", err_msg);
+        LOG_ERROR("Failed to create table - SQL error: %s", err_msg);
         sqlite3_free(err_msg);
     }
     free(query);
 }
 
 
-void databaselinkedlist_persist(sqlite3 *db, char *tableName, linkedlist_t *list) {
+void dbll_persist(sqlite3 *db, char *tableName, linkedlist_t *list) {
     char *err_msg = 0;
     char *queryTmpl = "DELETE FROM %tablename%";
     char *query = str_replace(queryTmpl, "%tablename%", tableName);
 
     int rc = sqlite3_exec(db, query, 0, 0, &err_msg);
     if (rc != SQLITE_OK) {
-        fprintf(stderr, "Failed to delete table\n");
-        fprintf(stderr, "SQL error: %s\n", err_msg);
+        LOG_ERROR("Failed to create table - SQL error: %s", err_msg);
         sqlite3_free(err_msg);
     }
 
@@ -55,14 +53,14 @@ void databaselinkedlist_persist(sqlite3 *db, char *tableName, linkedlist_t *list
     free(query);
 }
 
-void databaselinkedlist_loadActivities(sqlite3 *db, char *tableName, linkedlist_t *list) {
+void dbll_load(sqlite3 *db, char *tableName, linkedlist_t *list) {
     char *errmsg;
     char *queryTmpl = "SELECT name, active FROM %tablename%";
     char *query = str_replace(queryTmpl, "%tablename%", tableName);
 
     int ret = sqlite3_exec(db, query, loadActivitiesCallback, list, &errmsg);
     if (ret != SQLITE_OK) {
-        printf("Error in select statement %s [%s].\n", query, errmsg);
+        LOG_ERROR("Error in select statement %s [%s].", query, errmsg);
         free(query);
         return;
     }
@@ -82,12 +80,12 @@ static void addElement(sqlite3 *db, char *tableName, char *name, int active) {
         idx = sqlite3_bind_parameter_index(stmt, "@active");
         sqlite3_bind_int(stmt, idx, active);
     } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(db));
+        LOG_ERROR("Failed to execute statement: %s", sqlite3_errmsg(db));
     }
 
     rc = sqlite3_step(stmt);
     if (SQLITE_DONE != rc) {
-        fprintf(stderr, "insert statement didn't return DONE (%i): %s\n", rc, sqlite3_errmsg(db));
+        LOG_ERROR("insert statement didn't return DONE (%i): %s", rc, sqlite3_errmsg(db));
     }
     sqlite3_clear_bindings(stmt);
     sqlite3_finalize(stmt);
@@ -95,7 +93,7 @@ static void addElement(sqlite3 *db, char *tableName, char *name, int active) {
 }
 
 static int loadActivitiesCallback(void *p_data, int num_fields, char **p_fields, char **p_col_names) {
-    linkedlist_t *element = linkedlist_findElementByName(p_data, p_fields[0]);
+    linkedlist_t *element = ll_findByName(p_data, p_fields[0]);
     if (element != NULL) {
         if (!strcmp(p_fields[1], "1")) {
             element->active = 1;
