@@ -111,14 +111,17 @@ static void themes_unloadTheme(app_t *app) {
 }
 
 static void themes_initTheme(app_t *app) {
-    app->themes.active->images.background = rendering_loadImage(app, app->themes.active->images.backgroundPath);
-    app->themes.active->images.searchChevron = rendering_loadImage(app, app->themes.active->images.selectorIconPath);
-    app->themes.active->images.settingsIcon = rendering_loadImage(app, app->themes.active->images.settingsIconPath);
-    app->themes.active->images.checkboxChecked = rendering_loadImage(app,
+    app->themes.active->images.background = rendering_loadImage(app->sdlRenderer,
+                                                                app->themes.active->images.backgroundPath);
+    app->themes.active->images.searchChevron = rendering_loadImage(app->sdlRenderer,
+                                                                   app->themes.active->images.selectorIconPath);
+    app->themes.active->images.settingsIcon = rendering_loadImage(app->sdlRenderer,
+                                                                  app->themes.active->images.settingsIconPath);
+    app->themes.active->images.checkboxChecked = rendering_loadImage(app->sdlRenderer,
                                                                      app->themes.active->images.checkboxCheckedPath);
-    app->themes.active->images.checkboxUnchecked = rendering_loadImage(app,
+    app->themes.active->images.checkboxUnchecked = rendering_loadImage(app->sdlRenderer,
                                                                        app->themes.active->images.checkboxUncheckedPath);
-    app->themes.active->images.downloadManagerIcon = rendering_loadImage(app,
+    app->themes.active->images.downloadManagerIcon = rendering_loadImage(app->sdlRenderer,
                                                                          app->themes.active->images.downloadManagerIconPath);
 
     app->themes.active->fonts.font24 = TTF_OpenFont(app->themes.active->fonts.font, 16);

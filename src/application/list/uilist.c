@@ -62,7 +62,7 @@ void uilist_renderList(app_t *app, int offset) {
         themes_setDrawColorField(app);
         SDL_RenderFillRect(app->sdlRenderer, &rects.inner);
 
-        rendering_loadText(app, &texture, element->name, app->themes.active->fonts.font24,
+        rendering_loadText(app->sdlRenderer, &texture, element->name, app->themes.active->fonts.font24,
                            &app->themes.active->colors.text);
         if (app->list.checkbox) {
             uiElementRects_t checkboxRects = uihelper_generateRects(rects.inner.x + 3, rects.content.y, rects.content.h,

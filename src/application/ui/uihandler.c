@@ -75,13 +75,13 @@ static void renderDownloadManagerIcon(app_t *app) {
             linkedlist_getElementCount(app->download.active) + linkedlist_getElementCount(app->download.queue);
     if (downloadCount > 0) {
         themes_setDrawColor(app, fieldActive);
-        rendering_circle(app, width - 65, 32, 10);
+        rendering_circle(app->sdlRenderer, width - 65, 32, 10);
 
         char buffer[4];
         sprintf(buffer, "%d", downloadCount);
 
         texture_t texture;
-        rendering_loadText(app, &texture, buffer, app->themes.active->fonts.font16,
+        rendering_loadText(app->sdlRenderer, &texture, buffer, app->themes.active->fonts.font16,
                            &app->themes.active->colors.textInverted);
         SDL_Rect srcQuad = {0, 0, width - 100 - 60, texture.h};
         SDL_Rect renderQuad = {width - 65 - texture.w / 2, 32 - texture.h / 2, texture.w, texture.h};
@@ -99,7 +99,8 @@ static void renderCopyright(app_t *app) {
     *text = 0xA9;
 
     texture_t texture;
-    rendering_loadText(app, &texture, text, app->themes.active->fonts.font16, &app->themes.active->colors.textInverted);
+    rendering_loadText(app->sdlRenderer, &texture, text, app->themes.active->fonts.font16,
+                       &app->themes.active->colors.textInverted);
     SDL_Rect renderQuad = {50, height - 30, texture.w, texture.h};
     SDL_RenderCopy(app->sdlRenderer, texture.texture, NULL, &renderQuad);
     free(text);

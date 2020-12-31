@@ -17,14 +17,16 @@
 #ifndef UI_RENDERING_H
 #define UI_RENDERING_H
 
-#include "../application.h"
+#include <SDL.h>
+#include <SDL_ttf.h>
+#include "texture.h"
 
-SDL_Texture *rendering_loadImage(app_t *app, char *filename);
+SDL_Texture *rendering_loadImage(SDL_Renderer *sdlRenderer, char *filename);
 
-SDL_Texture *rendering_memImage(app_t *app, void *data, int size);
+SDL_Texture *rendering_memImage(SDL_Renderer *sdlRenderer, void *data, int size);
 
-void rendering_loadText(app_t *app, texture_t *texture, char *str, TTF_Font *font, SDL_Color *color);
+void rendering_loadText(SDL_Renderer *sdlRenderer, texture_t *texture, char *str, TTF_Font *font, SDL_Color *color);
 
-void rendering_circle(app_t *app, int x, int y, int radius);
+void rendering_circle(SDL_Renderer *sdlRenderer, int x, int y, int radius);
 
 #endif

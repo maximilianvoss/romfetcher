@@ -55,7 +55,7 @@ static void renderSystemSelector(app_t *app) {
     SDL_RenderCopy(app->sdlRenderer, app->themes.active->images.searchChevron, NULL, &texture_rect);
 
     texture_t texture;
-    rendering_loadText(app, &texture, app->systems.active->fullname, app->themes.active->fonts.font24,
+    rendering_loadText(app->sdlRenderer, &texture, app->systems.active->fullname, app->themes.active->fonts.font24,
                        &app->themes.active->colors.text);
     uihelper_renderTexture(app->sdlRenderer, &texture, &element.content);
     uihelper_destroyTexture(&texture);
@@ -75,7 +75,7 @@ static void renderSearchField(app_t *app) {
 
     if (*(app->search.searchText) != '\0') {
         texture_t texture;
-        rendering_loadText(app, &texture, app->search.searchText, app->themes.active->fonts.font24,
+        rendering_loadText(app->sdlRenderer, &texture, app->search.searchText, app->themes.active->fonts.font24,
                            &app->themes.active->colors.text);
         uihelper_renderTexture(app->sdlRenderer, &texture, &element.content);
         uihelper_destroyTexture(&texture);
@@ -95,7 +95,8 @@ static void renderSearchButton(app_t *app) {
     SDL_RenderFillRect(app->sdlRenderer, &element.inner);
 
     texture_t texture;
-    rendering_loadText(app, &texture, "Search", app->themes.active->fonts.font24, &app->themes.active->colors.text);
+    rendering_loadText(app->sdlRenderer, &texture, "Search", app->themes.active->fonts.font24,
+                       &app->themes.active->colors.text);
     uihelper_renderTextureCentered(app->sdlRenderer, &texture, &element.content);
     uihelper_destroyTexture(&texture);
 }
@@ -135,26 +136,30 @@ static void renderSearchResult(app_t *app, int offset) {
     SDL_RenderFillRect(app->sdlRenderer, &rects.inner);
     position += LIST_ITEM_HEIGHT;
 
-    rendering_loadText(app, &texture, "Game Title", app->themes.active->fonts.font24, &app->themes.active->colors.text);
+    rendering_loadText(app->sdlRenderer, &texture, "Game Title", app->themes.active->fonts.font24,
+                       &app->themes.active->colors.text);
     rects.content.x += LIST_ITEM_HEIGHT - 5;
     uihelper_renderTexture(app->sdlRenderer, &texture, &rects.content);
     uihelper_destroyTexture(&texture);
 
-    rendering_loadText(app, &texture, "Dwn", app->themes.active->fonts.font24, &app->themes.active->colors.text);
+    rendering_loadText(app->sdlRenderer, &texture, "Dwn", app->themes.active->fonts.font24,
+                       &app->themes.active->colors.text);
     rects.content.x = width - 3 * width / 10;
     rects.content.w = width / 10;
     uihelper_renderTextureCentered(app->sdlRenderer, &texture, &rects.content);
     uihelper_destroyTexture(&texture);
     drawHeadDivider(app, &rects);
 
-    rendering_loadText(app, &texture, "Rat", app->themes.active->fonts.font24, &app->themes.active->colors.text);
+    rendering_loadText(app->sdlRenderer, &texture, "Rat", app->themes.active->fonts.font24,
+                       &app->themes.active->colors.text);
     rects.content.x = width - 2 * width / 10;
     rects.content.w = width / 10 - 25;
     uihelper_renderTextureCentered(app->sdlRenderer, &texture, &rects.content);
     uihelper_destroyTexture(&texture);
     drawHeadDivider(app, &rects);
 
-    rendering_loadText(app, &texture, "Size", app->themes.active->fonts.font24, &app->themes.active->colors.text);
+    rendering_loadText(app->sdlRenderer, &texture, "Size", app->themes.active->fonts.font24,
+                       &app->themes.active->colors.text);
     rects.content.x = width - width / 10 - 25;
     rects.content.w = width / 10;
     uihelper_renderTextureCentered(app->sdlRenderer, &texture, &rects.content);
@@ -175,7 +180,7 @@ static void renderSearchResult(app_t *app, int offset) {
         // TODO: Keep Texture
         if (element->hoster->favicon != NULL) {
             if (element->hoster->favicon->size > 0 && element->hoster->favicon->binary != NULL) {
-                SDL_Texture *icon = rendering_memImage(app, element->hoster->favicon->binary,
+                SDL_Texture *icon = rendering_memImage(app->sdlRenderer, element->hoster->favicon->binary,
                                                        element->hoster->favicon->size);
                 if (icon != NULL) {
                     uihelper_renderSDLTexture(app->sdlRenderer, icon, &iconItem.inner);
@@ -187,7 +192,7 @@ static void renderSearchResult(app_t *app, int offset) {
         // Title
         rects = uihelper_generateRects(20 + LIST_ITEM_HEIGHT - 5, position,
                                        6 * width / 10, LIST_ITEM_HEIGHT);
-        rendering_loadText(app, &texture, element->title, app->themes.active->fonts.font24,
+        rendering_loadText(app->sdlRenderer, &texture, element->title, app->themes.active->fonts.font24,
                            &app->themes.active->colors.text);
         uihelper_renderTexture(app->sdlRenderer, &texture, &rects.content);
         uihelper_destroyTexture(&texture);
@@ -198,7 +203,8 @@ static void renderSearchResult(app_t *app, int offset) {
         rects = uihelper_generateRects(width - 3 * width / 10, position, width / 10,
                                        LIST_ITEM_HEIGHT);
         uihelper_noPaddingX(&rects);
-        rendering_loadText(app, &texture, buffer, app->themes.active->fonts.font24, &app->themes.active->colors.text);
+        rendering_loadText(app->sdlRenderer, &texture, buffer, app->themes.active->fonts.font24,
+                           &app->themes.active->colors.text);
         uihelper_renderTextureRight(app->sdlRenderer, &texture, &rects.content);
         uihelper_destroyTexture(&texture);
         drawDivider(app, &rects);
@@ -207,7 +213,8 @@ static void renderSearchResult(app_t *app, int offset) {
         snprintf(buffer, 7, "%2.1f", element->rating);
         rects = uihelper_generateRects(width - 2 * width / 10, position, width / 10 - 25, LIST_ITEM_HEIGHT);
         uihelper_noPaddingX(&rects);
-        rendering_loadText(app, &texture, buffer, app->themes.active->fonts.font24, &app->themes.active->colors.text);
+        rendering_loadText(app->sdlRenderer, &texture, buffer, app->themes.active->fonts.font24,
+                           &app->themes.active->colors.text);
         uihelper_renderTextureRight(app->sdlRenderer, &texture, &rects.content);
         uihelper_destroyTexture(&texture);
         drawDivider(app, &rects);
@@ -218,7 +225,7 @@ static void renderSearchResult(app_t *app, int offset) {
         rects.content.x += 3;
         rects.content.w -= 3;
         if (element->fileSize != NULL) {
-            rendering_loadText(app, &texture, element->fileSize, app->themes.active->fonts.font24,
+            rendering_loadText(app->sdlRenderer, &texture, element->fileSize, app->themes.active->fonts.font24,
                                &app->themes.active->colors.text);
             uihelper_renderTextureRight(app->sdlRenderer, &texture, &rects.content);
             uihelper_destroyTexture(&texture);

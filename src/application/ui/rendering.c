@@ -16,6 +16,7 @@
 
 #include "rendering.h"
 #include <SDL_image.h>
+#include <romfetcher.h>
 
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
 int rmask = 0xff000000;
@@ -29,17 +30,17 @@ int bmask = 0x00ff0000;
 int amask = 0xff000000;
 #endif
 
-SDL_Texture *rendering_loadImage(app_t *app, char *filename) {
+SDL_Texture *rendering_loadImage(SDL_Renderer *sdlRenderer, char *filename) {
     if (filename == NULL) {
         return NULL;
     }
     SDL_Texture *texture;
     LOG_INFO("Loading %s", filename);
-    texture = IMG_LoadTexture(app->sdlRenderer, filename);
+    texture = IMG_LoadTexture(sdlRenderer, filename);
     return texture;
 }
 
-SDL_Texture *rendering_memImage(app_t *app, void *data, int size) {
+SDL_Texture *rendering_memImage(SDL_Renderer *sdlRenderer, void *data, int size) {
     if (data == NULL || size < 1) {
         LOG_DEBUG("Data is empty");
         return NULL;
@@ -50,7 +51,7 @@ SDL_Texture *rendering_memImage(app_t *app, void *data, int size) {
         LOG_ERROR("%s", SDL_GetError());
     }
 
-    SDL_Texture *texture = SDL_CreateTextureFromSurface(app->sdlRenderer, image);
+    SDL_Texture *texture = SDL_CreateTextureFromSurface(sdlRenderer, image);
     if (texture == NULL) {
         LOG_ERROR("%s", SDL_GetError());
     }
@@ -58,7 +59,7 @@ SDL_Texture *rendering_memImage(app_t *app, void *data, int size) {
     return texture;
 }
 
-void rendering_loadText(app_t *app, texture_t *texture, char *str, TTF_Font *font, SDL_Color *color) {
+void rendering_loadText(SDL_Renderer *sdlRenderer, texture_t *texture, char *str, TTF_Font *font, SDL_Color *color) {
     char cpy[strlen(str) + 1];
     strcpy(cpy, str);
 
@@ -97,7 +98,7 @@ void rendering_loadText(app_t *app, texture_t *texture, char *str, TTF_Font *fon
     }
 
     if (blindSurface != NULL) {
-        texture->texture = SDL_CreateTextureFromSurface(app->sdlRenderer, blindSurface);
+        texture->texture = SDL_CreateTextureFromSurface(sdlRenderer, blindSurface);
         texture->w = blindSurface->w;
         texture->h = blindSurface->h;
         SDL_FreeSurface(blindSurface);
@@ -105,16 +106,15 @@ void rendering_loadText(app_t *app, texture_t *texture, char *str, TTF_Font *fon
 }
 
 
-void rendering_circle(app_t *app, int x, int y, int radius) {
+void rendering_circle(SDL_Renderer *sdlRenderer, int x, int y, int radius) {
     int point_x;
     int point_y;
     while (radius > 0) {
         for (int t = 0; t < 360; t++) {
             point_x = x + radius * cos(t);
             point_y = y + radius * sin(t);
-            SDL_RenderDrawPoint(app->sdlRenderer, point_x, point_y);
+            SDL_RenderDrawPoint(sdlRenderer, point_x, point_y);
         }
-
         radius--;
     }
 }
