@@ -95,8 +95,8 @@ set(SOURCES
         src/application/enginecache/enginecache.h
         src/application/database/database.c
         src/application/database/database.h
-        src/application/database/linkedlist.c
-        src/application/database/linkedlist.h
+        src/application/list/linkedlist.c
+        src/application/list/linkedlist.h
         src/application/database/postprocess.c
         src/application/database/postprocess.h
         src/application/download/downloader.c
@@ -120,10 +120,10 @@ set(SOURCES
         src/application/download/inputdownloadmanager.h
         src/application/input/inputhandler.c
         src/application/input/inputhandler.h
-        src/application/input/inputkeyboard.c
-        src/application/input/inputkeyboard.h
-        src/application/input/inputlist.c
-        src/application/input/inputlist.h
+        src/application/keyboard/inputkeyboard.c
+        src/application/keyboard/inputkeyboard.h
+        src/application/list/inputlist.c
+        src/application/list/inputlist.h
         src/application/modal/inputmodal.c
         src/application/modal/inputmodal.h
         src/application/search/inputsearch.c
@@ -154,10 +154,10 @@ set(SOURCES
         src/application/download/uidownloadmanager.h
         src/application/ui/uihandler.c
         src/application/ui/uihandler.h
-        src/application/ui/uikeyboard.c
-        src/application/ui/uikeyboard.h
-        src/application/ui/uilist.c
-        src/application/ui/uilist.h
+        src/application/keyboard/uikeyboard.c
+        src/application/keyboard/uikeyboard.h
+        src/application/list/uilist.c
+        src/application/list/uilist.h
         src/application/modal/uimodal.c
         src/application/modal/uimodal.h
         src/application/search/uisearch.c

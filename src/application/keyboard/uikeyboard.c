@@ -15,7 +15,7 @@
  */
 
 #include "uikeyboard.h"
-#include "rendering.h"
+#include "../ui/rendering.h"
 #include "../themes/rendering.h"
 #include "../helper/uihelper.h"
 

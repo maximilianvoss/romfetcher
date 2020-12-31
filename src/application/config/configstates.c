@@ -17,7 +17,7 @@
 #include "configstates.h"
 #include "../ui/display.h"
 #include "config.h"
-#include "../database/linkedlist.h"
+#include "../list/linkedlist.h"
 #include "../constants.h"
 #include "../themes/rendering.h"
 

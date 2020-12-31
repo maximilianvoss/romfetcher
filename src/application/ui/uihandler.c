@@ -16,11 +16,11 @@
 
 #include "uihandler.h"
 #include "../search/uisearch.h"
-#include "uikeyboard.h"
+#include "../keyboard/uikeyboard.h"
 #include "../download/uidownload.h"
 #include "rendering.h"
 #include "../constants.h"
-#include "uilist.h"
+#include "../list/uilist.h"
 #include "../themes/rendering.h"
 #include "../modal/uimodal.h"
 #include "../download/uidownloadmanager.h"

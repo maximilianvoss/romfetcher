@@ -24,7 +24,7 @@
 #include "download/downloader.h"
 #include "database/download.h"
 #include "helper/path.h"
-#include "database/linkedlist.h"
+#include "list/linkedlist.h"
 #include "constants.h"
 #include "enginecache/enginecache.h"
 #include "themes/rendering.h"
