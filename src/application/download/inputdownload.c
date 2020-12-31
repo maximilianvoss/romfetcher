@@ -16,7 +16,7 @@
 
 #include "inputdownload.h"
 #include "../state/statehandler.h"
-#include "../download/downloader.h"
+#include "downloader.h"
 
 static void moveToNext(app_t *app);
 

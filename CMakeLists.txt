@@ -114,10 +114,10 @@ set(SOURCES
         src/application/helper/path.h
         src/application/helper/uihelper.c
         src/application/helper/uihelper.h
-        src/application/input/inputdownload.c
-        src/application/input/inputdownload.h
-        src/application/input/inputdownloadmanager.c
-        src/application/input/inputdownloadmanager.h
+        src/application/download/inputdownload.c
+        src/application/download/inputdownload.h
+        src/application/download/inputdownloadmanager.c
+        src/application/download/inputdownloadmanager.h
         src/application/input/inputhandler.c
         src/application/input/inputhandler.h
         src/application/input/inputkeyboard.c
@@ -126,18 +126,18 @@ set(SOURCES
         src/application/input/inputlist.h
         src/application/input/inputmodal.c
         src/application/input/inputmodal.h
-        src/application/input/inputsearch.c
-        src/application/input/inputsearch.h
-        src/application/state/statedownload.c
-        src/application/state/statedownload.h
-        src/application/state/statedownloadmanager.c
-        src/application/state/statedownloadmanager.h
+        src/application/search/inputsearch.c
+        src/application/search/inputsearch.h
+        src/application/download/statedownload.c
+        src/application/download/statedownload.h
+        src/application/download/statedownloadmanager.c
+        src/application/download/statedownloadmanager.h
         src/application/state/statehandler.c
         src/application/state/statehandler.h
         src/application/state/statekeyboard.c
         src/application/state/statekeyboard.h
-        src/application/state/statesearch.c
-        src/application/state/statesearch.h
+        src/application/search/statesearch.c
+        src/application/search/statesearch.h
         src/application/state/statesystem.c
         src/application/state/statesystem.h
         src/application/themes/loading.c
@@ -148,10 +148,10 @@ set(SOURCES
         src/application/ui/display.h
         src/application/ui/rendering.c
         src/application/ui/rendering.h
-        src/application/ui/uidownload.c
-        src/application/ui/uidownload.h
-        src/application/ui/uidownloadmanager.c
-        src/application/ui/uidownloadmanager.h
+        src/application/download/uidownload.c
+        src/application/download/uidownload.h
+        src/application/download/uidownloadmanager.c
+        src/application/download/uidownloadmanager.h
         src/application/ui/uihandler.c
         src/application/ui/uihandler.h
         src/application/ui/uikeyboard.c
@@ -160,10 +160,10 @@ set(SOURCES
         src/application/ui/uilist.h
         src/application/ui/uimodal.c
         src/application/ui/uimodal.h
-        src/application/ui/uisearch.c
-        src/application/ui/uisearch.h
-        src/application/ui/uisearchresult.c
-        src/application/ui/uisearchresult.h
+        src/application/search/uisearch.c
+        src/application/search/uisearch.h
+        src/application/search/uisearchresult.c
+        src/application/search/uisearchresult.h
         src/application/themes/themes.h
         src/application/download/download.h src/application/input/input.h src/application/ui/texture.h src/application/config/configmenu.h
         src/application/config/config.c src/application/config/config.h src/application/config/configstates.c src/application/config/configstates.h)

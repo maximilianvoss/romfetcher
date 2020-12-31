@@ -15,9 +15,9 @@
  */
 
 #include "uidownloadmanager.h"
-#include "rendering.h"
+#include "../ui/rendering.h"
 #include "../themes/rendering.h"
-#include "../download/downloadpipeline.h"
+#include "downloadpipeline.h"
 
 static void renderProgressBar(app_t *app, download_t *element, int position);
 

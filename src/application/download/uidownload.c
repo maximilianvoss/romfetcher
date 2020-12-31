@@ -15,7 +15,7 @@
  */
 
 #include "uidownload.h"
-#include "rendering.h"
+#include "../ui/rendering.h"
 #include "../themes/rendering.h"
 
 static void renderTitle(app_t *app);

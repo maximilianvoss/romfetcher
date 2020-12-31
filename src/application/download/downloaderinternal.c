@@ -19,8 +19,8 @@
 #include <pthread.h>
 #include <zconf.h>
 #include "downloaderinternal.h"
-#include "../state/statesearch.h"
-#include "../state/statedownload.h"
+#include "../search/statesearch.h"
+#include "statedownload.h"
 #include "../database/postprocess.h"
 #include "../constants.h"
 #include "../database/download.h"

@@ -15,15 +15,15 @@
  */
 
 #include "uihandler.h"
-#include "uisearch.h"
+#include "../search/uisearch.h"
 #include "uikeyboard.h"
-#include "uidownload.h"
+#include "../download/uidownload.h"
 #include "rendering.h"
 #include "../constants.h"
 #include "uilist.h"
 #include "../themes/rendering.h"
 #include "uimodal.h"
-#include "uidownloadmanager.h"
+#include "../download/uidownloadmanager.h"
 
 static void renderDefaults(app_t *app);
 

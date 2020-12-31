@@ -16,10 +16,10 @@
 
 #include <csafestring.h>
 #include "inputdownloadmanager.h"
-#include "../download/downloadpipeline.h"
+#include "downloadpipeline.h"
 #include "../../common/utils.h"
 #include "../state/statehandler.h"
-#include "../download/downloader.h"
+#include "downloader.h"
 
 static void modalCancelDownload(void *appPtr, void *data);
 

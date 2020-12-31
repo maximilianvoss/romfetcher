@@ -15,11 +15,11 @@
  */
 
 #include "statehandler.h"
-#include "statesearch.h"
+#include "../search/statesearch.h"
 #include "statesystem.h"
 #include "statekeyboard.h"
-#include "statedownload.h"
-#include "statedownloadmanager.h"
+#include "../download/statedownload.h"
+#include "../download/statedownloadmanager.h"
 #include "../config/configstates.h"
 
 static void *getInitFunction(window_t target);

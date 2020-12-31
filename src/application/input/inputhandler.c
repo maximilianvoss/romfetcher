@@ -16,12 +16,12 @@
 
 #include "inputhandler.h"
 #include "../constants.h"
-#include "inputsearch.h"
-#include "inputdownload.h"
+#include "../search/inputsearch.h"
+#include "../download/inputdownload.h"
 #include "inputkeyboard.h"
 #include "inputlist.h"
 #include "inputmodal.h"
-#include "inputdownloadmanager.h"
+#include "../download/inputdownloadmanager.h"
 #include "../download/downloader.h"
 
 static void processGameController(app_t *app);
