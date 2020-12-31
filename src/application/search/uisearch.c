@@ -17,7 +17,6 @@
 #include "uisearch.h"
 #include "../ui/rendering.h"
 #include "../themes/rendering.h"
-#include "uisearchresult.h"
 #include "../helper/uihelper.h"
 #include "../constants.h"
 
@@ -27,61 +26,17 @@ static void renderSearchButton(app_t *app);
 
 static void renderSystemSelector(app_t *app);
 
+static void renderSearchResult(app_t *app, int offset);
 
-static void renderSettingsIcon(app_t *app);
+static inline void drawHeadDivider(app_t *app, uiElementRects_t *rects);
 
-static void renderDownloadManagerIcon(app_t *app);
+static inline void drawDivider(app_t *app, uiElementRects_t *rects);
 
 void uisearch_render(app_t *app) {
-    renderSettingsIcon(app);
-    renderDownloadManagerIcon(app);
     renderSystemSelector(app);
     renderSearchField(app);
     renderSearchButton(app);
-    uisearchresult_render(app, 2 * (LIST_ITEM_HEIGHT + 10) + 50);
-}
-
-static void renderSettingsIcon(app_t *app) {
-    int width, height;
-    SDL_GL_GetDrawableSize(app->sdlWindow, &width, &height);
-
-    uiElementRects_t element = uihelper_generateRects(width - 35, 10, 25, 25);
-    if (app->search.position == searchactivity_config) {
-        themes_setDrawColor(app, fieldActive);
-        SDL_RenderFillRect(app->sdlRenderer, &element.outter);
-    }
-    uihelper_renderSDLTexture(app->sdlRenderer, app->themes.active->images.settingsIcon, &element.inner);
-
-}
-
-static void renderDownloadManagerIcon(app_t *app) {
-    int width, height;
-    SDL_GL_GetDrawableSize(app->sdlWindow, &width, &height);
-
-    uiElementRects_t element = uihelper_generateRects(width - 85, 10, 25, 25);
-    if (app->search.position == searchactivity_downloadMgr) {
-        themes_setDrawColor(app, fieldActive);
-        SDL_RenderFillRect(app->sdlRenderer, &element.outter);
-    }
-    uihelper_renderSDLTexture(app->sdlRenderer, app->themes.active->images.downloadManagerIcon, &element.inner);
-
-    int downloadCount =
-            linkedlist_getElementCount(app->download.active) + linkedlist_getElementCount(app->download.queue);
-    if (downloadCount > 0) {
-        themes_setDrawColor(app, fieldActive);
-        rendering_circle(app, width - 65, 32, 10);
-
-        char buffer[4];
-        sprintf(buffer, "%d", downloadCount);
-
-        texture_t texture;
-        rendering_loadText(app, &texture, buffer, app->themes.active->fonts.font16,
-                           &app->themes.active->colors.textInverted);
-        SDL_Rect srcQuad = {0, 0, width - 100 - 60, texture.h};
-        SDL_Rect renderQuad = {width - 65 - texture.w / 2, 32 - texture.h / 2, texture.w, texture.h};
-        SDL_RenderCopy(app->sdlRenderer, texture.texture, &srcQuad, &renderQuad);
-        SDL_DestroyTexture(texture.texture);
-    }
+    renderSearchResult(app, 2 * (LIST_ITEM_HEIGHT + 10) + 50);
 }
 
 static void renderSystemSelector(app_t *app) {
@@ -103,7 +58,7 @@ static void renderSystemSelector(app_t *app) {
     rendering_loadText(app, &texture, app->systems.active->fullname, app->themes.active->fonts.font24,
                        &app->themes.active->colors.text);
     uihelper_renderTexture(app->sdlRenderer, &texture, &element.content);
-    SDL_DestroyTexture(texture.texture);
+    uihelper_destroyTexture(&texture);
 }
 
 static void renderSearchField(app_t *app) {
@@ -123,7 +78,7 @@ static void renderSearchField(app_t *app) {
         rendering_loadText(app, &texture, app->search.searchText, app->themes.active->fonts.font24,
                            &app->themes.active->colors.text);
         uihelper_renderTexture(app->sdlRenderer, &texture, &element.content);
-        SDL_DestroyTexture(texture.texture);
+        uihelper_destroyTexture(&texture);
     }
 }
 
@@ -142,6 +97,146 @@ static void renderSearchButton(app_t *app) {
     texture_t texture;
     rendering_loadText(app, &texture, "Search", app->themes.active->fonts.font24, &app->themes.active->colors.text);
     uihelper_renderTextureCentered(app->sdlRenderer, &texture, &element.content);
-    SDL_DestroyTexture(texture.texture);
+    uihelper_destroyTexture(&texture);
 }
 
+static void renderSearchResult(app_t *app, int offset) {
+    int width, height;
+    SDL_GL_GetDrawableSize(app->sdlWindow, &width, &height);
+
+    texture_t texture;
+    result_t *element = app->search.cursor;
+
+    if (element == NULL) {
+        element = app->search.all;
+    }
+
+    if (element == NULL) {
+        return;
+    }
+
+    int deviceCountToDisplay = (height - offset - 80) / LIST_ITEM_HEIGHT + 1;
+
+    int i = 0;
+    while (i < deviceCountToDisplay / 2 - 1) {
+        if (element->prev == NULL) {
+            break;
+        }
+        element = element->prev;
+        i++;
+    }
+
+    int position = offset;
+
+    uiElementRects_t rects = uihelper_generateRectsFullScreenWidth(20, position, width, LIST_ITEM_HEIGHT);
+    themes_setDrawColorField(app);
+    SDL_RenderFillRect(app->sdlRenderer, &rects.outter);
+    themes_setDrawColorBackground(app, 1);
+    SDL_RenderFillRect(app->sdlRenderer, &rects.inner);
+    position += LIST_ITEM_HEIGHT;
+
+    rendering_loadText(app, &texture, "Game Title", app->themes.active->fonts.font24, &app->themes.active->colors.text);
+    rects.content.x += LIST_ITEM_HEIGHT - 5;
+    uihelper_renderTexture(app->sdlRenderer, &texture, &rects.content);
+    uihelper_destroyTexture(&texture);
+
+    rendering_loadText(app, &texture, "Dwn", app->themes.active->fonts.font24, &app->themes.active->colors.text);
+    rects.content.x = width - 3 * width / 10;
+    rects.content.w = width / 10;
+    uihelper_renderTextureCentered(app->sdlRenderer, &texture, &rects.content);
+    uihelper_destroyTexture(&texture);
+    drawHeadDivider(app, &rects);
+
+    rendering_loadText(app, &texture, "Rat", app->themes.active->fonts.font24, &app->themes.active->colors.text);
+    rects.content.x = width - 2 * width / 10;
+    rects.content.w = width / 10 - 25;
+    uihelper_renderTextureCentered(app->sdlRenderer, &texture, &rects.content);
+    uihelper_destroyTexture(&texture);
+    drawHeadDivider(app, &rects);
+
+    rendering_loadText(app, &texture, "Size", app->themes.active->fonts.font24, &app->themes.active->colors.text);
+    rects.content.x = width - width / 10 - 25;
+    rects.content.w = width / 10;
+    uihelper_renderTextureCentered(app->sdlRenderer, &texture, &rects.content);
+    uihelper_destroyTexture(&texture);
+    drawHeadDivider(app, &rects);
+
+    while (element != NULL && position <= height - 80) {
+        rects = uihelper_generateRectsFullScreenWidth(20, position, width, LIST_ITEM_HEIGHT);
+        themes_setDrawColorBackground(app, (element == app->search.cursor));
+        SDL_RenderFillRect(app->sdlRenderer, &rects.outter);
+
+        themes_setDrawColorField(app);
+        SDL_RenderFillRect(app->sdlRenderer, &rects.inner);
+
+        // Favicon
+        uiElementRects_t iconItem = uihelper_generateRects(25, position + 5, LIST_ITEM_HEIGHT - 10,
+                                                           LIST_ITEM_HEIGHT - 10);
+        // TODO: Keep Texture
+        if (element->hoster->favicon != NULL) {
+            if (element->hoster->favicon->size > 0 && element->hoster->favicon->binary != NULL) {
+                SDL_Texture *icon = rendering_memImage(app, element->hoster->favicon->binary,
+                                                       element->hoster->favicon->size);
+                if (icon != NULL) {
+                    uihelper_renderSDLTexture(app->sdlRenderer, icon, &iconItem.inner);
+                    SDL_DestroyTexture(icon);
+                }
+            }
+        }
+
+        // Title
+        rects = uihelper_generateRects(20 + LIST_ITEM_HEIGHT - 5, position,
+                                       6 * width / 10, LIST_ITEM_HEIGHT);
+        rendering_loadText(app, &texture, element->title, app->themes.active->fonts.font24,
+                           &app->themes.active->colors.text);
+        uihelper_renderTexture(app->sdlRenderer, &texture, &rects.content);
+        uihelper_destroyTexture(&texture);
+
+        // Downloads
+        char buffer[7];
+        snprintf(buffer, 7, "%d", element->downloads);
+        rects = uihelper_generateRects(width - 3 * width / 10, position, width / 10,
+                                       LIST_ITEM_HEIGHT);
+        uihelper_noPaddingX(&rects);
+        rendering_loadText(app, &texture, buffer, app->themes.active->fonts.font24, &app->themes.active->colors.text);
+        uihelper_renderTextureRight(app->sdlRenderer, &texture, &rects.content);
+        uihelper_destroyTexture(&texture);
+        drawDivider(app, &rects);
+
+        // Rating
+        snprintf(buffer, 7, "%2.1f", element->rating);
+        rects = uihelper_generateRects(width - 2 * width / 10, position, width / 10 - 25, LIST_ITEM_HEIGHT);
+        uihelper_noPaddingX(&rects);
+        rendering_loadText(app, &texture, buffer, app->themes.active->fonts.font24, &app->themes.active->colors.text);
+        uihelper_renderTextureRight(app->sdlRenderer, &texture, &rects.content);
+        uihelper_destroyTexture(&texture);
+        drawDivider(app, &rects);
+
+        // File size
+        rects = uihelper_generateRects(width - width / 10 - 25, position, width / 10, LIST_ITEM_HEIGHT);
+        uihelper_noPaddingX(&rects);
+        rects.content.x += 3;
+        rects.content.w -= 3;
+        if (element->fileSize != NULL) {
+            rendering_loadText(app, &texture, element->fileSize, app->themes.active->fonts.font24,
+                               &app->themes.active->colors.text);
+            uihelper_renderTextureRight(app->sdlRenderer, &texture, &rects.content);
+            uihelper_destroyTexture(&texture);
+        }
+        drawDivider(app, &rects);
+
+        element = element->next;
+        position += LIST_ITEM_HEIGHT;
+    }
+}
+
+static inline void drawHeadDivider(app_t *app, uiElementRects_t *rects) {
+    SDL_RenderDrawLine(app->sdlRenderer, rects->content.x, rects->inner.y, rects->content.x,
+                       rects->inner.y + rects->inner.h);
+}
+
+static inline void drawDivider(app_t *app, uiElementRects_t *rects) {
+    themes_setDrawColorBackground(app, 0);
+    SDL_RenderDrawLine(app->sdlRenderer, rects->inner.x, rects->inner.y, rects->inner.x,
+                       rects->inner.y + rects->inner.h);
+}

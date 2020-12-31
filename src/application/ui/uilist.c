@@ -77,7 +77,7 @@ void uilist_renderList(app_t *app, int offset) {
         } else {
             uihelper_renderTexture(app->sdlRenderer, &texture, &rects.content);
         }
-        SDL_DestroyTexture(texture.texture);
+        uihelper_destroyTexture(&texture);
 
         if (app->list.filterActive) {
             element = linkedlist_getNextActive(element);

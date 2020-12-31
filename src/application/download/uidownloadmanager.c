@@ -18,6 +18,7 @@
 #include "../ui/rendering.h"
 #include "../themes/rendering.h"
 #include "downloadpipeline.h"
+#include "../helper/uihelper.h"
 
 static void renderProgressBar(app_t *app, download_t *element, int position);
 
@@ -62,7 +63,7 @@ void uidownloadmanager_render(app_t *app) {
         SDL_Rect renderQuad = {60, position + 3, (texture.w > width - 120) ? width - 120 : texture.w, texture.h};
 
         SDL_RenderCopy(app->sdlRenderer, texture.texture, &srcQuad, &renderQuad);
-        SDL_DestroyTexture(texture.texture);
+        uihelper_destroyTexture(&texture);
 
         renderProgressBar(app, element, position);
 
@@ -112,5 +113,5 @@ static void renderProgressBar(app_t *app, download_t *element, int position) {
     SDL_Rect renderQuad = {width / 2 - texture.w / 2, position + 35 + 3, texture.w, texture.h};
     SDL_RenderCopy(app->sdlRenderer, texture.texture, NULL, &renderQuad);
 
-    SDL_DestroyTexture(texture.texture);
+    uihelper_destroyTexture(&texture);
 }

@@ -20,7 +20,7 @@
 #include "../download/inputdownload.h"
 #include "inputkeyboard.h"
 #include "inputlist.h"
-#include "inputmodal.h"
+#include "../modal/inputmodal.h"
 #include "../download/inputdownloadmanager.h"
 #include "../download/downloader.h"
 

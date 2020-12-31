@@ -17,6 +17,7 @@
 #include "uikeyboard.h"
 #include "rendering.h"
 #include "../themes/rendering.h"
+#include "../helper/uihelper.h"
 
 static void renderSearchField(app_t *app);
 
@@ -48,7 +49,7 @@ static void renderSearchField(app_t *app) {
         SDL_Rect renderQuad = {60, 55, texture.w, texture.h};
         SDL_RenderCopy(app->sdlRenderer, texture.texture, NULL, &renderQuad);
         charPos += texture.w;
-        SDL_DestroyTexture(texture.texture);
+        uihelper_destroyTexture(&texture);
     }
 
     if (app->keyboard.activeChar != '\0') {
@@ -58,7 +59,7 @@ static void renderSearchField(app_t *app) {
                            &app->themes.active->colors.textHighlight);
         SDL_Rect renderQuad = {charPos, 55, texture.w, texture.h};
         SDL_RenderCopy(app->sdlRenderer, texture.texture, NULL, &renderQuad);
-        SDL_DestroyTexture(texture.texture);
+        uihelper_destroyTexture(&texture);
     }
 }
 
@@ -110,6 +111,6 @@ static void renderKey(app_t *app, int posx, int posy, int padWidth, int padHeigh
         SDL_Rect renderQuad = {posx + offsetX, posy + offsetY, width, height};
 
         SDL_RenderCopy(app->sdlRenderer, texture.texture, &srcQuad, &renderQuad);
-        SDL_DestroyTexture(texture.texture);
+        uihelper_destroyTexture(&texture);
     }
 }

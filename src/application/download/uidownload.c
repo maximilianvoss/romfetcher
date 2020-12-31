@@ -17,6 +17,7 @@
 #include "uidownload.h"
 #include "../ui/rendering.h"
 #include "../themes/rendering.h"
+#include "../helper/uihelper.h"
 
 static void renderTitle(app_t *app);
 
@@ -46,7 +47,7 @@ static void renderTitle(app_t *app) {
     SDL_Rect renderQuad = {width / 2 - textureWidth / 2, 55, textureWidth, texture.h};
     SDL_RenderCopy(app->sdlRenderer, texture.texture, NULL, &renderQuad);
 
-    SDL_DestroyTexture(texture.texture);
+    uihelper_destroyTexture(&texture);
 }
 
 static void renderStartButton(app_t *app) {
@@ -67,7 +68,7 @@ static void renderStartButton(app_t *app) {
     SDL_Rect renderQuad = {width - texture.w - 100, 315, texture.w, texture.h};
     SDL_RenderCopy(app->sdlRenderer, texture.texture, NULL, &renderQuad);
 
-    SDL_DestroyTexture(texture.texture);
+    uihelper_destroyTexture(&texture);
 }
 
 static void renderCancelButton(app_t *app) {
@@ -88,5 +89,5 @@ static void renderCancelButton(app_t *app) {
     SDL_Rect renderQuad = {100, 315, texture.w, texture.h};
     SDL_RenderCopy(app->sdlRenderer, texture.texture, NULL, &renderQuad);
 
-    SDL_DestroyTexture(texture.texture);
+    uihelper_destroyTexture(&texture);
 }

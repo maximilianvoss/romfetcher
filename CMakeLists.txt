@@ -124,8 +124,8 @@ set(SOURCES
         src/application/input/inputkeyboard.h
         src/application/input/inputlist.c
         src/application/input/inputlist.h
-        src/application/input/inputmodal.c
-        src/application/input/inputmodal.h
+        src/application/modal/inputmodal.c
+        src/application/modal/inputmodal.h
         src/application/search/inputsearch.c
         src/application/search/inputsearch.h
         src/application/download/statedownload.c
@@ -158,12 +158,10 @@ set(SOURCES
         src/application/ui/uikeyboard.h
         src/application/ui/uilist.c
         src/application/ui/uilist.h
-        src/application/ui/uimodal.c
-        src/application/ui/uimodal.h
+        src/application/modal/uimodal.c
+        src/application/modal/uimodal.h
         src/application/search/uisearch.c
         src/application/search/uisearch.h
-        src/application/search/uisearchresult.c
-        src/application/search/uisearchresult.h
         src/application/themes/themes.h
         src/application/download/download.h src/application/input/input.h src/application/ui/texture.h src/application/config/configmenu.h
         src/application/config/config.c src/application/config/config.h src/application/config/configstates.c src/application/config/configstates.h)

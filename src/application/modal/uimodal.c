@@ -16,7 +16,8 @@
 
 #include "uimodal.h"
 #include "../themes/rendering.h"
-#include "rendering.h"
+#include "../ui/rendering.h"
+#include "../helper/uihelper.h"
 
 static void darkenBackground(app_t *app);
 
@@ -85,7 +86,7 @@ static void renderHeadline(app_t *app) {
     SDL_RenderFillRect(app->sdlRenderer, &box);
 
     SDL_RenderCopy(app->sdlRenderer, texture.texture, &srcQuad, &renderQuad);
-    SDL_DestroyTexture(texture.texture);
+    uihelper_destroyTexture(&texture);
 }
 
 static void renderText(app_t *app) {
@@ -98,7 +99,7 @@ static void renderText(app_t *app) {
     SDL_Rect srcQuad = {0, 0, width - 85 - 85, texture.h};
     SDL_Rect renderQuad = {85, 140, (texture.w > width - 85 - 85) ? width - 85 - 85 : texture.w, texture.h};
     SDL_RenderCopy(app->sdlRenderer, texture.texture, &srcQuad, &renderQuad);
-    SDL_DestroyTexture(texture.texture);
+    uihelper_destroyTexture(&texture);
 }
 
 static void renderActionButton(app_t *app) {
@@ -121,7 +122,7 @@ static void renderActionButton(app_t *app) {
     SDL_Rect renderQuad = {(texture.w > 180) ? width - 85 - 200 : width - 85 - 200 + (200 - texture.w) / 2,
                            height - 150 + 75 - 55, (texture.w > 180) ? 180 : texture.w, texture.h};
     SDL_RenderCopy(app->sdlRenderer, texture.texture, &srcQuad, &renderQuad);
-    SDL_DestroyTexture(texture.texture);
+    uihelper_destroyTexture(&texture);
 }
 
 static void renderCancelButton(app_t *app) {
@@ -145,6 +146,6 @@ static void renderCancelButton(app_t *app) {
         SDL_Rect renderQuad = {(texture.w > 180) ? 95 : 85 + (200 - texture.w) / 2, height - 150 + 75 - 55,
                                (texture.w > 180) ? 180 : texture.w, texture.h};
         SDL_RenderCopy(app->sdlRenderer, texture.texture, &srcQuad, &renderQuad);
-        SDL_DestroyTexture(texture.texture);
+        uihelper_destroyTexture(&texture);
     }
 }

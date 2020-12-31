@@ -93,3 +93,9 @@ void uihelper_renderSDLTexture(SDL_Renderer *sdlRenderer, SDL_Texture *texture, 
     SDL_Rect renderQuad = {target->x, target->y, target->w, target->h};
     SDL_RenderCopy(sdlRenderer, texture, NULL, &renderQuad);
 }
+
+void uihelper_destroyTexture(texture_t *texture) {
+    texture->h = -1;
+    texture->w = -1;
+    SDL_DestroyTexture(texture->texture);
+}

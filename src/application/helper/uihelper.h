@@ -40,4 +40,6 @@ void uihelper_renderTextureRight(SDL_Renderer *sdlRenderer, texture_t *texture, 
 
 void uihelper_renderSDLTexture(SDL_Renderer *sdlRenderer, SDL_Texture *texture, SDL_Rect *target);
 
+void uihelper_destroyTexture(texture_t *texture);
+
 #endif
