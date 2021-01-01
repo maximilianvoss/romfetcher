@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-#include "inputhandler.h"
+#include "input.h"
 #include "../constants.h"
 #include "../search/search.h"
 #include "../download/inputdownload.h"
-#include "../keyboard/keyboard.h"
+#include "keyboard.h"
 #include "../list/list.h"
 #include "../modal/modal.h"
 #include "../download/inputdownloadmanager.h"
@@ -44,17 +44,16 @@ static void (*processSelect)(app_t *app);
 
 static void (*processBack)(app_t *app);
 
-static void (*processOtherButton)(app_t *app, GameControllerState_t *state);
+static void (*processOtherButton)(app_t *app, controller_t *state);
 
 static void (*processOtherKey)(app_t *app, SDL_Scancode scancode);
 
 static SDL_GameController **gameControllers;
-static GameControllerState_t gameControllerState;
+static controller_t gameControllerState;
 static int gameControllerCount;
 static Uint32 lastKeyPressed = 0;
 
-
-void inputhandler_init() {
+void input_init() {
     if (SDL_GameControllerAddMapping(CONTROLLER_MAPPING)) {
         LOG_ERROR("Failed to add mapping: %s", SDL_GetError());
     }
@@ -77,7 +76,7 @@ void inputhandler_init() {
     }
 }
 
-void inputhandler_processInputs(app_t *app) {
+void input_processInputs(app_t *app) {
     switch (app->win) {
         case window_search:
             processUp = &search_processUp;
@@ -151,7 +150,7 @@ void inputhandler_processInputs(app_t *app) {
     processEvents(app);
 }
 
-void inputhandler_destroy() {
+void inputr_destroy() {
     for (int i = 0; i < gameControllerCount; i++) {
         SDL_GameControllerClose(gameControllers[i]);
     }

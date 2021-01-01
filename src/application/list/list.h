@@ -31,7 +31,7 @@ void ll_processSelect(app_t *app);
 
 void ll_processBack(app_t *app);
 
-void ll_processOtherButton(app_t *app, GameControllerState_t *state);
+void ll_processOtherButton(app_t *app, controller_t *state);
 
 void ll_processOtherKey(app_t *app, SDL_Scancode scancode);
 

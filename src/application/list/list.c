@@ -58,7 +58,7 @@ void ll_processBack(app_t *app) {
     statehandler_switch(app, 0);
 }
 
-void ll_processOtherButton(app_t *app, GameControllerState_t *state) {
+void ll_processOtherButton(app_t *app, controller_t *state) {
 }
 
 void ll_processOtherKey(app_t *app, SDL_Scancode scancode) {}

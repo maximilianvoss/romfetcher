@@ -16,7 +16,7 @@
 
 #include "application.h"
 #include "ui/uihandler.h"
-#include "input/inputhandler.h"
+#include "input/input.h"
 #include "ui/display.h"
 #include "database/database.h"
 #include "themes/loading.h"
@@ -42,7 +42,7 @@ int main() {
     initApp(&app);
 
     while (!app.quit) {
-        inputhandler_processInputs(&app);
+        input_processInputs(&app);
         uihandler_render(&app);
         SDL_Delay(75);
     }
@@ -81,7 +81,7 @@ void static initApp(app_t *app) {
     app->config.advanced.cursor = app->config.advanced.active;
 
     display_init(app);
-    inputhandler_init();
+    input_init();
 
     themes_activate(app, app->themes.active);
 
@@ -100,7 +100,7 @@ void static destroyApp(app_t *app) {
 
     config_destroy(app->config.active, app->config.advanced.active, app->config.resolution.active);
 
-    inputhandler_destroy();
+    inputr_destroy();
     downloader_destroy(app);
     database_destroy(app->database.db);
     SDL_Quit();

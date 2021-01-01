@@ -184,7 +184,7 @@ void keyboard_processBack(app_t *app) {
     removeLastCharFromText(app);
 }
 
-void keyboard_processOtherButton(app_t *app, GameControllerState_t *state) {
+void keyboard_processOtherButton(app_t *app, controller_t *state) {
     if (state->buttonY) {
         removeLastCharFromText(app);
     }

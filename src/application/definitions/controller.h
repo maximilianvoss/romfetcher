@@ -14,16 +14,27 @@
  * limitations under the License.
  */
 
-#ifndef UI_INPUTHANDLER_H
-#define UI_INPUTHANDLER_H
+#ifndef DEFINITIONS_CONTROLLER_H
+#define DEFINITIONS_CONTROLLER_H
 
-#include "../application.h"
+typedef struct {
+    uint8_t up;
+    uint8_t down;
+    uint8_t left;
+    uint8_t right;
+    uint8_t start;
+    uint8_t back;
+    uint8_t leftShoulder;
+    uint8_t rightShoulder;
+    uint8_t leftStick;
+    uint8_t rightStick;
+    uint8_t buttonA;
+    uint8_t buttonB;
+    uint8_t buttonX;
+    uint8_t buttonY;
 
-void inputhandler_init();
-
-void inputhandler_destroy();
-
-void inputhandler_processInputs(app_t *app);
-
+    int16_t stickX;
+    int16_t stickY;
+} controller_t;
 
 #endif

@@ -66,7 +66,7 @@ void inputdownloadmanager_processBack(app_t *app) {
     statehandler_switch(app, 0);
 }
 
-void inputdownloadmanager_processOtherButton(app_t *app, GameControllerState_t *state) {}
+void inputdownloadmanager_processOtherButton(app_t *app, controller_t *state) {}
 
 void inputdownloadmanager_processOtherKey(app_t *app, SDL_Scancode scancode) {}
 

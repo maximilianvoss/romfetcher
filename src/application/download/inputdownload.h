@@ -31,7 +31,7 @@ void inputdownload_processSelect(app_t *app);
 
 void inputdownload_processBack(app_t *app);
 
-void inputdownload_processOtherButton(app_t *app, GameControllerState_t *state);
+void inputdownload_processOtherButton(app_t *app, controller_t *state);
 
 void inputdownload_processOtherKey(app_t *app, SDL_Scancode scancode);
 

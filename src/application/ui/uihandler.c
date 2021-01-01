@@ -15,10 +15,10 @@
  */
 
 #include "uihandler.h"
-#include "../search/search.h"
-#include "../keyboard/keyboard.h"
-#include "../download/uidownload.h"
 #include "rendering.h"
+#include "../search/search.h"
+#include "../input/keyboard.h"
+#include "../download/uidownload.h"
 #include "../constants.h"
 #include "../list/list.h"
 #include "../themes/rendering.h"
@@ -33,6 +33,44 @@ static void renderSettingsIcon(app_t *app);
 static void renderDownloadManagerIcon(app_t *app);
 
 static void renderCopyright(app_t *app);
+
+void uihandler_render(app_t *app) {
+    void (*renderEngine)(app_t *app) = NULL;
+    renderDefaults(app);
+
+    switch (app->win) {
+        case window_search:
+            if (app->systems.active == NULL) {
+                app->systems.active = linkedlist_getFirstActive(app->systems.all);
+            }
+            renderEngine = &uisearch_render;
+            break;
+        case window_keyboard:
+            renderEngine = &keyboard_render;
+            break;
+        case window_download:
+            renderEngine = &uidownload_render;
+            break;
+        case window_downloadMgr:
+            renderEngine = &uidownloadmanager_render;
+            break;
+        case window_config:
+        case window_config_advanced:
+        case window_config_hoster:
+        case window_config_resolution:
+        case window_config_systems:
+        case window_config_themes:
+        case window_system:
+            renderEngine = &ll_renderDefault;
+            break;
+    }
+
+    if (renderEngine != NULL) {
+        renderEngine(app);
+    }
+    model_render(app);
+    SDL_RenderPresent(app->sdlRenderer);
+}
 
 static void renderDefaults(app_t *app) {
     int width, height;
@@ -106,42 +144,4 @@ static void renderCopyright(app_t *app) {
     free(text);
 
     uihelper_destroyTexture(&texture);
-}
-
-void uihandler_render(app_t *app) {
-    void (*renderEngine)(app_t *app) = NULL;
-    renderDefaults(app);
-
-    switch (app->win) {
-        case window_search:
-            if (app->systems.active == NULL) {
-                app->systems.active = linkedlist_getFirstActive(app->systems.all);
-            }
-            renderEngine = &uisearch_render;
-            break;
-        case window_keyboard:
-            renderEngine = &keyboard_render;
-            break;
-        case window_download:
-            renderEngine = &uidownload_render;
-            break;
-        case window_downloadMgr:
-            renderEngine = &uidownloadmanager_render;
-            break;
-        case window_config:
-        case window_config_advanced:
-        case window_config_hoster:
-        case window_config_resolution:
-        case window_config_systems:
-        case window_config_themes:
-        case window_system:
-            renderEngine = &ll_renderDefault;
-            break;
-    }
-
-    if (renderEngine != NULL) {
-        renderEngine(app);
-    }
-    model_render(app);
-    SDL_RenderPresent(app->sdlRenderer);
 }

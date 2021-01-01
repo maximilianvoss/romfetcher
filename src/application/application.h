@@ -22,7 +22,7 @@
 #include "definitions/enums.h"
 #include "definitions/themes.h"
 #include "definitions/download.h"
-#include "definitions/input.h"
+#include "definitions/controller.h"
 #include "definitions/texture.h"
 #include "config/configmenu.h"
 

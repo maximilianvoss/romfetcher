@@ -31,7 +31,7 @@ void search_processSelect(app_t *app);
 
 void search_processBack(app_t *app);
 
-void search_processOtherButton(app_t *app, GameControllerState_t *state);
+void search_processOtherButton(app_t *app, controller_t *state);
 
 void search_processOtherKey(app_t *app, SDL_Scancode scancode);
 

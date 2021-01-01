@@ -118,10 +118,10 @@ set(SOURCES
         src/application/download/inputdownload.h
         src/application/download/inputdownloadmanager.c
         src/application/download/inputdownloadmanager.h
-        src/application/input/inputhandler.c
-        src/application/input/inputhandler.h
-        src/application/keyboard/keyboard.c
-        src/application/keyboard/keyboard.h
+        src/application/input/input.c
+        src/application/input/input.h
+        src/application/input/keyboard.c
+        src/application/input/keyboard.h
         src/application/list/list.c
         src/application/list/list.h
         src/application/modal/modal.c
@@ -151,7 +151,7 @@ set(SOURCES
         src/application/ui/uihandler.c
         src/application/ui/uihandler.h
         src/application/definitions/themes.h
-        src/application/definitions/download.h src/application/definitions/input.h src/application/definitions/texture.h src/application/config/configmenu.h
+        src/application/definitions/download.h src/application/definitions/controller.h src/application/definitions/texture.h src/application/config/configmenu.h
         src/application/config/config.c src/application/config/config.h src/application/config/configstates.c src/application/config/configstates.h src/application/definitions/config.h)
 
 set(TEST_SOURCES

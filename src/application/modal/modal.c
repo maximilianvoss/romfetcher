@@ -74,7 +74,7 @@ void modal_processBack(app_t *app) {
     app->modal.displayed = 0;
 }
 
-void modal_processOtherButton(app_t *app, GameControllerState_t *state) {}
+void modal_processOtherButton(app_t *app, controller_t *state) {}
 
 void modal_processOtherKey(app_t *app, SDL_Scancode scancode) {}
 

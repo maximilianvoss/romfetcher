@@ -14,33 +14,16 @@
  * limitations under the License.
  */
 
-#ifndef KEYBOARD_KEYBOARD_H
-#define KEYBOARD_KEYBOARD_H
+#ifndef INPUT_INPUT_H
+#define INPUT_INPUT_H
 
 #include "../application.h"
 
-void keyboard_processUp(app_t *app);
+void input_init();
 
-void keyboard_processDown(app_t *app);
+void inputr_destroy();
 
-void keyboard_processLeft(app_t *app);
+void input_processInputs(app_t *app);
 
-void keyboard_processRight(app_t *app);
-
-void keyboard_processSelect(app_t *app);
-
-void keyboard_processBack(app_t *app);
-
-void keyboard_processOtherButton(app_t *app, GameControllerState_t *state);
-
-void keyboard_processOtherKey(app_t *app, SDL_Scancode scancode);
-
-void keyboard_render(app_t *app);
-
-window_t keyboard_stateTarget(app_t *app, uint8_t isSelectButton);
-
-void keyboard_statePersist(app_t *app);
-
-void keyboard_stateInit(app_t *app);
 
 #endif

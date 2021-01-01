@@ -17,7 +17,7 @@
 #include "statehandler.h"
 #include "../search/search.h"
 #include "statesystem.h"
-#include "../keyboard/keyboard.h"
+#include "../input/keyboard.h"
 #include "../download/statedownload.h"
 #include "../download/statedownloadmanager.h"
 #include "../config/configstates.h"
