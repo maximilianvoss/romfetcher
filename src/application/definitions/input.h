@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Maximilian Voss (maximilian@voss.rocks)
+ * Copyright 2020 - 2021 Maximilian Voss (maximilian@voss.rocks)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef UI_INPUT_H
-#define UI_INPUT_H
+#ifndef DEFINITIONS_INPUT_H
+#define DEFINITIONS_INPUT_H
 
 typedef struct {
     uint8_t up;

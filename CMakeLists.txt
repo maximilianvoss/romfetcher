@@ -89,16 +89,16 @@ set(SOURCES
         src/application/application.h
         src/application/constants.h
         src/application/config/configmenu.c
-        src/application/database/download.c
-        src/application/database/download.h
+        src/application/download/download.c
+        src/application/download/download.h
         src/application/enginecache/enginecache.c
         src/application/enginecache/enginecache.h
         src/application/database/database.c
         src/application/database/database.h
-        src/application/list/linkedlist.c
-        src/application/list/linkedlist.h
-        src/application/database/postprocess.c
-        src/application/database/postprocess.h
+        src/application/list/dblist.c
+        src/application/list/dblist.h
+        src/application/download/postprocess.c
+        src/application/download/postprocess.h
         src/application/download/downloader.c
         src/application/download/downloader.h
         src/application/download/downloadercurl.c
@@ -107,7 +107,7 @@ set(SOURCES
         src/application/download/downloaderinternal.h
         src/application/download/downloadpipeline.c
         src/application/download/downloadpipeline.h
-        src/application/enums.h
+        src/application/definitions/enums.h
         src/application/helper/map.c
         src/application/helper/map.h
         src/application/helper/path.c
@@ -120,24 +120,20 @@ set(SOURCES
         src/application/download/inputdownloadmanager.h
         src/application/input/inputhandler.c
         src/application/input/inputhandler.h
-        src/application/keyboard/inputkeyboard.c
-        src/application/keyboard/inputkeyboard.h
-        src/application/list/inputlist.c
-        src/application/list/inputlist.h
-        src/application/modal/inputmodal.c
-        src/application/modal/inputmodal.h
-        src/application/search/inputsearch.c
-        src/application/search/inputsearch.h
+        src/application/keyboard/keyboard.c
+        src/application/keyboard/keyboard.h
+        src/application/list/list.c
+        src/application/list/list.h
+        src/application/modal/modal.c
+        src/application/modal/modal.h
+        src/application/search/search.c
+        src/application/search/search.h
         src/application/download/statedownload.c
         src/application/download/statedownload.h
         src/application/download/statedownloadmanager.c
         src/application/download/statedownloadmanager.h
         src/application/state/statehandler.c
         src/application/state/statehandler.h
-        src/application/state/statekeyboard.c
-        src/application/state/statekeyboard.h
-        src/application/search/statesearch.c
-        src/application/search/statesearch.h
         src/application/state/statesystem.c
         src/application/state/statesystem.h
         src/application/themes/loading.c
@@ -154,17 +150,9 @@ set(SOURCES
         src/application/download/uidownloadmanager.h
         src/application/ui/uihandler.c
         src/application/ui/uihandler.h
-        src/application/keyboard/uikeyboard.c
-        src/application/keyboard/uikeyboard.h
-        src/application/list/uilist.c
-        src/application/list/uilist.h
-        src/application/modal/uimodal.c
-        src/application/modal/uimodal.h
-        src/application/search/uisearch.c
-        src/application/search/uisearch.h
-        src/application/themes/themes.h
-        src/application/download/download.h src/application/input/input.h src/application/ui/texture.h src/application/config/configmenu.h
-        src/application/config/config.c src/application/config/config.h src/application/config/configstates.c src/application/config/configstates.h)
+        src/application/definitions/themes.h
+        src/application/definitions/download.h src/application/definitions/input.h src/application/definitions/texture.h src/application/config/configmenu.h
+        src/application/config/config.c src/application/config/config.h src/application/config/configstates.c src/application/config/configstates.h src/application/definitions/config.h)
 
 set(TEST_SOURCES
         test/download.c

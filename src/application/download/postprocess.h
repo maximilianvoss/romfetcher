@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Maximilian Voss (maximilian@voss.rocks)
+ * Copyright 2020 - 2021 Maximilian Voss (maximilian@voss.rocks)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,25 +14,15 @@
  * limitations under the License.
  */
 
-#ifndef UI_INPUTMODAL_H
-#define UI_INPUTMODAL_H
+#ifndef DATABASE_POSTPROCESS_H
+#define DATABASE_POSTPROCESS_H
 
+#include <sqlite3.h>
 #include "../application.h"
 
-void inputmodal_processUp(app_t *app);
 
-void inputmodal_processDown(app_t *app);
+void databasepostprocess_init(sqlite3 *db);
 
-void inputmodal_processLeft(app_t *app);
-
-void inputmodal_processRight(app_t *app);
-
-void inputmodal_processSelect(app_t *app);
-
-void inputmodal_processBack(app_t *app);
-
-void inputmodal_processOtherButton(app_t *app, GameControllerState_t *state);
-
-void inputmodal_processOtherKey(app_t *app, SDL_Scancode scancode);
+char *databasepostprocess_getCommand(app_t *app, char *fileSuffix);
 
 #endif

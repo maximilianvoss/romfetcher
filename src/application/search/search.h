@@ -14,11 +14,33 @@
  * limitations under the License.
  */
 
-#ifndef HOSTER_WOWROMS_MAPPING_H
-#define HOSTER_WOWROMS_MAPPING_H
+#ifndef SEARCH_SEARCH_H
+#define SEARCH_SEARCH_H
 
-#include "../../romfetcher.h"
+#include "../application.h"
 
-char *wowroms_deviceMapping(system_t *system);
+void search_processUp(app_t *app);
+
+void search_processDown(app_t *app);
+
+void search_processLeft(app_t *app);
+
+void search_processRight(app_t *app);
+
+void search_processSelect(app_t *app);
+
+void search_processBack(app_t *app);
+
+void search_processOtherButton(app_t *app, GameControllerState_t *state);
+
+void search_processOtherKey(app_t *app, SDL_Scancode scancode);
+
+window_t search_stateTarget(app_t *app, uint8_t isSelectButton);
+
+void search_statePersist(app_t *app);
+
+void search_stateInit(app_t *app);
+
+void uisearch_render(app_t *app);
 
 #endif

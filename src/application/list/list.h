@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Maximilian Voss (maximilian@voss.rocks)
+ * Copyright 2020 - 2021 Maximilian Voss (maximilian@voss.rocks)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,29 @@
  * limitations under the License.
  */
 
-#ifndef UI_UISEARCH_H
-#define UI_UISEARCH_H
+#ifndef LIST_LL_H
+#define LIST_LL_H
 
 #include "../application.h"
 
-void uisearch_render(app_t *app);
+void ll_processUp(app_t *app);
+
+void ll_processDown(app_t *app);
+
+void ll_processLeft(app_t *app);
+
+void ll_processRight(app_t *app);
+
+void ll_processSelect(app_t *app);
+
+void ll_processBack(app_t *app);
+
+void ll_processOtherButton(app_t *app, GameControllerState_t *state);
+
+void ll_processOtherKey(app_t *app, SDL_Scancode scancode);
+
+void ll_renderDefault(app_t *app);
+
+void ll_renderList(app_t *app, int offset);
 
 #endif

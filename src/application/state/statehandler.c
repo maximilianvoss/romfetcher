@@ -15,9 +15,9 @@
  */
 
 #include "statehandler.h"
-#include "../search/statesearch.h"
+#include "../search/search.h"
 #include "statesystem.h"
-#include "statekeyboard.h"
+#include "../keyboard/keyboard.h"
 #include "../download/statedownload.h"
 #include "../download/statedownloadmanager.h"
 #include "../config/configstates.h"
@@ -33,16 +33,16 @@ static void (*state_init)(app_t *app);
 void statehandler_switch(app_t *app, uint8_t isSelectButton) {
     switch (app->win) {
         case window_search:
-            state_target = &statesearch_target;
-            state_persist = &statesearch_persist;
+            state_target = &search_stateTarget;
+            state_persist = &search_statePersist;
             break;
         case window_system:
             state_target = &statesystem_target;
             state_persist = &statesystem_persist;
             break;
         case window_keyboard:
-            state_target = &statekeyboard_target;
-            state_persist = &statekeyboard_persist;
+            state_target = &keyboard_stateTarget;
+            state_persist = &keyboard_statePersist;
             break;
         case window_download:
             state_target = &statedownload_target;
@@ -53,28 +53,28 @@ void statehandler_switch(app_t *app, uint8_t isSelectButton) {
             state_persist = &statedownloadmanager_persist;
             break;
         case window_config:
-            state_target = &configStateConfig_target;
-            state_persist = &configStateConfig_persist;
+            state_target = &config_stateTarget;
+            state_persist = &config_statePersist;
             break;
         case window_config_advanced:
-            state_target = &configStateAdvanced_target;
-            state_persist = &configStateAdvanced_persist;
+            state_target = &advancedConfig_stateTarget;
+            state_persist = &advancedConfig_statePersist;
             break;
         case window_config_hoster:
-            state_target = &configStateHoster_target;
-            state_persist = &configStateHoster_persist;
+            state_target = &hosterConfig_stateTarget;
+            state_persist = &hosterConfig_statePersist;
             break;
         case window_config_resolution:
-            state_target = &configStateResolution_target;
-            state_persist = &configStateResolution_persist;
+            state_target = &resolutionConfig_stateTarget;
+            state_persist = &resolutionConfig_statePersist;
             break;
         case window_config_systems:
-            state_target = &configStateSystems_target;
-            state_persist = &configStateSystems_persist;
+            state_target = &systemConfig_stateTarget;
+            state_persist = &systemConfig_statePersist;
             break;
         case window_config_themes:
-            state_target = &configStateTheme_target;
-            state_persist = &configStateTheme_persit;
+            state_target = &themeConfig_stateTarget;
+            state_persist = &themeConfig_statePersist;
             break;
     }
 
@@ -88,27 +88,27 @@ void statehandler_switch(app_t *app, uint8_t isSelectButton) {
 static void *getInitFunction(window_t target) {
     switch (target) {
         case window_search:
-            return &statesearch_init;
+            return &search_stateInit;
         case window_system:
             return &statesystem_init;
         case window_keyboard:
-            return &statekeyboard_init;
+            return &keyboard_stateInit;
         case window_download:
             return &statedownload_init;
         case window_downloadMgr:
             return &statedownloadmanager_init;
         case window_config:
-            return &configStateConfig_init;
+            return &config_stateInit;
         case window_config_advanced:
-            return &configStateAdvanced_init;
+            return &advancedConfig_stateInit;
         case window_config_hoster:
-            return &configStateHoster_init;
+            return &hosterConfig_stateInit;
         case window_config_resolution:
-            return &configStateResolution_init;
+            return &resolutioinConfig_stateInit;
         case window_config_systems:
-            return &configStateSystems_init;
+            return &systemConfig_stateInit;
         case window_config_themes:
-            return &configStateTheme_init;
+            return &themeConfig_stateInit;
     }
     return NULL;
 }

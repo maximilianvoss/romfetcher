@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Maximilian Voss (maximilian@voss.rocks)
+ * Copyright 2020 - 2021 Maximilian Voss (maximilian@voss.rocks)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-#ifndef UI_UILIST_H
-#define UI_UILIST_H
+#ifndef LIST_DBLIST_H
+#define LIST_DBLIST_H
 
+#include <sqlite3.h>
 #include "../application.h"
 
-void uilist_renderDefault(app_t *app);
+void dbll_init(sqlite3 *db, char *tableName);
 
-void uilist_renderList(app_t *app, int offset);
+void dbll_persist(sqlite3 *db, char *tableName, linkedlist_t *list);
+
+void dbll_load(sqlite3 *db, char *tableName, linkedlist_t *list);
 
 #endif

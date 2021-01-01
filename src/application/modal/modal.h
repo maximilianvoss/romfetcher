@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Maximilian Voss (maximilian@voss.rocks)
+ * Copyright 2020 - 2021 Maximilian Voss (maximilian@voss.rocks)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,27 @@
  * limitations under the License.
  */
 
-#ifndef DATABASE_POSTPROCESS_H
-#define DATABASE_POSTPROCESS_H
+#ifndef MODAL_MODAL_H
+#define MODAL_MODAL_H
 
-#include <sqlite3.h>
 #include "../application.h"
 
+void modal_processUp(app_t *app);
 
-void databasepostprocess_init(sqlite3 *db);
+void modal_processDown(app_t *app);
 
-char *databasepostprocess_getCommand(app_t *app, char *fileSuffix);
+void modal_processLeft(app_t *app);
+
+void modal_processRight(app_t *app);
+
+void modal_processSelect(app_t *app);
+
+void modal_processBack(app_t *app);
+
+void modal_processOtherButton(app_t *app, GameControllerState_t *state);
+
+void modal_processOtherKey(app_t *app, SDL_Scancode scancode);
+
+void model_render(app_t *app);
 
 #endif

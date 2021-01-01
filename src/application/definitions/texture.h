@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Maximilian Voss (maximilian@voss.rocks)
+ * Copyright 2020 - 2021 Maximilian Voss (maximilian@voss.rocks)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-#ifndef STATE_STATESEARCH_H
-#define STATE_STATESEARCH_H
+#ifndef DEFINITIONS_TEXTURE_H
+#define DEFINITIONS_TEXTURE_H
 
-#include "../application.h"
+#include <SDL.h>
 
-window_t statesearch_target(app_t *app, uint8_t isSelectButton);
-
-void statesearch_persist(app_t *app);
-
-void statesearch_init(app_t *app);
-
+typedef struct {
+    SDL_Texture *texture;
+    int w;
+    int h;
+} texture_t;
 
 #endif

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "uimodal.h"
+#include "modal.h"
 #include "../themes/rendering.h"
 #include "../ui/rendering.h"
 #include "../helper/uihelper.h"
@@ -31,8 +31,55 @@ static void renderActionButton(app_t *app);
 
 static void renderCancelButton(app_t *app);
 
+void modal_processUp(app_t *app) {
+    if (app->modal.cancelButton != NULL) {
+        app->modal.cursorPos = app->modal.cursorPos ? 0 : 1;
+    }
+}
 
-void uimodel_render(app_t *app) {
+void modal_processDown(app_t *app) {
+    if (app->modal.cancelButton != NULL) {
+        app->modal.cursorPos = app->modal.cursorPos ? 0 : 1;
+    }
+}
+
+void modal_processLeft(app_t *app) {
+    if (app->modal.cancelButton != NULL) {
+        app->modal.cursorPos = app->modal.cursorPos ? 0 : 1;
+    }
+}
+
+void modal_processRight(app_t *app) {
+    if (app->modal.cancelButton != NULL) {
+        app->modal.cursorPos = app->modal.cursorPos ? 0 : 1;
+    }
+}
+
+void modal_processSelect(app_t *app) {
+    if (!app->modal.cursorPos && app->modal.callbackAction != NULL) {
+        app->modal.callbackAction(app, app->modal.callbackData);
+    }
+    if (app->modal.cursorPos && app->modal.callbackCancel != NULL) {
+        app->modal.callbackCancel(app, app->modal.callbackData);
+    }
+    app->modal.cursorPos = 0;
+    app->modal.displayed = 0;
+}
+
+void modal_processBack(app_t *app) {
+    if (app->modal.callbackCancel != NULL) {
+        app->modal.callbackCancel(app, app->modal.callbackData);
+    }
+    app->modal.cursorPos = 0;
+    app->modal.displayed = 0;
+}
+
+void modal_processOtherButton(app_t *app, GameControllerState_t *state) {}
+
+void modal_processOtherKey(app_t *app, SDL_Scancode scancode) {}
+
+
+void model_render(app_t *app) {
     if (!app->modal.displayed) {
         return;
     }

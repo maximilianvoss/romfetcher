@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Maximilian Voss (maximilian@voss.rocks)
+ * Copyright 2020 - 2021 Maximilian Voss (maximilian@voss.rocks)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,40 +19,40 @@
 
 #include "../application.h"
 
-window_t configStateConfig_target(app_t *app, uint8_t isSelectButton);
+window_t config_stateTarget(app_t *app, uint8_t isSelectButton);
 
-void configStateConfig_persist(app_t *app);
+void config_statePersist(app_t *app);
 
-void configStateConfig_init(app_t *app);
+void config_stateInit(app_t *app);
 
-window_t configStateAdvanced_target(app_t *app, uint8_t isSelectButton);
+window_t advancedConfig_stateTarget(app_t *app, uint8_t isSelectButton);
 
-void configStateAdvanced_persist(app_t *app);
+void advancedConfig_statePersist(app_t *app);
 
-void configStateAdvanced_init(app_t *app);
+void advancedConfig_stateInit(app_t *app);
 
-window_t configStateHoster_target(app_t *app, uint8_t isSelectButton);
+window_t hosterConfig_stateTarget(app_t *app, uint8_t isSelectButton);
 
-void configStateHoster_persist(app_t *app);
+void hosterConfig_statePersist(app_t *app);
 
-void configStateHoster_init(app_t *app);
+void hosterConfig_stateInit(app_t *app);
 
-window_t configStateResolution_target(app_t *app, uint8_t isSelectButton);
+window_t resolutionConfig_stateTarget(app_t *app, uint8_t isSelectButton);
 
-void configStateResolution_persist(app_t *app);
+void resolutionConfig_statePersist(app_t *app);
 
-void configStateResolution_init(app_t *app);
+void resolutioinConfig_stateInit(app_t *app);
 
-window_t configStateSystems_target(app_t *app, uint8_t isSelectButton);
+window_t systemConfig_stateTarget(app_t *app, uint8_t isSelectButton);
 
-void configStateSystems_persist(app_t *app);
+void systemConfig_statePersist(app_t *app);
 
-void configStateSystems_init(app_t *app);
+void systemConfig_stateInit(app_t *app);
 
-window_t configStateTheme_target(app_t *app, uint8_t isSelectButton);
+window_t themeConfig_stateTarget(app_t *app, uint8_t isSelectButton);
 
-void configStateTheme_persit(app_t *app);
+void themeConfig_statePersist(app_t *app);
 
-void configStateTheme_init(app_t *app);
+void themeConfig_stateInit(app_t *app);
 
 #endif

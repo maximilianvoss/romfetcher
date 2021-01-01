@@ -14,15 +14,33 @@
  * limitations under the License.
  */
 
-#ifndef DATABASE_DOWNLOAD_H
-#define DATABASE_DOWNLOAD_H
+#ifndef KEYBOARD_KEYBOARD_H
+#define KEYBOARD_KEYBOARD_H
 
 #include "../application.h"
 
-void download_init(sqlite3 *db);
+void keyboard_processUp(app_t *app);
 
-void download_load(app_t *app);
+void keyboard_processDown(app_t *app);
 
-void download_persistDownload(app_t *app, download_t *download);
+void keyboard_processLeft(app_t *app);
+
+void keyboard_processRight(app_t *app);
+
+void keyboard_processSelect(app_t *app);
+
+void keyboard_processBack(app_t *app);
+
+void keyboard_processOtherButton(app_t *app, GameControllerState_t *state);
+
+void keyboard_processOtherKey(app_t *app, SDL_Scancode scancode);
+
+void keyboard_render(app_t *app);
+
+window_t keyboard_stateTarget(app_t *app, uint8_t isSelectButton);
+
+void keyboard_statePersist(app_t *app);
+
+void keyboard_stateInit(app_t *app);
 
 #endif

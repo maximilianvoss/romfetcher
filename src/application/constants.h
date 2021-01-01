@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Maximilian Voss (maximilian@voss.rocks)
+ * Copyright 2020 - 2021 Maximilian Voss (maximilian@voss.rocks)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,6 +45,6 @@
 #define LIST_ITEM_HEIGHT 30
 #endif
 
-#define COPYRIGHT "C Copyright 2020 by Maximilian Voss (maximilian@voss.rocks)"
+#define COPYRIGHT "C Copyright 2020 - 2021 by Maximilian Voss (maximilian@voss.rocks)"
 
 #endif

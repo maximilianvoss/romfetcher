@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Maximilian Voss (maximilian@voss.rocks)
+ * Copyright 2020 - 2021 Maximilian Voss (maximilian@voss.rocks)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 #ifndef ENGINECACHE_ENGINECACHE_H
 #define ENGINECACHE_ENGINECACHE_H
 
+#include <romfetcher.h>
 #include <sqlite3.h>
 
 void enginecache_init(sqlite3 *db);

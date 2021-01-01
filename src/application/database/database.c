@@ -18,30 +18,32 @@
 #include "database.h"
 #include "../constants.h"
 #include "../enginecache/enginecache.h"
-#include "../list/linkedlist.h"
-#include "postprocess.h"
-#include "download.h"
+#include "../list/dblist.h"
+#include "../download/postprocess.h"
+#include "../download/download.h"
 #include "../helper/path.h"
 
 static csafestring_t *buildDBPath();
 
-void database_init(app_t *app) {
+sqlite3 *database_init() {
+    sqlite3 *db;
     csafestring_t *dbPath = buildDBPath();
-    if (sqlite3_open_v2(dbPath->data, &app->database.db,
+    if (sqlite3_open_v2(dbPath->data, &db,
                         SQLITE_OPEN_FULLMUTEX | SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL) != SQLITE_OK) {
-        LOG_ERROR("Could not initialize database %s: %s", dbPath->data, sqlite3_errmsg(app->database.db));
-        sqlite3_close(app->database.db);
+        LOG_ERROR("Could not initialize database %s: %s", dbPath->data, sqlite3_errmsg(db));
+        sqlite3_close(db);
         safe_destroy(dbPath);
         exit(1);
     }
 
     safe_destroy(dbPath);
-    database_initTables(app->database.db);
+    database_initTables(db);
+    return db;
 }
 
-void database_destroy(app_t *app) {
-    if (sqlite3_close(app->database.db) != SQLITE_OK) {
-        LOG_ERROR("Could not destruct database: %s", sqlite3_errmsg(app->database.db));
+void database_destroy(sqlite3 *db) {
+    if (sqlite3_close(db) != SQLITE_OK) {
+        LOG_ERROR("Could not destruct database: %s", sqlite3_errmsg(db));
     }
 }
 

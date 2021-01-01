@@ -15,14 +15,14 @@
  */
 
 #include "uihandler.h"
-#include "../search/uisearch.h"
-#include "../keyboard/uikeyboard.h"
+#include "../search/search.h"
+#include "../keyboard/keyboard.h"
 #include "../download/uidownload.h"
 #include "rendering.h"
 #include "../constants.h"
-#include "../list/uilist.h"
+#include "../list/list.h"
 #include "../themes/rendering.h"
-#include "../modal/uimodal.h"
+#include "../modal/modal.h"
 #include "../download/uidownloadmanager.h"
 #include "../helper/uihelper.h"
 
@@ -120,7 +120,7 @@ void uihandler_render(app_t *app) {
             renderEngine = &uisearch_render;
             break;
         case window_keyboard:
-            renderEngine = &uikeyboard_render;
+            renderEngine = &keyboard_render;
             break;
         case window_download:
             renderEngine = &uidownload_render;
@@ -135,13 +135,13 @@ void uihandler_render(app_t *app) {
         case window_config_systems:
         case window_config_themes:
         case window_system:
-            renderEngine = &uilist_renderDefault;
+            renderEngine = &ll_renderDefault;
             break;
     }
 
     if (renderEngine != NULL) {
         renderEngine(app);
     }
-    uimodel_render(app);
+    model_render(app);
     SDL_RenderPresent(app->sdlRenderer);
 }

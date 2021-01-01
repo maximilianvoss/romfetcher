@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Maximilian Voss (maximilian@voss.rocks)
+ * Copyright 2020 - 2021 Maximilian Voss (maximilian@voss.rocks)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-#include "../application.h"
-
 #ifndef DATABASE_DATABASE_H
 #define DATABASE_DATABASE_H
 
-void database_init(app_t *app);
+#include <sqlite3.h>
 
-void database_destroy(app_t *app);
+sqlite3 *database_init();
+
+void database_destroy(sqlite3 *db);
 
 void database_initTables(sqlite3 *db);
 

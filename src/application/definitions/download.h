@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Maximilian Voss (maximilian@voss.rocks)
+ * Copyright 2020 - 2021 Maximilian Voss (maximilian@voss.rocks)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,23 @@
  * limitations under the License.
  */
 
-#ifndef UI_UIMODAL_H
-#define UI_UIMODAL_H
+#ifndef DEFINITIONS_DOWNLOAD_H
+#define DEFINITIONS_DOWNLOAD_H
 
-#include "../application.h"
+typedef struct download_s {
+    struct download_s *prev;
+    struct download_s *next;
+    char *title;
+    uint8_t active;
+    system_t *system;
+    char *url;
+    char *data;
+    char *filename;
+    httpmethod_t method;
+    curl_off_t current;
+    curl_off_t total;
+    volatile uint8_t cancelled;
+} download_t;
 
-void uimodel_render(app_t *app);
 
 #endif

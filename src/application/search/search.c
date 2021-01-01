@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-#include "uisearch.h"
+#include "search.h"
+#include "../state/statehandler.h"
 #include "../ui/rendering.h"
 #include "../themes/rendering.h"
 #include "../helper/uihelper.h"
@@ -31,6 +32,149 @@ static void renderSearchResult(app_t *app, int offset);
 static inline void drawHeadDivider(app_t *app, uiElementRects_t *rects);
 
 static inline void drawDivider(app_t *app, uiElementRects_t *rects);
+
+void search_processUp(app_t *app) {
+    switch (app->search.position) {
+        case searchactivity_downloadMgr:
+        case searchactivity_config:
+            break;
+        case searchactivity_system:
+            app->search.position = searchactivity_config;
+            break;
+        case searchactivity_field:
+        case searchactivity_button:
+            app->search.position = searchactivity_system;
+            break;
+        case searchactivity_results:
+            if (app->search.cursor->prev == NULL) {
+                app->search.position = searchactivity_field;
+                app->search.cursor = NULL;
+            } else {
+                app->search.cursor = app->search.cursor->prev;
+            }
+            break;
+    }
+}
+
+void search_processDown(app_t *app) {
+    switch (app->search.position) {
+        case searchactivity_downloadMgr:
+        case searchactivity_config:
+            app->search.position = searchactivity_system;
+            break;
+        case searchactivity_system:
+            app->search.position = searchactivity_field;
+            break;
+        case searchactivity_field:
+        case searchactivity_button:
+            if (app->search.all != NULL) {
+                app->search.cursor = app->search.all;
+                app->search.position = searchactivity_results;
+            }
+            break;
+        case searchactivity_results:
+            if (app->search.cursor->next != NULL) {
+                app->search.cursor = app->search.cursor->next;
+            }
+            break;
+    }
+}
+
+void search_processLeft(app_t *app) {
+    switch (app->search.position) {
+        case searchactivity_downloadMgr:
+            break;
+        case searchactivity_config:
+            app->search.position = searchactivity_downloadMgr;
+            break;
+        case searchactivity_system:
+            break;
+        case searchactivity_field:
+            app->search.position = searchactivity_system;
+            break;
+        case searchactivity_button:
+            app->search.position = searchactivity_field;
+            break;
+        case searchactivity_results:
+            if (app->search.cursor->prev == NULL) {
+                app->search.position = searchactivity_button;
+            } else {
+                app->search.cursor = app->search.cursor->prev;
+            }
+            break;
+    }
+}
+
+void search_processRight(app_t *app) {
+    switch (app->search.position) {
+        case searchactivity_downloadMgr:
+            app->search.position = searchactivity_config;
+            break;
+        case searchactivity_config:
+            break;
+        case searchactivity_system:
+            app->search.position = searchactivity_field;
+            break;
+        case searchactivity_field:
+            app->search.position = searchactivity_button;
+            break;
+        case searchactivity_button:
+            if (app->search.all != NULL) {
+                app->search.cursor = app->search.all;
+                app->search.position = searchactivity_results;
+            }
+            break;
+        case searchactivity_results:
+            if (app->search.cursor->next != NULL) {
+                app->search.cursor = app->search.cursor->next;
+            }
+            break;
+    }
+}
+
+void search_processSelect(app_t *app) {
+    statehandler_switch(app, 1);
+}
+
+void search_processBack(app_t *app) {
+}
+
+void search_processOtherButton(app_t *app, GameControllerState_t *state) {
+}
+
+void search_processOtherKey(app_t *app, SDL_Scancode scancode) {}
+
+window_t search_stateTarget(app_t *app, uint8_t isSelectButton) {
+    switch (app->search.position) {
+        case searchactivity_config:
+            return window_config;
+        case searchactivity_system:
+            return window_system;
+        case searchactivity_field:
+            return window_keyboard;
+        case searchactivity_results:
+            return window_download;
+        case searchactivity_downloadMgr:
+            return window_downloadMgr;
+        default:
+            return window_search;
+    }
+}
+
+void search_statePersist(app_t *app) {
+    if (app->search.position == searchactivity_button) {
+        if (strlen(app->search.searchText) > 2) {
+            if (app->search.all != NULL) {
+                result_freeList(app->search.all);
+            }
+            app->search.all = searchHosters(app->engine.all, app->systems.active, app->search.searchText);
+        }
+    }
+}
+
+void search_stateInit(app_t *app) {
+    app->win = window_search;
+}
 
 void uisearch_render(app_t *app) {
     renderSystemSelector(app);

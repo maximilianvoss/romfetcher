@@ -18,7 +18,7 @@
 #include "downloadercurl.h"
 #include "../helper/path.h"
 #include "../../common/utils.h"
-#include "../database/postprocess.h"
+#include "postprocess.h"
 
 static char *postProcess(app_t *app, char *file);
 

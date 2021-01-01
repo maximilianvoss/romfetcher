@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Maximilian Voss (maximilian@voss.rocks)
+ * Copyright 2020 - 2021 Maximilian Voss (maximilian@voss.rocks)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef ENUMS_H
-#define ENUMS_H
+#ifndef DEFINITIONS_ENUMS_H
+#define DEFINITIONS_ENUMS_H
 
 typedef enum {
     window_search,

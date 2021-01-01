@@ -22,9 +22,9 @@
 #include "themes/loading.h"
 #include "config/configmenu.h"
 #include "download/downloader.h"
-#include "database/download.h"
+#include "download/download.h"
 #include "helper/path.h"
-#include "list/linkedlist.h"
+#include "list/dblist.h"
 #include "constants.h"
 #include "enginecache/enginecache.h"
 #include "themes/rendering.h"
@@ -55,7 +55,7 @@ void static initApp(app_t *app) {
     memset(app, 0, sizeof(app_t));
 
     path_initRomfetchersHome();
-    database_init(app);
+    app->database.db = database_init();
     themes_init(app);
 
     cacheHandler.appData = app;
@@ -102,6 +102,6 @@ void static destroyApp(app_t *app) {
 
     inputhandler_destroy();
     downloader_destroy(app);
-    database_destroy(app);
+    database_destroy(app->database.db);
     SDL_Quit();
 }

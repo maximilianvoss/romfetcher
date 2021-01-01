@@ -17,7 +17,7 @@
 #include "configstates.h"
 #include "../ui/display.h"
 #include "config.h"
-#include "../list/linkedlist.h"
+#include "../list/dblist.h"
 #include "../constants.h"
 #include "../themes/rendering.h"
 
@@ -36,18 +36,18 @@ static void persistSystems(app_t *app);
 static void persistTheme(app_t *app);
 
 // config
-window_t configStateConfig_target(app_t *app, uint8_t isSelectButton) {
+window_t config_stateTarget(app_t *app, uint8_t isSelectButton) {
     if (isSelectButton) {
         return ((configMenu_t *) app->list.cursor)->destiny;
     }
     return window_search;
 }
 
-void configStateConfig_persist(app_t *app) {
+void config_statePersist(app_t *app) {
 
 }
 
-void configStateConfig_init(app_t *app) {
+void config_stateInit(app_t *app) {
     app->win = window_config;
     app->list.active = (linkedlist_t *) app->config.active;
     app->list.all = (linkedlist_t *) ll_get1st(app->config.active);
@@ -63,17 +63,17 @@ static void modalAdvancedApprove(void *appPtr, void *data) {
     app_t *app = appPtr;
     config_persist(app->database.db, app->config.advanced.active, app->config.resolution.cursor, app->themes.active,
                    app->engine.all, app->systems.all);
-    configStateConfig_init((app_t *) app);
+    config_stateInit((app_t *) app);
 }
 
 static void modalAdvancedCancel(void *appPtr, void *data) {
     app_t *app = appPtr;
     config_revert(app->database.db, &app->config.advanced.active, &app->config.resolution.active, &app->themes.active);
     display_reset(app);
-    configStateAdvanced_init(app);
+    advancedConfig_stateInit(app);
 }
 
-window_t configStateAdvanced_target(app_t *app, uint8_t isSelectButton) {
+window_t advancedConfig_stateTarget(app_t *app, uint8_t isSelectButton) {
     if (isSelectButton) {
         return window_config_advanced;
     }
@@ -94,10 +94,10 @@ window_t configStateAdvanced_target(app_t *app, uint8_t isSelectButton) {
     return window_config_advanced;
 }
 
-void configStateAdvanced_persist(app_t *app) {
+void advancedConfig_statePersist(app_t *app) {
 }
 
-void configStateAdvanced_init(app_t *app) {
+void advancedConfig_stateInit(app_t *app) {
     if (app->win != window_config_advanced) {
         app->win = window_config_advanced;
 
@@ -110,7 +110,7 @@ void configStateAdvanced_init(app_t *app) {
 }
 
 // hosters
-window_t configStateHoster_target(app_t *app, uint8_t isSelectButton) {
+window_t hosterConfig_stateTarget(app_t *app, uint8_t isSelectButton) {
     if (isSelectButton) {
         return window_config_hoster;
     }
@@ -118,11 +118,11 @@ window_t configStateHoster_target(app_t *app, uint8_t isSelectButton) {
     return window_config;
 }
 
-void configStateHoster_persist(app_t *app) {
+void hosterConfig_statePersist(app_t *app) {
 
 }
 
-void configStateHoster_init(app_t *app) {
+void hosterConfig_stateInit(app_t *app) {
     if (app->win != window_config_hoster) {
         app->win = window_config_hoster;
         app->list.cursor = (linkedlist_t *) app->engine.all;
@@ -142,17 +142,17 @@ static void modalResolutionApprove(void *appPtr, void *data) {
     app_t *app = appPtr;
     config_persist(app->database.db, app->config.advanced.active, app->config.resolution.cursor, app->themes.active,
                    app->engine.all, app->systems.all);
-    configStateConfig_init(app);
+    config_stateInit(app);
 }
 
 static void modalResolutionCancel(void *appPtr, void *data) {
     app_t *app = appPtr;
     config_revert(app->database.db, &app->config.advanced.active, &app->config.resolution.active, &app->themes.active);
     display_reset(app);
-    configStateResolution_init(app);
+    resolutioinConfig_stateInit(app);
 }
 
-window_t configStateResolution_target(app_t *app, uint8_t isSelectButton) {
+window_t resolutionConfig_stateTarget(app_t *app, uint8_t isSelectButton) {
     app->config.resolution.active = (resolutionConfig_t *) app->list.active;
 
     display_reset(app);
@@ -170,9 +170,9 @@ window_t configStateResolution_target(app_t *app, uint8_t isSelectButton) {
     return window_config_advanced;
 }
 
-void configStateResolution_persist(app_t *app) {}
+void resolutionConfig_statePersist(app_t *app) {}
 
-void configStateResolution_init(app_t *app) {
+void resolutioinConfig_stateInit(app_t *app) {
     app->win = window_config_resolution;
     app->list.active = (linkedlist_t *) app->config.resolution.active;
     app->list.all = (linkedlist_t *) ll_get1st(app->config.resolution.active);
@@ -183,7 +183,7 @@ void configStateResolution_init(app_t *app) {
 }
 
 // Systems
-window_t configStateSystems_target(app_t *app, uint8_t isSelectButton) {
+window_t systemConfig_stateTarget(app_t *app, uint8_t isSelectButton) {
     if (isSelectButton) {
         return window_config_systems;
     }
@@ -191,11 +191,11 @@ window_t configStateSystems_target(app_t *app, uint8_t isSelectButton) {
     return window_config;
 }
 
-void configStateSystems_persist(app_t *app) {
+void systemConfig_statePersist(app_t *app) {
 
 }
 
-void configStateSystems_init(app_t *app) {
+void systemConfig_stateInit(app_t *app) {
     if (app->win != window_config_systems) {
         app->win = window_config_systems;
         app->list.cursor = (linkedlist_t *) app->systems.all;
@@ -212,18 +212,18 @@ static void persistSystems(app_t *app) {
 }
 
 // Themes
-window_t configStateTheme_target(app_t *app, uint8_t isSelectButton) {
+window_t themeConfig_stateTarget(app_t *app, uint8_t isSelectButton) {
     if (isSelectButton) {
         persistTheme(app);
     }
     return window_config;
 }
 
-void configStateTheme_persit(app_t *app) {
+void themeConfig_statePersist(app_t *app) {
 
 }
 
-void configStateTheme_init(app_t *app) {
+void themeConfig_stateInit(app_t *app) {
     app->win = window_config_themes;
     app->list.cursor = (linkedlist_t *) app->themes.active;
     app->list.all = (linkedlist_t *) app->themes.all;

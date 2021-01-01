@@ -17,7 +17,7 @@
 #include "config.h"
 #include "../database/database.h"
 #include "../constants.h"
-#include "../list/linkedlist.h"
+#include "../list/dblist.h"
 #include "../themes/loading.h"
 
 static void initConfigTable(sqlite3 *db);

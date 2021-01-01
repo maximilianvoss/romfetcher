@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Maximilian Voss (maximilian@voss.rocks)
+ * Copyright 2020 - 2021 Maximilian Voss (maximilian@voss.rocks)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@
 #include <sqlite3.h>
 #include <romfetcher.h>
 #include "configmenu.h"
-#include "../themes/themes.h"
+#include "../definitions/themes.h"
 
 void config_load(sqlite3 *db, configMenu_t **configMenu, advancedConfig_t **advancedConfigs,
                  resolutionConfig_t **resolutionConfigs, theme_t **themes,

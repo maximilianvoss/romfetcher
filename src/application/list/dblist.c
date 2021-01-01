@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "linkedlist.h"
+#include "dblist.h"
 #include "../../common/utils.h"
 
 static void addElement(sqlite3 *db, char *tableName, char *name, int active);

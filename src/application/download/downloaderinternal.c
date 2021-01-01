@@ -19,13 +19,13 @@
 #include <pthread.h>
 #include <zconf.h>
 #include "downloaderinternal.h"
-#include "../search/statesearch.h"
 #include "statedownload.h"
-#include "../database/postprocess.h"
+#include "postprocess.h"
 #include "../constants.h"
-#include "../database/download.h"
+#include "download.h"
 #include "../../common/utils.h"
 #include "../helper/path.h"
+#include "../search/search.h"
 
 static void destroyDownload(void *ptr);
 
@@ -185,7 +185,7 @@ static void modalCancel(void *app, void *data) {
     app_t *appPtr = (app_t *) app;
     appPtr->modal.displayed = 0;
     statedownload_persist(appPtr);
-    statesearch_init(appPtr);
+    search_stateInit(appPtr);
     destroyDownload(data);
     free(data);
 }

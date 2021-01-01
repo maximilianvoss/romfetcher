@@ -16,11 +16,11 @@
 
 #include "inputhandler.h"
 #include "../constants.h"
-#include "../search/inputsearch.h"
+#include "../search/search.h"
 #include "../download/inputdownload.h"
-#include "../keyboard/inputkeyboard.h"
-#include "../list/inputlist.h"
-#include "../modal/inputmodal.h"
+#include "../keyboard/keyboard.h"
+#include "../list/list.h"
+#include "../modal/modal.h"
 #include "../download/inputdownloadmanager.h"
 #include "../download/downloader.h"
 
@@ -80,24 +80,24 @@ void inputhandler_init() {
 void inputhandler_processInputs(app_t *app) {
     switch (app->win) {
         case window_search:
-            processUp = &inputsearch_processUp;
-            processDown = &inputsearch_processDown;
-            processLeft = &inputsearch_processLeft;
-            processRight = &inputsearch_processRight;
-            processSelect = &inputsearch_processSelect;
-            processBack = &inputsearch_processBack;
-            processOtherButton = &inputsearch_processOtherButton;
-            processOtherKey = &inputsearch_processOtherKey;
+            processUp = &search_processUp;
+            processDown = &search_processDown;
+            processLeft = &search_processLeft;
+            processRight = &search_processRight;
+            processSelect = &search_processSelect;
+            processBack = &search_processBack;
+            processOtherButton = &search_processOtherButton;
+            processOtherKey = &search_processOtherKey;
             break;
         case window_keyboard:
-            processUp = &inputkeyboard_processUp;
-            processDown = &inputkeyboard_processDown;
-            processLeft = &inputkeyboard_processLeft;
-            processRight = &inputkeyboard_processRight;
-            processSelect = &inputkeyboard_processSelect;
-            processBack = &inputkeyboard_processBack;
-            processOtherButton = &inputkeyboard_processOtherButton;
-            processOtherKey = &inputkeyboard_processOtherKey;
+            processUp = &keyboard_processUp;
+            processDown = &keyboard_processDown;
+            processLeft = &keyboard_processLeft;
+            processRight = &keyboard_processRight;
+            processSelect = &keyboard_processSelect;
+            processBack = &keyboard_processBack;
+            processOtherButton = &keyboard_processOtherButton;
+            processOtherKey = &keyboard_processOtherKey;
             break;
         case window_download:
             processUp = &inputdownload_processUp;
@@ -126,26 +126,26 @@ void inputhandler_processInputs(app_t *app) {
         case window_config_resolution:
         case window_config_themes:
         case window_system:
-            processUp = &inputlist_processUp;
-            processDown = &inputlist_processDown;
-            processLeft = &inputlist_processLeft;
-            processRight = &inputlist_processRight;
-            processSelect = &inputlist_processSelect;
-            processBack = &inputlist_processBack;
-            processOtherButton = &inputlist_processOtherButton;
-            processOtherKey = &inputlist_processOtherKey;
+            processUp = &ll_processUp;
+            processDown = &ll_processDown;
+            processLeft = &ll_processLeft;
+            processRight = &ll_processRight;
+            processSelect = &ll_processSelect;
+            processBack = &ll_processBack;
+            processOtherButton = &ll_processOtherButton;
+            processOtherKey = &ll_processOtherKey;
             break;
     }
 
     if (app->modal.displayed) {
-        processUp = &inputmodal_processUp;
-        processDown = &inputmodal_processDown;
-        processLeft = &inputmodal_processLeft;
-        processRight = &inputmodal_processRight;
-        processSelect = &inputmodal_processSelect;
-        processBack = &inputmodal_processBack;
-        processOtherButton = &inputmodal_processOtherButton;
-        processOtherKey = &inputmodal_processOtherKey;
+        processUp = &modal_processUp;
+        processDown = &modal_processDown;
+        processLeft = &modal_processLeft;
+        processRight = &modal_processRight;
+        processSelect = &modal_processSelect;
+        processBack = &modal_processBack;
+        processOtherButton = &modal_processOtherButton;
+        processOtherKey = &modal_processOtherKey;
     }
 
     processEvents(app);

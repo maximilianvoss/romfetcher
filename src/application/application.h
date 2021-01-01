@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Maximilian Voss (maximilian@voss.rocks)
+ * Copyright 2020 - 2021 Maximilian Voss (maximilian@voss.rocks)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,11 @@
 
 #include <romfetcher.h>
 #include <sqlite3.h>
-#include "enums.h"
-#include "themes/themes.h"
-#include "download/download.h"
-#include "input/input.h"
-#include "ui/texture.h"
+#include "definitions/enums.h"
+#include "definitions/themes.h"
+#include "definitions/download.h"
+#include "definitions/input.h"
+#include "definitions/texture.h"
 #include "config/configmenu.h"
 
 typedef struct {

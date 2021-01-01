@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Maximilian Voss (maximilian@voss.rocks)
+ * Copyright 2020 - 2021 Maximilian Voss (maximilian@voss.rocks)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef THEMES_THEMES_H
-#define THEMES_THEMES_H
+#ifndef DEFINITIONS_THEMES_H
+#define DEFINITIONS_THEMES_H
 
 #include <SDL.h>
 #include <SDL_ttf.h>

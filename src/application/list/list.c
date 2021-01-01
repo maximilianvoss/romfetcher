@@ -14,18 +14,87 @@
  * limitations under the License.
  */
 
-
-#include "uilist.h"
+#include "list.h"
+#include "../state/statehandler.h"
 #include "../ui/rendering.h"
 #include "../themes/rendering.h"
 #include "../constants.h"
 #include "../helper/uihelper.h"
 
-void uilist_renderDefault(app_t *app) {
-    uilist_renderList(app, 50);
+static void up(app_t *app);
+
+static void down(app_t *app);
+
+void ll_processUp(app_t *app) {
+    up(app);
 }
 
-void uilist_renderList(app_t *app, int offset) {
+void ll_processDown(app_t *app) {
+    down(app);
+}
+
+void ll_processLeft(app_t *app) {
+    up(app);
+}
+
+void ll_processRight(app_t *app) {
+    down(app);
+}
+
+void ll_processSelect(app_t *app) {
+    if (app->list.multi) {
+        if (app->list.cursor->active) {
+            app->list.cursor->active = 0;
+        } else {
+            app->list.cursor->active = 1;
+        }
+    } else {
+        app->list.active = app->list.cursor;
+    }
+    statehandler_switch(app, 1);
+}
+
+void ll_processBack(app_t *app) {
+    statehandler_switch(app, 0);
+}
+
+void ll_processOtherButton(app_t *app, GameControllerState_t *state) {
+}
+
+void ll_processOtherKey(app_t *app, SDL_Scancode scancode) {}
+
+static void up(app_t *app) {
+    if (app->list.filterActive) {
+        linkedlist_t *prev = linkedlist_getPrevActive(app->list.cursor);
+        if (prev != NULL) {
+            app->list.cursor = prev;
+        }
+    } else {
+        if (app->list.cursor->prev != NULL) {
+            app->list.cursor = app->list.cursor->prev;
+        }
+    }
+}
+
+static void down(app_t *app) {
+    if (app->list.filterActive) {
+        linkedlist_t *next = linkedlist_getNextActive(app->list.cursor);
+        if (next != NULL) {
+            app->list.cursor = next;
+        }
+    } else {
+        if (app->list.cursor->next != NULL) {
+            app->list.cursor = app->list.cursor->next;
+        }
+
+    }
+}
+
+void ll_renderDefault(app_t *app) {
+    ll_renderList(app, 50);
+}
+
+void ll_renderList(app_t *app, int offset) {
     int width, height;
     SDL_GL_GetDrawableSize(app->sdlWindow, &width, &height);
 

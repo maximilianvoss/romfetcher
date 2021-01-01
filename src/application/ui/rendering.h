@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Maximilian Voss (maximilian@voss.rocks)
+ * Copyright 2020 - 2021 Maximilian Voss (maximilian@voss.rocks)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
 
 #include <SDL.h>
 #include <SDL_ttf.h>
-#include "texture.h"
+#include "../definitions/texture.h"
 
 SDL_Texture *rendering_loadImage(SDL_Renderer *sdlRenderer, char *filename);
 

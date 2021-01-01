@@ -15,7 +15,7 @@
  */
 
 #include "download.h"
-#include "../download/downloader.h"
+#include "downloader.h"
 
 void download_init(sqlite3 *db) {
     char *err_msg = 0;
