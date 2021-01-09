@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Maximilian Voss (maximilian@voss.rocks)
+ * Copyright 2020 - 2021 Maximilian Voss (maximilian@voss.rocks)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,8 +54,6 @@ static csafestring_t *buildDBPath() {
 }
 
 void database_initTables(sqlite3 *db) {
-
-
     if (!database_tableExists(db, "enginecache")) {
         enginecache_init(db);
     }

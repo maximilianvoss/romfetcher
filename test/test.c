@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Maximilian Voss (maximilian@voss.rocks)
+ * Copyright 2020 - 2021 Maximilian Voss (maximilian@voss.rocks)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -162,6 +162,6 @@ int main(int argc, char **argv) {
     TESTCALL("test_engine_romhustler_zxspectrum", test_engine_romhustler_zxspectrum, &app);
     TESTCALL("test_engine_romhustler_download", test_engine_romhustler_download, &app);
 
-    database_destroy(&app);
+    database_destroy(app.database.db);
     return -1;
 }

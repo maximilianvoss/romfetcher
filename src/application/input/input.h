@@ -21,7 +21,7 @@
 
 void input_init();
 
-void inputr_destroy();
+void input_destroy();
 
 void input_processInputs(app_t *app);
 

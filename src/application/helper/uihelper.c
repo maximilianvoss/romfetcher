@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Maximilian Voss (maximilian@voss.rocks)
+ * Copyright 2020 - 2021 Maximilian Voss (maximilian@voss.rocks)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,29 +63,35 @@ void uihelper_noPaddingX(uiElementRects_t *element) {
 }
 
 void uihelper_renderTexture(SDL_Renderer *sdlRenderer, texture_t *texture, SDL_Rect *target) {
-    SDL_Rect srcQuad = {0, 0, (texture->w > target->w) ? target->w : texture->w, texture->h};
+    SDL_Rect srcQuad = {0, 0,
+                        (texture->w > target->w) ? target->w : texture->w,
+                        (texture->h > target->h) ? target->h : texture->h};
     SDL_Rect renderQuad = {target->x,
-                           target->y,
+                           (texture->h > target->h) ? target->y : target->y + (target->h - texture->h) / 2,
                            (texture->w > target->w) ? target->w : texture->w,
-                           target->h};
+                           (texture->h > target->h) ? target->h : texture->h};
     SDL_RenderCopy(sdlRenderer, texture->texture, &srcQuad, &renderQuad);
 }
 
 void uihelper_renderTextureCentered(SDL_Renderer *sdlRenderer, texture_t *texture, SDL_Rect *target) {
-    SDL_Rect srcQuad = {0, 0, (texture->w > target->w) ? target->w : texture->w, texture->h};
+    SDL_Rect srcQuad = {0, 0,
+                        (texture->w > target->w) ? target->w : texture->w,
+                        (texture->h > target->h) ? target->h : texture->h};
     SDL_Rect renderQuad = {(texture->w > target->w) ? target->x : target->x + (target->w - texture->w) / 2,
-                           target->y,
+                           (texture->h > target->h) ? target->y : target->y + (target->h - texture->h) / 2,
                            (texture->w > target->w) ? target->w : texture->w,
-                           target->h};
+                           (texture->h > target->h) ? target->h : texture->h};
     SDL_RenderCopy(sdlRenderer, texture->texture, &srcQuad, &renderQuad);
 }
 
 void uihelper_renderTextureRight(SDL_Renderer *sdlRenderer, texture_t *texture, SDL_Rect *target) {
-    SDL_Rect srcQuad = {0, 0, (texture->w > target->w) ? target->w : texture->w, texture->h};
+    SDL_Rect srcQuad = {0, 0,
+                        (texture->w > target->w) ? target->w : texture->w,
+                        (texture->h > target->h) ? target->h : texture->h};
     SDL_Rect renderQuad = {(texture->w > target->w) ? target->x : target->x + target->w - texture->w - 3,
-                           target->y,
+                           (texture->h > target->h) ? target->y : target->y + (target->h - texture->h) / 2,
                            (texture->w > target->w) ? target->w : texture->w,
-                           target->h};
+                           (texture->h > target->h) ? target->h : texture->h};
     SDL_RenderCopy(sdlRenderer, texture->texture, &srcQuad, &renderQuad);
 }
 

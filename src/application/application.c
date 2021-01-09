@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Maximilian Voss (maximilian@voss.rocks)
+ * Copyright 2020 - 2021 Maximilian Voss (maximilian@voss.rocks)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
 #include "database/database.h"
 #include "themes/loading.h"
 #include "config/configmenu.h"
-#include "download/downloader.h"
+#include "download/downloader/downloader.h"
 #include "download/download.h"
 #include "helper/path.h"
 #include "list/dblist.h"
@@ -98,10 +98,12 @@ void static destroyApp(app_t *app) {
     destroyHosters(app->engine.all);
     destroySystems(app->systems.all);
 
+    downloader_destroy(app);
+
     config_destroy(app->config.active, app->config.advanced.active, app->config.resolution.active);
 
-    inputr_destroy();
-    downloader_destroy(app);
+    input_destroy();
+
     database_destroy(app->database.db);
     SDL_Quit();
 }

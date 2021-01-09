@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Maximilian Voss (maximilian@voss.rocks)
+ * Copyright 2020 - 2021 Maximilian Voss (maximilian@voss.rocks)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,6 +61,7 @@ void config_stateInit(app_t *app) {
 // advanced configs
 static void modalAdvancedApprove(void *appPtr, void *data) {
     app_t *app = appPtr;
+    app->modal.displayed = 0;
     config_persist(app->database.db, app->config.advanced.active, app->config.resolution.cursor, app->themes.active,
                    app->engine.all, app->systems.all);
     config_stateInit((app_t *) app);
@@ -68,6 +69,7 @@ static void modalAdvancedApprove(void *appPtr, void *data) {
 
 static void modalAdvancedCancel(void *appPtr, void *data) {
     app_t *app = appPtr;
+    app->modal.displayed = 0;
     config_revert(app->database.db, &app->config.advanced.active, &app->config.resolution.active, &app->themes.active);
     display_reset(app);
     advancedConfig_stateInit(app);
@@ -140,6 +142,7 @@ static void persistHoster(app_t *app) {
 // Resolution
 static void modalResolutionApprove(void *appPtr, void *data) {
     app_t *app = appPtr;
+    app->modal.displayed = 0;
     config_persist(app->database.db, app->config.advanced.active, app->config.resolution.cursor, app->themes.active,
                    app->engine.all, app->systems.all);
     config_stateInit(app);
@@ -147,6 +150,7 @@ static void modalResolutionApprove(void *appPtr, void *data) {
 
 static void modalResolutionCancel(void *appPtr, void *data) {
     app_t *app = appPtr;
+    app->modal.displayed = 0;
     config_revert(app->database.db, &app->config.advanced.active, &app->config.resolution.active, &app->themes.active);
     display_reset(app);
     resolutioinConfig_stateInit(app);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Maximilian Voss (maximilian@voss.rocks)
+ * Copyright 2020 - 2021 Maximilian Voss (maximilian@voss.rocks)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,21 +19,18 @@
 #include <pthread.h>
 #include <zconf.h>
 #include "downloaderinternal.h"
-#include "statedownload.h"
-#include "postprocess.h"
-#include "../constants.h"
-#include "download.h"
-#include "../../common/utils.h"
-#include "../helper/path.h"
-#include "../search/search.h"
+#include "../postprocess.h"
+#include "../../constants.h"
+#include "../download.h"
+#include "../../../common/utils.h"
+#include "../../helper/path.h"
+#include "../../search/search.h"
 
 static void destroyDownload(void *ptr);
 
 static void addDownload(app_t *app, download_t *download);
 
 static void modalDownload(void *app, void *data);
-
-static void modalCancel(void *app, void *data);
 
 static void postProcess(app_t *app, char *file);
 
@@ -105,7 +102,7 @@ void downloaderinternal_addToQueue(app_t *app, system_t *system, char *title, ch
         app->modal.app = app;
         app->modal.callbackData = download;
         app->modal.callbackAction = &modalDownload;
-        app->modal.callbackCancel = &modalCancel;
+        app->modal.callbackCancel = NULL;
     } else {
         addDownload(app, download);
     }
@@ -179,15 +176,6 @@ static void destroyDownload(void *ptr) {
 static void modalDownload(void *app, void *data) {
     ((app_t *) app)->modal.displayed = 0;
     addDownload(app, data);
-}
-
-static void modalCancel(void *app, void *data) {
-    app_t *appPtr = (app_t *) app;
-    appPtr->modal.displayed = 0;
-    statedownload_persist(appPtr);
-    search_stateInit(appPtr);
-    destroyDownload(data);
-    free(data);
 }
 
 static void addDownload(app_t *app, download_t *download) {

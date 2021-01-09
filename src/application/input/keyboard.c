@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Maximilian Voss (maximilian@voss.rocks)
+ * Copyright 2020 - 2021 Maximilian Voss (maximilian@voss.rocks)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@
 #include "../themes/rendering.h"
 #include "../ui/rendering.h"
 #include "../helper/uihelper.h"
+#include "../constants.h"
 
 static void addActiveCharToText(app_t *app);
 
@@ -214,34 +215,36 @@ void keyboard_render(app_t *app) {
 
 static void renderSearchField(app_t *app) {
     int width, height;
-    int charPos = 60;
+    int charPos;
     SDL_GL_GetDrawableSize(app->sdlWindow, &width, &height);
 
-    SDL_Rect r2 = {48, 50, width - 96, 54};
-    themes_setDrawColor(app, fieldBackground);
-    SDL_RenderFillRect(app->sdlRenderer, &r2);
+    uiElementRects_t fullTextRect = uihelper_generateRectsFullScreenWidth(PADDING_SIDES, PADDING_TOP, width,
+                                                                          LIST_ITEM_HEIGHT);
+    themes_setDrawColorFieldBackground(app, 0);
+    SDL_RenderFillRect(app->sdlRenderer, &fullTextRect.outter);
 
-    SDL_Rect r = {50, 52, width - 100, 50};
-    themes_setDrawColorField(app);
-    SDL_RenderFillRect(app->sdlRenderer, &r);
+    themes_setDrawColorFieldForeground(app, 0);
+    SDL_RenderFillRect(app->sdlRenderer, &fullTextRect.inner);
 
+    charPos = fullTextRect.content.x;
     if (*(app->keyboard.text) != '\0') {
         texture_t texture;
-        rendering_loadText(app->sdlRenderer, &texture, app->keyboard.text, app->themes.active->fonts.font34,
-                           &app->themes.active->colors.text);
-        SDL_Rect renderQuad = {60, 55, texture.w, texture.h};
-        SDL_RenderCopy(app->sdlRenderer, texture.texture, NULL, &renderQuad);
-        charPos += texture.w;
+        rendering_loadText(app->sdlRenderer, &texture, app->keyboard.text, app->themes.active->fonts.font24,
+                           themes_getDrawColor(app, keyboardText));
+
+        uihelper_renderTexture(app->sdlRenderer, &texture, &fullTextRect.content);
+        charPos = fullTextRect.content.x + texture.w;
         uihelper_destroyTexture(&texture);
     }
 
     if (app->keyboard.activeChar != '\0') {
         char miniString[2] = {app->keyboard.activeChar, '\0'};
         texture_t texture;
-        rendering_loadText(app->sdlRenderer, &texture, miniString, app->themes.active->fonts.font34,
-                           &app->themes.active->colors.textHighlight);
-        SDL_Rect renderQuad = {charPos, 55, texture.w, texture.h};
-        SDL_RenderCopy(app->sdlRenderer, texture.texture, NULL, &renderQuad);
+        rendering_loadText(app->sdlRenderer, &texture, miniString, app->themes.active->fonts.font24,
+                           themes_getDrawColor(app, keyboardActiveChar));
+
+        fullTextRect.content.x = charPos;
+        uihelper_renderTexture(app->sdlRenderer, &texture, &fullTextRect.content);
         uihelper_destroyTexture(&texture);
     }
 }
@@ -257,49 +260,40 @@ static void renderDailPad(app_t *app) {
     int width, height;
     SDL_GL_GetDrawableSize(app->sdlWindow, &width, &height);
 
-    int padWidth = (width - 100) / 4;
-    int padHeight = (height - 100 - 50) / 4 - 20;
+    int padWidth = (width - 2 * PADDING_SIDES) / 4;
+    int padHeight = (height - PADDING_TOP - PADDING_BOTTOM - 2 * LIST_ITEM_HEIGHT) / 4 - 20;
     int posX = (width / 2) - 1.5 * padWidth - 20;
 
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 4; j++) {
-            renderKey(app, posX + i * (padWidth + 20), 120 + j * (padHeight + 20), padWidth, padHeight,
+            renderKey(app, posX + i * (padWidth + 20), PADDING_TOP + 2 * LIST_ITEM_HEIGHT + j * (padHeight + 20),
+                      padWidth, padHeight,
                       app->keyboard.pointerPosition == i + j * 3 ? 1 : 0, (char *) keys[j][i]);
         }
     }
 }
 
 static void renderKey(app_t *app, int posx, int posy, int padWidth, int padHeight, uint8_t active, char *text) {
-    SDL_Rect rectShadow = {posx, posy, padWidth, padHeight};
-    themes_setDrawColorBackground(app, active);
-    SDL_RenderFillRect(app->sdlRenderer, &rectShadow);
+    uiElementRects_t keyRect = uihelper_generateRects(posx, posy, padWidth, padHeight);
 
-    SDL_Rect rect = {posx + 2, posy + 2, padWidth - 4, padHeight - 4};
-    themes_setDrawColorField(app);
-    SDL_RenderFillRect(app->sdlRenderer, &rect);
+    themes_setDrawColorFieldBackground(app, active);
+    SDL_RenderFillRect(app->sdlRenderer, &keyRect.outter);
+
+    themes_setDrawColorFieldForeground(app, active);
+    SDL_RenderFillRect(app->sdlRenderer, &keyRect.inner);
 
     if (text != NULL && *text != '\0') {
         texture_t texture;
         rendering_loadText(app->sdlRenderer, &texture, text, app->themes.active->fonts.font26,
-                           &app->themes.active->colors.text);
-
-        int width = (texture.w > padWidth - 40) ? padWidth - 40 : texture.w;
-        int offsetX = (padWidth - width) / 2;
-
-        int height = (texture.h > padHeight - 20) ? padHeight - 20 : texture.h;
-        int offsetY = (padHeight - height) / 2;
-
-        SDL_Rect srcQuad = {0, 0, padWidth - 40, padHeight - 20};
-        SDL_Rect renderQuad = {posx + offsetX, posy + offsetY, width, height};
-
-        SDL_RenderCopy(app->sdlRenderer, texture.texture, &srcQuad, &renderQuad);
+                           themes_getDrawColor(app, keyboardText));
+        uihelper_renderTextureCentered(app->sdlRenderer, &texture, &keyRect.inner);
         uihelper_destroyTexture(&texture);
     }
 }
 
 static void addActiveCharToText(app_t *app) {
     int length = strlen(app->keyboard.text);
-    if (length > 254 || app->keyboard.activeChar == 0) {
+    if (length == MAX_SEARCHTEXT_LENGTH - 1 || app->keyboard.activeChar == 0) {
         return;
     }
     app->keyboard.text[length] = app->keyboard.activeChar;
@@ -325,7 +319,7 @@ window_t keyboard_stateTarget(app_t *app, uint8_t isSelectButton) {
 }
 
 void keyboard_statePersist(app_t *app) {
-    memcpy(app->search.searchText, app->keyboard.text, 256);
+    memcpy(app->search.searchText, app->keyboard.text, MAX_SEARCHTEXT_LENGTH);
 }
 
 void keyboard_stateInit(app_t *app) {

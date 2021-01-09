@@ -20,20 +20,95 @@
 #include "../application.h"
 
 enum theme_color {
-    background,
-    field,
-    fieldBackground,
-    fieldActive,
+    windowBackgroundActive,
+    windowBackgroundInactive,
+    windowCopyright,
+
+    fieldTextInactive,
+    fieldForegroundInactive,
+    fieldBackgroundInactive,
+    fieldTextActive,
+    fieldForegroundActive,
+    fieldBackgroundActive,
+
+    resultHeaderBackbround,
+    resultHeaderForeground,
+    resultHeaderText,
+    resultDivider,
+    resultRowTextActive,
+    resultRowForegroundActive,
+    resultRowBackgroundActive,
+    resultRowTextInactive,
+    resultRowForegroundInactive,
+    resultRowBackgroundInactive,
+
     modalBackground,
-    modalBackgroundInactive,
-    modalFrame,
-    modalButtonFrame,
-    modalButtonFrameActive
+    modalForeground,
+    modalHeadText,
+    modalHeadForeground,
+    modalButtonTextInactive,
+    modalButtonForegroundInactive,
+    modalButtonBackgroundInactive,
+    modalButtonTextActive,
+    modalButtonForegroundActive,
+    modalButtonBackgroundActive,
+
+    iconForegroundColorInactive,
+    iconBackgroundColorInactive,
+    iconForegroundColorActive,
+    iconBackgroundColorActive,
+
+    iconDownloadsTextInactive,
+    iconDownloadsCircleInactive,
+    iconDownloadsTextActive,
+    iconDownloadsCircleActive,
+
+    keyboardText,
+    keyboardActiveChar,
+
+    dwnldsItemForegroundInactive,
+    dwnldsItemBackgroundInactive,
+    dwnldsItemTextInactive,
+    dwnldsItemForegroundActive,
+    dwnldsItemBackgroundActive,
+    dwnldsItemTextActive,
+    dwnldsBarForegroundInactive,
+    dwnldsBarBackgroundInactive,
+    dwnldsBarTextInactive,
+    dwnldsBarProgressBarInactive,
+    dwnldsBarForegroundActive,
+    dwnldsBarBackgroundActive,
+    dwnldsBarTextActive,
+    dwnldsBarProgressBarActive
 };
 
-void themes_setDrawColorField(app_t *app);
+void themes_setDrawColorFieldForeground(app_t *app, uint8_t active);
 
-void themes_setDrawColorBackground(app_t *app, uint8_t active);
+void themes_setDrawColorFieldBackground(app_t *app, uint8_t active);
+
+SDL_Color *themes_getDrawColorFieldText(app_t *app, uint8_t active);
+
+void themes_setDrawColorResultForeground(app_t *app, uint8_t active);
+
+void themes_setDrawColorResultBackground(app_t *app, uint8_t active);
+
+SDL_Color *themes_getDrawColorResultText(app_t *app, uint8_t active);
+
+void themes_setDrawColorDwnItemForeground(app_t *app, uint8_t active);
+
+void themes_setDrawColorDwnItemBackground(app_t *app, uint8_t active);
+
+SDL_Color *themes_getDrawColorDwnItemText(app_t *app, uint8_t active);
+
+void themes_setDrawColorDwnProgressForeground(app_t *app, uint8_t active);
+
+void themes_setDrawColorDwnProgressBackground(app_t *app, uint8_t active);
+
+void themes_setDrawColorDwnProgressState(app_t *app, uint8_t active);
+
+SDL_Color *themes_getDrawColorDwnProgressText(app_t *app, uint8_t active);
+
+SDL_Color *themes_getDrawColor(app_t *app, enum theme_color color);
 
 void themes_setDrawColor(app_t *app, enum theme_color color);
 

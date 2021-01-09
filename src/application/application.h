@@ -25,6 +25,7 @@
 #include "definitions/controller.h"
 #include "definitions/texture.h"
 #include "config/configmenu.h"
+#include "constants.h"
 
 typedef struct {
     SDL_Renderer *sdlRenderer;
@@ -62,7 +63,7 @@ typedef struct {
 
     struct {
         char activeChar;
-        char text[256];
+        char text[MAX_SEARCHTEXT_LENGTH];
         int8_t pointerPosition;
     } keyboard;
 
@@ -90,11 +91,6 @@ typedef struct {
         struct {
             advancedConfig_t *active;
             advancedConfig_t *cursor;
-//            uint8_t fullscreen;
-//            uint8_t opengl;
-//            uint8_t highdpi;
-//            uint8_t downloadQueue;
-//            uint8_t externalCurl;
         } advanced;
 
         struct {
@@ -104,10 +100,9 @@ typedef struct {
     } config;
 
     struct {
-        result_t *active;
         result_t *cursor;
         result_t *all;
-        char searchText[256];
+        char searchText[MAX_SEARCHTEXT_LENGTH];
         searchactivity_t position;
     } search;
 

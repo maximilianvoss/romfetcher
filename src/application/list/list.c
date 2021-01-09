@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Maximilian Voss (maximilian@voss.rocks)
+ * Copyright 2020 - 2021 Maximilian Voss (maximilian@voss.rocks)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -91,7 +91,7 @@ static void down(app_t *app) {
 }
 
 void ll_renderDefault(app_t *app) {
-    ll_renderList(app, 50);
+    ll_renderList(app, PADDING_TOP);
 }
 
 void ll_renderList(app_t *app, int offset) {
@@ -124,15 +124,16 @@ void ll_renderList(app_t *app, int offset) {
     }
 
     int position = offset;
-    while (element != NULL && position <= height - 80) {
-        uiElementRects_t rects = uihelper_generateRectsFullScreenWidth(20, position, width, LIST_ITEM_HEIGHT);
-        themes_setDrawColorBackground(app, (element == app->list.cursor));
+    while (element != NULL && position <= height - PADDING_BOTTOM) {
+        uiElementRects_t rects = uihelper_generateRectsFullScreenWidth(PADDING_SIDES, position, width,
+                                                                       LIST_ITEM_HEIGHT);
+        themes_setDrawColorFieldBackground(app, (element == app->list.cursor));
         SDL_RenderFillRect(app->sdlRenderer, &rects.outter);
-        themes_setDrawColorField(app);
+        themes_setDrawColorFieldForeground(app, (element == app->list.cursor));
         SDL_RenderFillRect(app->sdlRenderer, &rects.inner);
 
         rendering_loadText(app->sdlRenderer, &texture, element->name, app->themes.active->fonts.font24,
-                           &app->themes.active->colors.text);
+                           themes_getDrawColorFieldText(app, (element == app->list.cursor)));
         if (app->list.checkbox) {
             uiElementRects_t checkboxRects = uihelper_generateRects(rects.inner.x + 3, rects.content.y, rects.content.h,
                                                                     rects.content.h);

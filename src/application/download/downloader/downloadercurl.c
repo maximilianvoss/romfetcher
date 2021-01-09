@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Maximilian Voss (maximilian@voss.rocks)
+ * Copyright 2020 - 2021 Maximilian Voss (maximilian@voss.rocks)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 #include <csafestring.h>
 #include "downloadercurl.h"
-#include "../helper/path.h"
-#include "../../common/utils.h"
-#include "postprocess.h"
+#include "../../helper/path.h"
+#include "../../../common/utils.h"
+#include "../postprocess.h"
 
 static char *postProcess(app_t *app, char *file);
 

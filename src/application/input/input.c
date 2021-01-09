@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Maximilian Voss (maximilian@voss.rocks)
+ * Copyright 2020 - 2021 Maximilian Voss (maximilian@voss.rocks)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,12 @@
  */
 
 #include "input.h"
-#include "../constants.h"
 #include "../search/search.h"
-#include "../download/inputdownload.h"
 #include "keyboard.h"
 #include "../list/list.h"
 #include "../modal/modal.h"
-#include "../download/inputdownloadmanager.h"
-#include "../download/downloader.h"
+#include "../download/downloadmanager.h"
+#include "../download/downloader/downloader.h"
 
 static void processGameController(app_t *app);
 
@@ -98,25 +96,15 @@ void input_processInputs(app_t *app) {
             processOtherButton = &keyboard_processOtherButton;
             processOtherKey = &keyboard_processOtherKey;
             break;
-        case window_download:
-            processUp = &inputdownload_processUp;
-            processDown = &inputdownload_processDown;
-            processLeft = &inputdownload_processLeft;
-            processRight = &inputdownload_processRight;
-            processSelect = &inputdownload_processSelect;
-            processBack = &inputdownload_processBack;
-            processOtherButton = &inputdownload_processOtherButton;
-            processOtherKey = &inputdownload_processOtherKey;
-            break;
         case window_downloadMgr:
-            processUp = &inputdownloadmanager_processUp;
-            processDown = &inputdownloadmanager_processDown;
-            processLeft = &inputdownloadmanager_processLeft;
-            processRight = &inputdownloadmanager_processRight;
-            processSelect = &inputdownloadmanager_processSelect;
-            processBack = &inputdownloadmanager_processBack;
-            processOtherButton = &inputdownloadmanager_processOtherButton;
-            processOtherKey = &inputdownloadmanager_processOtherKey;
+            processUp = &downloadmanager_processUp;
+            processDown = &downloadmanager_processDown;
+            processLeft = &downloadmanager_processLeft;
+            processRight = &downloadmanager_processRight;
+            processSelect = &downloadmanager_processSelect;
+            processBack = &downloadmanager_processBack;
+            processOtherButton = &downloadmanager_processOtherButton;
+            processOtherKey = &downloadmanager_processOtherKey;
             break;
         case window_config:
         case window_config_advanced:
@@ -150,7 +138,7 @@ void input_processInputs(app_t *app) {
     processEvents(app);
 }
 
-void inputr_destroy() {
+void input_destroy() {
     for (int i = 0; i < gameControllerCount; i++) {
         SDL_GameControllerClose(gameControllers[i]);
     }

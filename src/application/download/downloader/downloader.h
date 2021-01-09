@@ -14,25 +14,22 @@
  * limitations under the License.
  */
 
-#ifndef UI_INPUTDOWNLOADMANAGER_H
-#define UI_INPUTDOWNLOADMANAGER_H
+#ifndef DOWNLOAD_DOWNLOADER_H
+#define DOWNLOAD_DOWNLOADER_H
 
-#include "../application.h"
+#include "../../application.h"
 
-void inputdownloadmanager_processUp(app_t *app);
+void downloader_init(app_t *app);
 
-void inputdownloadmanager_processDown(app_t *app);
+void downloader_destroy(app_t *app);
 
-void inputdownloadmanager_processLeft(app_t *app);
+uint8_t downloader_addToQueue(void *app, system_t *system, char *title, char *url, char *data, char *filename,
+                              httpmethod_t method);
 
-void inputdownloadmanager_processRight(app_t *app);
+void downloader_cancel(app_t *app, download_t *download);
 
-void inputdownloadmanager_processSelect(app_t *app);
+uint8_t downloader_isActive(app_t *app);
 
-void inputdownloadmanager_processBack(app_t *app);
-
-void inputdownloadmanager_processOtherButton(app_t *app, controller_t *state);
-
-void inputdownloadmanager_processOtherKey(app_t *app, SDL_Scancode scancode);
+void downloader_cancelAllDownloads(app_t *app);
 
 #endif

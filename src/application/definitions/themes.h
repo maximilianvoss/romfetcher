@@ -27,19 +27,73 @@ typedef struct theme_s {
     char *fileReference;
 
     struct {
-        SDL_Color background;
-        SDL_Color field;
-        SDL_Color fieldBackground;
-        SDL_Color fieldHighlight;
-        SDL_Color text;
-        SDL_Color textHighlight;
-        SDL_Color textInverted;
+        SDL_Color windowBackgroundActive;
+        SDL_Color windowBackgroundInactive;
+        SDL_Color windowCopyright;
+
+        SDL_Color fieldTextInactive;
+        SDL_Color fieldForegroundInactive;
+        SDL_Color fieldBackgroundInactive;
+        SDL_Color fieldTextActive;
+        SDL_Color fieldForegroundActive;
+        SDL_Color fieldBackgroundActive;
+
+        SDL_Color buttonTextInactive;
+        SDL_Color buttonForegroundInactive;
+        SDL_Color buttonBackgroundInactive;
+        SDL_Color buttonTextActive;
+        SDL_Color buttonForegroundActive;
+        SDL_Color buttonBackgroundActive;
+
+        SDL_Color resultHeaderBackbround;
+        SDL_Color resultHeaderForeground;
+        SDL_Color resultHeaderText;
+        SDL_Color resultDivider;
+        SDL_Color resultRowTextActive;
+        SDL_Color resultRowForegroundActive;
+        SDL_Color resultRowBackgroundActive;
+        SDL_Color resultRowTextInactive;
+        SDL_Color resultRowForegroundInactive;
+        SDL_Color resultRowBackgroundInactive;
+
         SDL_Color modalBackground;
-        SDL_Color modalBackgroundInactive;
-        SDL_Color modalFrame;
+        SDL_Color modalForeground;
         SDL_Color modalText;
-        SDL_Color modalButtonFrame;
-        SDL_Color modalButtonFrameActive;
+        SDL_Color modalHeadText;
+        SDL_Color modalHeadForeground;
+        SDL_Color modalButtonTextInactive;
+        SDL_Color modalButtonForegroundInactive;
+        SDL_Color modalButtonBackgroundInactive;
+        SDL_Color modalButtonTextActive;
+        SDL_Color modalButtonForegroundActive;
+        SDL_Color modalButtonBackgroundActive;
+
+        SDL_Color iconForegroundColorInactive;
+        SDL_Color iconBackgroundColorInactive;
+        SDL_Color iconForegroundColorActive;
+        SDL_Color iconBackgroundColorActive;
+        SDL_Color iconDownloadsTextInactive;
+        SDL_Color iconDownloadsCircleInactive;
+        SDL_Color iconDownloadsTextActive;
+        SDL_Color iconDownloadsCircleActive;
+
+        SDL_Color keyboardText;
+        SDL_Color keyboardActiveChar;
+
+        SDL_Color dwnldsItemForegroundInactive;
+        SDL_Color dwnldsItemBackgroundInactive;
+        SDL_Color dwnldsItemTextInactive;
+        SDL_Color dwnldsItemForegroundActive;
+        SDL_Color dwnldsItemBackgroundActive;
+        SDL_Color dwnldsItemTextActive;
+        SDL_Color dwnldsBarForegroundInactive;
+        SDL_Color dwnldsBarBackgroundInactive;
+        SDL_Color dwnldsBarTextInactive;
+        SDL_Color dwnldsBarProgressBarInactive;
+        SDL_Color dwnldsBarForegroundActive;
+        SDL_Color dwnldsBarBackgroundActive;
+        SDL_Color dwnldsBarTextActive;
+        SDL_Color dwnldsBarProgressBarActive;
     } colors;
 
     struct {

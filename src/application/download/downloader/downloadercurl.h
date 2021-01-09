@@ -17,7 +17,7 @@
 #ifndef DOWNLOAD_DOWNLOADERCURL_H
 #define DOWNLOAD_DOWNLOADERCURL_H
 
-#include "../application.h"
+#include "../../application.h"
 
 void downloadercurl_init(app_t *app);
 

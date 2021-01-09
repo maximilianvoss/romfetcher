@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Maximilian Voss (maximilian@voss.rocks)
+ * Copyright 2020 - 2021 Maximilian Voss (maximilian@voss.rocks)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,7 @@
 #include "../search/search.h"
 #include "statesystem.h"
 #include "../input/keyboard.h"
-#include "../download/statedownload.h"
-#include "../download/statedownloadmanager.h"
+#include "../download/downloadmanager.h"
 #include "../config/configstates.h"
 
 static void *getInitFunction(window_t target);
@@ -44,13 +43,9 @@ void statehandler_switch(app_t *app, uint8_t isSelectButton) {
             state_target = &keyboard_stateTarget;
             state_persist = &keyboard_statePersist;
             break;
-        case window_download:
-            state_target = &statedownload_target;
-            state_persist = &statedownload_persist;
-            break;
         case window_downloadMgr:
-            state_target = &statedownloadmanager_target;
-            state_persist = &statedownloadmanager_persist;
+            state_target = &downloadmanager_stateTarget;
+            state_persist = &downloadmanager_statePersist;
             break;
         case window_config:
             state_target = &config_stateTarget;
@@ -93,10 +88,8 @@ static void *getInitFunction(window_t target) {
             return &statesystem_init;
         case window_keyboard:
             return &keyboard_stateInit;
-        case window_download:
-            return &statedownload_init;
         case window_downloadMgr:
-            return &statedownloadmanager_init;
+            return &downloadmanager_stateInit;
         case window_config:
             return &config_stateInit;
         case window_config_advanced:

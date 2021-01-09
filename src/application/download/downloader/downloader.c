@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Maximilian Voss (maximilian@voss.rocks)
+ * Copyright 2020 - 2021 Maximilian Voss (maximilian@voss.rocks)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 #include "downloader.h"
 #include "downloadercurl.h"
 #include "downloaderinternal.h"
-#include "../config/config.h"
+#include "../../config/config.h"
 
 void downloader_init(app_t *app) {
     if (config_get(app->config.advanced.active, advancedConfig_externalCurl)) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Maximilian Voss (maximilian@voss.rocks)
+ * Copyright 2020 - 2021 Maximilian Voss (maximilian@voss.rocks)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
+#include <csafestring.h>
 #include "search.h"
 #include "../state/statehandler.h"
 #include "../ui/rendering.h"
 #include "../themes/rendering.h"
 #include "../helper/uihelper.h"
 #include "../constants.h"
+#include "../download/downloader/downloader.h"
+
+static void modalDownload(void *appPtr, void *data);
 
 static void renderSearchField(app_t *app);
 
@@ -144,6 +148,12 @@ void search_processOtherButton(app_t *app, controller_t *state) {
 
 void search_processOtherKey(app_t *app, SDL_Scancode scancode) {}
 
+static void modalDownload(void *appPtr, void *data) {
+    app_t *app = appPtr;
+    app->modal.displayed = 0;
+    downloadItem(app->search.cursor, downloader_addToQueue, app);
+}
+
 window_t search_stateTarget(app_t *app, uint8_t isSelectButton) {
     switch (app->search.position) {
         case searchactivity_config:
@@ -153,7 +163,19 @@ window_t search_stateTarget(app_t *app, uint8_t isSelectButton) {
         case searchactivity_field:
             return window_keyboard;
         case searchactivity_results:
-            return window_download;
+            app->modal.displayed = 1;
+            app->modal.headline = "Start Download";
+            csafestring_t *text = safe_create("Shall we start download for:\n");
+            safe_strcat(text, app->search.cursor->title);
+            app->modal.text = text->data;
+            app->modal.app = app;
+            app->modal.cursorPos = 0;
+            app->modal.actionButton = "Download";
+            app->modal.callbackAction = modalDownload;
+            app->modal.cancelButton = "Cancel";
+            app->modal.callbackData = NULL;
+            app->modal.callbackCancel = NULL;
+            return window_search;
         case searchactivity_downloadMgr:
             return window_downloadMgr;
         default:
@@ -176,22 +198,23 @@ void search_stateInit(app_t *app) {
     app->win = window_search;
 }
 
-void uisearch_render(app_t *app) {
+void search_render(app_t *app) {
     renderSystemSelector(app);
     renderSearchField(app);
     renderSearchButton(app);
-    renderSearchResult(app, 2 * (LIST_ITEM_HEIGHT + 10) + 50);
+    renderSearchResult(app, 2 * (LIST_ITEM_HEIGHT + 10) + PADDING_TOP);
 }
 
 static void renderSystemSelector(app_t *app) {
     int width, height;
     SDL_GL_GetDrawableSize(app->sdlWindow, &width, &height);
 
-    uiElementRects_t element = uihelper_generateRectsFullScreenWidth(20, 50, width, LIST_ITEM_HEIGHT);
-    themes_setDrawColorBackground(app, (app->search.position == searchactivity_system));
+    uiElementRects_t element = uihelper_generateRectsFullScreenWidth(PADDING_SIDES, PADDING_TOP, width,
+                                                                     LIST_ITEM_HEIGHT);
+    themes_setDrawColorFieldBackground(app, (app->search.position == searchactivity_system));
     SDL_RenderFillRect(app->sdlRenderer, &element.outter);
 
-    themes_setDrawColorField(app);
+    themes_setDrawColorFieldForeground(app, (app->search.position == searchactivity_system));
     SDL_RenderFillRect(app->sdlRenderer, &element.inner);
 
     SDL_Rect texture_rect = {width - element.outter.x - element.outter.h, element.outter.y, element.outter.h,
@@ -200,7 +223,7 @@ static void renderSystemSelector(app_t *app) {
 
     texture_t texture;
     rendering_loadText(app->sdlRenderer, &texture, app->systems.active->fullname, app->themes.active->fonts.font24,
-                       &app->themes.active->colors.text);
+                       themes_getDrawColorFieldText(app, (app->search.position == searchactivity_system)));
     uihelper_renderTexture(app->sdlRenderer, &texture, &element.content);
     uihelper_destroyTexture(&texture);
 }
@@ -209,18 +232,19 @@ static void renderSearchField(app_t *app) {
     int width, height;
     SDL_GL_GetDrawableSize(app->sdlWindow, &width, &height);
 
-    uiElementRects_t element = uihelper_generateRects(20, 60 + LIST_ITEM_HEIGHT, width - width / 3 - 5,
+    uiElementRects_t element = uihelper_generateRects(PADDING_SIDES, PADDING_TOP + 10 + LIST_ITEM_HEIGHT,
+                                                      width - width / 3 - 5,
                                                       LIST_ITEM_HEIGHT);
-    themes_setDrawColorBackground(app, (app->search.position == searchactivity_field));
+    themes_setDrawColorFieldBackground(app, (app->search.position == searchactivity_field));
     SDL_RenderFillRect(app->sdlRenderer, &element.outter);
 
-    themes_setDrawColorField(app);
+    themes_setDrawColorFieldForeground(app, (app->search.position == searchactivity_field));
     SDL_RenderFillRect(app->sdlRenderer, &element.inner);
 
     if (*(app->search.searchText) != '\0') {
         texture_t texture;
         rendering_loadText(app->sdlRenderer, &texture, app->search.searchText, app->themes.active->fonts.font24,
-                           &app->themes.active->colors.text);
+                           themes_getDrawColorFieldText(app, (app->search.position == searchactivity_field)));
         uihelper_renderTexture(app->sdlRenderer, &texture, &element.content);
         uihelper_destroyTexture(&texture);
     }
@@ -230,17 +254,18 @@ static void renderSearchButton(app_t *app) {
     int width, height;
     SDL_GL_GetDrawableSize(app->sdlWindow, &width, &height);
 
-    uiElementRects_t element = uihelper_generateRects(width - width / 3 + 30, 60 + LIST_ITEM_HEIGHT, width / 3 - 50,
+    uiElementRects_t element = uihelper_generateRects(width - width / 3 + 30, PADDING_TOP + 10 + LIST_ITEM_HEIGHT,
+                                                      width / 3 - PADDING_SIDES - 30,
                                                       LIST_ITEM_HEIGHT);
-    themes_setDrawColorBackground(app, (app->search.position == searchactivity_button));
+    themes_setDrawColorFieldBackground(app, (app->search.position == searchactivity_button));
     SDL_RenderFillRect(app->sdlRenderer, &element.outter);
 
-    themes_setDrawColorField(app);
+    themes_setDrawColorFieldForeground(app, (app->search.position == searchactivity_button));
     SDL_RenderFillRect(app->sdlRenderer, &element.inner);
 
     texture_t texture;
     rendering_loadText(app->sdlRenderer, &texture, "Search", app->themes.active->fonts.font24,
-                       &app->themes.active->colors.text);
+                       themes_getDrawColorFieldText(app, (app->search.position == searchactivity_button)));
     uihelper_renderTextureCentered(app->sdlRenderer, &texture, &element.content);
     uihelper_destroyTexture(&texture);
 }
@@ -260,10 +285,10 @@ static void renderSearchResult(app_t *app, int offset) {
         return;
     }
 
-    int deviceCountToDisplay = (height - offset - 80) / LIST_ITEM_HEIGHT + 1;
+    int itemCountToDisplay = (height - offset - PADDING_BOTTOM) / LIST_ITEM_HEIGHT + 1;
 
     int i = 0;
-    while (i < deviceCountToDisplay / 2 - 1) {
+    while (i < itemCountToDisplay / 2 - 1) {
         if (element->prev == NULL) {
             break;
         }
@@ -273,21 +298,21 @@ static void renderSearchResult(app_t *app, int offset) {
 
     int position = offset;
 
-    uiElementRects_t rects = uihelper_generateRectsFullScreenWidth(20, position, width, LIST_ITEM_HEIGHT);
-    themes_setDrawColorField(app);
+    uiElementRects_t rects = uihelper_generateRectsFullScreenWidth(PADDING_SIDES, position, width, LIST_ITEM_HEIGHT);
+    themes_setDrawColor(app, resultHeaderBackbround);
     SDL_RenderFillRect(app->sdlRenderer, &rects.outter);
-    themes_setDrawColorBackground(app, 1);
+    themes_setDrawColor(app, resultHeaderForeground);
     SDL_RenderFillRect(app->sdlRenderer, &rects.inner);
     position += LIST_ITEM_HEIGHT;
 
     rendering_loadText(app->sdlRenderer, &texture, "Game Title", app->themes.active->fonts.font24,
-                       &app->themes.active->colors.text);
+                       themes_getDrawColor(app, resultHeaderText));
     rects.content.x += LIST_ITEM_HEIGHT - 5;
     uihelper_renderTexture(app->sdlRenderer, &texture, &rects.content);
     uihelper_destroyTexture(&texture);
 
     rendering_loadText(app->sdlRenderer, &texture, "Dwn", app->themes.active->fonts.font24,
-                       &app->themes.active->colors.text);
+                       themes_getDrawColor(app, resultHeaderText));
     rects.content.x = width - 3 * width / 10;
     rects.content.w = width / 10;
     uihelper_renderTextureCentered(app->sdlRenderer, &texture, &rects.content);
@@ -295,7 +320,7 @@ static void renderSearchResult(app_t *app, int offset) {
     drawHeadDivider(app, &rects);
 
     rendering_loadText(app->sdlRenderer, &texture, "Rat", app->themes.active->fonts.font24,
-                       &app->themes.active->colors.text);
+                       themes_getDrawColor(app, resultHeaderText));
     rects.content.x = width - 2 * width / 10;
     rects.content.w = width / 10 - 25;
     uihelper_renderTextureCentered(app->sdlRenderer, &texture, &rects.content);
@@ -303,19 +328,19 @@ static void renderSearchResult(app_t *app, int offset) {
     drawHeadDivider(app, &rects);
 
     rendering_loadText(app->sdlRenderer, &texture, "Size", app->themes.active->fonts.font24,
-                       &app->themes.active->colors.text);
+                       themes_getDrawColor(app, resultHeaderText));
     rects.content.x = width - width / 10 - 25;
     rects.content.w = width / 10;
     uihelper_renderTextureCentered(app->sdlRenderer, &texture, &rects.content);
     uihelper_destroyTexture(&texture);
     drawHeadDivider(app, &rects);
 
-    while (element != NULL && position <= height - 80) {
-        rects = uihelper_generateRectsFullScreenWidth(20, position, width, LIST_ITEM_HEIGHT);
-        themes_setDrawColorBackground(app, (element == app->search.cursor));
+    while (element != NULL && position <= height - PADDING_BOTTOM) {
+        rects = uihelper_generateRectsFullScreenWidth(PADDING_SIDES, position, width, LIST_ITEM_HEIGHT);
+        themes_setDrawColorResultBackground(app, (element == app->search.cursor));
         SDL_RenderFillRect(app->sdlRenderer, &rects.outter);
 
-        themes_setDrawColorField(app);
+        themes_setDrawColorResultForeground(app, (element == app->search.cursor));
         SDL_RenderFillRect(app->sdlRenderer, &rects.inner);
 
         // Favicon
@@ -334,10 +359,10 @@ static void renderSearchResult(app_t *app, int offset) {
         }
 
         // Title
-        rects = uihelper_generateRects(20 + LIST_ITEM_HEIGHT - 5, position,
+        rects = uihelper_generateRects(PADDING_SIDES + LIST_ITEM_HEIGHT - 5, position,
                                        6 * width / 10, LIST_ITEM_HEIGHT);
         rendering_loadText(app->sdlRenderer, &texture, element->title, app->themes.active->fonts.font24,
-                           &app->themes.active->colors.text);
+                           themes_getDrawColorResultText(app, (element == app->search.cursor)));
         uihelper_renderTexture(app->sdlRenderer, &texture, &rects.content);
         uihelper_destroyTexture(&texture);
 
@@ -348,7 +373,7 @@ static void renderSearchResult(app_t *app, int offset) {
                                        LIST_ITEM_HEIGHT);
         uihelper_noPaddingX(&rects);
         rendering_loadText(app->sdlRenderer, &texture, buffer, app->themes.active->fonts.font24,
-                           &app->themes.active->colors.text);
+                           themes_getDrawColorResultText(app, (element == app->search.cursor)));
         uihelper_renderTextureRight(app->sdlRenderer, &texture, &rects.content);
         uihelper_destroyTexture(&texture);
         drawDivider(app, &rects);
@@ -358,7 +383,7 @@ static void renderSearchResult(app_t *app, int offset) {
         rects = uihelper_generateRects(width - 2 * width / 10, position, width / 10 - 25, LIST_ITEM_HEIGHT);
         uihelper_noPaddingX(&rects);
         rendering_loadText(app->sdlRenderer, &texture, buffer, app->themes.active->fonts.font24,
-                           &app->themes.active->colors.text);
+                           themes_getDrawColorResultText(app, (element == app->search.cursor)));
         uihelper_renderTextureRight(app->sdlRenderer, &texture, &rects.content);
         uihelper_destroyTexture(&texture);
         drawDivider(app, &rects);
@@ -370,7 +395,7 @@ static void renderSearchResult(app_t *app, int offset) {
         rects.content.w -= 3;
         if (element->fileSize != NULL) {
             rendering_loadText(app->sdlRenderer, &texture, element->fileSize, app->themes.active->fonts.font24,
-                               &app->themes.active->colors.text);
+                               themes_getDrawColorResultText(app, (element == app->search.cursor)));
             uihelper_renderTextureRight(app->sdlRenderer, &texture, &rects.content);
             uihelper_destroyTexture(&texture);
         }
@@ -382,12 +407,13 @@ static void renderSearchResult(app_t *app, int offset) {
 }
 
 static inline void drawHeadDivider(app_t *app, uiElementRects_t *rects) {
+    themes_setDrawColor(app, resultDivider);
     SDL_RenderDrawLine(app->sdlRenderer, rects->content.x, rects->inner.y, rects->content.x,
                        rects->inner.y + rects->inner.h);
 }
 
 static inline void drawDivider(app_t *app, uiElementRects_t *rects) {
-    themes_setDrawColorBackground(app, 0);
+    themes_setDrawColor(app, resultDivider);
     SDL_RenderDrawLine(app->sdlRenderer, rects->inner.x, rects->inner.y, rects->inner.x,
                        rects->inner.y + rects->inner.h);
 }

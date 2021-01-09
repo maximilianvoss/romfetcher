@@ -21,7 +21,6 @@ typedef enum {
     window_search,
     window_system,
     window_keyboard,
-    window_download,
     window_downloadMgr,
     window_config,
     window_config_advanced,

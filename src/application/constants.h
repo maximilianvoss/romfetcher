@@ -45,6 +45,22 @@
 #define LIST_ITEM_HEIGHT 30
 #endif
 
+#ifndef PADDING_SIDES
+#define PADDING_SIDES 20
+#endif
+
+#ifndef PADDING_TOP
+#define PADDING_TOP 50
+#endif
+
+#ifndef PADDING_BOTTOM
+#define PADDING_BOTTOM 50
+#endif
+
+#ifndef MAX_SEARCHTEXT_LENGTH
+#define MAX_SEARCHTEXT_LENGTH 255
+#endif
+
 #define COPYRIGHT "C Copyright 2020 - 2021 by Maximilian Voss (maximilian@voss.rocks)"
 
 #endif

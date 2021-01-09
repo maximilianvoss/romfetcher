@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Maximilian Voss (maximilian@voss.rocks)
+ * Copyright 2020 - 2021 Maximilian Voss (maximilian@voss.rocks)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
 
 static void darkenBackground(app_t *app);
 
-static void renderBox(app_t *app);
+static void renderFrame(app_t *app);
 
 static void renderHeadline(app_t *app);
 
@@ -56,14 +56,21 @@ void modal_processRight(app_t *app) {
 }
 
 void modal_processSelect(app_t *app) {
-    if (!app->modal.cursorPos && app->modal.callbackAction != NULL) {
-        app->modal.callbackAction(app, app->modal.callbackData);
+    if (!app->modal.cursorPos) {
+        if (app->modal.callbackAction != NULL) {
+            app->modal.callbackAction(app, app->modal.callbackData);
+        } else {
+            app->modal.displayed = 0;
+        }
     }
-    if (app->modal.cursorPos && app->modal.callbackCancel != NULL) {
-        app->modal.callbackCancel(app, app->modal.callbackData);
+    if (app->modal.cursorPos) {
+        if (app->modal.callbackCancel != NULL) {
+            app->modal.callbackCancel(app, app->modal.callbackData);
+        } else {
+            app->modal.displayed = 0;
+        }
     }
     app->modal.cursorPos = 0;
-    app->modal.displayed = 0;
 }
 
 void modal_processBack(app_t *app) {
@@ -71,7 +78,6 @@ void modal_processBack(app_t *app) {
         app->modal.callbackCancel(app, app->modal.callbackData);
     }
     app->modal.cursorPos = 0;
-    app->modal.displayed = 0;
 }
 
 void modal_processOtherButton(app_t *app, controller_t *state) {}
@@ -84,7 +90,7 @@ void model_render(app_t *app) {
         return;
     }
     darkenBackground(app);
-    renderBox(app);
+    renderFrame(app);
     renderHeadline(app);
     renderText(app);
     renderActionButton(app);
@@ -95,22 +101,22 @@ static void darkenBackground(app_t *app) {
     int width, height;
     SDL_GL_GetDrawableSize(app->sdlWindow, &width, &height);
 
-    themes_setDrawColor(app, modalBackgroundInactive);
+    themes_setDrawColor(app, windowBackgroundInactive);
     SDL_Rect backgroundRect = {0, 0, width, height};
     SDL_RenderFillRect(app->sdlRenderer, &backgroundRect);
 }
 
-static void renderBox(app_t *app) {
+static void renderFrame(app_t *app) {
     int width, height;
     SDL_GL_GetDrawableSize(app->sdlWindow, &width, &height);
 
-    themes_setDrawColor(app, modalFrame);
-    SDL_Rect shade = {75, 75, width - 150, height - 150};
-    SDL_RenderFillRect(app->sdlRenderer, &shade);
+    uiElementRects_t modalWindowRect = uihelper_generateRectsFullScreenWidth(75, 75, width, height - 150);
 
     themes_setDrawColor(app, modalBackground);
-    SDL_Rect box = {75 + 2, 75 + 2, width - 150 - 4, height - 150 - 4};
-    SDL_RenderFillRect(app->sdlRenderer, &box);
+    SDL_RenderFillRect(app->sdlRenderer, &modalWindowRect.outter);
+
+    themes_setDrawColor(app, modalForeground);
+    SDL_RenderFillRect(app->sdlRenderer, &modalWindowRect.inner);
 }
 
 static void renderHeadline(app_t *app) {
@@ -119,20 +125,17 @@ static void renderHeadline(app_t *app) {
 
     texture_t texture;
     rendering_loadText(app->sdlRenderer, &texture, app->modal.headline, app->themes.active->fonts.font34,
-                       &app->themes.active->colors.modalText);
-    SDL_Rect srcQuad = {0, 0, width - 85 - 85, texture.h};
-    SDL_Rect renderQuad = {(texture.w > width - 85 - 85) ? 85 : (width - texture.w) / 2, 85,
-                           (texture.w > width - 85 - 85) ? width - 85 - 85 : texture.w, texture.h};
+                       &app->themes.active->colors.modalHeadText);
 
-    themes_setDrawColor(app, modalFrame);
-    SDL_Rect shade = {75, 75, width - 150, texture.h + 15};
-    SDL_RenderFillRect(app->sdlRenderer, &shade);
+    uiElementRects_t modalHeaderRect = uihelper_generateRectsFullScreenWidth(75, 75, width, texture.h);
 
     themes_setDrawColor(app, modalBackground);
-    SDL_Rect box = {75 + 2, 75 + 2, width - 150 - 4, texture.h + 15 - 4};
-    SDL_RenderFillRect(app->sdlRenderer, &box);
+    SDL_RenderFillRect(app->sdlRenderer, &modalHeaderRect.outter);
 
-    SDL_RenderCopy(app->sdlRenderer, texture.texture, &srcQuad, &renderQuad);
+    themes_setDrawColor(app, modalHeadForeground);
+    SDL_RenderFillRect(app->sdlRenderer, &modalHeaderRect.inner);
+
+    uihelper_renderTextureCentered(app->sdlRenderer, &texture, &modalHeaderRect.content);
     uihelper_destroyTexture(&texture);
 }
 
@@ -143,32 +146,35 @@ static void renderText(app_t *app) {
     texture_t texture;
     rendering_loadText(app->sdlRenderer, &texture, app->modal.text, app->themes.active->fonts.font26,
                        &app->themes.active->colors.modalText);
-    SDL_Rect srcQuad = {0, 0, width - 85 - 85, texture.h};
-    SDL_Rect renderQuad = {85, 140, (texture.w > width - 85 - 85) ? width - 85 - 85 : texture.w, texture.h};
-    SDL_RenderCopy(app->sdlRenderer, texture.texture, &srcQuad, &renderQuad);
+
+    uiElementRects_t modalTextRect = uihelper_generateRectsFullScreenWidth(75, 140, width, texture.h);
+    uihelper_renderTexture(app->sdlRenderer, &texture, &modalTextRect.content);
     uihelper_destroyTexture(&texture);
 }
+
+#define BUTTON_WIDTH 200
+#define BUTTON_HEIGHT 50
 
 static void renderActionButton(app_t *app) {
     int width, height;
     SDL_GL_GetDrawableSize(app->sdlWindow, &width, &height);
 
-    themes_setDrawColor(app, app->modal.cursorPos ? modalButtonFrameActive : modalButtonFrame);
-    SDL_Rect shade = {width - 85 - 200, height - 150 + 75 - 65, 200, 50};
-    SDL_RenderFillRect(app->sdlRenderer, &shade);
+    uiElementRects_t modalActionBtnRect = uihelper_generateRects(width - BUTTON_WIDTH - 85,
+                                                                 height - 150 + 75 - BUTTON_HEIGHT - 15,
+                                                                 BUTTON_WIDTH, BUTTON_HEIGHT);
 
-    themes_setDrawColor(app, app->modal.cursorPos ? modalButtonFrame : modalButtonFrameActive);
-    SDL_Rect box = {width - 85 - 200 + 2, height - 150 + 75 - 65 + 2, 200 - 4, 50 - 4};
-    SDL_RenderFillRect(app->sdlRenderer, &box);
+    themes_setDrawColor(app, app->modal.cursorPos ? modalButtonBackgroundInactive : modalButtonBackgroundActive);
+    SDL_RenderFillRect(app->sdlRenderer, &modalActionBtnRect.outter);
+
+    themes_setDrawColor(app, app->modal.cursorPos ? modalButtonForegroundInactive : modalButtonForegroundActive);
+    SDL_RenderFillRect(app->sdlRenderer, &modalActionBtnRect.inner);
 
     texture_t texture;
     rendering_loadText(app->sdlRenderer, &texture, app->modal.actionButton, app->themes.active->fonts.font26,
-                       &app->themes.active->colors.modalText);
-    SDL_Rect srcQuad = {0, 0, 180, texture.h};
+                       app->modal.cursorPos ? &app->themes.active->colors.modalButtonTextInactive
+                                            : &app->themes.active->colors.modalButtonTextActive);
 
-    SDL_Rect renderQuad = {(texture.w > 180) ? width - 85 - 200 : width - 85 - 200 + (200 - texture.w) / 2,
-                           height - 150 + 75 - 55, (texture.w > 180) ? 180 : texture.w, texture.h};
-    SDL_RenderCopy(app->sdlRenderer, texture.texture, &srcQuad, &renderQuad);
+    uihelper_renderTextureCentered(app->sdlRenderer, &texture, &modalActionBtnRect.content);
     uihelper_destroyTexture(&texture);
 }
 
@@ -177,22 +183,21 @@ static void renderCancelButton(app_t *app) {
         int width, height;
         SDL_GL_GetDrawableSize(app->sdlWindow, &width, &height);
 
-        themes_setDrawColor(app, app->modal.cursorPos ? modalButtonFrame : modalButtonFrameActive);
-        SDL_Rect shade = {85, height - 150 + 75 - 65, 200, 50};
-        SDL_RenderFillRect(app->sdlRenderer, &shade);
+        uiElementRects_t modalActionBtnRect = uihelper_generateRects(85, height - 150 + 75 - BUTTON_HEIGHT - 15,
+                                                                     BUTTON_WIDTH, BUTTON_HEIGHT);
 
-        themes_setDrawColor(app, app->modal.cursorPos ? modalButtonFrameActive : modalButtonFrame);
-        SDL_Rect box = {85 + 2, height - 150 + 75 - 65 + 2, 200 - 4, 50 - 4};
-        SDL_RenderFillRect(app->sdlRenderer, &box);
+        themes_setDrawColor(app, !app->modal.cursorPos ? modalButtonBackgroundInactive : modalButtonBackgroundActive);
+        SDL_RenderFillRect(app->sdlRenderer, &modalActionBtnRect.outter);
+
+        themes_setDrawColor(app, !app->modal.cursorPos ? modalButtonForegroundInactive : modalButtonForegroundActive);
+        SDL_RenderFillRect(app->sdlRenderer, &modalActionBtnRect.inner);
 
         texture_t texture;
         rendering_loadText(app->sdlRenderer, &texture, app->modal.cancelButton, app->themes.active->fonts.font26,
-                           &app->themes.active->colors.modalText);
-        SDL_Rect srcQuad = {0, 0, 180, texture.h};
+                           !app->modal.cursorPos ? &app->themes.active->colors.modalButtonTextInactive
+                                                 : &app->themes.active->colors.modalButtonTextActive);
 
-        SDL_Rect renderQuad = {(texture.w > 180) ? 95 : 85 + (200 - texture.w) / 2, height - 150 + 75 - 55,
-                               (texture.w > 180) ? 180 : texture.w, texture.h};
-        SDL_RenderCopy(app->sdlRenderer, texture.texture, &srcQuad, &renderQuad);
+        uihelper_renderTextureCentered(app->sdlRenderer, &texture, &modalActionBtnRect.content);
         uihelper_destroyTexture(&texture);
     }
 }

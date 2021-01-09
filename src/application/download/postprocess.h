@@ -20,7 +20,6 @@
 #include <sqlite3.h>
 #include "../application.h"
 
-
 void databasepostprocess_init(sqlite3 *db);
 
 char *databasepostprocess_getCommand(app_t *app, char *fileSuffix);

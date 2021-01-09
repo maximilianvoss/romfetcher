@@ -41,6 +41,6 @@ void search_statePersist(app_t *app);
 
 void search_stateInit(app_t *app);
 
-void uisearch_render(app_t *app);
+void search_render(app_t *app);
 
 #endif

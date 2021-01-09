@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Maximilian Voss (maximilian@voss.rocks)
+ * Copyright 2020 - 2021 Maximilian Voss (maximilian@voss.rocks)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -161,20 +161,85 @@ static void loadTheme(app_t *app, char *path) {
 
 static theme_t *createThemeByMap(char *path, void *map) {
     theme_t *theme = (theme_t *) calloc(1, sizeof(theme_t));
-    loadColor(&theme->colors.background, map, "colors.backgroundPath");
-    loadColor(&theme->colors.field, map, "colors.field");
-    loadColor(&theme->colors.fieldBackground, map, "colors.fieldBackground");
-    loadColor(&theme->colors.fieldHighlight, map, "colors.fieldHighlight");
-    loadColor(&theme->colors.text, map, "colors.text");
-    loadColor(&theme->colors.textHighlight, map, "colors.textHighlight");
-    loadColor(&theme->colors.textInverted, map, "colors.textInverted");
 
-    loadColor(&theme->colors.modalBackground, map, "colors.modalBackground");
-    loadColor(&theme->colors.modalBackgroundInactive, map, "colors.modalBackgroundInactive");
-    loadColor(&theme->colors.modalFrame, map, "colors.modalFrame");
-    loadColor(&theme->colors.modalText, map, "colors.modalText");
-    loadColor(&theme->colors.modalButtonFrame, map, "colors.modalButtonFrame");
-    loadColor(&theme->colors.modalButtonFrameActive, map, "colors.modalButtonFrameActive");
+    // window
+    loadColor(&theme->colors.windowBackgroundActive, map, "colors.window.background.active");
+    loadColor(&theme->colors.windowBackgroundInactive, map, "colors.window.background.inactive");
+    loadColor(&theme->colors.windowCopyright, map, "colors.window.copyright");
+
+    // field
+    loadColor(&theme->colors.fieldTextActive, map, "colors.field.active.text");
+    loadColor(&theme->colors.fieldForegroundActive, map, "colors.field.active.foreground");
+    loadColor(&theme->colors.fieldBackgroundActive, map, "colors.field.active.background");
+    loadColor(&theme->colors.fieldTextInactive, map, "colors.field.inactive.text");
+    loadColor(&theme->colors.fieldForegroundInactive, map, "colors.field.inactive.foreground");
+    loadColor(&theme->colors.fieldBackgroundInactive, map, "colors.field.inactive.background");
+
+    // button
+    loadColor(&theme->colors.buttonTextActive, map, "colors.button.active.text");
+    loadColor(&theme->colors.buttonForegroundActive, map, "colors.button.active.foreground");
+    loadColor(&theme->colors.buttonBackgroundActive, map, "colors.button.active.background");
+    loadColor(&theme->colors.buttonTextInactive, map, "colors.button.inactive.text");
+    loadColor(&theme->colors.buttonForegroundInactive, map, "colors.button.inactive.foreground");
+    loadColor(&theme->colors.buttonBackgroundInactive, map, "colors.button.inactive.background");
+
+    // Search Result list
+    loadColor(&theme->colors.resultHeaderBackbround, map, "colors.results.header.background");
+    loadColor(&theme->colors.resultHeaderForeground, map, "colors.results.header.foreground");
+    loadColor(&theme->colors.resultHeaderText, map, "colors.results.header.text");
+    loadColor(&theme->colors.resultDivider, map, "colors.results.divider");
+    loadColor(&theme->colors.resultRowTextActive, map, "colors.results.row.active.text");
+    loadColor(&theme->colors.resultRowForegroundActive, map, "colors.results.row.active.foreground");
+    loadColor(&theme->colors.resultRowBackgroundActive, map, "colors.results.row.active.background");
+    loadColor(&theme->colors.resultRowTextInactive, map, "colors.results.row.inactive.text");
+    loadColor(&theme->colors.resultRowForegroundInactive, map, "colors.results.row.inactive.foreground");
+    loadColor(&theme->colors.resultRowBackgroundInactive, map, "colors.results.row.inactive.background");
+
+    // modal frame
+    loadColor(&theme->colors.modalBackground, map, "colors.modal.background");
+    loadColor(&theme->colors.modalForeground, map, "colors.modal.foreground");
+    loadColor(&theme->colors.modalText, map, "colors.modal.text");
+    loadColor(&theme->colors.modalHeadText, map, "colors.modal.head.text");
+    loadColor(&theme->colors.modalHeadForeground, map, "colors.modal.head.foreground");
+
+    // modal button
+    loadColor(&theme->colors.modalButtonTextActive, map, "colors.modal.button.active.text");
+    loadColor(&theme->colors.modalButtonForegroundActive, map, "colors.modal.button.active.foreground");
+    loadColor(&theme->colors.modalButtonBackgroundActive, map, "colors.modal.button.active.background");
+    loadColor(&theme->colors.modalButtonTextInactive, map, "colors.modal.button.inactive.text");
+    loadColor(&theme->colors.modalButtonForegroundInactive, map, "colors.modal.button.inactive.foreground");
+    loadColor(&theme->colors.modalButtonBackgroundInactive, map, "colors.modal.button.inactive.background");
+
+    // icons
+    loadColor(&theme->colors.iconForegroundColorActive, map, "colors.icon.active.foreground");
+    loadColor(&theme->colors.iconBackgroundColorActive, map, "colors.icon.active.background");
+    loadColor(&theme->colors.iconDownloadsTextActive, map, "colors.icon.active.downloadsText");
+    loadColor(&theme->colors.iconDownloadsCircleActive, map, "colors.icon.active.downloadsCircle");
+
+    loadColor(&theme->colors.iconForegroundColorInactive, map, "colors.icon.inactive.foreground");
+    loadColor(&theme->colors.iconBackgroundColorInactive, map, "colors.icon.inactive.background");
+    loadColor(&theme->colors.iconDownloadsTextInactive, map, "colors.icon.inactive.downloadsText");
+    loadColor(&theme->colors.iconDownloadsCircleInactive, map, "colors.icon.inactive.downloadsCircle");
+
+    // keyboard
+    loadColor(&theme->colors.keyboardText, map, "colors.keyboard.text");
+    loadColor(&theme->colors.keyboardActiveChar, map, "colors.keyboard.activeChar");
+
+    // Downloads
+    loadColor(&theme->colors.dwnldsItemForegroundInactive, map, "colors.downloads.item.inactive.foreground");
+    loadColor(&theme->colors.dwnldsItemBackgroundInactive, map, "colors.downloads.item.inactive.background");
+    loadColor(&theme->colors.dwnldsItemTextInactive, map, "colors.downloads.item.inactive.text");
+    loadColor(&theme->colors.dwnldsItemForegroundActive, map, "colors.downloads.item.active.foreground");
+    loadColor(&theme->colors.dwnldsItemBackgroundActive, map, "colors.downloads.item.active.background");
+    loadColor(&theme->colors.dwnldsItemTextActive, map, "colors.downloads.item.active.text");
+    loadColor(&theme->colors.dwnldsBarForegroundInactive, map, "colors.downloads.progressbar.inactive.foreground");
+    loadColor(&theme->colors.dwnldsBarBackgroundInactive, map, "colors.downloads.progressbar.inactive.background");
+    loadColor(&theme->colors.dwnldsBarTextInactive, map, "colors.downloads.progressbar.inactive.text");
+    loadColor(&theme->colors.dwnldsBarProgressBarInactive, map, "colors.downloads.progressbar.inactive.bar");
+    loadColor(&theme->colors.dwnldsBarForegroundActive, map, "colors.downloads.progressbar.active.foreground");
+    loadColor(&theme->colors.dwnldsBarBackgroundActive, map, "colors.downloads.progressbar.active.background");
+    loadColor(&theme->colors.dwnldsBarTextActive, map, "colors.downloads.progressbar.active.text");
+    loadColor(&theme->colors.dwnldsBarProgressBarActive, map, "colors.downloads.progressbar.active.bar");
 
     theme->fileReference = cloneString(path);
     theme->name = cloneString(hash_get(map, "name"));
