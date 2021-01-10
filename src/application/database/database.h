@@ -17,6 +17,7 @@
 #ifndef DATABASE_DATABASE_H
 #define DATABASE_DATABASE_H
 
+#include <stdint.h>
 #include <sqlite3.h>
 
 sqlite3 *database_init();

@@ -294,6 +294,7 @@ void *linkedlist_getFirstElement(void *ptr) {
         }
         list = list->prev;
     }
+    return NULL;
 }
 
 void *linkedlist_getFirstActive(void *ptr) {
