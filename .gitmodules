@@ -4,4 +4,4 @@
 	branch = master
 [submodule "libs/lexbor"]
 	path = libs/lexbor
-	url = https://github.com/lexbor/lexbor.gits
+	url = https://github.com/lexbor/lexbor.git
