@@ -116,8 +116,8 @@ void downloaderinternal_cancel(app_t *app, download_t *download) {
     pthread_mutex_lock(&lockQueue);
     pthread_mutex_lock(&lockDone);
 
-    acll_t *activeElement = acll_firstFilter(app->download.active, filterDownloadInList, download);
-    acll_t *queueElement = acll_firstFilter(app->download.queue, filterDownloadInList, download);
+    acll_t *activeElement = acll_find(app->download.active, filterDownloadInList, download);
+    acll_t *queueElement = acll_find(app->download.queue, filterDownloadInList, download);
     if (activeElement != NULL) {
         app->download.active = acll_remove(app->download.active, activeElement);
         download->cancelled = 1;
@@ -223,7 +223,7 @@ static void *downloadThreadExecution(void *appPtr) {
             safe_destroy(downloadPath);
 
             pthread_mutex_lock(&lockActive);
-            acll_t *element = acll_firstFilter(app->download.active, filterDownloadInList, download);
+            acll_t *element = acll_find(app->download.active, filterDownloadInList, download);
             app->download.active = acll_remove(app->download.active, element);
             pthread_mutex_unlock(&lockActive);
 

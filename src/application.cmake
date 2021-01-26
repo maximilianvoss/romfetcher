@@ -33,6 +33,8 @@ set(SOURCES_APPLICATION
         src/download/postprocess.h
         src/enginecache/enginecache.c
         src/enginecache/enginecache.h
+        src/helper/entities.c
+        src/helper/entities.h
         src/helper/map.c
         src/helper/map.h
         src/helper/path.c
