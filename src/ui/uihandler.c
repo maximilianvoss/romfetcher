@@ -119,8 +119,7 @@ static void renderDownloadManagerIcon(app_t *app) {
     }
     uihelper_renderSDLTexture(app->sdlRenderer, getActiveTheme(app)->images.downloadManagerIcon, &element.inner);
 
-    int downloadCount =
-            acll_count(app->download.active) + acll_count(app->download.queue);
+    int downloadCount = acll_count(app->download.all);
     if (downloadCount > 0) {
         if (app->search.position == searchactivity_downloadMgr) {
             themes_setDrawColor(app, iconDownloadsCircleActive);

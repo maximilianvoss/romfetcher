@@ -107,11 +107,8 @@ typedef struct {
     } search;
 
     struct {
-        acll_t *active;
-        acll_t *done;
-        acll_t *queue;
+        acll_t *all;
         acll_t *cursor;
-        downloadactivity_t cursorPos;
     } download;
 } app_t;
 

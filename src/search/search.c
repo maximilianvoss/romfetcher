@@ -21,7 +21,7 @@
 #include "../themes/rendering.h"
 #include "../helper/uihelper.h"
 #include "../constants.h"
-#include "../download/downloader/downloader.h"
+#include "../download/downloader.h"
 
 static void modalDownload(void *appPtr, void *data);
 

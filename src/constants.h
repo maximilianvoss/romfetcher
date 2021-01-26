@@ -37,10 +37,6 @@
 #define DOWNLOADER_THREADS 2
 #endif
 
-#ifndef ENGINE_FETCH_THREADS
-#define ENGINE_FETCH_THREADS 5
-#endif
-
 #ifndef LIST_ITEM_HEIGHT
 #define LIST_ITEM_HEIGHT 30
 #endif

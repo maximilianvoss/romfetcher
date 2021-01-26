@@ -19,16 +19,10 @@ set(SOURCES_APPLICATION
         src/definitions/themes.h
         src/download/download.c
         src/download/download.h
-        src/download/downloader/downloader.c
-        src/download/downloader/downloader.h
-        src/download/downloader/downloadercurl.c
-        src/download/downloader/downloadercurl.h
-        src/download/downloader/downloaderinternal.c
-        src/download/downloader/downloaderinternal.h
+        src/download/downloader.c
+        src/download/downloader.h
         src/download/downloadmanager.c
         src/download/downloadmanager.h
-        src/download/downloadpipeline.c
-        src/download/downloadpipeline.h
         src/download/postprocess.c
         src/download/postprocess.h
         src/enginecache/enginecache.c

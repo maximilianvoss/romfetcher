@@ -16,10 +16,9 @@
 
 #include <csafestring.h>
 #include "downloadmanager.h"
-#include "downloadpipeline.h"
 #include "../helper/utils.h"
 #include "../state/statehandler.h"
-#include "downloader/downloader.h"
+#include "downloader.h"
 #include "../ui/rendering.h"
 #include "../themes/rendering.h"
 #include "../helper/uihelper.h"
@@ -29,16 +28,14 @@ static void modalCancelDownload(void *appPtr, void *data);
 static void modalNoCancelDownload(void *appPtr, void *data);
 
 void downloadmanager_processUp(app_t *app) {
-    acll_t *prev = downloadpipeline_getPrev(app, app->download.cursor);
-    if (prev != NULL) {
-        app->download.cursor = prev;
+    if (app->download.cursor != NULL) {
+        app->download.cursor = app->download.cursor->prev;
     }
 }
 
 void downloadmanager_processDown(app_t *app) {
-    acll_t *next = downloadpipeline_getNext(app, app->download.cursor);
-    if (next != NULL) {
-        app->download.cursor = next;
+    if (app->download.cursor != NULL) {
+        app->download.cursor = app->download.cursor->next;
     }
 }
 
@@ -47,7 +44,7 @@ void downloadmanager_processLeft(app_t *app) {}
 void downloadmanager_processRight(app_t *app) {}
 
 void downloadmanager_processSelect(app_t *app) {
-    if (!acll_in(app->download.done, app->download.cursor)) {
+    if (getDownload(app->download.cursor)->active) {
         app->modal.displayed = 1;
         app->modal.headline = "Cancel Download?";
         app->modal.actionButton = "Yes";
@@ -96,15 +93,7 @@ void downloadmanager_statePersist(app_t *app) {
 
 void downloadmanager_stateInit(app_t *app) {
     app->win = window_downloadMgr;
-    if (app->download.active != NULL) {
-        app->download.cursor = app->download.active;
-    } else if (app->download.queue != NULL) {
-        app->download.cursor = app->download.queue;
-    } else if (app->download.done != NULL) {
-        app->download.cursor = app->download.done;
-    } else {
-        app->download.cursor = NULL;
-    }
+    app->download.cursor = acll_first(app->download.all);
 }
 
 static void renderProgressBar(app_t *app, acll_t *element, int position);
@@ -113,20 +102,19 @@ void downloadmanager_render(app_t *app) {
     int width, height;
     SDL_GL_GetDrawableSize(app->sdlWindow, &width, &height);
 
-    int itemsToDisplay = (height - PADDING_TOP - PADDING_BOTTOM) / (LIST_ITEM_HEIGHT * 2) + 1;
+    int elementCountToDisplay = (height - PADDING_TOP - PADDING_BOTTOM) / (LIST_ITEM_HEIGHT * 2) + 1;
 
-    acll_t *element = (app->download.cursor != NULL) ? app->download.cursor : app->download.active;
+    acll_t *element = (app->list.cursor != NULL) ? app->list.cursor : app->list.all;
     if (element == NULL) {
         return;
     }
 
     int i = 0;
-    while (i < itemsToDisplay / 2 - 1) {
-        acll_t *prev = downloadpipeline_getPrev(app, element);
-        if (prev == NULL) {
+    while (i < elementCountToDisplay / 2 - 1) {
+        if (element->prev == NULL) {
             break;
         }
-        element = prev;
+        element = element->prev;
         i++;
     }
 
@@ -142,7 +130,7 @@ void downloadmanager_render(app_t *app) {
 
         renderProgressBar(app, element, position);
 
-        element = downloadpipeline_getNext(app, element);
+        element = element->next;
         position += 65;
     }
 }
@@ -169,19 +157,19 @@ static void renderProgressBar(app_t *app, acll_t *element, int position) {
 
     double percentage;
     char percentText[10];
-    if (acll_in(app->download.active, element)) {
+    if (getDownload(element)->active) {
         percentage = download->total != 0 ? (double) download->current / (double) download->total : 0.0;
         snprintf(percentText, 5, "%.0f%c", percentage * 100, '%');
-    } else if (acll_in(app->download.queue, element)) {
-        percentage = 0.0f;
-        strcpy (percentText, "QUEUED");
     } else {
-        if (download->cancelled) {
+        if (getDownload(element)->cancelled) {
             percentage = 0.0f;
             strcpy (percentText, "CANCELLED");
-        } else {
+        } else if (!getDownload(element)->finished) {
             percentage = 1.0f;
             strcpy (percentText, "DONE");
+        } else {
+            percentage = 0.0f;
+            strcpy (percentText, "QUEUED");
         }
     }
 

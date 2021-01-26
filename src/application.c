@@ -21,7 +21,7 @@
 #include "database/database.h"
 #include "themes/loading.h"
 #include "config/configmenu.h"
-#include "download/downloader/downloader.h"
+#include "download/downloader.h"
 #include "download/download.h"
 #include "helper/path.h"
 #include "list/list.h"

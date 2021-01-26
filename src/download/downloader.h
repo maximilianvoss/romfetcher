@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-#ifndef DOWNLOAD_DOWNLOADERINTERNAL_H
-#define DOWNLOAD_DOWNLOADERINTERNAL_H
+#ifndef DOWNLOAD_DOWNLOADER_H
+#define DOWNLOAD_DOWNLOADER_H
 
-#include "../../application.h"
+#include "../application.h"
 
-void downloaderinternal_init(app_t *app);
+void downloader_init(app_t *app);
 
-void downloaderinternal_destroy(app_t *app);
+void downloader_destroy(app_t *app);
 
-void downloaderinternal_addToQueue(app_t *app, rl_system *system, char *title, char *url, char *data, char *filename,
-                                   chttp_method method);
+uint8_t downloader_addToQueue(void *appPtr, rl_system *system, char *title, char *url, char *data, char *filename,
+                              chttp_method method);
 
-void downloaderinternal_cancel(app_t *app, download_t *download);
+void downloader_cancel(app_t *app, download_t *download);
 
-uint8_t downloaderinternal_isActive(app_t *app);
+uint8_t downloader_isActive(app_t *app);
 
-void downloaderinternal_cancelAllDownloads(app_t *app);
+void downloader_cancelAllDownloads(app_t *app);
 
 #endif

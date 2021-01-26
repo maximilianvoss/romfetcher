@@ -20,7 +20,7 @@
 #include "../list/list.h"
 #include "../modal/modal.h"
 #include "../download/downloadmanager.h"
-#include "../download/downloader/downloader.h"
+#include "../download/downloader.h"
 
 static void processGameController(app_t *app);
 

@@ -20,7 +20,9 @@
 #include <stdlib.h>
 #include <stdint.h>
 
+#ifndef FREENOTNULL
 #define FREENOTNULL(x) if (x != NULL) free (x)
+#endif
 
 char *str_replace(char *orig, char *rep, char *with);
 

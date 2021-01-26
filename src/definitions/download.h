@@ -18,16 +18,17 @@
 #define DEFINITIONS_DOWNLOAD_H
 
 typedef struct download_s {
-    char *title;
-    uint8_t active;
     rl_system *system;
+    char *title;
     char *url;
     char *data;
     char *filename;
     chttp_method method;
     curl_off_t current;
     curl_off_t total;
+    volatile uint8_t active;
     volatile uint8_t cancelled;
+    volatile uint8_t finished;
 } download_t;
 
 #define getDownload(download) ((download_t *) download->payload)
