@@ -16,56 +16,61 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH true)
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 find_package(SDL2_ttf REQUIRED)
-find_package(CURL REQUIRED)
 find_package(SQLite3 REQUIRED)
 find_package(Threads REQUIRED)
-find_package(OpenSSL REQUIRED)
 
-# sub included libraries
+# Header includes
+set(INCLUDE_DIRECTORIES
+        ${INCLUDE_DIRECTORIES}
+        ${SDL2_INCLUDE_DIRS}
+        ${SDL2_IMAGE_INCLUDE_DIRS}
+        ${SDL2TTF_INCLUDE_DIRS}
+        ${SQLite3_INCLUDE_DIRS}
+        libs/romlibrary
+        libs/acll
+        libs/csafestring
+        libs/json2map
+        libs/chttp
+        libs/clogger
+        )
+include_directories(${INCLUDE_DIRECTORIES})
+
+# debug handling for build
+if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+    set(CMAKE_VERBOSE_MAKEFILE on)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -Wall -DCLOGGER_LEVEL=2 -DCLOGGER_SDL")
+    set(CMAKE_INSTALL_PREFIX /usr/local)
+else ()
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -O3 -DCLOGGER_LEVEL=1 -DCLOGGER_SDL")
+endif ()
+
+# Build submodules
+add_subdirectory(libs/romlibrary)
+add_subdirectory(libs/acll)
 add_subdirectory(libs/csafestring)
-include_directories(libs/csafestring)
 add_subdirectory(libs/json2map)
-include_directories(libs/json2map)
-add_subdirectory(libs/lexbor)
-include_directories(libs/lexbor)
+add_subdirectory(libs/chttp)
 
 #include other cmake files for building
-include(src/common/common.cmake)
-include(src/library/library.cmake)
-include(src/application/application.cmake)
-include(test/test.cmake)
+include(src/application.cmake)
 include(resources/resources.cmake)
 include(resources/themes/themes.cmake)
 
-# debug handlnig for build
-if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
-    set(CMAKE_VERBOSE_MAKEFILE on)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -Wall")
-    set(CMAKE_INSTALL_PREFIX /usr/local)
-else ()
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -O3")
-endif ()
-
 set(LINK_LIBRARIES
-        library
-        common
         csafestring
         json2map
-        lexbor_static
         m
+        romlibrary
+        chttp
         ${SDL2_LIBRARIES}
         ${SDL2_IMAGE_LIBRARIES}
         ${SDL2TTF_LIBRARY}
-        ${CURL_LIBRARIES}
         ${CMAKE_THREAD_LIBS_INIT}
         ${SQLite3_LIBRARIES}
-        ${OPENSSL_LIBRARIES}
         )
 
 # Linking
-include_directories(src/library libs/lexbor/source ${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${SDL2TTF_INCLUDE_DIRS} ${CURL_INCLUDE_DIRS} ${SQLite3_INCLUDE_DIRS} ${OPENSSL_INCLUDE_DIR})
 target_link_libraries(romfetcher ${LINK_LIBRARIES})
-target_link_libraries(romfetcher_testcases ${LINK_LIBRARIES})
 
 # Install
 install(TARGETS romfetcher DESTINATION bin)
