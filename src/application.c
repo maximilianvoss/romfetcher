@@ -42,8 +42,11 @@ int main() {
 
     while (!app.quit) {
         input_processInputs(&app);
-        uihandler_render(&app);
-        SDL_Delay(75);
+        if (app.renderingRequired) {
+            app.renderingRequired = 0;
+            uihandler_render(&app);
+        }
+        SDL_Delay(25);
     }
 
     destroyApp(&app);
@@ -52,6 +55,7 @@ int main() {
 
 void static initApp(app_t *app) {
     memset(app, 0, sizeof(app_t));
+    app->renderingRequired = 1;
 
     path_initRomfetchersHome();
     app->database.db = database_init();

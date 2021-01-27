@@ -101,6 +101,7 @@ static void renderProgressBar(app_t *app, acll_t *element, int position);
 void downloadmanager_render(app_t *app) {
     int width, height;
     SDL_GL_GetDrawableSize(app->sdlWindow, &width, &height);
+    app->renderingRequired = 1;
 
     int elementCountToDisplay = (height - PADDING_TOP - PADDING_BOTTOM) / (LIST_ITEM_HEIGHT * 2) + 1;
 

@@ -179,6 +179,7 @@ static void processEvents(app_t *app) {
     }
 
     while (SDL_PollEvent(&event)) {
+        app->renderingRequired = 1;
         switch (event.type) {
             case SDL_QUIT:
                 questionAppQuitting(app);

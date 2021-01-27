@@ -32,6 +32,7 @@ typedef struct {
     SDL_Window *sdlWindow;
     window_t win;
     volatile uint8_t quit;
+    volatile uint8_t renderingRequired;
 
     struct {
         sqlite3 *db;
