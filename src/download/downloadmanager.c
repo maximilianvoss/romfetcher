@@ -28,13 +28,13 @@ static void modalCancelDownload(void *appPtr, void *data);
 static void modalNoCancelDownload(void *appPtr, void *data);
 
 void downloadmanager_processUp(app_t *app) {
-    if (app->download.cursor != NULL) {
+    if (app->download.cursor->prev != NULL) {
         app->download.cursor = app->download.cursor->prev;
     }
 }
 
 void downloadmanager_processDown(app_t *app) {
-    if (app->download.cursor != NULL) {
+    if (app->download.cursor->next != NULL) {
         app->download.cursor = app->download.cursor->next;
     }
 }
@@ -104,7 +104,7 @@ void downloadmanager_render(app_t *app) {
 
     int elementCountToDisplay = (height - PADDING_TOP - PADDING_BOTTOM) / (LIST_ITEM_HEIGHT * 2) + 1;
 
-    acll_t *element = (app->list.cursor != NULL) ? app->list.cursor : app->list.all;
+    acll_t *element = (app->download.cursor != NULL) ? app->download.cursor : app->download.all;
     if (element == NULL) {
         return;
     }
@@ -164,7 +164,7 @@ static void renderProgressBar(app_t *app, acll_t *element, int position) {
         if (getDownload(element)->cancelled) {
             percentage = 0.0f;
             strcpy (percentText, "CANCELLED");
-        } else if (!getDownload(element)->finished) {
+        } else if (getDownload(element)->finished) {
             percentage = 1.0f;
             strcpy (percentText, "DONE");
         } else {

@@ -36,6 +36,10 @@ static int filterQueuedDownload(void *payload, void *input);
 
 static int filterActiveDownload(void *payload, void *input);
 
+static int downloadComparator(void *payload1, void *payload2);
+
+static inline uint8_t downloadIsQueued(download_t *download);
+
 static void downloadCurl(app_t *app, download_t *download);
 
 static void downloadInternal(app_t *app, download_t *download);
@@ -93,8 +97,17 @@ uint8_t downloader_addToQueue(void *appPtr, rl_system *system, char *title, char
     return 0;
 }
 
-void downloader_cancel(app_t *app, download_t *download) {
+void downloader_cancel(app_t *app, acll_t *element) {
+    if (element == NULL) {
+        return;
+    }
+    download_t *download = getDownload(element);
     download->cancelled = 1;
+    download->active = 0;
+
+    pthread_mutex_lock(&mutexQueue);
+    app->download.all = acll_sort(app->download.all, downloadComparator);
+    pthread_mutex_unlock(&mutexQueue);
 }
 
 uint8_t downloader_isActive(app_t *app) {
@@ -106,6 +119,7 @@ void downloader_cancelAllDownloads(app_t *app) {
     acll_t *element = acll_first(app->download.all);
     while (element != NULL) {
         getDownload(element)->cancelled = 1;
+        getDownload(element)->active = 0;
         element = element->next;
     }
     pthread_mutex_unlock(&mutexQueue);
@@ -139,6 +153,12 @@ static void *downloadThreadExecution(void *appPtr) {
             } else {
                 downloadInternal(app, getDownload(element));
             }
+            getDownload(element)->finished = 1;
+            getDownload(element)->active = 0;
+
+            pthread_mutex_lock(&mutexQueue);
+            app->download.all = acll_sort(app->download.all, downloadComparator);
+            pthread_mutex_unlock(&mutexQueue);
         }
         sleep(3);
     }
@@ -153,6 +173,7 @@ static void modalDownload(void *app, void *data) {
 static void addDownload(app_t *app, download_t *download) {
     pthread_mutex_lock(&mutexQueue);
     app->download.all = acll_append(app->download.all, download);
+    app->download.all = acll_sort(app->download.all, downloadComparator);
     pthread_mutex_unlock(&mutexQueue);
 }
 
@@ -174,6 +195,64 @@ static int filterActiveDownload(void *payload, void *input) {
     download_t *download = payload;
     (void) input;
     return download->active;
+}
+
+static int downloadComparator(void *payload1, void *payload2) {
+    download_t *download1 = payload1;
+    download_t *download2 = payload2;
+
+    // active
+    if (download1->active && download2->active) {
+        return 0;
+    }
+    if (download1->active) {
+        return -1;
+    }
+    if (!download1->active) {
+        return 1;
+    }
+
+    // queued
+    if (downloadIsQueued(download1) && downloadIsQueued(download2)) {
+        return 0;
+    }
+    if (downloadIsQueued(download1)) {
+        return -1;
+    }
+    if (downloadIsQueued(download2)) {
+        return 1;
+    }
+
+    // finished
+    if (download1->finished && download2->finished) {
+        return 0;
+    }
+    if (download1->finished) {
+        return -1;
+    }
+    if (download2->finished) {
+        return 1;
+    }
+
+    // cancelled
+    if (download1->cancelled && download2->cancelled) {
+        return 0;
+    }
+    if (download1->cancelled) {
+        return -1;
+    }
+    if (download2->cancelled) {
+        return 1;
+    }
+    LOG_ERROR("This end of function should never be reached");
+    return 0;
+}
+
+static inline uint8_t downloadIsQueued(download_t *download) {
+    if (!download->finished && !download->cancelled && !download->active) {
+        return 1;
+    }
+    return 0;
 }
 
 static void downloadCurl(app_t *app, download_t *download) {

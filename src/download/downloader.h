@@ -26,7 +26,7 @@ void downloader_destroy(app_t *app);
 uint8_t downloader_addToQueue(void *appPtr, rl_system *system, char *title, char *url, char *data, char *filename,
                               chttp_method method);
 
-void downloader_cancel(app_t *app, download_t *download);
+void downloader_cancel(app_t *app, acll_t *element);
 
 uint8_t downloader_isActive(app_t *app);
 
