@@ -8,4 +8,4 @@ before_install:
   - sudo apt-get -y install libsdl2-ttf-dev libsdl2-image-dev libsdl2-dev libcurl4-openssl-dev libsqlite3-dev libcurl4-openssl-dev
 
 script:
-  - cmake -G "Unix Makefiles" && make && make test
+  - cmake -DCMAKE_BUILD_TYPE=Test && cmake --build . -j 16 && ctest -j 16
