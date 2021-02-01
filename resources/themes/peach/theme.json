@@ -2,84 +2,112 @@
   "name": "Princess Peach",
   "font": "FreeSans.ttf",
   "colors": {
-    "background": [
-      245,
-      153,
-      178,
-      255
-    ],
-    "field": [
-      255,
-      255,
-      255,
-      150
-    ],
-    "fieldBackground": [
-      255,
-      255,
-      255,
-      150
-    ],
-    "fieldHighlight": [
-      245,
-      153,
-      178,
-      150
-    ],
-    "text": [
-      0,
-      0,
-      0,
-      255
-    ],
-    "textHighlight": [
-      245,
-      153,
-      178,
-      255
-    ],
-    "textInverted": [
-      255,
-      255,
-      255,
-      255
-    ],
-    "modalBackground": [
-      255,
-      255,
-      255,
-      150
-    ],
-    "modalBackgroundInactive": [
-      0,
-      0,
-      0,
-      100
-    ],
-    "modalFrame": [
-      255,
-      255,
-      255,
-      30
-    ],
-    "modalText": [
-      0,
-      0,
-      0,
-      255
-    ],
-    "modalButtonFrame": [
-      245,
-      153,
-      178,
-      150
-    ],
-    "modalButtonFrameActive": [
-      255,
-      255,
-      255,
-      150
-    ]
+    "window": {
+      "background": {
+        "active": [245, 153, 178, 255],
+        "inactive": [245, 153, 178, 150]
+      },
+      "copyright": [255, 255, 255, 255]
+    },
+    "field": {
+      "active": {
+        "text": [255, 255, 255, 255],
+        "foreground": [245, 153, 178, 150],
+        "background": [255, 255, 255, 150]
+      },
+      "inactive": {
+        "text": [255, 255, 255, 255],
+        "foreground": [255, 255, 255, 10],
+        "background": [245, 153, 178, 150]
+      }
+    },
+    "results": {
+      "header": {
+        "text": [255, 255, 255, 255],
+        "foreground": [245, 153, 178, 150],
+        "background": [255, 255, 255, 150]
+      },
+      "divider": [255, 255, 255, 150],
+      "row": {
+        "active": {
+          "text": [255, 255, 255, 255],
+          "foreground": [245, 153, 178, 150],
+          "background": [255, 255, 255, 150]
+        },
+        "inactive": {
+          "text": [255, 255, 255, 255],
+          "foreground": [245, 153, 178, 150],
+          "background": [255, 255, 255, 10]
+        }
+      }
+    },
+    "modal": {
+      "foreground": [245, 153, 178, 150],
+      "background": [255, 255, 255, 150],
+      "text": [255, 255, 255, 255],
+      "head": {
+        "text": [255, 255, 255, 255],
+        "foreground": [245, 153, 178, 150]
+      },
+      "button": {
+        "active": {
+          "text": [255, 255, 255, 255],
+          "foreground": [245, 153, 178, 150],
+          "background": [255, 255, 255, 150]
+        },
+        "inactive": {
+          "text": [255, 255, 255, 255],
+          "foreground": [245, 153, 178, 150],
+          "background": [255, 255, 255, 10]
+        }
+      }
+    },
+    "icon": {
+      "active": {
+        "foreground": [245, 153, 178, 150],
+        "background": [255, 255, 255, 150],
+        "downloadsText": [245, 153, 178, 255],
+        "downloadsCircle": [255, 255, 255, 150]
+      },
+      "inactive": {
+        "foreground": [245, 153, 178, 150],
+        "background": [255, 255, 255, 10],
+        "downloadsText": [255, 255, 255, 255],
+        "downloadsCircle": [245, 153, 178, 150]
+      }
+    },
+    "keyboard": {
+      "text": [255, 255, 255, 255],
+      "activeChar": [255, 255, 255, 180]
+    },
+    "downloads": {
+      "item": {
+        "active": {
+          "text": [255, 255, 255, 255],
+          "foreground": [245, 153, 178, 150],
+          "background": [255, 255, 255, 150]
+        },
+        "inactive": {
+          "text": [255, 255, 255, 255],
+          "foreground": [245, 153, 178, 150],
+          "background": [255, 255, 255, 10]
+        }
+      },
+      "progressbar": {
+        "active": {
+          "text": [245, 153, 178, 255],
+          "foreground": [245, 153, 178, 150],
+          "background": [255, 255, 255, 150],
+          "bar": [255, 255, 255, 150]
+        },
+        "inactive": {
+          "text": [255, 255, 255, 255],
+          "foreground": [245, 153, 178, 150],
+          "background": [255, 255, 255, 10],
+          "bar": [245, 153, 178, 150]
+        }
+      }
+    }
   },
   "images": {
     "background": "wallpaper.png",

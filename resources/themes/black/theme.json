@@ -2,84 +2,112 @@
   "name": "Black",
   "font": "FreeSans.ttf",
   "colors": {
-    "background": [
-      0,
-      0,
-      0,
-      255
-    ],
-    "field": [
-      150,
-      150,
-      150,
-      150
-    ],
-    "fieldBackground": [
-      150,
-      150,
-      150,
-      150
-    ],
-    "fieldHighlight": [
-      255,
-      255,
-      255,
-      150
-    ],
-    "text": [
-      0,
-      0,
-      0,
-      255
-    ],
-    "textHighlight": [
-      255,
-      255,
-      255,
-      255
-    ],
-    "textInverted": [
-      255,
-      255,
-      255,
-      255
-    ],
-    "modalBackground": [
-      0,
-      0,
-      0,
-      200
-    ],
-    "modalBackgroundInactive": [
-      255,
-      255,
-      255,
-      50
-    ],
-    "modalFrame": [
-      255,
-      255,
-      255,
-      30
-    ],
-    "modalText": [
-      255,
-      255,
-      255,
-      255
-    ],
-    "modalButtonFrame": [
-      80,
-      80,
-      80,
-      255
-    ],
-    "modalButtonFrameActive": [
-      0,
-      0,
-      0,
-      150
-    ]
+    "window": {
+      "background": {
+        "active": [0, 0, 0, 255],
+        "inactive": [0, 0, 0, 150]
+      },
+      "copyright": [255, 255, 255, 255]
+    },
+    "field": {
+      "active": {
+        "text": [255, 255, 255, 255],
+        "foreground": [0, 0, 0, 10],
+        "background": [255, 255, 255, 150]
+      },
+      "inactive": {
+        "text": [255, 255, 255, 255],
+        "foreground": [0, 0, 0, 150],
+        "background": [255, 255, 255, 150]
+      }
+    },
+    "results": {
+      "header": {
+        "text": [255, 255, 255, 255],
+        "foreground": [0, 0, 0, 10],
+        "background": [255, 255, 255, 150]
+      },
+      "divider": [255, 255, 255, 150],
+      "row": {
+        "active": {
+          "text": [255, 255, 255, 255],
+          "foreground": [0, 0, 0, 10],
+          "background": [255, 255, 255, 150]
+        },
+        "inactive": {
+          "text": [255, 255, 255, 255],
+          "foreground": [0, 0, 0, 150],
+          "background": [255, 255, 255, 150]
+        }
+      }
+    },
+    "modal": {
+      "foreground": [0, 0, 0, 150],
+      "background": [255, 255, 255, 150],
+      "text": [255, 255, 255, 255],
+      "head": {
+        "text": [255, 255, 255, 255],
+        "foreground": [0, 0, 0, 150]
+      },
+      "button": {
+        "active": {
+          "text": [255, 255, 255, 255],
+          "foreground": [0, 0, 0, 150],
+          "background": [255, 255, 255, 150]
+        },
+        "inactive": {
+          "text": [255, 255, 255, 255],
+          "foreground": [0, 0, 0, 150],
+          "background": [255, 255, 255, 10]
+        }
+      }
+    },
+    "icon": {
+      "active": {
+        "foreground": [0, 0, 0, 150],
+        "background": [255, 255, 255, 150],
+        "downloadsText": [0, 0, 0, 255],
+        "downloadsCircle": [255, 255, 255, 150]
+      },
+      "inactive": {
+        "foreground": [0, 0, 0, 150],
+        "background": [255, 255, 255, 10],
+        "downloadsText": [255, 255, 255, 255],
+        "downloadsCircle": [0, 0, 0, 150]
+      }
+    },
+    "keyboard": {
+      "text": [255, 255, 255, 255],
+      "activeChar": [255, 255, 255, 180]
+    },
+    "downloads": {
+      "item": {
+        "active": {
+          "text": [255, 255, 255, 255],
+          "foreground": [0, 0, 0, 10],
+          "background": [255, 255, 255, 150]
+        },
+        "inactive": {
+          "text": [255, 255, 255, 255],
+          "foreground": [0, 0, 0, 10],
+          "background": [255, 255, 255, 10]
+        }
+      },
+      "progressbar": {
+        "active": {
+          "text": [0, 0, 0, 255],
+          "foreground": [0, 0, 0, 10],
+          "background": [255, 255, 255, 150],
+          "bar": [255, 255, 255, 150]
+        },
+        "inactive": {
+          "text": [255, 255, 255, 255],
+          "foreground": [0, 0, 0, 10],
+          "background": [255, 255, 255, 150],
+          "bar": [0, 0, 0, 150]
+        }
+      }
+    }
   },
   "images": {
     "checkboxChecked": "checkbox_checked.png",
