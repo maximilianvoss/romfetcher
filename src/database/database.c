@@ -26,6 +26,7 @@
 static csafestring_t *buildDBPath();
 
 sqlite3 *database_init() {
+    LOG_TRACE("database_init start");
     sqlite3 *db;
     csafestring_t *dbPath = buildDBPath();
     if (sqlite3_open_v2(dbPath->data, &db,
@@ -38,22 +39,28 @@ sqlite3 *database_init() {
 
     safe_destroy(dbPath);
     database_initTables(db);
+    LOG_TRACE("database_init done");
     return db;
 }
 
 void database_destroy(sqlite3 *db) {
+    LOG_TRACE("database_destroy start");
     if (sqlite3_close(db) != SQLITE_OK) {
         LOG_ERROR("Could not destruct database: %s", sqlite3_errmsg(db));
     }
+    LOG_TRACE("database_destroy done");
 }
 
 static csafestring_t *buildDBPath() {
+    LOG_TRACE("buildDBPath start");
     csafestring_t *path = path_romfetchersHome();
     safe_strcat(path, DATABASE_FILE);
+    LOG_TRACE("buildDBPath done (return=%s)", path->data);
     return path;
 }
 
 void database_initTables(sqlite3 *db) {
+    LOG_TRACE("database_initTables start");
     if (!database_tableExists(db, "enginecache")) {
         enginecache_init(db);
     }
@@ -69,9 +76,11 @@ void database_initTables(sqlite3 *db) {
     if (!database_tableExists(db, "downloads")) {
         download_init(db);
     }
+    LOG_TRACE("database_initTables done");
 }
 
 void database_dropAllTables(sqlite3 *db) {
+    LOG_TRACE("database_dropAllTables start");
     char *err_msg = 0;
     char *query = "DROP TABLE IF EXISTS systems; DROP TABLE IF EXISTS config; DROP TABLE IF EXISTS enginecache; DROP TABLE IF EXISTS enginecachestate; DROP TABLE IF EXISTS engines; DROP TABLE IF EXISTS postprocessors";
 
@@ -80,9 +89,11 @@ void database_dropAllTables(sqlite3 *db) {
         LOG_ERROR("Failed to create table - SQL error: %s", err_msg);
         sqlite3_free(err_msg);
     }
+    LOG_TRACE("database_dropAllTables done");
 }
 
 uint8_t database_tableExists(sqlite3 *db, char *tableName) {
+    LOG_TRACE("database_tableExists start (tableName=%s)", tableName);
     char *query = "SELECT name FROM sqlite_master WHERE type='table' AND name=@name";
 
     sqlite3_stmt *stmt;
@@ -97,10 +108,12 @@ uint8_t database_tableExists(sqlite3 *db, char *tableName) {
     int step = sqlite3_step(stmt);
     if (step == SQLITE_ROW) {
         sqlite3_finalize(stmt);
+        LOG_TRACE("database_tableExists done (tableName=%s, return=1)", tableName);
         return 1;
     }
 
     sqlite3_clear_bindings(stmt);
     sqlite3_finalize(stmt);
+    LOG_TRACE("database_tableExists done (tableName=%s, return=0)", tableName);
     return 0;
 }

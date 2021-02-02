@@ -22,6 +22,7 @@
 
 
 void sdl_init() {
+    LOG_TRACE("sdl_init start");
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER) < 0) {
         LOG_ERROR("Couldn't initialize SDL: %s", SDL_GetError());
         exit(1);
@@ -36,9 +37,11 @@ void sdl_init() {
         LOG_ERROR("Couldn't initialize IMG: %s", IMG_GetError());
         exit(1);
     }
+    LOG_TRACE("sdl_init done");
 }
 
 void display_init(app_t *app) {
+    LOG_TRACE("display_init start");
     Uint32 rendererFlags = SDL_RENDERER_ACCELERATED;
     Uint32 windowFlags = 0;
 
@@ -84,15 +87,20 @@ void display_init(app_t *app) {
         exit(1);
     }
     SDL_SetRenderDrawBlendMode(app->sdlRenderer, SDL_BLENDMODE_BLEND);
+    LOG_TRACE("display_init done");
 }
 
 void display_destroy(app_t *app) {
+    LOG_TRACE("display_destroy start");
     SDL_DestroyRenderer(app->sdlRenderer);
     SDL_DestroyWindow(app->sdlWindow);
+    LOG_TRACE("display_destroy done");
 }
 
 void display_reset(app_t *app) {
+    LOG_TRACE("display_reset start");
     display_destroy(app);
     display_init(app);
     themes_activate(app, app->themes.active);
+    LOG_TRACE("display_reset done");
 }

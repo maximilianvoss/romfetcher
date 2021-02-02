@@ -43,6 +43,7 @@ int main() {
     while (!app.quit) {
         input_processInputs(&app);
         if (app.renderingRequired) {
+            LOG_TRACE("re-rendering the UI");
             app.renderingRequired = 0;
             uihandler_render(&app);
         }
@@ -54,6 +55,7 @@ int main() {
 }
 
 void static initApp(app_t *app) {
+    LOG_TRACE("initApp start");
     memset(app, 0, sizeof(app_t));
     app->renderingRequired = 1;
 
@@ -90,9 +92,11 @@ void static initApp(app_t *app) {
 
     downloader_init(app);
     download_load(app);
+    LOG_TRACE("initApp done");
 }
 
 void static destroyApp(app_t *app) {
+    LOG_TRACE("destroyApp start");
     downloader_cancelAllDownloads(app);
     display_destroy(app);
     themes_destroy(app);
@@ -109,4 +113,5 @@ void static destroyApp(app_t *app) {
 
     database_destroy(app->database.db);
     SDL_Quit();
+    LOG_TRACE("destroyApp done");
 }

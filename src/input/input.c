@@ -52,6 +52,7 @@ static int gameControllerCount;
 static Uint32 lastKeyPressed = 0;
 
 void input_init() {
+    LOG_TRACE("input_init start");
     if (SDL_GameControllerAddMapping(CONTROLLER_MAPPING)) {
         LOG_ERROR("Failed to add mapping: %s", SDL_GetError());
     }
@@ -72,9 +73,11 @@ void input_init() {
             SDL_free(mapping);
         }
     }
+    LOG_TRACE("input_init done");
 }
 
 void input_processInputs(app_t *app) {
+    LOG_TRACE("input_processInputs start");
     switch (app->win) {
         case window_search:
             processUp = &search_processUp;
@@ -136,17 +139,21 @@ void input_processInputs(app_t *app) {
     }
 
     processEvents(app);
+    LOG_TRACE("input_processInputs done");
 }
 
 void input_destroy() {
+    LOG_TRACE("input_destroy start");
     for (int i = 0; i < gameControllerCount; i++) {
         SDL_GameControllerClose(gameControllers[i]);
     }
     free(gameControllers);
+    LOG_TRACE("input_destroy done");
 }
 
 
 static void processGameController(app_t *app) {
+    LOG_TRACE("processGameController start");
     if (gameControllerState.start && gameControllerState.back) {
         questionAppQuitting(app);
     } else if (gameControllerState.up) {
@@ -164,9 +171,11 @@ static void processGameController(app_t *app) {
     } else {
         processOtherButton(app, &gameControllerState);
     }
+    LOG_TRACE("processGameController done");
 }
 
 static void processEvents(app_t *app) {
+    LOG_TRACE("processEvents start");
     SDL_Event event;
     SDL_Scancode scancode;
 
@@ -271,9 +280,11 @@ static void processEvents(app_t *app) {
                 break;
         }
     }
+    LOG_TRACE("processEvents done");
 }
 
 static void questionAppQuitting(app_t *app) {
+    LOG_TRACE("questionAppQuitting start");
     app->modal.displayed = 1;
     app->modal.headline = "Quit Rom Fetcher";
     if (downloader_isActive(app)) {
@@ -288,9 +299,12 @@ static void questionAppQuitting(app_t *app) {
     app->modal.callbackData = NULL;
     app->modal.callbackAction = &modalQuit;
     app->modal.callbackCancel = NULL;
+    LOG_TRACE("questionAppQuitting done");
 }
 
 static void modalQuit(void *app, void *data) {
+    LOG_TRACE("modalQuit start");
     ((app_t *) app)->modal.displayed = 0;
     ((app_t *) app)->quit = 1;
+    LOG_TRACE("modalQuit done");
 }

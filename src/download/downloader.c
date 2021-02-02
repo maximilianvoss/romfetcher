@@ -49,14 +49,17 @@ static char *postProcess(app_t *app, char *file, uint8_t noExecute);
 pthread_mutex_t mutexQueue;
 
 void downloader_init(app_t *app) {
+    LOG_TRACE("downloader_init start");
     if (pthread_mutex_init(&mutexQueue, NULL) != 0) {
         LOG_ERROR("Mutex init failed");
         exit(1);
     }
     spawnThreads(app);
+    LOG_TRACE("downloader_init done");
 }
 
 void downloader_destroy(app_t *app) {
+    LOG_TRACE("downloader_destroy start");
     pthread_mutex_lock(&mutexQueue);
 
     acll_free(app->download.all, &destroyDownload);
@@ -64,10 +67,13 @@ void downloader_destroy(app_t *app) {
 
     pthread_mutex_unlock(&mutexQueue);
     pthread_mutex_destroy(&mutexQueue);
+    LOG_TRACE("downloader_destroy done");
 }
 
 uint8_t downloader_addToQueue(void *appPtr, rl_system *system, char *title, char *url, char *data, char *filename,
                               chttp_method method) {
+    LOG_TRACE("downloader_addToQueue start (system=%s, title=%s, url=%s, data=%s, filename=%s, method=%d",
+              system->fullname, title, url, data, filename, method);
     app_t *app = appPtr;
     download_t *download = calloc(1, sizeof(download_t));
     download->title = str_clone(title);
@@ -94,11 +100,15 @@ uint8_t downloader_addToQueue(void *appPtr, rl_system *system, char *title, char
         addDownload(app, download);
     }
     safe_destroy(downloadPath);
+    LOG_TRACE("downloader_addToQueue done (system=%s, title=%s, url=%s, data=%s, filename=%s, method=%d",
+              system->fullname, title, url, data, filename, method);
     return 0;
 }
 
 void downloader_cancel(app_t *app, acll_t *element) {
+    LOG_TRACE("downloader_cancel start");
     if (element == NULL) {
+        LOG_TRACE("downloader_cancel done (element=NULL)");
         return;
     }
     download_t *download = getDownload(element);
@@ -108,6 +118,7 @@ void downloader_cancel(app_t *app, acll_t *element) {
     pthread_mutex_lock(&mutexQueue);
     app->download.all = acll_sort(app->download.all, downloadComparator);
     pthread_mutex_unlock(&mutexQueue);
+    LOG_TRACE("downloader_cancel start");
 }
 
 uint8_t downloader_isActive(app_t *app) {
@@ -115,6 +126,7 @@ uint8_t downloader_isActive(app_t *app) {
 }
 
 void downloader_cancelAllDownloads(app_t *app) {
+    LOG_TRACE("downloader_cancelAllDownload start");
     pthread_mutex_lock(&mutexQueue);
     acll_t *element = acll_first(app->download.all);
     while (element != NULL) {
@@ -123,20 +135,25 @@ void downloader_cancelAllDownloads(app_t *app) {
         element = element->next;
     }
     pthread_mutex_unlock(&mutexQueue);
+    LOG_TRACE("downloader_cancelAllDownload done");
 }
 
 static void spawnThreads(app_t *app) {
+    LOG_TRACE("spawnThreads start");
     pthread_t downloadThreads[DOWNLOADER_THREADS];
     for (int i = 0; i < DOWNLOADER_THREADS; i++) {
         if (pthread_create(&downloadThreads[i], NULL, downloadThreadExecution, app)) {
             LOG_ERROR("Error creating thread");
             return;
         }
+        LOG_DEBUG("Thread %d spawned", i);
         pthread_detach(downloadThreads[i]);
     }
+    LOG_TRACE("spawnThreads done");
 }
 
 static void *downloadThreadExecution(void *appPtr) {
+    LOG_TRACE("downloadThreadExecution start");
     app_t *app = (app_t *) appPtr;
     while (!app->quit) {
         pthread_mutex_lock(&mutexQueue);
@@ -162,6 +179,7 @@ static void *downloadThreadExecution(void *appPtr) {
         }
         sleep(3);
     }
+    LOG_TRACE("downloadThreadExecution done");
     return NULL;
 }
 
@@ -171,29 +189,38 @@ static void modalDownload(void *app, void *data) {
 }
 
 static void addDownload(app_t *app, download_t *download) {
+    LOG_TRACE("addDownload start");
     pthread_mutex_lock(&mutexQueue);
     app->download.all = acll_append(app->download.all, download);
     app->download.all = acll_sort(app->download.all, downloadComparator);
     pthread_mutex_unlock(&mutexQueue);
+    LOG_TRACE("addDownload done");
 }
 
 static void destroyDownload(void *ptr) {
+    LOG_TRACE("destroyDownload start");
     download_t *download = (download_t *) ptr;
     FREENOTNULL(download->title);
     FREENOTNULL(download->url);
     FREENOTNULL(download->data);
     FREENOTNULL(download->filename);
+    LOG_TRACE("destroyDownload done");
 }
 
 static int filterQueuedDownload(void *payload, void *input) {
+    LOG_TRACE("filterQueuedDownload start");
     download_t *download = payload;
     (void) input;
+    LOG_TRACE("filterQueuedDownload done (return=%d)",
+              (!download->active && !download->cancelled && !download->finished));
     return (!download->active && !download->cancelled && !download->finished);
 }
 
 static int filterActiveDownload(void *payload, void *input) {
+    LOG_TRACE("filterActiveDownload start");
     download_t *download = payload;
     (void) input;
+    LOG_TRACE("filterActiveDownload done (return=%d)", download->active);
     return download->active;
 }
 
@@ -249,13 +276,17 @@ static int downloadComparator(void *payload1, void *payload2) {
 }
 
 static inline uint8_t downloadIsQueued(download_t *download) {
+    LOG_TRACE("downloadIsQueued start")
     if (!download->finished && !download->cancelled && !download->active) {
+        LOG_TRACE("downloadIsQueued done (return=1)");
         return 1;
     }
+    LOG_TRACE("downloadIsQueued done (return=0)");
     return 0;
 }
 
 static void downloadCurl(app_t *app, download_t *download) {
+    LOG_TRACE("downloadCurl start");
     csafestring_t *fullCmd = safe_create("$(nohup ");
 
     csafestring_t *downloadPath = path_downloadTarget(download->system, download->filename);
@@ -303,9 +334,11 @@ static void downloadCurl(app_t *app, download_t *download) {
     system(fullCmd->data);
 
     safe_destroy(fullCmd);
+    LOG_TRACE("downloadCurl done");
 }
 
 static void downloadInternal(app_t *app, download_t *download) {
+    LOG_TRACE("downloadInternal start");
     csafestring_t *downloadPath = path_downloadTarget(download->system, download->filename);
     chttp_download(download->url, download->data, download->method, downloadPath->data, &download->current,
                    &download->total, &download->cancelled);
@@ -318,9 +351,11 @@ static void downloadInternal(app_t *app, download_t *download) {
     }
     postProcess(app, downloadPath->data, 0);
     safe_destroy(downloadPath);
+    LOG_TRACE("downloadInternal done");
 }
 
 static char *postProcess(app_t *app, char *file, uint8_t noExecute) {
+    LOG_TRACE("postProcess start (file=%s, noExecute=%d)", file, noExecute);
     char *suffix = file_suffix(file);
     char *command = NULL;
 
@@ -341,5 +376,6 @@ static char *postProcess(app_t *app, char *file, uint8_t noExecute) {
         free(commandTemplate);
         free(tmp);
     }
+    LOG_TRACE("postProcess done (file=%s, noExecute=%d)", file, noExecute);
     return command;
 }

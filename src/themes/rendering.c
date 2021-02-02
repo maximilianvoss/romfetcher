@@ -305,6 +305,7 @@ void themes_setDrawColor(app_t *app, enum theme_color color) {
 }
 
 static void themes_unloadTheme(app_t *app) {
+    LOG_TRACE("themes_unloadTheme start");
     SDL_DestroyTexture(getActiveTheme(app)->images.background);
     SDL_DestroyTexture(getActiveTheme(app)->images.searchChevron);
     SDL_DestroyTexture(getActiveTheme(app)->images.settingsIcon);
@@ -316,9 +317,11 @@ static void themes_unloadTheme(app_t *app) {
     TTF_CloseFont(getActiveTheme(app)->fonts.font34);
     TTF_CloseFont(getActiveTheme(app)->fonts.font26);
     TTF_CloseFont(getActiveTheme(app)->fonts.font16);
+    LOG_TRACE("themes_unloadTheme done");
 }
 
 static void themes_initTheme(app_t *app) {
+    LOG_TRACE("themes_initTheme start");
     getActiveTheme(app)->images.background = rendering_loadImage(app->sdlRenderer,
                                                                  getActiveTheme(app)->images.backgroundPath);
     getActiveTheme(app)->images.searchChevron = rendering_loadImage(app->sdlRenderer,
@@ -353,9 +356,11 @@ static void themes_initTheme(app_t *app) {
     if (getActiveTheme(app)->fonts.font16 == NULL) {
         LOG_ERROR("Failed to load font16 SDL_ttf Error: %s", TTF_GetError());
     }
+    LOG_TRACE("themes_initTheme done");
 }
 
 void themes_activate(app_t *app, acll_t *theme) {
+    LOG_TRACE("themes_activate start");
     if (app->themes.active != NULL) {
         themes_unloadTheme(app);
     }
@@ -365,4 +370,5 @@ void themes_activate(app_t *app, acll_t *theme) {
         app->themes.active = theme;
     }
     themes_initTheme(app);
+    LOG_TRACE("themes_activate done");
 }

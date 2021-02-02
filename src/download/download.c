@@ -18,6 +18,7 @@
 #include "downloader.h"
 
 void download_init(sqlite3 *db) {
+    LOG_TRACE("download_init start");
     char *err_msg = 0;
 
     char *query = "CREATE TABLE downloads (title TEXT, system TEXT, url TEXT, data TEXT, filename TEXT, method INT)";
@@ -26,9 +27,11 @@ void download_init(sqlite3 *db) {
         LOG_ERROR("Failed to create table - SQL error: %s", err_msg);
         sqlite3_free(err_msg);
     }
+    LOG_TRACE("download_init done");
 }
 
 void download_load(app_t *app) {
+    LOG_TRACE("download_load start");
     char *query = "SELECT title, system, url, data, filename, method FROM downloads";
 
     sqlite3_stmt *stmt;
@@ -69,9 +72,11 @@ void download_load(app_t *app) {
         LOG_ERROR("Failed to create table - SQL error: %s", err_msg);
         sqlite3_free(err_msg);
     }
+    LOG_TRACE("download_load done");
 }
 
 void download_persistDownload(app_t *app, download_t *download) {
+    LOG_TRACE("download_persistDownload start");
     char *query = "INSERT INTO downloads (title, system, url, data, filename, method) VALUES (@title, @system, @url, @data, @filename, @method)";
 
     sqlite3_stmt *stmt;
@@ -107,4 +112,5 @@ void download_persistDownload(app_t *app, download_t *download) {
     }
     sqlite3_clear_bindings(stmt);
     sqlite3_finalize(stmt);
+    LOG_TRACE("download_persistDownload done");
 }

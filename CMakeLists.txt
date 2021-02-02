@@ -38,7 +38,7 @@ include_directories(${INCLUDE_DIRECTORIES})
 # debug handling for build
 if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
     set(CMAKE_VERBOSE_MAKEFILE on)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -Wall -DCLOGGER_LEVEL=2")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -Wall -DCLOGGER_LEVEL=3")
     set(CMAKE_INSTALL_PREFIX /usr/local)
 else ()
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -O3 -DCLOGGER_LEVEL=1")

@@ -21,29 +21,34 @@
 
 
 csafestring_t *path_romfetchersHome() {
+    LOG_TRACE("path_romfetchersHome start");
     csafestring_t *path = safe_create(getenv("HOME"));
     safe_strchrappend(path, '/');
     safe_strcat(path, HOMEDIR_PATH);
     safe_strchrappend(path, '/');
+    LOG_TRACE("path_romfetchersHome done. (return=%s)", path->data);
     return path;
 }
 
 void path_initRomfetchersHome() {
+    LOG_TRACE("path_initRomfetchersHome start");
     csafestring_t *path = path_romfetchersHome();
     struct stat st = {0};
     if (stat(path->data, &st) == -1) {
         mkdir(path->data, 0700);
     }
     safe_destroy(path);
+    LOG_TRACE("path_initRomfetchersHome done");
 }
 
 csafestring_t *path_downloadTarget(rl_system *system, char *filename) {
+    LOG_TRACE("path_downloadTarget start (system=%s, filename=%s)", system->fullname, filename);
     csafestring_t *path = safe_create(getenv("HOME"));
     safe_strchrappend(path, '/');
     safe_strcat(path, ROM_BASE_DIR);
     safe_strcat(path, system->path);
     safe_strchrappend(path, '/');
     safe_strcat(path, filename);
-
+    LOG_TRACE("path_downloadTarget done (system=%s, filename=%s, return=%s)", system->fullname, filename, path->data);
     return path;
 }

@@ -49,6 +49,7 @@ static void freetheme(void *ptr);
 static int filterFileReference(void *payload, void *input);
 
 void themes_init(app_t *app) {
+    LOG_TRACE("themes_init start")
     char themedirs[255][255] = THEMES_SYSTEM_DIRS;
     for (int i = 0; i < 255 && *themedirs[i] != '\0'; ++i) {
         loadThemes(app, themedirs[i]);
@@ -64,32 +65,42 @@ void themes_init(app_t *app) {
         exit(1);
     }
     app->themes.active = app->themes.all;
+    LOG_TRACE("themes_init done")
 }
 
 void themes_destroy(app_t *app) {
+    LOG_TRACE("themes_destroy start")
     // FIXME: destroy Textures  & Fonts
     acll_free(app->themes.all, &freetheme);
+    LOG_TRACE("themes_destroy done")
 }
 
 acll_t *themes_getByFileReference(acll_t *themes, char *fileReference) {
+    LOG_TRACE("themes_getByFileReference start(fileReference=%s)", fileReference)
     if (fileReference == NULL) {
+        LOG_TRACE("themes_getByFileReference done(fileReference=%s, return=NULL)", fileReference);
         return NULL;
     }
-
-    return acll_find(themes, filterFileReference, fileReference);
+    acll_t *result = acll_find(themes, filterFileReference, fileReference);
+    LOG_TRACE("themes_getByFileReference done(fileReference=%s, return=%s)", fileReference, getTheme(result)->name);
+    return result;
 }
 
 static int filterFileReference(void *payload, void *input) {
+    LOG_TRACE("filterFileReference start");
     theme_t *theme = payload;
     char *fileReference = input;
 
     if (!strcmp(theme->fileReference, fileReference)) {
+        LOG_TRACE("filterFileReference done (return=1)");
         return 1;
     }
+    LOG_TRACE("filterFileReference done (return=0)");
     return 0;
 }
 
 static void freetheme(void *ptr) {
+    LOG_TRACE("freetheme start");
     theme_t *theme = (theme_t *) ptr;
 
     FREENOTNULL(theme->fileReference);
@@ -101,22 +112,27 @@ static void freetheme(void *ptr) {
     FREENOTNULL(theme->images.settingsIconPath);
     FREENOTNULL(theme->images.downloadManagerIconPath);
     FREENOTNULL(theme->name);
+    LOG_TRACE("freetheme done");
 }
 
 static void colorSetter(SDL_Color *color, int r, int g, int b, int a) {
+    LOG_TRACE("colorSetter start (r=%d, g=%d, b=%d, a=%d", r, g, b, a);
     color->r = r;
     color->g = g;
     color->b = b;
     color->a = a;
+    LOG_TRACE("colorSetter done (r=%d, g=%d, b=%d, a=%d", r, g, b, a);
 }
 
 
 static void loadThemes(app_t *app, char *path) {
+    LOG_TRACE("loadThemes start (path=%s)", path);
     DIR *directoryHandler;
     struct dirent *entry;
 
     directoryHandler = opendir(path);
     if (directoryHandler == NULL) {
+        LOG_TRACE("loadThemes done (path=%s, directoryHandler=NULL)", path);
         return;
     }
 
@@ -134,9 +150,11 @@ static void loadThemes(app_t *app, char *path) {
         }
     }
     closedir(directoryHandler);
+    LOG_TRACE("loadThemes done (path=%s)", path);
 }
 
 static void loadTheme(app_t *app, char *path) {
+    LOG_TRACE("loadTheme start (path=%s)", path);
     csafestring_t *filepath = safe_create(path);
     safe_strchrappend(filepath, '/');
     safe_strcat(filepath, "theme.json");
@@ -163,9 +181,11 @@ static void loadTheme(app_t *app, char *path) {
 
     safe_destroy(content);
     safe_destroy(filepath);
+    LOG_TRACE("loadTheme done (path=%s)", path);
 }
 
 static theme_t *createThemeByMap(char *path, void *map) {
+    LOG_TRACE("createThemeByMap start (path=%s)", path);
     theme_t *theme = (theme_t *) calloc(1, sizeof(theme_t));
 
     // window
@@ -259,10 +279,12 @@ static theme_t *createThemeByMap(char *path, void *map) {
     theme->images.downloadManagerIconPath = createFullQualifiedPath(path,
                                                                     hash_get(map, "images.downloadManagerIcon"));
 
+    LOG_TRACE("createThemeByMap done (path=%s)", path);
     return theme;
 }
 
 static void loadColor(SDL_Color *color, void *map, char *key) {
+    LOG_TRACE("loadColor start (key=%s)", key);
     csafestring_t *tmp = safe_create(key);
     safe_strcat(tmp, "[x]");
     int count = mapToInt(map, tmp->data);
@@ -270,6 +292,7 @@ static void loadColor(SDL_Color *color, void *map, char *key) {
     if (count != 4) {
         colorSetter(color, 0, 0, 0, 0);
         safe_destroy(tmp);
+        LOG_ERROR("count !=4");
         return;
     }
 
@@ -294,23 +317,30 @@ static void loadColor(SDL_Color *color, void *map, char *key) {
     }
 
     safe_destroy(tmp);
+    LOG_TRACE("loadColor done (key=%s)", key);
 }
 
 static int mapToInt(void *map, char *key) {
+    LOG_TRACE("mapToInt start (key=%s)", key);
     char *countStr = hash_get(map, key);
     if (countStr == NULL) {
+        LOG_TRACE("mapToInt done (key=%s, return=-1)", key);
         return -1;
     }
 
     int count = atol(countStr);
+    LOG_TRACE("mapToInt done (key=%s, return=%d)", key, count);
     return count;
 }
 
 static char *createFullQualifiedPath(char *path, char *file) {
+    LOG_TRACE("createFullQualifiedPath start (path=%s, file=%s)", path, file);
     if (file == NULL) {
+        LOG_TRACE("createFullQualifiedPath done (path=%s, file=%s, return=NULL)", path, file);
         return NULL;
     }
     if (*file == '/') {
+        LOG_TRACE("createFullQualifiedPath done (path=%s, file=%s, return=%s)", path, file, file);
         return cloneString(file);
     }
     csafestring_t *filepath = safe_create(path);
@@ -319,28 +349,36 @@ static char *createFullQualifiedPath(char *path, char *file) {
 
     char *str = cloneString(filepath->data);
     safe_destroy(filepath);
+    LOG_TRACE("createFullQualifiedPath done (path=%s, file=%s, return=%s)", path, file, str);
     return str;
 }
 
 static char *cloneString(char *strIn) {
+    LOG_TRACE("cloneString start (strIn=%s)", strIn);
     if (strIn == NULL) {
+        LOG_TRACE("cloneString done (strIn=%s)", strIn);
         return NULL;
     }
     char *str = (char *) calloc(strlen(strIn) + 1, sizeof(char));
     strcpy(str, strIn);
+    LOG_TRACE("cloneString done (strIn=%s)", strIn);
     return str;
 }
 
 static void json2maphook(void *data, char *key, char *value) {
+    LOG_TRACE("json2maphook start (key=%s, value=%s)", key, value);
     hash_set(data, key, value);
+    LOG_TRACE("json2maphook done (key=%s, value=%s)", key, value);
 }
 
 static void *loadJsonMap(char *json) {
+    LOG_TRACE("loadJsonMap start (json=%s)", json);
     void *map = hash_createMap();
     json2map_t *json2mapObj = json2map_init(0);
     json2map_registerDataHook(json2mapObj, map, &json2maphook);
     json2map_parse(json2mapObj, NULL, json);
     json2map_destroy(json2mapObj);
+    LOG_TRACE("loadJsonMap done (json=%s)", json);
     return map;
 }
 

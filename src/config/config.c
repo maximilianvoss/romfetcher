@@ -32,6 +32,7 @@ void
 config_load(sqlite3 *db, acll_t **configMenu, acll_t **advancedConfigs,
             acll_t **resolutionConfigs, acll_t **themes,
             acll_t *hosters, acll_t *systems) {
+    LOG_TRACE("config_load start");
 
     // set initial states
     if (!database_tableExists(db, "config")) {
@@ -61,10 +62,14 @@ config_load(sqlite3 *db, acll_t **configMenu, acll_t **advancedConfigs,
     // load the hosters & systems settings
     ll_dbLoad(db, DATABASE_TABLE_HOSTER, hosters);
     ll_dbLoad(db, DATABASE_TABLE_SYSTEMS, systems);
+
+    LOG_TRACE("config_load done");
 }
 
 void config_revert(sqlite3 *db, acll_t **advancedConfigs,
                    acll_t **resolutionConfigs, acll_t **themes) {
+    LOG_TRACE("config_revert start");
+
     // updating config with DB values
     char *query = "SELECT theme, fullscreen, opengl, highdpi, downloadqueue, externalcurl, resolution FROM config";
     sqlite3_stmt *stmt;
@@ -94,11 +99,13 @@ void config_revert(sqlite3 *db, acll_t **advancedConfigs,
         config_set(*advancedConfigs, advancedConfig_externalCurl, externalCurl);
     }
     sqlite3_finalize(stmt);
+    LOG_TRACE("config_revert done");
 }
 
 void
 config_persist(sqlite3 *db, acll_t *advancedConfigs, acll_t *resolutionConfigs, acll_t *theme,
                acll_t *hosters, acll_t *systems) {
+    LOG_TRACE("config_persist start");
     char *query = "UPDATE config SET theme=@theme, fullscreen=@fullscreen, opengl=@opengl, highdpi=@highdpi, resolution=@resolution, downloadqueue=@downloadqueue, externalcurl=@externalcurl";
 
     sqlite3_stmt *stmt;
@@ -133,16 +140,20 @@ config_persist(sqlite3 *db, acll_t *advancedConfigs, acll_t *resolutionConfigs, 
 
     ll_dbPersist(db, DATABASE_TABLE_HOSTER, hosters);
     ll_dbPersist(db, DATABASE_TABLE_SYSTEMS, systems);
+    LOG_TRACE("config_persist done");
 }
 
 void
 config_destroy(acll_t *configMenu, acll_t *advancedConfigs, acll_t *resolutionConfigs) {
+    LOG_TRACE("config_destroy start");
     configMenu_destroy(configMenu);
     advancedConfig_destroy(advancedConfigs);
     resolutionConfig_destroy(resolutionConfigs);
+    LOG_TRACE("config_destroy done");
 }
 
 void config_set(acll_t *advancedConfigs, advancedConfigSetting_t setting, uint8_t value) {
+    LOG_TRACE("config_set start (setting=%d, value=%d)", setting, value);
     acll_t *ptr = advancedConfigs;
     while (ptr != NULL) {
         if (getAdvancedConfig(ptr)->setting == setting) {
@@ -151,20 +162,25 @@ void config_set(acll_t *advancedConfigs, advancedConfigSetting_t setting, uint8_
         }
         ptr = ptr->next;
     }
+    LOG_TRACE("config_set done (setting=%d, value=%d)", setting, value);
 }
 
 uint8_t config_get(acll_t *advancedConfigs, advancedConfigSetting_t setting) {
+    LOG_TRACE("config_get start (setting=%d)", setting);
     acll_t *ptr = acll_first(advancedConfigs);
     while (ptr != NULL) {
         if (getAdvancedConfig(ptr)->setting == setting) {
+            LOG_TRACE("config_get done (setting=%d, return=%d)", setting, getAdvancedConfig(ptr)->active);
             return getAdvancedConfig(ptr)->active;
         }
         ptr = ptr->next;
     }
+    LOG_TRACE("config_get done (setting=%d, return=255)", setting);
     return 255;
 }
 
 static void initConfigTable(sqlite3 *db) {
+    LOG_TRACE("initConfigTable start");
     char *err_msg = 0;
     char *query = "CREATE TABLE config (version INT, theme TEXT, fullscreen INT, opengl INT, highdpi INT, downloadqueue INT, externalcurl INT, resolution TEXT);";
 
@@ -174,9 +190,11 @@ static void initConfigTable(sqlite3 *db) {
         sqlite3_free(err_msg);
     }
     fillStdConfig(db);
+    LOG_TRACE("initConfigTable done");
 }
 
 static uint8_t checkDBVersion(sqlite3 *db) {
+    LOG_TRACE("checkDBVersion start");
     char *query = "SELECT version FROM config";
 
     sqlite3_stmt *stmt;
@@ -189,14 +207,17 @@ static uint8_t checkDBVersion(sqlite3 *db) {
     if (step == SQLITE_ROW) {
         if (sqlite3_column_int(stmt, 0) < DATABASE_SCHEMA_SUPPORTED_LEGACY_VERSION) {
             sqlite3_finalize(stmt);
+            LOG_TRACE("checkDBVersion done (return=1)");
             return 1;
         }
     }
     sqlite3_finalize(stmt);
+    LOG_TRACE("checkDBVersion done (return=0)");
     return 0;
 }
 
 static void fillStdConfig(sqlite3 *db) {
+    LOG_TRACE("fillStdConfig start");
     char *query = "INSERT INTO config (version, fullscreen, downloadqueue) VALUES (@version, 1, 1)";
 
     sqlite3_stmt *stmt;
@@ -215,10 +236,13 @@ static void fillStdConfig(sqlite3 *db) {
     }
     sqlite3_clear_bindings(stmt);
     sqlite3_finalize(stmt);
+    LOG_TRACE("fillStdConfig done");
 }
 
 static int filterResolutionName(void *payload, void *input) {
+    LOG_TRACE("filterResolutionName start");
     resolutionConfig_t *resolutionConfig = payload;
     char *name = input;
+    LOG_TRACE("filterResolutionName done");
     return !strcmp(resolutionConfig->name, name);
 }
