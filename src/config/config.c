@@ -243,8 +243,9 @@ static int filterResolutionName(void *payload, void *input) {
     LOG_TRACE("filterResolutionName start");
     resolutionConfig_t *resolutionConfig = payload;
     char *name = input;
-    LOG_TRACE("resolutionConfig->name=%s", resolutionConfig->name);
-    LOG_TRACE("name=%s", name);
+    if (name == NULL || resolutionConfig == NULL || resolutionConfig->name == NULL) {
+        return -1;
+    }
     LOG_TRACE("filterResolutionName done");
     return !strcmp(resolutionConfig->name, name);
 }
