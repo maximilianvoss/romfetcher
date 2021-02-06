@@ -1,0 +1,28 @@
+include(FindPackageHandleStandardArgs)
+
+find_path(JSON2MAP_INCLUDE_DIR_INTERNAL json2map.h
+        HINTS
+        include
+        )
+mark_as_advanced(JSON2MAP_INCLUDE_DIR_INTERNAL)
+
+FIND_LIBRARY(JSON2MAP_LIBRARIES_INTERNAL
+        NAMES json2map
+        HINTS
+        PATH_SUFFIXES lib64 lib
+        )
+mark_as_advanced(JSON2MAP_LIBRARIES_INTERNAL)
+
+find_package(CSAFESTRING)
+
+find_package_handle_standard_args(JSON2MAP
+        REQUIRED_VARS JSON2MAP_INCLUDE_DIR_INTERNAL JSON2MAP_LIBRARIES_INTERNAL)
+
+set(JSON2MAP_INCLUDE_DIR
+        ${JSON2MAP_INCLUDE_DIR_INTERNAL}
+        ${CSAFESTRING_INCLUDE_DIR}
+        )
+set(JSON2MAP_LIBRARIES
+        ${JSON2MAP_LIBRARIES_INTERNAL}
+        ${CSAFESTRING_LIBRARIES}
+        )

@@ -8,7 +8,6 @@ set(CPACK_PACKAGE_VERSION_PATCH "0")
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 set(CMAKE_C_STANDARD 99)
-set(CMAKE_INSTALL_PREFIX /usr)
 set(THREADS_PREFER_PTHREAD_FLAG on)
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH true)
 
@@ -17,23 +16,16 @@ find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 find_package(SDL2_ttf REQUIRED)
 find_package(SQLite3 REQUIRED)
+find_package(CURL REQUIRED)
 find_package(Threads REQUIRED)
-
-# Header includes
-set(INCLUDE_DIRECTORIES
-        ${INCLUDE_DIRECTORIES}
-        ${SDL2_INCLUDE_DIRS}
-        ${SDL2_IMAGE_INCLUDE_DIRS}
-        ${SDL2TTF_INCLUDE_DIRS}
-        ${SQLite3_INCLUDE_DIRS}
-        libs/romlibrary
-        libs/acll
-        libs/csafestring
-        libs/json2map
-        libs/chttp
-        libs/clogger
-        )
-include_directories(${INCLUDE_DIRECTORIES})
+find_package(OpenSSL REQUIRED)
+find_package(ACLL REQUIRED)
+find_package(CHTTP REQUIRED)
+find_package(CLOGGER REQUIRED)
+find_package(CSAFESTRING REQUIRED)
+find_package(JSON2MAP REQUIRED)
+find_package(ROMLIBRARY REQUIRED)
+#find_package(LEXBOR REQUIRED)
 
 # debug handling for build
 if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
@@ -44,32 +36,102 @@ else ()
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -O3 -DCLOGGER_LEVEL=1")
 endif ()
 
-# Build submodules
-add_subdirectory(libs/romlibrary)
-add_subdirectory(libs/acll)
-add_subdirectory(libs/csafestring)
-add_subdirectory(libs/json2map)
-add_subdirectory(libs/chttp)
+# Header includes
+set(INCLUDE_DIRECTORIES
+        ${INCLUDE_DIRECTORIES}
+        ${SDL2_INCLUDE_DIRS}
+        ${SDL2_IMAGE_INCLUDE_DIRS}
+        ${SDL2TTF_INCLUDE_DIRS}
+        ${SQLite3_INCLUDE_DIRS}
+        ${JSON2MAP_INCLUDE_DIR}
+        ${ROMLIBRARY_INCLUDE_DIR}
+        )
+
+include_directories(${INCLUDE_DIRECTORIES})
 
 #include other cmake files for building
-include(src/application.cmake)
 include(resources/resources.cmake)
 include(resources/themes/themes.cmake)
 
 set(LINK_LIBRARIES
-        csafestring
-        json2map
         m
-        romlibrary
-        chttp
+        ${CMAKE_THREAD_LIBS_INIT}
         ${SDL2_LIBRARIES}
         ${SDL2_IMAGE_LIBRARIES}
         ${SDL2TTF_LIBRARY}
-        ${CMAKE_THREAD_LIBS_INIT}
         ${SQLite3_LIBRARIES}
+        ${JSON2MAP_LIBRARIES}
+        ${ROMLIBRARY_LIBRARIES}
+        )
+
+
+set(SOURCES_APPLICATION
+        src/application.c
+        src/application.h
+        src/config/config.c
+        src/config/config.h
+        src/config/configmenu.c
+        src/config/configmenu.h
+        src/config/configstates.c
+        src/config/configstates.h
+        src/constants.h
+        src/database/database.c
+        src/database/database.h
+        src/definitions/config.h
+        src/definitions/controller.h
+        src/definitions/download.h
+        src/definitions/enums.h
+        src/definitions/listitem.h
+        src/definitions/texture.h
+        src/definitions/themes.h
+        src/download/download.c
+        src/download/download.h
+        src/download/downloader.c
+        src/download/downloader.h
+        src/download/downloadmanager.c
+        src/download/downloadmanager.h
+        src/download/postprocess.c
+        src/download/postprocess.h
+        src/enginecache/enginecache.c
+        src/enginecache/enginecache.h
+        src/helper/entities.c
+        src/helper/entities.h
+        src/helper/map.c
+        src/helper/map.h
+        src/helper/path.c
+        src/helper/path.h
+        src/helper/uihelper.c
+        src/helper/uihelper.h
+        src/helper/utils.c
+        src/helper/utils.h
+        src/input/input.c
+        src/input/input.h
+        src/input/keyboard.c
+        src/input/keyboard.h
+        src/list/list.c
+        src/list/list.h
+        src/modal/modal.c
+        src/modal/modal.h
+        src/search/search.c
+        src/search/search.h
+        src/state/statehandler.c
+        src/state/statehandler.h
+        src/state/statesystem.c
+        src/state/statesystem.h
+        src/themes/loading.c
+        src/themes/loading.h
+        src/themes/rendering.c
+        src/themes/rendering.h
+        src/ui/display.c
+        src/ui/display.h
+        src/ui/rendering.c
+        src/ui/rendering.h
+        src/ui/uihandler.c
+        src/ui/uihandler.h
         )
 
 # Linking
+add_executable(romfetcher ${SOURCES_APPLICATION})
 target_link_libraries(romfetcher ${LINK_LIBRARIES})
 
 # Install
