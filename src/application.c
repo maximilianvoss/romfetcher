@@ -29,6 +29,10 @@
 #include "themes/rendering.h"
 #include "config/config.h"
 
+#ifdef RL_DYNAMIC
+#include "dynamic.h"
+#endif
+
 void static initApp(app_t *app);
 
 void static destroyApp(app_t *app);
@@ -58,6 +62,10 @@ void static initApp(app_t *app) {
     LOG_TRACE("initApp start");
     memset(app, 0, sizeof(app_t));
     app->renderingRequired = 1;
+
+#ifdef RL_DYNAMIC
+    loadLibraryFunctions();
+#endif
 
     path_initRomfetchersHome();
     app->database.db = database_init();

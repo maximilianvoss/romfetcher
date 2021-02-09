@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef CONFIG_H
-#define CONFIG_H
+#ifndef _CONSTANTS_H
+#define _CONSTANTS_H
 
 #define DATABASE_SCHEMA_VERSION 300
 #define DATABASE_SCHEMA_SUPPORTED_LEGACY_VERSION 300
@@ -55,6 +55,15 @@
 
 #ifndef MAX_SEARCHTEXT_LENGTH
 #define MAX_SEARCHTEXT_LENGTH 255
+#endif
+
+#ifndef RL_DYNAMIC_LIBRARY
+#ifdef UNIX
+#define RL_DYNAMIC_LIBRARY "libromlibrary.so"
+#endif
+#ifdef MACOS
+#define RL_DYNAMIC_LIBRARY "libromlibrary.dylib"
+#endif
 #endif
 
 #define COPYRIGHT "C Copyright 2020 - 2021 by Maximilian Voss (maximilian@voss.rocks)"

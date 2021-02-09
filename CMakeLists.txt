@@ -14,18 +14,10 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH true)
 # required packages
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
-find_package(SDL2_ttf REQUIRED)
+find_package(SDL2TTF REQUIRED)
 find_package(SQLite3 REQUIRED)
-find_package(CURL REQUIRED)
-find_package(Threads REQUIRED)
-find_package(OpenSSL REQUIRED)
-find_package(ACLL REQUIRED)
-find_package(CHTTP REQUIRED)
-find_package(CLOGGER REQUIRED)
-find_package(CSAFESTRING REQUIRED)
 find_package(JSON2MAP REQUIRED)
 find_package(ROMLIBRARY REQUIRED)
-#find_package(LEXBOR REQUIRED)
 
 # debug handling for build
 if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
@@ -34,6 +26,15 @@ if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
     set(CMAKE_INSTALL_PREFIX /usr/local)
 else ()
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -O3 -DCLOGGER_LEVEL=1")
+endif ()
+
+if (RL_DYNAMIC)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DRL_DYNAMIC")
+    if (APPLE)
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DMACOS")
+    elseif (UNIX)
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DUNIX")
+    endif ()
 endif ()
 
 # Header includes
@@ -61,9 +62,16 @@ set(LINK_LIBRARIES
         ${SDL2TTF_LIBRARY}
         ${SQLite3_LIBRARIES}
         ${JSON2MAP_LIBRARIES}
-        ${ROMLIBRARY_LIBRARIES}
+        ${ACLL_LIBRARIES}
+        ${CHTTP_LIBRARIES}
         )
 
+if (NOT RL_DYNAMIC)
+    set(LINK_LIBRARIES
+            ${LINK_LIBRARIES}
+            ${ROMLIBRARY_LIBRARIES}
+            )
+endif ()
 
 set(SOURCES_APPLICATION
         src/application.c
@@ -128,7 +136,7 @@ set(SOURCES_APPLICATION
         src/ui/rendering.h
         src/ui/uihandler.c
         src/ui/uihandler.h
-        )
+        src/dynamic.c src/dynamic.h)
 
 # Linking
 add_executable(romfetcher ${SOURCES_APPLICATION})
