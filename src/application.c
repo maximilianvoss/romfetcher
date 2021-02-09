@@ -28,7 +28,6 @@
 #include "enginecache/enginecache.h"
 #include "themes/rendering.h"
 #include "config/config.h"
-
 #ifdef RL_DYNAMIC
 #include "dynamic.h"
 #endif

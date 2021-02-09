@@ -14,57 +14,50 @@
  * limitations under the License.
  */
 
-#include
-"constants.h"
+#include "dynamic.h"
+#include <dlfcn.h>
+#include <romlibrary.h>
+#include "constants.h"
 
-#include
-"dynamic.h"
-#include
-<dlfcn.h>
-#include
-<romlibrary.h>
-
-#define
-load(handler, func, name)\
+#define load(handler, func, name)\
     func = dlsym(handler, name); \
     errormsg = dlerror();\
     if ( func == NULL || errormsg != NULL)\
     LOG_ERROR("Not able to load: %s\nError: %s", name, errormsg);
 
 void loadLibraryFunctions() {
-#ifdef
-RL_DYNAMIC
-void *libHandler;
-char *errormsg;
+#ifdef RL_DYNAMIC
+    void *libHandler;
+    char *errormsg;
 
-LOG_INFO("Loading library: %s", RL_DYNAMIC_LIBRARY);
-libHandler = dlopen(RL_DYNAMIC_LIBRARY, RTLD_LAZY);
-if (libHandler == NULL) {
-LOG_ERROR("Error during dlopen(): %s\n", dlerror());
-exit(1);
-}
+    LOG_INFO("Loading library: %s", RL_DYNAMIC_LIBRARY);
+    libHandler = dlopen(RL_DYNAMIC_LIBRARY, RTLD_LAZY);
+    if (libHandler == NULL) {
+        LOG_ERROR("Error during dlopen(): %s\n", dlerror());
+        exit(1);
+    }
 
-// system
-load(libHandler, rl_systems_init, "rl_systems_init");
-load(libHandler, rl_system_free, "rl_system_free");
-load(libHandler, rl_system_findByFullname, "rl_system_findByFullname");
+    // system
+    load(libHandler, rl_systems_init, "rl_systems_init");
+    load(libHandler, rl_system_free, "rl_system_free");
+    load(libHandler, rl_system_findByFullname, "rl_system_findByFullname");
 
-// hoster
-load(libHandler, rl_hoster_init, "rl_hoster_init");
-load(libHandler, rl_search, "rl_search");
-load(libHandler, rl_download, "rl_download");
-load(libHandler, rl_hoster_free, "rl_hoster_free");
-load(libHandler, rl_hoster_findByFullname, "rl_hoster_findByFullname");
-load(libHandler, rl_hoster_findByName, "rl_hoster_findByName");
+    // hoster
+    load(libHandler, rl_hoster_init, "rl_hoster_init");
+    load(libHandler, rl_search, "rl_search");
+    load(libHandler, rl_download, "rl_download");
+    load(libHandler, rl_hoster_free, "rl_hoster_free");
+    load(libHandler, rl_hoster_findByFullname, "rl_hoster_findByFullname");
+    load(libHandler, rl_hoster_findByName, "rl_hoster_findByName");
 
-// results
-load(libHandler, rl_result_create, "rl_result_create");
-load(libHandler, rl_result_setTitle, "rl_result_setTitle");
-load(libHandler, rl_result_setUrl, "rl_result_setUrl");
-load(libHandler, rl_result_setDownloads, "rl_result_setDownloads");
-load(libHandler, rl_result_setRating, "rl_result_setRating");
-load(libHandler, rl_result_setFileSize, "rl_result_setFileSize");
-load(libHandler, rl_results_free, "rl_results_free");
-load(libHandler, rl_results_sort, "rl_results_sort");
+    // results
+    load(libHandler, rl_result_create, "rl_result_create");
+    load(libHandler, rl_result_setTitle, "rl_result_setTitle");
+    load(libHandler, rl_result_setUrl, "rl_result_setUrl");
+    load(libHandler, rl_result_setDownloads, "rl_result_setDownloads");
+    load(libHandler, rl_result_setRating, "rl_result_setRating");
+    load(libHandler, rl_result_setFileSize, "rl_result_setFileSize");
+    load(libHandler, rl_results_free, "rl_results_free");
+    load(libHandler, rl_results_sort, "rl_results_sort");
 #endif
 }
