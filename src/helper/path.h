@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef HELPER_PATH_H
-#define HELPER_PATH_H
+#ifndef _HELPER_PATH_H
+#define _HELPER_PATH_H
 
 #include <csafestring.h>
 #include "../application.h"

@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef THEMES_LOADING_H
-#define THEMES_LOADING_H
+#ifndef _THEMES_LOADING_H
+#define _THEMES_LOADING_H
 
 #include "../application.h"
 

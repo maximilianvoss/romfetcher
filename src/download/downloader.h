@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef DOWNLOAD_DOWNLOADER_H
-#define DOWNLOAD_DOWNLOADER_H
+#ifndef _DOWNLOAD_DOWNLOADER_H
+#define _DOWNLOAD_DOWNLOADER_H
 
 #include "../application.h"
 

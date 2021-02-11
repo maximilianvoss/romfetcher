@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef DATABASE_DATABASE_H
-#define DATABASE_DATABASE_H
+#ifndef _DATABASE_DATABASE_H
+#define _DATABASE_DATABASE_H
 
 #include <stdint.h>
 #include <sqlite3.h>

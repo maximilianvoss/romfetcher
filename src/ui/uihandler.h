@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef UI_UIHANDLER_H
-#define UI_UIHANDLER_H
+#ifndef _UI_UIHANDLER_H
+#define _UI_UIHANDLER_H
 
 #include "../application.h"
 

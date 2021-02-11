@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef ENGINECACHE_ENGINECACHE_H
-#define ENGINECACHE_ENGINECACHE_H
+#ifndef _ENGINECACHE_ENGINECACHE_H
+#define _ENGINECACHE_ENGINECACHE_H
 
 #include <romlibrary.h>
 #include <sqlite3.h>

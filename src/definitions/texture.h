@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef DEFINITIONS_TEXTURE_H
-#define DEFINITIONS_TEXTURE_H
+#ifndef _DEFINITIONS_TEXTURE_H
+#define _DEFINITIONS_TEXTURE_H
 
 #include <SDL.h>
 

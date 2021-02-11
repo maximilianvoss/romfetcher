@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef KEYBOARD_KEYBOARD_H
-#define KEYBOARD_KEYBOARD_H
+#ifndef _INPUT_KEYBOARD_H
+#define _INPUT_KEYBOARD_H
 
 #include "../application.h"
 

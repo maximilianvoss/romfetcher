@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef HELPER_MAP_H
-#define HELPER_MAP_H
+#ifndef _HELPER_MAP_H
+#define _HELPER_MAP_H
 
 void *hash_createMap();
 

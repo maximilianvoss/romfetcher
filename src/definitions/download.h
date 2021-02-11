@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef DEFINITIONS_DOWNLOAD_H
-#define DEFINITIONS_DOWNLOAD_H
+#ifndef _DEFINITIONS_DOWNLOAD_H
+#define _DEFINITIONS_DOWNLOAD_H
 
 typedef struct download_s {
     rl_system *system;

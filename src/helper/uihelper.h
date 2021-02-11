@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef HELPER_UIHELPER_H
-#define HELPER_UIHELPER_H
+#ifndef _HELPER_UIHELPER_H
+#define _HELPER_UIHELPER_H
 
 #include <SDL_rect.h>
 #include "../application.h"

@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef DATABASE_DOWNLOAD_H
-#define DATABASE_DOWNLOAD_H
+#ifndef _DATABASE_DOWNLOAD_H
+#define _DATABASE_DOWNLOAD_H
 
 #include "../application.h"
 

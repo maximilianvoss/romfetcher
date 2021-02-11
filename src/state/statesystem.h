@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef STATE_STATESYSTEM_H
-#define STATE_STATESYSTEM_H
+#ifndef _STATE_STATESYSTEM_H
+#define _STATE_STATESYSTEM_H
 
 #include "../application.h"
 

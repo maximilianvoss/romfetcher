@@ -292,7 +292,7 @@ static void loadColor(SDL_Color *color, void *map, char *key) {
     if (count != 4) {
         colorSetter(color, 0, 0, 0, 0);
         safe_destroy(tmp);
-        LOG_ERROR("count !=4");
+        LOG_ERROR("loadColor (key=%s) - count != 4", key);
         return;
     }
 

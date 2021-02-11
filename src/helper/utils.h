@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef HELPER_UTILS_H
-#define HELPER_UTILS_H
+#ifndef _HELPER_UTILS_H
+#define _HELPER_UTILS_H
 
 #include <stdlib.h>
 #include <stdint.h>

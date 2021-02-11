@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef APPLICATION_H
-#define APPLICATION_H
+#ifndef _APPLICATION_H
+#define _APPLICATION_H
 
 #include <romlibrary.h>
 #include <sqlite3.h>

@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef THEMES_RENDERING_H
-#define THEMES_RENDERING_H
+#ifndef _THEMES_RENDERING_H
+#define _THEMES_RENDERING_H
 
 #include "../application.h"
 

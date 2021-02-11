@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef DEFINITIONS_CONFIG_H
-#define DEFINITIONS_CONFIG_H
+#ifndef _DEFINITIONS_CONFIG_H
+#define _DEFINITIONS_CONFIG_H
 
 #include <stdint.h>
 #include "enums.h"

@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef DATABASE_POSTPROCESS_H
-#define DATABASE_POSTPROCESS_H
+#ifndef _DOWNLOAD_POSTPROCESS_H
+#define _DOWNLOAD_POSTPROCESS_H
 
 #include <sqlite3.h>
 #include "../application.h"

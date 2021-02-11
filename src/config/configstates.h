@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef CONFIG_CONFIGSTATES_H
-#define CONFIG_CONFIGSTATES_H
+#ifndef _CONFIG_CONFIGSTATES_H
+#define _CONFIG_CONFIGSTATES_H
 
 #include "../application.h"
 

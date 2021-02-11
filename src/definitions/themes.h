@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef DEFINITIONS_THEMES_H
-#define DEFINITIONS_THEMES_H
+#ifndef _DEFINITIONS_THEMES_H
+#define _DEFINITIONS_THEMES_H
 
 #include <SDL.h>
 #include <SDL_ttf.h>

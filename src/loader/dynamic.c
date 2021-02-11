@@ -17,7 +17,7 @@
 #include "dynamic.h"
 #include <dlfcn.h>
 #include <romlibrary.h>
-#include "constants.h"
+#include "../constants.h"
 
 #define load(handler, func, name)\
     func = dlsym(handler, name); \

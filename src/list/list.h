@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef LIST_LL_H
-#define LIST_LL_H
+#ifndef _LIST_LIST_H
+#define _LIST_LIST_H
 
 #include "../application.h"
 

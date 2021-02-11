@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef CONFIG_CONFIG_H
-#define CONFIG_CONFIG_H
+#ifndef _CONFIG_CONFIG_H
+#define _CONFIG_CONFIG_H
 
 #include <sqlite3.h>
 #include <romlibrary.h>

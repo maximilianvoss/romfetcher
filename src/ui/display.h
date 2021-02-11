@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef UI_DISPLAY_H
-#define UI_DISPLAY_H
+#ifndef _UI_DISPLAY_H
+#define _UI_DISPLAY_H
 
 #include "../application.h"
 

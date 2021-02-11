@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef DEFINITIONS_ENUMS_H
-#define DEFINITIONS_ENUMS_H
+#ifndef _DEFINITIONS_ENUMS_H
+#define _DEFINITIONS_ENUMS_H
 
 typedef enum {
     window_search,

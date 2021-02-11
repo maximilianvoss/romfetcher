@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef DEFINITIONS_CONTROLLER_H
-#define DEFINITIONS_CONTROLLER_H
+#ifndef _DEFINITIONS_CONTROLLER_H
+#define _DEFINITIONS_CONTROLLER_H
 
 typedef struct {
     uint8_t up;

@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef _DYNAMIC_H
-#define _DYNAMIC_H
+#ifndef _LOADER_DYNAMIC_H
+#define _LOADER_DYNAMIC_H
 
 void loadLibraryFunctions();
 

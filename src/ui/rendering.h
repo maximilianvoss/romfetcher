@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef UI_RENDERING_H
-#define UI_RENDERING_H
+#ifndef _UI_RENDERING_H
+#define _UI_RENDERING_H
 
 #include <SDL.h>
 #include <SDL_ttf.h>

@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef SEARCH_SEARCH_H
-#define SEARCH_SEARCH_H
+#ifndef _SEARCH_SEARCH_H
+#define _SEARCH_SEARCH_H
 
 #include "../application.h"
 

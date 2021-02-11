@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef DEFINITIONS_LISTITEM_H
-#define DEFINITIONS_LISTITEM_H
+#ifndef _DEFINITIONS_LISTITEM_H
+#define _DEFINITIONS_LISTITEM_H
 
 typedef struct listitem_s {
     char *name;

@@ -29,7 +29,7 @@
 #include "themes/rendering.h"
 #include "config/config.h"
 #ifdef RL_DYNAMIC
-#include "dynamic.h"
+#include "loader/dynamic.h"
 #endif
 
 void static initApp(app_t *app);

@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef INPUT_INPUT_H
-#define INPUT_INPUT_H
+#ifndef _INPUT_INPUT_H
+#define _INPUT_INPUT_H
 
 #include "../application.h"
 

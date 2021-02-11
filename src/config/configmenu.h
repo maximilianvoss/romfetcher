@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef CONFIG_CONFIGMENU_H
-#define CONFIG_CONFIGMENU_H
+#ifndef _CONFIG_CONFIGMENU_H
+#define _CONFIG_CONFIGMENU_H
 
 #include <acll.h>
 #include "../definitions/config.h"

@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef MODAL_MODAL_H
-#define MODAL_MODAL_H
+#ifndef _MODAL_MODAL_H
+#define _MODAL_MODAL_H
 
 #include "../application.h"
 

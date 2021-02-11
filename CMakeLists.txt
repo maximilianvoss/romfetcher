@@ -118,6 +118,8 @@ set(SOURCES_APPLICATION
         src/input/keyboard.h
         src/list/list.c
         src/list/list.h
+        src/loader/dynamic.c
+        src/loader/dynamic.h
         src/modal/modal.c
         src/modal/modal.h
         src/search/search.c
@@ -136,7 +138,7 @@ set(SOURCES_APPLICATION
         src/ui/rendering.h
         src/ui/uihandler.c
         src/ui/uihandler.h
-        src/dynamic.c src/dynamic.h)
+        )
 
 # Linking
 add_executable(romfetcher ${SOURCES_APPLICATION})
