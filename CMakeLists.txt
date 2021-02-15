@@ -14,7 +14,7 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH true)
 # required packages
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
-find_package(SDL2TTF REQUIRED)
+find_package(SDL2_TTF REQUIRED)
 find_package(SQLite3 REQUIRED)
 find_package(JSON2MAP REQUIRED)
 find_package(ROMLIBRARY REQUIRED)
