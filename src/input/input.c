@@ -179,11 +179,12 @@ static void processEvents(app_t *app) {
     SDL_Event event;
     SDL_Scancode scancode;
 
-    if (SDL_TICKS_PASSED(SDL_GetTicks(), lastKeyPressed + 300L)) {
+    if (SDL_TICKS_PASSED(SDL_GetTicks(), lastKeyPressed + 150L)) {
         if (gameControllerState.up || gameControllerState.down || gameControllerState.left ||
             gameControllerState.right) {
             processGameController(app);
             lastKeyPressed = SDL_GetTicks();
+            app->renderingRequired = 1;
         }
     }
 
