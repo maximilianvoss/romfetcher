@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#include <csafestring.h>
 #include "uihandler.h"
 #include "rendering.h"
 #include "../search/search.h"
@@ -30,7 +31,7 @@ static void renderSettingsIcon(app_t *app);
 
 static void renderDownloadManagerIcon(app_t *app);
 
-static void renderCopyright(app_t *app);
+static void renderBottomText(app_t *app);
 
 void uihandler_render(app_t *app) {
     void (*renderEngine)(app_t *app) = NULL;
@@ -77,7 +78,7 @@ static void renderDefaults(app_t *app) {
 
     renderSettingsIcon(app);
     renderDownloadManagerIcon(app);
-    renderCopyright(app);
+    renderBottomText(app);
 }
 
 static void renderSettingsIcon(app_t *app) {
@@ -147,20 +148,22 @@ static void renderDownloadManagerIcon(app_t *app) {
     }
 }
 
-static void renderCopyright(app_t *app) {
+static void renderBottomText(app_t *app) {
     int width, height;
     SDL_GL_GetDrawableSize(app->sdlWindow, &width, &height);
 
-    char *text = calloc(strlen(COPYRIGHT) + 1, sizeof(char));
-    strcpy (text, COPYRIGHT);
-    *text = 0xA9;
+    csafestring_t *text = safe_create(COPYRIGHT);
+    *text->data = 0xA9;
+
+    safe_strcat(text, " - romlibrary: ");
+    safe_strcat(text, RML_VERSION_STRING);
 
     texture_t texture;
-    rendering_loadText(app->sdlRenderer, &texture, text, getActiveTheme(app)->fonts.font16,
+    rendering_loadText(app->sdlRenderer, &texture, text->data, getActiveTheme(app)->fonts.font16,
                        &getActiveTheme(app)->colors.windowCopyright);
-    SDL_Rect renderQuad = {50, height - 30, texture.w, texture.h};
+    SDL_Rect renderQuad = {PADDING_SIDES, height - PADDING_BOTTOM + texture.h, texture.w, texture.h};
     SDL_RenderCopy(app->sdlRenderer, texture.texture, NULL, &renderQuad);
-    free(text);
+    safe_destroy(text);
 
     uihelper_destroyTexture(&texture);
 }
