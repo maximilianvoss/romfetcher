@@ -11,7 +11,24 @@ FIND_LIBRARY(ROMLIBRARY_LIBRARIES_INTERNAL
         HINTS
         PATH_SUFFIXES lib64 lib
         )
-mark_as_advanced(ROMLIBRARY_LIBRARIES_INTERNAL)
+mark_as_advanced(ROMLIBRARY_INCLUDE_DIR_INTERNAL)
+
+if (ROMLIBRARY_INCLUDE_DIR_INTERNAL)
+    file(STRINGS ${ROMLIBRARY_INCLUDE_DIR_INTERNAL}/romlibrary.h _ver_line
+            REGEX "^#define RL_VERSION *[0-9]+"
+            LIMIT_COUNT 1)
+    string(REGEX MATCH "[0-9]+"
+            ROMLIBRARY_VERSION "${_ver_line}")
+    unset(_ver_line)
+
+    if (${ROMLIBRARY_VERSION} GREATER_EQUAL 110 AND ${ROMLIBRARY_VERSION} LESS_EQUAL 200)
+        message("Romlibrary Version found: " ${ROMLIBRARY_VERSION})
+    else ()
+        message("Not supported Romlibrary version found: " ${ROMLIBRARY_VERSION})
+        set(ROMLIBRARY_INCLUDE_DIR_INTERNAL "")
+        set(ROMLIBRARY_INCLUDE_DIR_INTERNAL "")
+    endif ()
+endif ()
 
 find_package_handle_standard_args(ROMLIBRARY
         REQUIRED_VARS ROMLIBRARY_INCLUDE_DIR_INTERNAL ROMLIBRARY_LIBRARIES_INTERNAL)

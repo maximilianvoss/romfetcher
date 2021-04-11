@@ -37,6 +37,9 @@ void loadLibraryFunctions() {
         exit(1);
     }
 
+    load(libHandler, rl_getVersion, "rl_getVersion");
+    load(libHandler, rl_getVersionNumber, "rl_getVersionNumber");
+
     // system
     load(libHandler, rl_systems_init, "rl_systems_init");
     load(libHandler, rl_system_free, "rl_system_free");

@@ -156,7 +156,7 @@ static void renderBottomText(app_t *app) {
     *text->data = 0xA9;
 
     safe_strcat(text, " - romlibrary: ");
-    safe_strcat(text, RML_VERSION_STRING);
+    safe_strcat(text, rl_getVersion());
 
     texture_t texture;
     rendering_loadText(app->sdlRenderer, &texture, text->data, getActiveTheme(app)->fonts.font16,
