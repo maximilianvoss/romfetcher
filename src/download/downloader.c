@@ -70,8 +70,10 @@ void downloader_destroy(app_t *app) {
     LOG_TRACE("downloader_destroy done");
 }
 
-uint8_t downloader_addToQueue(void *appPtr, rl_system *system, char *title, char *url, char *data, char *filename,
-                              chttp_method method) {
+uint8_t
+downloader_addToQueue(void *appPtr, rl_system *system, char *title, char *url, struct curl_slist *headers, char *data,
+                      char *filename,
+                      chttp_method method) {
     LOG_TRACE("downloader_addToQueue start (system=%s, title=%s, url=%s, data=%s, filename=%s, method=%d",
               system->fullname, title, url, data, filename, method);
     app_t *app = appPtr;
@@ -340,7 +342,7 @@ static void downloadCurl(app_t *app, download_t *download) {
 static void downloadInternal(app_t *app, download_t *download) {
     LOG_TRACE("downloadInternal start");
     csafestring_t *downloadPath = path_downloadTarget(download->system, download->filename);
-    chttp_download(download->url, download->data, download->method, downloadPath->data, &download->current,
+    chttp_download(download->url, NULL, download->data, download->method, downloadPath->data, &download->current,
                    &download->total, &download->cancelled);
 
     if (download->cancelled) {

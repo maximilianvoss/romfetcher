@@ -66,6 +66,6 @@
 #endif
 #endif
 
-#define COPYRIGHT "C Copyright 2020 - 2021 by Maximilian Voss (maximilian@voss.rocks)"
+#define COPYRIGHT "C Copyright 2020 - 2023 by Maximilian Voss (maximilian@voss.rocks)"
 
 #endif

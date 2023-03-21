@@ -53,7 +53,7 @@ void download_load(app_t *app) {
         rl_system *system = rl_getSystem(rl_systems_findByFullname(app->systems.all, systemMarker));
         chttp_method method = (methodMarker == 1) ? POST : GET;
 
-        downloader_addToQueue(app, system, title, url, data, filename, method);
+        downloader_addToQueue(app, system, title, url, NULL, data, filename, method);
 
         ret = sqlite3_step(stmt);
     }
