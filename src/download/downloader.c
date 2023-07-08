@@ -367,7 +367,7 @@ static char *postProcess(app_t *app, char *file, uint8_t noExecute) {
         char *tmp = str_replace(commandTemplate, "%file%", file);
         command = str_replace(tmp, "%target%", directory);
 
-        if (noExecute) {
+        if (noExecute == 0) {
             int status = system(command);
             LOG_INFO("%s exited with: %d", command, status);
             free(command);
